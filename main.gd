@@ -4,6 +4,8 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
+# - Then, change bounce logic so that the held-down move-sideways button is
+#   ignored after hitting a wall, until the button is lifted and pressed again.
 # - Update level art:
 #   - Make ground continuous with wall.
 #   - Make four types of wall:
@@ -12,7 +14,6 @@ class_name Main
 #     - wall-left
 #     - wall-right
 #   - Update walls to fade to solid at the edges.
-# - Add player logic to bounce off walls.
 # - Debug and adjust player mechanics.
 #   - Is fall animation not triggering?
 #   - Make movement satisfying!
@@ -31,6 +32,14 @@ class_name Main
 # - Add an unlock for double jump after a certain tier.
 # >- Take screenshot: with the yeti.
 # - Add music.
+#   - Add support for sometimes changing the music when starting a new tier.
+#   - Change every X tiers.
+#   - Cycle through set playlist order.
+#   - Create at least three songs:
+#     - One simple, minimal song for the start, at the crevasse bottom.
+#     - One lively, happy song for the main-menu screen, and part of intro
+#       animation.
+#     - One other up-beat minor song.
 # - Search for and replace occurrences of FIXME.
 # 
 ###############################################################################

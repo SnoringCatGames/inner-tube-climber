@@ -9,14 +9,18 @@ var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
 const RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER := 0.68
 const JUMP_BOOST := -1000.0
+const WALL_BOUNCE_BOOST := 200.0
+const FLOOR_BOUNCE_BOOST := -1000.0
 const IN_AIR_HORIZONTAL_ACCELERATION := 3200.0
-const WALK_ACCELERATION := 350.0
+const WALK_ACCELERATION := 20.0
+const WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION := 250.0
+const LOW_SPEED_THRESHOLD_FOR_WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION := 500.0
 const MIN_HORIZONTAL_SPEED := 5.0
-const MAX_HORIZONTAL_SPEED := 400.0
+const MAX_HORIZONTAL_SPEED := 500.0
 const MIN_VERTICAL_SPEED := 0.0
 const MAX_VERTICAL_SPEED := 4000.0
 const MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION := 15.0
-const FRICTION_COEFFICIENT := 0.01
+const FRICTION_COEFFICIENT := 0.02
 
 var horizontal_facing_sign := 1
 var horizontal_acceleration_sign := 0
@@ -27,6 +31,9 @@ var is_touching_wall := false
 var is_touching_left_wall := false
 var is_touching_right_wall := false
 var toward_wall_sign := 0
+var just_touched_floor := false
+var just_touched_ceiling := false
+var just_touched_wall := false
 
 var just_triggered_jump := false
 var is_rising_from_jump := false
@@ -71,9 +78,15 @@ func _physics_process(delta_sec: float) -> void:
 
 # Calculates basic surface-related state for the current frame.
 func _update_surface_state() -> void:
+    var was_touching_floor := is_touching_floor
+    var was_touching_ceiling := is_touching_ceiling
+    var was_touching_wall := is_touching_wall
     is_touching_floor = is_on_floor()
     is_touching_ceiling = is_on_ceiling()
     is_touching_wall = is_on_wall()
+    just_touched_floor = !was_touching_floor and is_touching_floor
+    just_touched_ceiling = !was_touching_ceiling and is_touching_ceiling
+    just_touched_wall = !was_touching_wall and is_touching_wall
     var which_wall: int = Utils.get_which_wall_collided_for_body(self)
     is_touching_left_wall = which_wall == SurfaceSide.LEFT_WALL
     is_touching_right_wall = which_wall == SurfaceSide.RIGHT_WALL
@@ -103,10 +116,11 @@ func _update_actions(delta_sec: float) -> void:
 func _process_actions(delta_sec: float) -> void:
     just_triggered_jump = false
     
-    if is_touching_left_wall:
-        velocity.x = max(velocity.x, 0)
-    if is_touching_right_wall:
-        velocity.x = min(velocity.x, 0)
+    # Bounce horizontal velocity off of walls.
+    if just_touched_wall:
+        velocity.x = -velocity.x
+        velocity.x += \
+                WALL_BOUNCE_BOOST if velocity.x > 0 else -WALL_BOUNCE_BOOST
     
     if is_touching_floor:
         jump_count = 0
@@ -127,20 +141,30 @@ func _process_actions(delta_sec: float) -> void:
         else:
             var friction_multiplier := \
                     Utils.get_floor_friction_multiplier(self)
+            assert(friction_multiplier != 0)
+            
+            var walk_acceleration := \
+                    WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION if \
+                    abs(velocity.x) < \
+                            LOW_SPEED_THRESHOLD_FOR_WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION and \
+                            friction_multiplier < 1.0 else \
+                    WALK_ACCELERATION
             
             # Horizontal movement.
             velocity.x += \
-                    WALK_ACCELERATION * \
+                    walk_acceleration * \
                     horizontal_acceleration_sign * \
                     friction_multiplier
             
             # Friction.
-            var friction_offset: float = \
-                    friction_multiplier * \
-                    FRICTION_COEFFICIENT * \
-                    GRAVITY_FAST_FALL
-            friction_offset = clamp(friction_offset, 0, abs(velocity.x))
-            velocity.x += -sign(velocity.x) * friction_offset
+            if horizontal_acceleration_sign == 0 or \
+                    (horizontal_acceleration_sign > 0) != (velocity.x > 0):
+                var friction_offset: float = \
+                        friction_multiplier * \
+                        FRICTION_COEFFICIENT * \
+                        GRAVITY_FAST_FALL
+                friction_offset = clamp(friction_offset, 0, abs(velocity.x))
+                velocity.x += -sign(velocity.x) * friction_offset
     else:
         # If the player falls off a wall or ledge, then that's considered the first
         # jump.
@@ -176,6 +200,7 @@ func _process_actions(delta_sec: float) -> void:
     # Cap velocity beyond min/max values.
     velocity = Utils.cap_velocity( \
             velocity, \
+            horizontal_acceleration_sign == 0, \
             MIN_HORIZONTAL_SPEED, \
             MAX_HORIZONTAL_SPEED, \
             MIN_VERTICAL_SPEED, \
@@ -205,13 +230,11 @@ func _process_animation() -> void:
 
 # Updates sounds for the current frame.
 func _process_sfx() -> void:
-    # FIXME: Play sounds.
-    
-    if false:
+    if just_triggered_jump:
         jump_sfx_player.play()
     
-    if false:
+    if just_touched_floor or just_touched_ceiling:
         land_sfx_player.play()
     
-    if false:
+    if just_touched_wall:
         bounce_sfx_player.play()

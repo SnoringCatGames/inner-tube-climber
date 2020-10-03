@@ -172,6 +172,7 @@ static func update_velocity_in_air( \
 
 static func cap_velocity( \
         velocity: Vector2, \
+        caps_min_horizontal_speed: bool, \
         min_horizontal_speed: float, \
         max_horizontal_speed: float, \
         min_vertical_speed: float, \
@@ -183,7 +184,8 @@ static func cap_velocity( \
             max_horizontal_speed)
     
     # Kill horizontal speed below a min value.
-    if velocity.x > -min_horizontal_speed and \
+    if caps_min_horizontal_speed and \
+            velocity.x > -min_horizontal_speed and \
             velocity.x < min_horizontal_speed:
         velocity.x = 0
     

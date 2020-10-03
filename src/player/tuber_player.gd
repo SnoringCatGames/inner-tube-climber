@@ -103,6 +103,11 @@ func _update_actions(delta_sec: float) -> void:
 func _process_actions(delta_sec: float) -> void:
     just_triggered_jump = false
     
+    if is_touching_left_wall:
+        velocity.x = max(velocity.x, 0)
+    if is_touching_right_wall:
+        velocity.x = min(velocity.x, 0)
+    
     if is_touching_floor:
         jump_count = 0
         is_rising_from_jump = false
@@ -120,12 +125,18 @@ func _process_actions(delta_sec: float) -> void:
             velocity.y = JUMP_BOOST
             
         else:
+            var friction_multiplier := \
+                    Utils.get_floor_friction_multiplier(self)
+            
             # Horizontal movement.
-            velocity.x += WALK_ACCELERATION * horizontal_acceleration_sign
+            velocity.x += \
+                    WALK_ACCELERATION * \
+                    horizontal_acceleration_sign * \
+                    friction_multiplier
             
             # Friction.
             var friction_offset: float = \
-                    Utils.get_floor_friction_multiplier(self) * \
+                    friction_multiplier * \
                     FRICTION_COEFFICIENT * \
                     GRAVITY_FAST_FALL
             friction_offset = clamp(friction_offset, 0, abs(velocity.x))

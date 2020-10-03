@@ -1,7 +1,7 @@
 extends Node2D
 class_name CameraController
 
-const DEFAULT_CAMERA_ZOOM := 1.0
+const DEFAULT_CAMERA_ZOOM := 0.25
 const ZOOM_STEP_RATIO := Vector2(0.05, 0.05)
 const PAN_STEP := 32.0
 

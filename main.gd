@@ -12,9 +12,6 @@ class_name Main
 #     - wall-left
 #     - wall-right
 #   - Update walls to fade to solid at the edges.
-# - Add a simple test level.
-# - Add ability to jump up through platforms (or just _all_ tiles?).
-# - Add friction values to tile set.
 # - Add player logic to bounce off walls.
 # - Debug and adjust player mechanics.
 #   - Is fall animation not triggering?

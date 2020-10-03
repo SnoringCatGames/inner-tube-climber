@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/tuber_land.wav-3ef5e911c04d8d9b006f21ad05de00ea.sample"
+
+[deps]
+
+source_file="res://assets/sfx/tuber_land.wav"
+dest_files=[ "res://.import/tuber_land.wav-3ef5e911c04d8d9b006f21ad05de00ea.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -80,6 +80,45 @@ static func get_children_by_type( \
                     recursive)
     return result
 
+static func get_which_wall_collided_for_body(body: KinematicBody2D) -> int:
+    if body.is_on_wall():
+        for i in range(body.get_slide_count()):
+            var collision := body.get_slide_collision(i)
+            var side := get_which_surface_side_collided(collision)
+            if side == SurfaceSide.LEFT_WALL or side == SurfaceSide.RIGHT_WALL:
+                return side
+    return SurfaceSide.NONE
+
+static func get_which_surface_side_collided( \
+        collision: KinematicCollision2D) -> int:
+    if abs(collision.normal.angle_to(Geometry.UP)) <= \
+            Geometry.FLOOR_MAX_ANGLE:
+        return SurfaceSide.FLOOR
+    elif abs(collision.normal.angle_to(Geometry.DOWN)) <= \
+            Geometry.FLOOR_MAX_ANGLE:
+        return SurfaceSide.CEILING
+    elif collision.normal.x > 0:
+        return SurfaceSide.LEFT_WALL
+    else:
+        return SurfaceSide.RIGHT_WALL
+
+static func get_floor_friction_multiplier(body: KinematicBody2D) -> float:
+    var collision := _get_floor_collision(body)
+    # Collision friction is a property of the TileMap node.
+    if collision != null and collision.collider.collision_friction != null:
+        return collision.collider.collision_friction
+    return 0.0
+
+static func _get_floor_collision( \
+        body: KinematicBody2D) -> KinematicCollision2D:
+    if body.is_on_floor():
+        for i in range(body.get_slide_count()):
+            var collision := body.get_slide_collision(i)
+            if abs(collision.normal.angle_to(Geometry.UP)) <= \
+                    Geometry.FLOOR_MAX_ANGLE:
+                return collision
+    return null
+
 static func add_scene( \
         parent: Node, \
         resource_path: String, \
@@ -95,3 +134,68 @@ static func add_scene( \
 
 static func get_global_touch_position(input_event: InputEvent) -> Vector2:
     return Global.current_level.make_input_local(input_event).position
+
+static func update_velocity_in_air( \
+        velocity: Vector2, \
+        delta_sec: float, \
+        is_pressing_jump: bool, \
+        is_first_jump: bool, \
+        horizontal_acceleration_sign: int, \
+        in_air_horizontal_acceleration: float, \
+        slow_rise_gravity_multiplier: float, \
+        rise_double_jump_gravity_multiplier: float, \
+        gravity_fast_fall: float) -> Vector2:
+    var is_rising_from_jump := velocity.y < 0 and is_pressing_jump
+    
+    # Make gravity stronger when falling. This creates a more satisfying jump.
+    # Similarly, make gravity stronger for double jumps.
+    var gravity_multiplier := \
+            1.0 if \
+            !is_rising_from_jump else \
+            (slow_rise_gravity_multiplier if \
+            is_first_jump else \
+            rise_double_jump_gravity_multiplier)
+    
+    # Vertical movement.
+    velocity.y += \
+            delta_sec * \
+            gravity_fast_fall * \
+            gravity_multiplier
+    
+    # Horizontal movement.
+    velocity.x += \
+            delta_sec * \
+            in_air_horizontal_acceleration * \
+            horizontal_acceleration_sign
+    
+    return velocity
+
+static func cap_velocity( \
+        velocity: Vector2, \
+        min_horizontal_speed: float, \
+        max_horizontal_speed: float, \
+        min_vertical_speed: float, \
+        max_vertical_speed: float) -> Vector2:
+    # Cap horizontal speed at a max value.
+    velocity.x = clamp( \
+            velocity.x, \
+            -max_horizontal_speed, \
+            max_horizontal_speed)
+    
+    # Kill horizontal speed below a min value.
+    if velocity.x > -min_horizontal_speed and \
+            velocity.x < min_horizontal_speed:
+        velocity.x = 0
+    
+    # Cap vertical speed at a max value.
+    velocity.y = clamp( \
+            velocity.y, \
+            -max_vertical_speed, \
+            max_vertical_speed)
+    
+    # Kill vertical speed below a min value.
+    if velocity.y > -min_vertical_speed and \
+            velocity.y < min_vertical_speed:
+        velocity.y = 0
+    
+    return velocity

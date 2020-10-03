@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/tuber_bounce.wav-b0c69b1947822f2f9930e2f414186690.sample"
+
+[deps]
+
+source_file="res://assets/sfx/tuber_bounce.wav"
+dest_files=[ "res://.import/tuber_bounce.wav-b0c69b1947822f2f9930e2f414186690.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

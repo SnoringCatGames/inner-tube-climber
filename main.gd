@@ -4,13 +4,43 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Replace default images and sounds under assets/ and dist/.
+# - Update level art:
+#   - Make ground continuous with wall.
+#   - Make four types of wall:
+#     - wall-ground-corner-left
+#     - wall-ground-corner-right
+#     - wall-left
+#     - wall-right
+#   - Update walls to fade to solid at the edges.
+# - Add a simple test level.
+# - Add ability to jump up through platforms (or just _all_ tiles?).
+# - Add friction values to tile set.
+# - Add player logic to bounce off walls.
+# - Debug and adjust player mechanics.
+#   - Is fall animation not triggering?
+#   - Make movement satisfying!
+# >- Take screenshot: of the player and level.
+# - Add logic to dynamically create level from concatenating separate Tier
+#   instances.
+#   - Manually create the different Tier classes.
+#   - And make it loop through the set of Tiers.
+#   - Then add logic to destroy previous Tiers
+#     - Don't allow falling to a previous Tier.
+#       - A new Tier should have a long platform with no holes.
+#       - No such thing as fall-through floors.
+#   - Then add logic to keep track of the current height, the current yeti climb
+#     speed, and the current yeti jump period.
+# - Add the yeti art and behavior.
+# - Add an unlock for double jump after a certain tier.
+# >- Take screenshot: with the yeti.
+# - Add music.
 # - Search for and replace occurrences of FIXME.
 # 
 ###############################################################################
 
 const LOADING_SCREEN_PATH := "res://src/loading_screen.tscn"
-const STARTING_LEVEL_RESOURCE_PATH := "res://src/FIXME"
+const STARTING_LEVEL_RESOURCE_PATH := "res://src/level/level_1.tscn"
+const PLAYER_RESOURCE_PATH := "res://src/player/tuber_player.tscn"
 
 var loading_screen: Node
 var camera_controller: CameraController
@@ -37,19 +67,14 @@ func _enter_tree() -> void:
                 LOADING_SCREEN_PATH)
 
 func _process(delta_sec: float) -> void:
-    # TODO: Figure out a better way of loading/parsing the level without
-    #        blocking the main thread?
-    
     if level == null and \
             Time.elapsed_play_time_sec > 0.25:
-        # FIXME: Add a level.
-        pass
-#        # Start loading the level.
-#        level = Utils.add_scene( \
-#                self, \
-#                STARTING_LEVEL_RESOURCE_PATH, \
-#                true, \
-#                false)
+        # Start loading the level.
+        level = Utils.add_scene( \
+                self, \
+                STARTING_LEVEL_RESOURCE_PATH, \
+                true, \
+                false)
     
     elif is_loading_screen_shown and \
             Global.is_level_ready and \
@@ -63,12 +88,16 @@ func _process(delta_sec: float) -> void:
             loading_screen.queue_free()
             loading_screen = null
         
-        # TODO: Move this player creation (and readiness recording) back into
-        #       Level.
         # Add the player after removing the loading screen, since the camera
         # will track the player, which makes the loading screen look offset.
         var position := Vector2.ZERO
-        # FIXME: Add player
+        var player: Player = Utils.add_scene( \
+                self, \
+                PLAYER_RESOURCE_PATH, \
+                true, \
+                true)
+        player.position = position
+        add_child(player)
         
         Global.canvas_layers.on_level_ready()
         

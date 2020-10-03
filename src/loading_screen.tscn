@@ -90,7 +90,7 @@ position = Vector2( 402.021, 157.966 )
 scale = Vector2( 2.67461, 2.67461 )
 texture = ExtResource( 1 )
 hframes = 8
-frame = 2
+frame = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="HBoxContainer/VBoxContainer/ProgressIndicator"]
 root_node = NodePath("../Sprite")

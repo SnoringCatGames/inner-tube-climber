@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/long_fall.wav-8be6cc205ce8e2a97a16c4d328f6ab67.sample"
+
+[deps]
+
+source_file="res://assets/sfx/long_fall.wav"
+dest_files=[ "res://.import/long_fall.wav-8be6cc205ce8e2a97a16c4d328f6ab67.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

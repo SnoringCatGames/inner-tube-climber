@@ -5,9 +5,6 @@ var velocity := Vector2.ZERO
 
 var animator: PlayerAnimator
 
-func _init() -> void:
-    _set_camera()
-
 func _ready() -> void:
     var animators: Array = Utils.get_children_by_type( \
             self, \
@@ -23,23 +20,23 @@ func _set_camera() -> void:
     Global.camera_controller.zoom = CameraController.DEFAULT_CAMERA_ZOOM
 
 func _physics_process(delta_sec: float) -> void:
-    _update_actions()
     _update_surface_state()
+    _update_actions(delta_sec)
     
-    _process_actions()
+    _process_actions(delta_sec)
     _process_animation()
     _process_sfx()
-
-# Calculate what actions occur during this frame.
-func _update_actions() -> void:
-    pass
 
 # Calculates basic surface-related state for the current frame.
 func _update_surface_state() -> void:
     pass
+
+# Calculate what actions occur during this frame.
+func _update_actions(delta_sec: float) -> void:
+    pass
     
 # Updates physics and player states in response to the current actions.
-func _process_actions() -> void:
+func _process_actions(delta_sec: float) -> void:
     pass
 
 # Updates the animation state for the current frame.

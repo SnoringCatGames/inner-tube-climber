@@ -8,19 +8,21 @@ const BOUNCE_SFX_STREAM := preload("res://assets/sfx/tuber_bounce.wav")
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
 const RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER := 0.68
-const JUMP_BOOST := -1000.0
-const WALL_BOUNCE_BOOST := 200.0
+const JUMP_BOOST := -800.0
+const WALL_BOUNCE_BOOST := 50.0
 const FLOOR_BOUNCE_BOOST := -1000.0
-const IN_AIR_HORIZONTAL_ACCELERATION := 3200.0
-const WALK_ACCELERATION := 20.0
+const IN_AIR_HORIZONTAL_ACCELERATION := 2500.0
+const WALK_ACCELERATION := 40.0
 const WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION := 250.0
 const LOW_SPEED_THRESHOLD_FOR_WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION := 500.0
 const MIN_HORIZONTAL_SPEED := 5.0
-const MAX_HORIZONTAL_SPEED := 500.0
+const MAX_HORIZONTAL_IN_AIR_SPEED := 550.0
+const MAX_HORIZONTAL_ON_FLOOR_SPEED := 500.0
 const MIN_VERTICAL_SPEED := 0.0
 const MAX_VERTICAL_SPEED := 4000.0
 const MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION := 15.0
 const FRICTION_COEFFICIENT := 0.02
+const WALL_BOUNCE_MOVEMENT_DELAY_SEC := 0.3
 
 var horizontal_facing_sign := 1
 var horizontal_acceleration_sign := 0
@@ -34,6 +36,9 @@ var toward_wall_sign := 0
 var just_touched_floor := false
 var just_touched_ceiling := false
 var just_touched_wall := false
+
+var has_hit_wall_since_pressing_move := false
+var last_hit_wall_time := -INF
 
 var just_triggered_jump := false
 var is_rising_from_jump := false
@@ -90,10 +95,22 @@ func _update_surface_state() -> void:
     var which_wall: int = Utils.get_which_wall_collided_for_body(self)
     is_touching_left_wall = which_wall == SurfaceSide.LEFT_WALL
     is_touching_right_wall = which_wall == SurfaceSide.RIGHT_WALL
+    
     toward_wall_sign = \
             (0 if !is_touching_wall else \
             (1 if which_wall == SurfaceSide.RIGHT_WALL else \
             -1))
+    
+    if just_touched_wall:
+        has_hit_wall_since_pressing_move = true
+    elif Input.is_action_just_pressed("move_left") or \
+            Input.is_action_just_pressed("move_right") or \
+            Input.is_action_just_released("move_left") or \
+            Input.is_action_just_released("move_right"):
+        has_hit_wall_since_pressing_move = false
+    
+    if just_touched_wall:
+        last_hit_wall_time = Time.elapsed_play_time_sec
 
 # Calculate what actions occur during this frame.
 func _update_actions(delta_sec: float) -> void:
@@ -102,12 +119,14 @@ func _update_actions(delta_sec: float) -> void:
     elif Input.is_action_pressed("move_left"):
         horizontal_facing_sign = -1
     
-    if Input.is_action_pressed("move_right"):
-        horizontal_acceleration_sign = 1
-    elif Input.is_action_pressed("move_left"):
-        horizontal_acceleration_sign = -1
-    else:
-        horizontal_acceleration_sign = 0
+    horizontal_acceleration_sign = 0
+    if !has_hit_wall_since_pressing_move or \
+            last_hit_wall_time < \
+                    Time.elapsed_play_time_sec - WALL_BOUNCE_MOVEMENT_DELAY_SEC:
+        if Input.is_action_pressed("move_right"):
+            horizontal_acceleration_sign = 1
+        elif Input.is_action_pressed("move_left"):
+            horizontal_acceleration_sign = -1
     
     if is_touching_ceiling:
         is_rising_from_jump = false
@@ -198,11 +217,15 @@ func _process_actions(delta_sec: float) -> void:
             velocity.y = JUMP_BOOST
     
     # Cap velocity beyond min/max values.
+    var max_horizontal_speed := \
+            MAX_HORIZONTAL_ON_FLOOR_SPEED if \
+            is_touching_floor else \
+            MAX_HORIZONTAL_IN_AIR_SPEED
     velocity = Utils.cap_velocity( \
             velocity, \
             horizontal_acceleration_sign == 0, \
             MIN_HORIZONTAL_SPEED, \
-            MAX_HORIZONTAL_SPEED, \
+            max_horizontal_speed, \
             MIN_VERTICAL_SPEED, \
             MAX_VERTICAL_SPEED)
 

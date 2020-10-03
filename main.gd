@@ -4,20 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Then, change bounce logic so that the held-down move-sideways button is
-#   ignored after hitting a wall, until the button is lifted and pressed again.
-# - Update level art:
-#   - Make ground continuous with wall.
-#   - Make four types of wall:
-#     - wall-ground-corner-left
-#     - wall-ground-corner-right
-#     - wall-left
-#     - wall-right
-#   - Update walls to fade to solid at the edges.
-# - Debug and adjust player mechanics.
-#   - Is fall animation not triggering?
-#   - Make movement satisfying!
-# >- Take screenshot: of the player and level.
 # - Add logic to dynamically create level from concatenating separate Tier
 #   instances.
 #   - Manually create the different Tier classes.
@@ -26,11 +12,25 @@ class_name Main
 #     - Don't allow falling to a previous Tier.
 #       - A new Tier should have a long platform with no holes.
 #       - No such thing as fall-through floors.
-#   - Then add logic to keep track of the current height, the current yeti climb
-#     speed, and the current yeti jump period.
-# - Add the yeti art and behavior.
+#   - Then add logic to keep track of the current height.
+# >- Take screenshot?
+# - Update art:
+#   - Make ground continuous with wall.
+#   - Make four types of wall:
+#     - wall-ground-corner-left
+#     - wall-ground-corner-right
+#     - wall-left
+#     - wall-right
+#   - Update walls to fade to solid at the edges.
+#   - Add shading to the tuber player.
+#   - Smooth sharp elbow angle on tuber jump-rise.
+#   - Put more thought into the ice and snow platform art.
+#   - Put more thought into the background?
+# >- Take screenshot?
+# - Add an unlock for face-plant-bounce-off-tube-higher-jump after a certain
+#   tier.
 # - Add an unlock for double jump after a certain tier.
-# >- Take screenshot: with the yeti.
+# >- Take screenshot?
 # - Add music.
 #   - Add support for sometimes changing the music when starting a new tier.
 #   - Change every X tiers.
@@ -40,6 +40,7 @@ class_name Main
 #     - One lively, happy song for the main-menu screen, and part of intro
 #       animation.
 #     - One other up-beat minor song.
+#     - Add dies irae as game-over/you-lose sound.
 # - Search for and replace occurrences of FIXME.
 # 
 ###############################################################################

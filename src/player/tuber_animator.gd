@@ -4,12 +4,12 @@ class_name TuberAnimator
 const FACES_RIGHT_BY_DEFAULT := true
 
 const RUN_NAME := "Run"
-const RUN_PLAYBACK_RATE := 1.0
+const RUN_PLAYBACK_RATE := 1.7
 
 const JUMP_NAME := "Jump"
 const JUMP_PLAYBACK_RATE := 1.0
 
-const FALL_NAME := "Jump"
+const FALL_NAME := "Fall"
 const FALL_PLAYBACK_RATE := 1.0
 
 const STAND_NAME := "Stand"

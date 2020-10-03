@@ -8,7 +8,7 @@
 resource_name = "run"
 length = 0.56
 loop = true
-step = 0.07
+step = 0.7
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
@@ -86,12 +86,11 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 
 [node name="Sprite" type="Sprite" parent="HBoxContainer/VBoxContainer/ProgressIndicator"]
-position = Vector2( 390.007, 157.966 )
+position = Vector2( 402.021, 157.966 )
 scale = Vector2( 2.67461, 2.67461 )
 texture = ExtResource( 1 )
-vframes = 4
-hframes = 2
-frame = 1
+hframes = 8
+frame = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="HBoxContainer/VBoxContainer/ProgressIndicator"]
 root_node = NodePath("../Sprite")

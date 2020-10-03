@@ -9,9 +9,10 @@ var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
 const RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER := 0.68
 const JUMP_BOOST := -800.0
-const WALL_BOUNCE_BOOST := 50.0
+const WALL_BOUNCE_HORIZONTAL_BOOST := -30.0
+const WALL_BOUNCE_VERTICAL_BOOST := -400.0
 const FLOOR_BOUNCE_BOOST := -1000.0
-const IN_AIR_HORIZONTAL_ACCELERATION := 2500.0
+const IN_AIR_HORIZONTAL_ACCELERATION := 1000.0
 const WALK_ACCELERATION := 40.0
 const WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION := 250.0
 const LOW_SPEED_THRESHOLD_FOR_WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION := 500.0
@@ -23,6 +24,7 @@ const MAX_VERTICAL_SPEED := 4000.0
 const MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION := 15.0
 const FRICTION_COEFFICIENT := 0.02
 const WALL_BOUNCE_MOVEMENT_DELAY_SEC := 0.3
+const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.15
 
 var horizontal_facing_sign := 1
 var horizontal_acceleration_sign := 0
@@ -45,6 +47,9 @@ var is_rising_from_jump := false
 var jump_count := 0
 # FIXME: Add double jumps after reaching a certain tier.
 var max_jump_count := 1
+
+var was_last_jump_input_consumed := false
+var last_jump_input_time := 0.0
 
 var jump_sfx_player: AudioStreamPlayer
 var land_sfx_player: AudioStreamPlayer
@@ -131,6 +136,10 @@ func _update_actions(delta_sec: float) -> void:
     if is_touching_ceiling:
         is_rising_from_jump = false
     
+    if Input.is_action_just_pressed("jump"):
+        last_jump_input_time = Time.elapsed_play_time_sec
+        was_last_jump_input_consumed = false
+    
 # Updates physics and player states in response to the current actions.
 func _process_actions(delta_sec: float) -> void:
     just_triggered_jump = false
@@ -139,7 +148,21 @@ func _process_actions(delta_sec: float) -> void:
     if just_touched_wall:
         velocity.x = -velocity.x
         velocity.x += \
-                WALL_BOUNCE_BOOST if velocity.x > 0 else -WALL_BOUNCE_BOOST
+                WALL_BOUNCE_HORIZONTAL_BOOST if \
+                velocity.x > 0 else \
+                -WALL_BOUNCE_HORIZONTAL_BOOST
+        if is_touching_left_wall:
+            velocity.x = max(velocity.x, 0)
+        else:
+            velocity.x = min(velocity.x, 0)
+        
+        velocity.y += WALL_BOUNCE_VERTICAL_BOOST
+    
+    var is_previous_jump_input_still_consumable := \
+            !was_last_jump_input_consumed and \
+            last_jump_input_time + \
+                    JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC > \
+                    Time.elapsed_play_time_sec
     
     if is_touching_floor:
         jump_count = 0
@@ -151,11 +174,13 @@ func _process_actions(delta_sec: float) -> void:
         velocity.y = MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION
         
         # Jump.
-        if Input.is_action_just_pressed("jump"):
+        if Input.is_action_just_pressed("jump") or \
+                is_previous_jump_input_still_consumable:
             jump_count = 1
             just_triggered_jump = true
             is_rising_from_jump = true
             velocity.y = JUMP_BOOST
+            was_last_jump_input_consumed = true
             
         else:
             var friction_multiplier := \
@@ -209,12 +234,14 @@ func _process_actions(delta_sec: float) -> void:
                 GRAVITY_FAST_FALL)
         
         # A jump while in air (a "double jump").
-        if Input.is_action_just_pressed("jump") and \
+        if (Input.is_action_just_pressed("jump") or \
+                is_previous_jump_input_still_consumable) and \
                 jump_count < max_jump_count:
             jump_count += 1
             just_triggered_jump = true
             is_rising_from_jump = true
             velocity.y = JUMP_BOOST
+            was_last_jump_input_consumed = true
     
     # Cap velocity beyond min/max values.
     var max_horizontal_speed := \

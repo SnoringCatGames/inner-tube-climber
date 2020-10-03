@@ -4,15 +4,28 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Add logic to dynamically create level from concatenating separate Tier
-#   instances.
-#   - Manually create the different Tier classes.
-#   - And make it loop through the set of Tiers.
-#   - Then add logic to destroy previous Tiers
-#     - Don't allow falling to a previous Tier.
-#       - A new Tier should have a long platform with no holes.
-#       - No such thing as fall-through floors.
-#   - Then add logic to keep track of the current height.
+# >- Take screenshot?
+# - Add logic to force a minimum camera scroll rate, and to cause game-over if
+#   player hits bottom of screen.
+#   - Stop having the camera follow player.
+#   - Instead, have camera pan up at a constant rate.
+#   - Calculate what screen bottom level is, and work to align this with the
+#     camera.
+#   - Tween camera pan up extra when the player gets within the highest quarter
+#     of the screen.
+#   - Create game over detection, pan stop, animation, sfx, and show menu
+#     screen after small delay.
+#   - Add logic to increase camera pan speed at each new tier.
+#   - Also increase music playback speed when camera pan speed increases.
+# >- Take screenshot?
+# - Render current height in a HUD element.
+# - Add overlays to indicate keys to press.
+#   - Configured in TIERS_CONFIG.
+#   - Rendered dynamically in level as overlays.
+# >- Take screenshot?
+# - Create a bunch of tiers that enable satisfying skill progression.
+# - Create a flag for setting the tier you want to start from (select from main
+#   menu).
 # >- Take screenshot?
 # - Update art:
 #   - Make ground continuous with wall.
@@ -26,6 +39,8 @@ class_name Main
 #   - Smooth sharp elbow angle on tuber jump-rise.
 #   - Put more thought into the ice and snow platform art.
 #   - Put more thought into the background?
+# - Will need to introduce solid, not-jump-throughable platforms, in order to
+#   make the wall bouncing really exciting and meaningful.
 # >- Take screenshot?
 # - Add an unlock for face-plant-bounce-off-tube-higher-jump after a certain
 #   tier.
@@ -41,13 +56,14 @@ class_name Main
 #       animation.
 #     - One other up-beat minor song.
 #     - Add dies irae as game-over/you-lose sound.
+# - Create alternate art for foreground and background for different tiers, in
+#   order to add more variety.
 # - Search for and replace occurrences of FIXME.
 # 
 ###############################################################################
 
 const LOADING_SCREEN_PATH := "res://src/loading_screen.tscn"
-const STARTING_LEVEL_RESOURCE_PATH := "res://src/level/level_1.tscn"
-const PLAYER_RESOURCE_PATH := "res://src/player/tuber_player.tscn"
+const STARTING_LEVEL_RESOURCE_PATH := "res://src/level/level.tscn"
 
 var loading_screen: Node
 var camera_controller: CameraController
@@ -94,17 +110,6 @@ func _process(delta_sec: float) -> void:
             canvas_layers.screen_layer.remove_child(loading_screen)
             loading_screen.queue_free()
             loading_screen = null
-        
-        # Add the player after removing the loading screen, since the camera
-        # will track the player, which makes the loading screen look offset.
-        var position := Vector2.ZERO
-        var player: Player = Utils.add_scene( \
-                self, \
-                PLAYER_RESOURCE_PATH, \
-                true, \
-                true)
-        player.position = position
-        add_child(player)
         
         Global.canvas_layers.on_level_ready()
         

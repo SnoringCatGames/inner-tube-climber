@@ -4,23 +4,14 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Implement game over screen.
-# - Implement saving high score to local storage, and passing message to/from
-#   HTML.
-# [30]- Add menus.
-#   - With sfx and music.
-#   - Create a flag for setting the tier you want to start from (select from
-#     main menu).
-#   - Add a checkbox to toggle "stuck in a retry loop".
-# [15]- Render current height in a HUD element.
-# - Add overlays to indicate keys to press.
-#   - Configured in TIERS_CONFIG.
-#   - Rendered dynamically in level as overlays.
-# - Add a message at the start that says "Click window to focus."
-# >- Take screenshot?
-# [10]- Update art:
-#   - Add shading to the tuber player.
-#   - Smooth sharp elbow angle on tuber jump-rise.
+# - Music index 2 doesn't loop back down to 0.
+# - Render current score.
+# - Also render death count.
+# - Increase level scroll speed acceleration and start velocity.
+# - Clean up tile types in all Tiers.
+# - Check TODOs/FIXMEs.
+# 
+# 
 # >- Take screenshot?
 #   - Level with solid, not-jump-throughable platforms, in order to emphasize
 #     wall bouncing.
@@ -31,6 +22,9 @@ class_name Main
 #   - Then, just remember in level whether any tier yet has unlocked it.
 #   - When a new tier arrives that unloks it, show the key indicator for using it.
 #   [30]- Create new tiers to take advantage of these.
+# - Create a flag for setting the tier you want to start from (select from main
+#   menu).
+# - Polish gameplay of easier Tiers. Make sure the sequence makes sense.
 # >- Take screenshot?
 # [2hr]- Add intro animations.
 # >- Take screenshot?
@@ -45,7 +39,8 @@ class_name Main
 # - Increase music playback speed when camera pan speed increases.
 # - Polish tilemap tile choices, since autotile isn't working.
 # - Search for and replace occurrences of FIXME.
-# - 
+# - Fix localStorage usage for high score.
+# - Add shading to the tuber player animations.
 # 
 ###############################################################################
 
@@ -129,7 +124,7 @@ func _process(delta_sec: float) -> void:
                 "_start_game")
 
 func _start_game() -> void:
-    level.start()
+    level.start(main_menu.selected_tier_index)
     main_menu.visible = false
 
 func _stop_game() -> void:
@@ -141,4 +136,4 @@ func _record_high_score(score: int) -> void:
         high_score = score
         main_menu.set_high_score(high_score)
         if OS.get_name() == "HTML5":
-            JavaScript.eval("window.setHighScore(%s)" % high_score)
+            JavaScript.eval("window.setHighScore(%d)" % high_score)

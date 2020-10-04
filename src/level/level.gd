@@ -39,6 +39,7 @@ var MUSIC_PLAYERS = [
 
 const CELL_SIZE := Vector2(32.0, 32.0)
 const VIEWPORT_SIZE := Vector2(480.0, 480.0)
+const INPUT_SIGN_POSITION := Vector2(0.0, 10.0)
 
 const PLAYER_START_POSITION := Vector2(96.0, -32.0)
 const PLAYER_START_VELOCITY := Vector2(0.0, -300.0)
@@ -54,7 +55,7 @@ const CAMERA_MAX_DISTANCE_BELOW_PLAYER := VIEWPORT_SIZE.y / 4
 const PLAYER_MAX_DISTANCE_BELOW_CAMERA := VIEWPORT_SIZE.y / 2 + CELL_SIZE.y / 2
 const MUSIC_CROSS_FADE_DURATION_SEC := 2.0
 const MUSIC_SILENT_VOLUME_DB := -80.0
-var MAIN_MENU_MUSIC_PLAYER: AudioStreamPlayer = MUSIC_PLAYERS[2]
+const MAIN_MENU_MUSIC_PLAYER_INDEX := 2
 const NUMBER_OF_LEVELS_PER_MUSIC := 1
 
 var is_stuck_in_a_retry_loop := false
@@ -117,7 +118,7 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
     # Start playing the default music for the menu screen.
-    _cross_fade_music(MAIN_MENU_MUSIC_PLAYER)
+    _cross_fade_music(MAIN_MENU_MUSIC_PLAYER_INDEX)
     
     _set_camera()
     
@@ -127,13 +128,12 @@ func start(tier_index := START_TIER_INDEX) -> void:
     visible = true
     is_game_paused = false
     start_new_level(tier_index)
-    _cross_fade_music(current_music_player)
+    _cross_fade_music(current_music_player_index)
     if tier_index != 0:
         _add_player(false)
 
 func stop() -> void:
-    var next_music_player := MAIN_MENU_MUSIC_PLAYER
-    _cross_fade_music(next_music_player)
+    _cross_fade_music(MAIN_MENU_MUSIC_PLAYER_INDEX)
     visible = false
     is_game_paused = true
 
@@ -300,6 +300,7 @@ func _destroy_level() -> void:
         remove_child(next_tier)
     
     _on_cross_fade_music_finished()
+    $WADSign.visible = false
 
 func start_new_level(tier_index := 0) -> void:
     player_current_height = 0.0
@@ -336,8 +337,6 @@ func start_new_level(tier_index := 0) -> void:
     current_tier.position = Vector2.ZERO
     next_tier.position = _get_tier_top_position(current_tier)
     
-    current_music_player = MUSIC_PLAYERS[current_music_player_index]
-    
     if current_tier_index != 0:
         current_camera_speed = CAMERA_SPEED_TIER_1
         previous_tier = Utils.add_scene( \
@@ -346,6 +345,10 @@ func start_new_level(tier_index := 0) -> void:
             true, \
             true)
         previous_tier.position.y -= _get_tier_top_position(previous_tier).y
+    
+    # Render the basic input instructions sign.
+    $WADSign.visible = true
+    $WADSign.position = INPUT_SIGN_POSITION
 
 func _on_entered_new_tier() -> void:
     tier_count += 1
@@ -382,7 +385,7 @@ func _on_entered_new_tier() -> void:
             tier_count % NUMBER_OF_LEVELS_PER_MUSIC == 0:
         current_music_player_index = \
                 (current_music_player_index + 1) % MUSIC_PLAYERS.size()
-        _cross_fade_music(MUSIC_PLAYERS[current_music_player_index])
+        _cross_fade_music(current_music_player_index)
     
     # Update camera pan speed.
     if tier_count == 1:
@@ -392,11 +395,13 @@ func _on_entered_new_tier() -> void:
     
     new_tier_sfx_player.play()
 
-func _cross_fade_music(next_music_player: AudioStreamPlayer) -> void:
+func _cross_fade_music(next_music_player_index: int) -> void:
     if fade_out_tween != null:
         _on_cross_fade_music_finished()
     assert(previous_music_player == null or !previous_music_player.playing)
     
+    var next_music_player: AudioStreamPlayer = \
+            MUSIC_PLAYERS[next_music_player_index]
     previous_music_player = current_music_player
     current_music_player = next_music_player
     
@@ -447,6 +452,7 @@ func _on_cross_fade_music_finished() -> void:
         fade_in_tween = null
     if previous_music_player != null:
         previous_music_player.stop()
+        previous_music_player = null
 
 static func _get_tier_top_position(tier: Tier) -> Vector2:
     var tile_maps := Utils.get_children_by_type( \

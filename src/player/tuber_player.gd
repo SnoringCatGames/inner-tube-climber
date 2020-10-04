@@ -12,8 +12,8 @@ const JUMP_BOOST := -600.0
 const WALL_BOUNCE_HORIZONTAL_BOOST := -30.0
 const WALL_BOUNCE_VERTICAL_BOOST := -200.0
 const FLOOR_BOUNCE_BOOST := -800.0
-const IN_AIR_HORIZONTAL_ACCELERATION := 800.0
-const WALK_ACCELERATION := 15.0
+const IN_AIR_HORIZONTAL_ACCELERATION := 600.0
+const WALK_ACCELERATION := 11.0
 const WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION := 250.0
 const LOW_SPEED_THRESHOLD_FOR_WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION := 500.0
 const MIN_HORIZONTAL_SPEED := 5.0
@@ -24,7 +24,7 @@ const MAX_VERTICAL_SPEED := 4000.0
 const MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION := 15.0
 const FRICTION_COEFFICIENT := 0.02
 const WALL_BOUNCE_MOVEMENT_DELAY_SEC := 0.3
-const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.15
+const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.25
 
 var horizontal_facing_sign := 1
 var horizontal_acceleration_sign := 0
@@ -61,14 +61,17 @@ func _init() -> void:
 func _init_sfx_players() -> void:
     jump_sfx_player = AudioStreamPlayer.new()
     jump_sfx_player.stream = JUMP_SFX_STREAM
+    jump_sfx_player.volume_db = -6.0
     add_child(jump_sfx_player)
     
     land_sfx_player = AudioStreamPlayer.new()
     land_sfx_player.stream = LAND_SFX_STREAM
+    land_sfx_player.volume_db = -0.0
     add_child(land_sfx_player)
     
     bounce_sfx_player = AudioStreamPlayer.new()
     bounce_sfx_player.stream = BOUNCE_SFX_STREAM
+    bounce_sfx_player.volume_db = -2.0
     add_child(bounce_sfx_player)
 
 func _physics_process(delta_sec: float) -> void:
@@ -184,7 +187,6 @@ func _process_actions(delta_sec: float) -> void:
         else:
             var friction_multiplier := \
                     Utils.get_floor_friction_multiplier(self)
-            assert(friction_multiplier != 0)
             
             var walk_acceleration := \
                     WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION if \

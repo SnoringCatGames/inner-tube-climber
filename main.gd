@@ -4,50 +4,49 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Render current height in a HUD element.
+# - Implement game over screen.
+# - Implement saving high score to local storage, and passing message to/from
+#   HTML.
+# [10]- Update art:
+#   - Add shading to the tuber player.
+#   - Smooth sharp elbow angle on tuber jump-rise.
+# >- Take screenshot?
+# [15]- Render current height in a HUD element.
 # - Add overlays to indicate keys to press.
 #   - Configured in TIERS_CONFIG.
 #   - Rendered dynamically in level as overlays.
 # >- Take screenshot?
-# - Create a bunch of tiers that enable satisfying skill progression.
-# - Create a flag for setting the tier you want to start from (select from main
-#   menu).
+# [2hr]- Create a bunch of tiers that enable satisfying skill progression.
 # >- Take screenshot?
-# - Update art:
-#   - Make ground continuous with wall.
-#   - Make four types of wall:
-#     - wall-ground-corner-left
-#     - wall-ground-corner-right
-#     - wall-left
-#     - wall-right
-#   - Update walls to fade to solid at the edges.
-#   - Add shading to the tuber player.
-#   - Smooth sharp elbow angle on tuber jump-rise.
-#   - Put more thought into the ice and snow platform art.
-#   - Put more thought into the background?
-# - Will need to introduce solid, not-jump-throughable platforms, in order to
-#   make the wall bouncing really exciting and meaningful.
+#   - Level with solid, not-jump-throughable platforms, in order to emphasize
+#     wall bouncing.
+#   - And level with ice to emphasize it also (but this one following that one).
+#   - Then a fun level with a mix of the two--ice and impenetrables.
+# [30]- Add menus.
+#   - With sfx and music.
+#   - Create a flag for setting the tier you want to start from (select from
+#     main menu).
+#   - Add a checkbox to toggle "stuck in a retry loop".
+# [30]- Add ability to unlock the bounce jump and the double jump.
+#   - Add a flag to tier configs that states whether that tier needs/unlocks it.
+#   - Then, just remember in level whether any tier yet has unlocked it.
+#   - When a new tier arrives that unloks it, show the key indicator for using it.
+#   [30]- Create new tiers to take advantage of these.
+# >- Take screenshot?
+# [2hr]- Add intro animations.
 # >- Take screenshot?
 # - Add an unlock for face-plant-bounce-off-tube-higher-jump after a certain
 #   tier.
 # - Add an unlock for double jump after a certain tier.
 # >- Take screenshot?
-# - Add music.
-#   - Add support for sometimes changing the music when starting a new tier.
-#   - Change every X tiers.
-#   - Cycle through set playlist order.
-#   - Create at least three songs:
-#     - One simple, minimal song for the start, at the crevasse bottom.
-#     - One lively, happy song for the main-menu screen, and part of intro
-#       animation.
-#     - One other up-beat minor song.
-#     - Add dies irae as game-over/you-lose sound.
-# - Update music to cross fade, rather than stopping/starting abruptly.
+# - Add dies irae as game-over/you-lose sound?
 # - Balance volumes of sfx and music.
 # - Create alternate art for foreground and background for different tiers, in
 #   order to add more variety.
 # - Increase music playback speed when camera pan speed increases.
+# - Polish tilemap tile choices, since autotile isn't working.
 # - Search for and replace occurrences of FIXME.
+# - 
 # 
 ###############################################################################
 

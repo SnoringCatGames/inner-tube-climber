@@ -12,13 +12,6 @@ func _ready() -> void:
     assert(animators.size() == 1)
     animator = animators[0]
 
-func _set_camera() -> void:
-    var camera := Camera2D.new()
-    add_child(camera)
-    # Register the current camera, so it's globally accessible.
-    Global.camera_controller.set_current_camera(camera)
-    Global.camera_controller.zoom = CameraController.DEFAULT_CAMERA_ZOOM
-
 func _physics_process(delta_sec: float) -> void:
     _update_surface_state()
     _update_actions(delta_sec)

@@ -5,19 +5,6 @@ class_name Main
 ### MAIN TODO LIST: ###
 # 
 # >- Take screenshot?
-# - Add logic to force a minimum camera scroll rate, and to cause game-over if
-#   player hits bottom of screen.
-#   - Stop having the camera follow player.
-#   - Instead, have camera pan up at a constant rate.
-#   - Calculate what screen bottom level is, and work to align this with the
-#     camera.
-#   - Tween camera pan up extra when the player gets within the highest quarter
-#     of the screen.
-#   - Create game over detection, pan stop, animation, sfx, and show menu
-#     screen after small delay.
-#   - Add logic to increase camera pan speed at each new tier.
-#   - Also increase music playback speed when camera pan speed increases.
-# >- Take screenshot?
 # - Render current height in a HUD element.
 # - Add overlays to indicate keys to press.
 #   - Configured in TIERS_CONFIG.
@@ -56,8 +43,11 @@ class_name Main
 #       animation.
 #     - One other up-beat minor song.
 #     - Add dies irae as game-over/you-lose sound.
+# - Update music to cross fade, rather than stopping/starting abruptly.
+# - Balance volumes of sfx and music.
 # - Create alternate art for foreground and background for different tiers, in
 #   order to add more variety.
+# - Increase music playback speed when camera pan speed increases.
 # - Search for and replace occurrences of FIXME.
 # 
 ###############################################################################

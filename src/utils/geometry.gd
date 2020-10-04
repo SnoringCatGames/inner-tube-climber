@@ -5,7 +5,7 @@ const DOWN := Vector2.DOWN
 const LEFT := Vector2.LEFT
 const RIGHT := Vector2.RIGHT
 const FLOOR_MAX_ANGLE := PI / 4.0
-const GRAVITY := 3000.0
+const GRAVITY := 1600.0
 const FLOAT_EPSILON := 0.00001
 
 # Calculates the minimum squared distance between a line segment and a point.

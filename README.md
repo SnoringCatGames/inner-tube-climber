@@ -2,11 +2,17 @@
 
 _**Demo: https://levilindsey.github.io/tube-climber/dist/tube-climber.html**._
 
-_TODO: Describe the game_
+_Oh no! The player is stuck inside a "loop"--that is, their inner tube--from a tragic inner-tubing accident that left them stuck in the bottom of an endless crevasse!_
 
-This game was created for the [Ludum Dare 47 game jam](https://ldjam.com/events/ludum-dare/47).
+This is an endless climber (2D platformer) game, with novel wall-bouncing mechanics!
 
-TODO: Write general description of game and code.
+This game was created in 48-hours as a "Compo" submsission for the [Ludum Dare 47 game jam](https://ldjam.com/events/ludum-dare/47). All design, code, images, sound effects, and music were created by Levi. The creation of this game was also livestreamed on Twitch: https://www.twitch.tv/ukulelefury/videos.
+
+## Theme: "Stuck in a loop"
+
+The theme for the game jam was "stuck in a loop". This game addresses the theme in two ways:
+1.  The player is stuck inside a "loop"--that is, their inner tube--from a tragic inner-tubing accident.
+2.  The vertically-scrolling level has no end, it "loops" through previous platforms if you get far enough.
 
 ## Software used
 

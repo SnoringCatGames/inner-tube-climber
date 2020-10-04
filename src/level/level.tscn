@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/level/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/level/level.gd" type="Script" id=2]
 [ext_resource path="res://assets/images/signs.png" type="Texture" id=3]
+[ext_resource path="res://assets/images/score-board.png" type="Texture" id=4]
+[ext_resource path="res://assets/fonts/main_font_xs.tres" type="DynamicFont" id=5]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 2 )
@@ -30,3 +32,61 @@ z_index = 1
 texture = ExtResource( 3 )
 region_enabled = true
 region_rect = Rect2( 97, 0, 29, 24 )
+
+[node name="ScoreBoards" type="Node2D" parent="."]
+position = Vector2( -234, 0 )
+z_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScoreBoards"]
+margin_right = 61.0
+margin_bottom = 46.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScorePanel" type="Panel" parent="ScoreBoards/VBoxContainer"]
+margin_right = 61.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 61, 21 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="ScoreBoards/VBoxContainer/ScorePanel"]
+position = Vector2( 30.5, 10.5 )
+texture = ExtResource( 4 )
+
+[node name="ScoreLabel" type="Label" parent="ScoreBoards/VBoxContainer/ScorePanel"]
+margin_left = 2.17509
+margin_top = 3.87618
+margin_right = 53.1751
+margin_bottom = 26.8762
+custom_fonts/font = ExtResource( 5 )
+text = "Score: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FallsPanel" type="Panel" parent="ScoreBoards/VBoxContainer"]
+margin_top = 25.0
+margin_right = 61.0
+margin_bottom = 46.0
+rect_min_size = Vector2( 61, 21 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="ScoreBoards/VBoxContainer/FallsPanel"]
+position = Vector2( 30.5, 10.5 )
+texture = ExtResource( 4 )
+
+[node name="FallsLabel" type="Label" parent="ScoreBoards/VBoxContainer/FallsPanel"]
+margin_left = 5.96869
+margin_top = 4.39056
+margin_right = 56.9687
+margin_bottom = 27.3906
+custom_fonts/font = ExtResource( 5 )
+text = "Falls: "
+__meta__ = {
+"_edit_use_anchors_": false
+}

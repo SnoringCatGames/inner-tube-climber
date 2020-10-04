@@ -29,7 +29,7 @@ const GAME_OVER_SFX_STREAM := preload("res://assets/sfx/yeti_yell.wav")
 const NEW_TIER_SFX_STREAM := preload("res://assets/sfx/new_tier.wav")
 
 const START_TIER_INDEX := 0
-const START_MUSIC_INDEX := 0
+const START_MUSIC_INDEX := 2 # FIXME: LEFT OFF HERE
 
 var MUSIC_PLAYERS = [
     AudioStreamPlayer.new(),
@@ -48,9 +48,9 @@ const CAMERA_START_ZOOM_PRE_STUCK := 0.4
 const CAMERA_START_POSITION_PRE_STUCK := PLAYER_START_POSITION
 const CAMERA_START_POSITION_POST_STUCK := Vector2(0.0, -128.0)
 const CAMERA_PAN_TO_POST_STUCK_DURATION_SEC := 0.5
-const CAMERA_SPEED_TIER_1 := 10.0
+const CAMERA_SPEED_TIER_1 := 15.0
 # TODO: Update this to instead be logarithmic.
-const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 2.0
+const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 3.0
 const CAMERA_MAX_DISTANCE_BELOW_PLAYER := VIEWPORT_SIZE.y / 4
 const PLAYER_MAX_DISTANCE_BELOW_CAMERA := VIEWPORT_SIZE.y / 2 + CELL_SIZE.y / 2
 const MUSIC_CROSS_FADE_DURATION_SEC := 2.0
@@ -60,6 +60,7 @@ const NUMBER_OF_LEVELS_PER_MUSIC := 1
 
 var is_stuck_in_a_retry_loop := false
 
+var start_tier_index := START_TIER_INDEX
 var current_tier_index := START_TIER_INDEX
 var current_music_player_index := START_MUSIC_INDEX
 
@@ -80,6 +81,7 @@ var player_current_height := 0.0
 var player_max_height := 0.0
 var tier_count := 0
 var current_score: int = 0
+var falls_count := 0
 
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
 var current_camera_speed := 0.0
@@ -127,7 +129,10 @@ func _ready() -> void:
 func start(tier_index := START_TIER_INDEX) -> void:
     visible = true
     is_game_paused = false
-    start_new_level(tier_index)
+    falls_count = 0
+    start_new_level( \
+            tier_index, \
+            START_MUSIC_INDEX)
     _cross_fade_music(current_music_player_index)
     if tier_index != 0:
         _add_player(false)
@@ -183,8 +188,16 @@ func _process(delta_sec: float) -> void:
             current_camera_height - PLAYER_MAX_DISTANCE_BELOW_CAMERA
     if player_current_height < current_game_over_height:
         _game_over()
+    
+    # Update score displays.
+    $ScoreBoards.position.y = Global.camera_controller.offset.y + 190
+    $ScoreBoards/VBoxContainer/ScorePanel/ScoreLabel.text = \
+            "Score: %d" % current_score
+    $ScoreBoards/VBoxContainer/FallsPanel/FallsLabel.text = \
+            "Falls: %d" % falls_count
 
 func _game_over() -> void:
+    falls_count += 1
     var game_score := current_score
     
     var retry_tier_index := current_tier_index
@@ -200,7 +213,9 @@ func _game_over() -> void:
     
     if is_stuck_in_a_retry_loop:
         # Reset state to replay the level at the latest tier.
-        start_new_level(retry_tier_index)
+        start_new_level( \
+                retry_tier_index, \
+                current_music_player_index)
         _add_player(false)
         current_camera_speed = camera_retry_speed
         is_game_paused = false
@@ -302,17 +317,20 @@ func _destroy_level() -> void:
     _on_cross_fade_music_finished()
     $WADSign.visible = false
 
-func start_new_level(tier_index := 0) -> void:
+func start_new_level( \
+        tier_index := 0, \
+        music_player_index := START_MUSIC_INDEX) -> void:
     player_current_height = 0.0
     player_max_height = 0.0
     current_score = 0
     tier_count = 0
-    current_music_player_index = START_MUSIC_INDEX
+    current_music_player_index = music_player_index
     
     current_camera_height = -CAMERA_START_POSITION_POST_STUCK.y
     current_camera_speed = 0.0
     current_game_over_height = -INF
     
+    start_tier_index = tier_index
     current_tier_index = tier_index
     
     var next_tier_index := current_tier_index + 1
@@ -349,6 +367,8 @@ func start_new_level(tier_index := 0) -> void:
     # Render the basic input instructions sign.
     $WADSign.visible = true
     $WADSign.position = INPUT_SIGN_POSITION
+    if current_tier_index != 0:
+        $WADSign.position.y -= CELL_SIZE.y
 
 func _on_entered_new_tier() -> void:
     tier_count += 1
@@ -381,7 +401,8 @@ func _on_entered_new_tier() -> void:
     next_tier.position = _get_tier_top_position(current_tier)
     
     # Maybe play new music.
-    if tier_count != 1 and \
+    if (start_tier_index != 0 or \
+            tier_count != 1) and \
             tier_count % NUMBER_OF_LEVELS_PER_MUSIC == 0:
         current_music_player_index = \
                 (current_music_player_index + 1) % MUSIC_PLAYERS.size()
@@ -398,14 +419,17 @@ func _on_entered_new_tier() -> void:
 func _cross_fade_music(next_music_player_index: int) -> void:
     if fade_out_tween != null:
         _on_cross_fade_music_finished()
-    assert(previous_music_player == null or !previous_music_player.playing)
+    if previous_music_player != null and previous_music_player.playing:
+        # TODO: This shouldn't happen, but it does sometimes.
+        pass
     
     var next_music_player: AudioStreamPlayer = \
             MUSIC_PLAYERS[next_music_player_index]
     previous_music_player = current_music_player
     current_music_player = next_music_player
     
-    if previous_music_player == current_music_player:
+    if previous_music_player == current_music_player and \
+            current_music_player.playing:
         return
     
     if previous_music_player != null and previous_music_player.playing:
@@ -450,9 +474,9 @@ func _on_cross_fade_music_finished() -> void:
         remove_child(fade_in_tween)
         fade_in_tween.queue_free()
         fade_in_tween = null
-    if previous_music_player != null:
+    if previous_music_player != null and \
+            previous_music_player != current_music_player:
         previous_music_player.stop()
-        previous_music_player = null
 
 static func _get_tier_top_position(tier: Tier) -> Vector2:
     var tile_maps := Utils.get_children_by_type( \

@@ -4,10 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Music index 2 doesn't loop back down to 0.
-# - Render current score.
-# - Also render death count.
-# - Increase level scroll speed acceleration and start velocity.
 # - Clean up tile types in all Tiers.
 # - Check TODOs/FIXMEs.
 # 

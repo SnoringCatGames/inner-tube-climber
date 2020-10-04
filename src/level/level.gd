@@ -1,6 +1,9 @@
 extends Node2D
 class_name Level
 
+signal back_to_menu
+signal game_over(score)
+
 const PLAYER_RESOURCE_PATH := "res://src/player/tuber_player.tscn"
 
 const TIER_SCENE_PATHS := [
@@ -49,10 +52,12 @@ const CAMERA_SPEED_TIER_1 := 10.0
 const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 2.0
 const CAMERA_MAX_DISTANCE_BELOW_PLAYER := VIEWPORT_SIZE.y / 4
 const PLAYER_MAX_DISTANCE_BELOW_CAMERA := VIEWPORT_SIZE.y / 2 + CELL_SIZE.y / 2
-
+const MUSIC_CROSS_FADE_DURATION_SEC := 2.0
+const MUSIC_SILENT_VOLUME_DB := -80.0
+var MAIN_MENU_MUSIC_PLAYER: AudioStreamPlayer = MUSIC_PLAYERS[2]
 const NUMBER_OF_LEVELS_PER_MUSIC := 1
 
-var is_stuck_in_a_retry_loop := true
+var is_stuck_in_a_retry_loop := false
 
 var current_tier_index := START_TIER_INDEX
 var current_music_player_index := START_MUSIC_INDEX
@@ -73,19 +78,18 @@ var player: TuberPlayer
 var player_current_height := 0.0
 var player_max_height := 0.0
 var tier_count := 0
+var current_score: int = 0
 
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
 var current_camera_speed := 0.0
 var current_game_over_height := -INF
-var is_game_paused := false
+var is_game_paused := true
 
 func _init() -> void:
     for path in TIER_SCENE_PATHS:
         load(path)
     
     _init_audio_players()
-    
-    start_new_level(current_tier_index)
 
 func _init_audio_players() -> void:
     MUSIC_PLAYERS[0].stream = MUSIC_STREAM_0
@@ -100,7 +104,7 @@ func _init_audio_players() -> void:
     
     game_over_sfx_player = AudioStreamPlayer.new()
     game_over_sfx_player.stream = GAME_OVER_SFX_STREAM
-    game_over_sfx_player.volume_db = -0.0
+    game_over_sfx_player.volume_db = -6.0
     add_child(game_over_sfx_player)
     
     new_tier_sfx_player = AudioStreamPlayer.new()
@@ -112,13 +116,26 @@ func _enter_tree() -> void:
     Global.current_level = self
 
 func _ready() -> void:
-    current_music_player.play()
+    # Start playing the default music for the menu screen.
+    _cross_fade_music(MAIN_MENU_MUSIC_PLAYER)
+    
     _set_camera()
     
-    if current_tier_index != 0:
-        _add_player(false)
-    
     Global.is_level_ready = true
+
+func start(tier_index := START_TIER_INDEX) -> void:
+    visible = true
+    is_game_paused = false
+    start_new_level(tier_index)
+    _cross_fade_music(current_music_player)
+    if tier_index != 0:
+        _add_player(false)
+
+func stop() -> void:
+    var next_music_player := MAIN_MENU_MUSIC_PLAYER
+    _cross_fade_music(next_music_player)
+    visible = false
+    is_game_paused = true
 
 func _physics_process(delta_sec: float) -> void:
     if is_game_paused:
@@ -140,6 +157,7 @@ func _physics_process(delta_sec: float) -> void:
     if player_current_height > next_tier_height:
         _on_entered_new_tier()
     player_max_height = max(player_max_height, player_current_height)
+    current_score = floor(player_max_height / 10.0) as int
 
 func _process(delta_sec: float) -> void:
     if is_game_paused:
@@ -167,43 +185,43 @@ func _process(delta_sec: float) -> void:
         _game_over()
 
 func _game_over() -> void:
-    if is_stuck_in_a_retry_loop:
-        # Reset state to replay the level at the latest tier.
-        
-        var retry_tier_index := current_tier_index
-        var camera_retry_speed := current_camera_speed
-        
-        _destroy_level()
-        start_new_level(retry_tier_index)
-        _add_player(false)
-        
-        current_camera_speed = camera_retry_speed
-        player_current_height = -PLAYER_START_POSITION.y + CELL_SIZE.y * 2
-        player_max_height = player_current_height
-        current_camera_height = player_current_height
-        Global.camera_controller.offset = Vector2(0.0, -current_camera_height)
-        
-        return
+    var game_score := current_score
     
-    is_game_paused = true
+    var retry_tier_index := current_tier_index
+    var camera_retry_speed := current_camera_speed
     
-    remove_child(player)
-    player.queue_free()
-    
-    _on_cross_fade_music_finished()
-    current_music_player.stop()
+    _destroy_level()
+    player_current_height = -PLAYER_START_POSITION.y + CELL_SIZE.y * 2
+    player_max_height = player_current_height
+    current_camera_height = player_current_height
+    Global.camera_controller.offset = Vector2(0.0, -current_camera_height)
     
     game_over_sfx_player.play()
-    game_over_sfx_player.connect( \
+    
+    if is_stuck_in_a_retry_loop:
+        # Reset state to replay the level at the latest tier.
+        start_new_level(retry_tier_index)
+        _add_player(false)
+        current_camera_speed = camera_retry_speed
+        is_game_paused = false
+    else:
+        Global.camera_controller.offset = CAMERA_START_POSITION_PRE_STUCK
+        Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
+        current_music_player.stop()
+        game_over_sfx_player.connect( \
+                "finished", \
+                self, \
+                "_on_game_over_sfx_finished")
+        # FIXME: Trigger some sort of animation (shake screen?).
+    
+    emit_signal("game_over", game_score)
+
+func _on_game_over_sfx_finished() -> void:
+    game_over_sfx_player.disconnect( \
             "finished", \
             self, \
             "_on_game_over_sfx_finished")
-    
-    # FIXME: Trigger some sort of animation (shake screen?).
-
-func _on_game_over_sfx_finished() -> void:
-    # FIXME: Switch to menu, start new music.
-    pass
+    emit_signal("back_to_menu")
 
 func _set_camera() -> void:
     var camera := Camera2D.new()
@@ -265,6 +283,8 @@ func _add_player(is_base_tier := false) -> void:
 
 func _destroy_level() -> void:
     current_tier_index = -INF
+    is_game_paused = true
+    current_score = 0
     
     if player != null:
         player.queue_free()
@@ -284,13 +304,13 @@ func _destroy_level() -> void:
 func start_new_level(tier_index := 0) -> void:
     player_current_height = 0.0
     player_max_height = 0.0
+    current_score = 0
     tier_count = 0
     current_music_player_index = START_MUSIC_INDEX
     
     current_camera_height = -CAMERA_START_POSITION_POST_STUCK.y
     current_camera_speed = 0.0
     current_game_over_height = -INF
-    is_game_paused = false
     
     current_tier_index = tier_index
     
@@ -318,7 +338,7 @@ func start_new_level(tier_index := 0) -> void:
     
     current_music_player = MUSIC_PLAYERS[current_music_player_index]
     
-    if tier_index != 0:
+    if current_tier_index != 0:
         current_camera_speed = CAMERA_SPEED_TIER_1
         previous_tier = Utils.add_scene( \
             self, \
@@ -372,9 +392,6 @@ func _on_entered_new_tier() -> void:
     
     new_tier_sfx_player.play()
 
-const MUSIC_CROSS_FADE_DURATION_SEC := 2.0
-const MUSIC_SILENT_VOLUME_DB := -80.0
-
 func _cross_fade_music(next_music_player: AudioStreamPlayer) -> void:
     if fade_out_tween != null:
         _on_cross_fade_music_finished()
@@ -382,6 +399,9 @@ func _cross_fade_music(next_music_player: AudioStreamPlayer) -> void:
     
     previous_music_player = current_music_player
     current_music_player = next_music_player
+    
+    if previous_music_player == current_music_player:
+        return
     
     if previous_music_player != null and previous_music_player.playing:
         fade_out_tween = Tween.new()

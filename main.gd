@@ -4,7 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# >- Take screenshot?
 # - Render current height in a HUD element.
 # - Add overlays to indicate keys to press.
 #   - Configured in TIERS_CONFIG.

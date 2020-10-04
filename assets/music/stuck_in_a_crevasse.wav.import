@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/stuck_in_a_crevasse.wav-8f8ec4fec29fa0f0ca9c6f5d399516ea.sample"
+
+[deps]
+
+source_file="res://assets/music/stuck_in_a_crevasse.wav"
+dest_files=[ "res://.import/stuck_in_a_crevasse.wav-8f8ec4fec29fa0f0ca9c6f5d399516ea.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/no_escape_from_the_loop.wav-021930ee3af34fd67e37fb5cef168b1d.sample"
+
+[deps]
+
+source_file="res://assets/music/no_escape_from_the_loop.wav"
+dest_files=[ "res://.import/no_escape_from_the_loop.wav-021930ee3af34fd67e37fb5cef168b1d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -8,12 +8,19 @@ const TIER_SCENE_PATHS := [
     "res://src/level/tiers/tier_1.tscn",
 ]
 
-const MUSIC_STREAM_1 := preload("res://assets/music/on_a_quest.ogg")
+const MUSIC_STREAM_0 := \
+        preload("res://assets/music/stuck_in_a_crevasse.ogg")
+const MUSIC_STREAM_1 := \
+        preload("res://assets/music/no_escape_from_the_loop.ogg")
+const MUSIC_STREAM_2 := \
+        preload("res://assets/music/out_for_a_loop_ride.ogg")
 const GAME_OVER_SFX_STREAM := preload("res://assets/sfx/yeti_yell.wav")
 
 const START_LEVEL_INDEX := 0
 
+var MUSIC_PLAYER_0 := AudioStreamPlayer.new()
 var MUSIC_PLAYER_1 := AudioStreamPlayer.new()
+var MUSIC_PLAYER_2 := AudioStreamPlayer.new()
 
 const CELL_SIZE := Vector2(32.0, 32.0)
 const VIEWPORT_SIZE := Vector2(480.0, 480.0)
@@ -25,9 +32,9 @@ const CAMERA_START_ZOOM_PRE_STUCK := 0.4
 const CAMERA_START_POSITION_PRE_STUCK := PLAYER_START_POSITION
 const CAMERA_START_POSITION_POST_STUCK := Vector2(0.0, -128.0)
 const CAMERA_PAN_TO_POST_STUCK_DURATION_SEC := 0.5
-const CAMERA_SPEED_TIER_1 := 6.0
+const CAMERA_SPEED_TIER_1 := 10.0
 # TODO: Update this to instead be logarithmic.
-const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 10.6
+const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 2.0
 const CAMERA_MAX_DISTANCE_BELOW_PLAYER := VIEWPORT_SIZE.y / 4
 const PLAYER_MAX_DISTANCE_BELOW_CAMERA := VIEWPORT_SIZE.y / 2 + CELL_SIZE.y / 2
 
@@ -36,11 +43,15 @@ var LEVEL_CONFIGS := [
         tiers = [
             {
                 tier_number = 0,
-                music_player = MUSIC_PLAYER_1,
+                music_player = MUSIC_PLAYER_0,
             },
             {
                 tier_number = 1,
                 music_player = MUSIC_PLAYER_1,
+            },
+            {
+                tier_number = 1,
+                music_player = MUSIC_PLAYER_2,
             },
         ],
     },
@@ -75,8 +86,12 @@ func _init() -> void:
     start_new_level(START_LEVEL_INDEX)
 
 func _init_audio_players() -> void:
+    MUSIC_PLAYER_0.stream = MUSIC_STREAM_0
+    add_child(MUSIC_PLAYER_0)
     MUSIC_PLAYER_1.stream = MUSIC_STREAM_1
     add_child(MUSIC_PLAYER_1)
+    MUSIC_PLAYER_2.stream = MUSIC_STREAM_2
+    add_child(MUSIC_PLAYER_2)
     
     game_over_sfx_player = AudioStreamPlayer.new()
     game_over_sfx_player.stream = GAME_OVER_SFX_STREAM

@@ -29,7 +29,7 @@ const GAME_OVER_SFX_STREAM := preload("res://assets/sfx/yeti_yell.wav")
 const NEW_TIER_SFX_STREAM := preload("res://assets/sfx/new_tier.wav")
 
 const START_TIER_INDEX := 0
-const START_MUSIC_INDEX := 2 # FIXME: LEFT OFF HERE
+const START_MUSIC_INDEX := 0
 
 var MUSIC_PLAYERS = [
     AudioStreamPlayer.new(),
@@ -227,7 +227,6 @@ func _game_over() -> void:
                 "finished", \
                 self, \
                 "_on_game_over_sfx_finished")
-        # FIXME: Trigger some sort of animation (shake screen?).
     
     emit_signal("game_over", game_score)
 

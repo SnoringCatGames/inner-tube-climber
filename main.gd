@@ -4,25 +4,14 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Clean up tile types in all Tiers.
-# - Check TODOs/FIXMEs.
-# 
-# 
 # >- Take screenshot?
-#   - Level with solid, not-jump-throughable platforms, in order to emphasize
-#     wall bouncing.
-#   - And level with ice to emphasize it also (but this one following that one).
-#   - Then a fun level with a mix of the two--ice and impenetrables.
 # [30]- Add ability to unlock the bounce jump and the double jump.
 #   - Add a flag to tier configs that states whether that tier needs/unlocks it.
 #   - Then, just remember in level whether any tier yet has unlocked it.
 #   - When a new tier arrives that unloks it, show the key indicator for using it.
 #   [30]- Create new tiers to take advantage of these.
-# - Create a flag for setting the tier you want to start from (select from main
-#   menu).
-# - Polish gameplay of easier Tiers. Make sure the sequence makes sense.
 # >- Take screenshot?
-# [2hr]- Add intro animations.
+# [2hr]- Add more intro animations.
 # >- Take screenshot?
 # - Add an unlock for face-plant-bounce-off-tube-higher-jump after a certain
 #   tier.
@@ -34,9 +23,9 @@ class_name Main
 #   order to add more variety.
 # - Increase music playback speed when camera pan speed increases.
 # - Polish tilemap tile choices, since autotile isn't working.
-# - Search for and replace occurrences of FIXME.
 # - Fix localStorage usage for high score.
 # - Add shading to the tuber player animations.
+# - Add an animation to shake the screen on game over.
 # 
 ###############################################################################
 

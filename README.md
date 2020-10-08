@@ -1,16 +1,18 @@
-# tube-climber
+# stuck-in-an-inner-tube
 
-_**Demo: https://levilindsey.github.io/tube-climber/dist/tube-climber.html**_
-
-_**Ludum Dare 47 Submission: https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube/**_
+_**Demo: https://levilindsey.github.io/stuck-in-an-inner-tube/dist/stuck-in-an-inner-tube.html**_
 
 _Oh no! The player is stuck inside a "loop"--that is, their inner tube--from a tragic inner-tubing accident that left them stuck in the bottom of an endless crevasse!_
 
 This is an endless climber (2D platformer) game, with novel wall-bouncing mechanics!
 
-This game was created in 48-hours as a "Compo" submsission for the [Ludum Dare 47 game jam](https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube/). All design, code, images, sound effects, and music were created by Levi. The creation of this game was also livestreamed on Twitch: https://www.twitch.tv/ukulelefury/videos.
+## Ludum Dare 47
 
-## Theme: "Stuck in a loop"
+_**Ludum Dare 47 Submission: https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube/**_
+
+This game is based off of a "Compo" submission for the [Ludum Dare 47 game jam](https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube/). All design, code, images, sound effects, and music were created by Levi in under 48 hours. The creation of this game was also [livestreamed on Twitch](https://www.twitch.tv/ukulelefury/videos). You can see Levi's original submission version at https://github.com/levilindsey/tube-climber.
+
+### The theme: "Stuck in a loop"
 
 The theme for the game jam was "stuck in a loop". This game addresses the theme in two ways:
 1.  The player is stuck inside a "loop"--that is, their inner tube--from a tragic inner-tubing accident.
@@ -22,6 +24,7 @@ The theme for the game jam was "stuck in a loop". This game addresses the theme 
 -   [Aseprite](https://www.aseprite.org/) was used to create the images.
 -   [Bfxr](https://www.bfxr.net/) was used to create the sound effects.
 -   [DefleMask](https://deflemask.com/) was used to create the music.
+-   [Trello](https://trello.com/b/GvuTgtRC/ludum-dare-47) was used for brainstorming and planning.
 
 ## Licenses
 

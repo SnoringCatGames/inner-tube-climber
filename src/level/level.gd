@@ -314,7 +314,7 @@ func _destroy_level() -> void:
         remove_child(next_tier)
     
     _on_cross_fade_music_finished()
-    $WADSign.visible = false
+    $SignAllKeys.visible = false
 
 func start_new_level( \
         tier_index := 0, \
@@ -364,10 +364,10 @@ func start_new_level( \
         previous_tier.position.y -= _get_tier_top_position(previous_tier).y
     
     # Render the basic input instructions sign.
-    $WADSign.visible = true
-    $WADSign.position = INPUT_SIGN_POSITION
+    $SignAllKeys.visible = true
+    $SignAllKeys.position = INPUT_SIGN_POSITION
     if current_tier_index != 0:
-        $WADSign.position.y -= CELL_SIZE.y
+        $SignAllKeys.position.y -= CELL_SIZE.y
 
 func _on_entered_new_tier() -> void:
     tier_count += 1

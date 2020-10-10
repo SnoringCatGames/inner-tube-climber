@@ -4,12 +4,12 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Add better control indicators for arrows/space.
-# - Fix the v-sync issue.
-# - Add forgiveness for allowing a jump if the player recently walked off a floor.
+# - Add forgiveness for allowing a jump if the player recently walked off a
+#   floor.
 # - Change score to accumulate between deaths.
 #   - Maybe count current elevation separately.
-#   - Then can make score more complicated, subracting deaths, including a multiplier for speed, etc.
+#   - Then can make score more complicated, subracting deaths, including a
+#     multiplier for speed, etc.
 # - Fix scroll speed bug.
 #   - Also, maybe have speed decrease after each death.
 # - Make scroll speed configurable from the main menu.
@@ -17,15 +17,20 @@ class_name Main
 # - Add intro animation.
 # - Add a pause feature.
 #   - In the pause menu, allow the player to quit back to the main menu.
-#   - Auto-save progress through each tier to local storage, so the user can resume there on next load?
-# - Possible to add levels with lots of sideways movement and camera panning. Probably conditionally lock camera horizontal pan.
+#   - Auto-save progress through each tier to local storage, so the user can
+#     resume there on next load?
+# - Possible to add levels with lots of sideways movement and camera panning.
+#   Probably conditionally lock camera horizontal pan.
 # - Make a level to emphasize dynamic jump height.
-# - Mobile control idea: touch either corner to move sideways, swipe slightly up on either to jump.
+# - Mobile control idea: touch either corner to move sideways, swipe slightly
+#   up on either to jump.
 # 
 # [30]- Add ability to unlock the bounce jump and the double jump.
-#   - Add a flag to tier configs that states whether that tier needs/unlocks it.
+#   - Add a flag to tier configs that states whether that tier needs/unlocks
+#     it.
 #   - Then, just remember in level whether any tier yet has unlocked it.
-#   - When a new tier arrives that unloks it, show the key indicator for using it.
+#   - When a new tier arrives that unloks it, show the key indicator for using
+#     it.
 #   [30]- Create new tiers to take advantage of these.
 # >- Take screenshot?
 # [2hr]- Add more intro animations.

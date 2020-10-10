@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/level/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/level/level.gd" type="Script" id=2]
 [ext_resource path="res://assets/images/signs.png" type="Texture" id=3]
 [ext_resource path="res://assets/images/score-board.png" type="Texture" id=4]
 [ext_resource path="res://assets/fonts/main_font_xs.tres" type="DynamicFont" id=5]
+[ext_resource path="res://assets/images/sign-all-keys.png" type="Texture" id=6]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 2 )
@@ -32,6 +33,11 @@ z_index = 1
 texture = ExtResource( 3 )
 region_enabled = true
 region_rect = Rect2( 97, 0, 29, 24 )
+
+[node name="SignAllKeys" type="Sprite" parent="."]
+visible = false
+z_index = 1
+texture = ExtResource( 6 )
 
 [node name="ScoreBoards" type="Node2D" parent="."]
 position = Vector2( -234, 0 )

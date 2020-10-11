@@ -24,7 +24,8 @@ const MAX_VERTICAL_SPEED := 4000.0
 const MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION := 15.0
 const FRICTION_COEFFICIENT := 0.02
 const WALL_BOUNCE_MOVEMENT_DELAY_SEC := 0.3
-const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.25
+const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.2
+const JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC := 0.15
 
 var horizontal_facing_sign := 1
 var horizontal_acceleration_sign := 0
@@ -36,8 +37,12 @@ var is_touching_left_wall := false
 var is_touching_right_wall := false
 var toward_wall_sign := 0
 var just_touched_floor := false
+var just_left_floor := false
 var just_touched_ceiling := false
+var just_left_ceiling := false
 var just_touched_wall := false
+var just_left_wall := false
+var entered_air_by_jumping := false
 
 var has_hit_wall_since_pressing_move := false
 var last_hit_wall_time := -INF
@@ -50,6 +55,7 @@ var max_jump_count := 1
 
 var was_last_jump_input_consumed := false
 var last_jump_input_time := 0.0
+var last_floor_fall_off_time := 0.0
 
 var jump_sfx_player: AudioStreamPlayer
 var land_sfx_player: AudioStreamPlayer
@@ -99,6 +105,9 @@ func _update_surface_state() -> void:
     just_touched_floor = !was_touching_floor and is_touching_floor
     just_touched_ceiling = !was_touching_ceiling and is_touching_ceiling
     just_touched_wall = !was_touching_wall and is_touching_wall
+    just_left_floor = was_touching_floor and !is_touching_floor
+    just_left_ceiling = was_touching_ceiling and !is_touching_ceiling
+    just_left_wall = was_touching_wall and !is_touching_wall
     var which_wall: int = Utils.get_which_wall_collided_for_body(self)
     is_touching_left_wall = which_wall == SurfaceSide.LEFT_WALL
     is_touching_right_wall = which_wall == SurfaceSide.RIGHT_WALL
@@ -118,6 +127,9 @@ func _update_surface_state() -> void:
     
     if just_touched_wall:
         last_hit_wall_time = Time.elapsed_play_time_sec
+    
+    if just_left_floor:
+        last_floor_fall_off_time = Time.elapsed_play_time_sec
 
 # Calculate what actions occur during this frame.
 func _update_actions(delta_sec: float) -> void:
@@ -165,9 +177,14 @@ func _process_actions(delta_sec: float) -> void:
             last_jump_input_time + \
                     JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC > \
                     Time.elapsed_play_time_sec
+    var is_jump_after_recent_fall_still_consumable := \
+            last_floor_fall_off_time > \
+            Time.elapsed_play_time_sec - \
+                    JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC
     
     if is_touching_floor:
         jump_count = 0
+        entered_air_by_jumping = false
         is_rising_from_jump = false
         
         # The move_and_slide system depends on some vertical gravity always pushing
@@ -179,6 +196,7 @@ func _process_actions(delta_sec: float) -> void:
         if Input.is_action_just_pressed("jump") or \
                 is_previous_jump_input_still_consumable:
             jump_count = 1
+            entered_air_by_jumping = true
             just_triggered_jump = true
             is_rising_from_jump = true
             velocity.y = JUMP_BOOST
@@ -210,7 +228,7 @@ func _process_actions(delta_sec: float) -> void:
                         GRAVITY_FAST_FALL
                 friction_offset = clamp(friction_offset, 0, abs(velocity.x))
                 velocity.x += -sign(velocity.x) * friction_offset
-    else:
+    else: # Is in the air.
         # If the player falls off a wall or ledge, then that's considered the first
         # jump.
         jump_count = max(jump_count, 1)
@@ -234,11 +252,22 @@ func _process_actions(delta_sec: float) -> void:
                 RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER, \
                 GRAVITY_FAST_FALL)
         
+        var is_an_initial_jump := \
+                Input.is_action_just_pressed("jump") and \
+                is_jump_after_recent_fall_still_consumable and \
+                jump_count == 1
         # A jump while in air (a "double jump").
-        if (Input.is_action_just_pressed("jump") or \
+        var is_a_double_jump := \
+                !is_an_initial_jump and \
+                (Input.is_action_just_pressed("jump") or \
                 is_previous_jump_input_still_consumable) and \
-                jump_count < max_jump_count:
-            jump_count += 1
+                jump_count < max_jump_count
+        
+        if is_an_initial_jump or is_a_double_jump:
+            if is_an_initial_jump:
+                jump_count = 1
+            else:
+                jump_count += 1
             just_triggered_jump = true
             is_rising_from_jump = true
             velocity.y = JUMP_BOOST

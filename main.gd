@@ -4,8 +4,14 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Add forgiveness for allowing a jump if the player recently walked off a
-#   floor.
+# - New autotiles:
+#   - Check friction.
+#   - Add under-snow shadow to wall tiles.
+#   - Create alternative art for a couple tiles: plain wall r/l; plain floor,
+#     plain center.
+#   - Create ice-wall tiles.
+#   - Fix issue with tiles at top/bottom of adjacent tiers not matching up /
+#     binding.
 # - Change score to accumulate between deaths.
 #   - Maybe count current elevation separately.
 #   - Then can make score more complicated, subracting deaths, including a
@@ -21,6 +27,11 @@ class_name Main
 #     resume there on next load?
 # - Possible to add levels with lots of sideways movement and camera panning.
 #   Probably conditionally lock camera horizontal pan.
+# - Make the wall-bounce-vertical-boost more consistent/predictable; don't want
+#   it to be better to bounce near bottom of jump instead of top.
+# - Add a delay after falling before restarting.
+# - Make a level te emphasize the slipperiness of ice (mostly snow, but fail on
+#   ice  near the top, must jump to bounce off wall).
 # - Make a level to emphasize dynamic jump height.
 # - Mobile control idea: touch either corner to move sideways, swipe slightly
 #   up on either to jump.

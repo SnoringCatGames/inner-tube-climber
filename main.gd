@@ -4,18 +4,32 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - New autotiles:
-#   - Check friction.
-#   - Add under-snow shadow to wall tiles.
-#   - Create alternative art for a couple tiles: plain wall r/l; plain floor,
-#     plain center.
-#   - Create ice-wall tiles.
+# - New tile art:
 #   - Fix issue with tiles at top/bottom of adjacent tiers not matching up /
 #     binding.
+#     - Maybe the fix is to instead remove the top row, and most of the bottom
+#       (except the middle platforms and the two surrounding wall tiles), and
+#       then create a couple possible filler scenes that are just the relevant
+#       between rows for whatever combination of previous/next tier types we're
+#       facing.
+#     - Make the Tier scene a `tool`, and expose a flag to the editor for
+#       configuring whether the given Tier is open or walled.
+#     - Actually, make this be an enum instead of a flag, then we can also
+#       support the upcoming feature of "HORIZONTAL_PANNING".
 # - Change score to accumulate between deaths.
 #   - Maybe count current elevation separately.
 #   - Then can make score more complicated, subracting deaths, including a
 #     multiplier for speed, etc.
+#     - Maybe, we should do something else for score...:
+#       - We want to allow some number of resets/falls.
+#       - We want to keep the scroll accelerating, but maybe slow a little on
+#         each fall.
+#       - Maybe it's easy, just give X (3?) lives per level attempt.
+#         - Then can still slow scroll a bit on each death, and we don't need
+#           to worry too much about how to adjust score, and/or even force an
+#           end condnition.
+#       - But then also have a hard-mode with one life, and faster initial
+#         speed, but slower acceleration.
 # - Fix scroll speed bug.
 #   - Also, maybe have speed decrease after each death.
 # - Make scroll speed configurable from the main menu.
@@ -27,6 +41,21 @@ class_name Main
 #     resume there on next load?
 # - Possible to add levels with lots of sideways movement and camera panning.
 #   Probably conditionally lock camera horizontal pan.
+#   - Theme-wise, we can eventually make the player escape the crevasse and
+#     start climbing up the mountain.
+#   - We can show trees and mountain range in the background.
+#   - Idk if there's something clever we can do to make the inner-tubing
+#     continue to make sense at this point though... why would they care to do
+#     more than escape the crevasse?
+#   - And then, what is the end goal? Is there something they get at the top of
+#     the mountain? Or just the beautiful view?
+#   - How do we then make it loop?
+#     - Maybe, show a cut-scene after the final mountain-ascent tier, once
+#       they've reached the summit.
+#     - Show a flag, show a beautiful sun-rise, show them stop and finally free
+#       themselves from their inner tube (maybe with a tool or with some help?),
+#       then show them start tubing down the mountain again, and repeat the
+#       intro animation in order to loop back to the start level.
 # - Make the wall-bounce-vertical-boost more consistent/predictable; don't want
 #   it to be better to bounce near bottom of jump instead of top.
 # - Add a delay after falling before restarting.
@@ -35,6 +64,23 @@ class_name Main
 # - Make a level to emphasize dynamic jump height.
 # - Mobile control idea: touch either corner to move sideways, swipe slightly
 #   up on either to jump.
+# 
+# Long-term planning:
+# - Maybe have a set sequence of tiers per-day? Per week? Per month?
+#   - Randomly shuffle?
+#   - Pre-generate for the whole year, at least.
+# - Or have a set of pre-made levels, with their own tier sequences, each
+#   showing the ascent art transition and summit animation.
+#   - Could show a different flag color for each level.
+#   - Anything else interesting to differentiate, art-wise?
+#   - Clearly, difficulty of levels should change.
+# - Show a leaderboard for each level, and also for the current special/rotating
+#   level.
+#   - Leaderboard should show a couple things:
+#     - Farthest climbed without dying.
+#       - Or score?
+#     - Fastest ascent through one cycle of the level.
+#   - Show username, and their score/speed.
 # 
 # [30]- Add ability to unlock the bounce jump and the double jump.
 #   - Add a flag to tier configs that states whether that tier needs/unlocks

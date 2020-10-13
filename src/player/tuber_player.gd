@@ -27,25 +27,7 @@ const WALL_BOUNCE_MOVEMENT_DELAY_SEC := 0.3
 const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.2
 const JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC := 0.15
 
-var horizontal_facing_sign := 1
-var horizontal_acceleration_sign := 0
-
-var is_touching_floor := false
-var is_touching_ceiling := false
-var is_touching_wall := false
-var is_touching_left_wall := false
-var is_touching_right_wall := false
-var toward_wall_sign := 0
-var just_touched_floor := false
-var just_left_floor := false
-var just_touched_ceiling := false
-var just_left_ceiling := false
-var just_touched_wall := false
-var just_left_wall := false
-var entered_air_by_jumping := false
-
-var has_hit_wall_since_pressing_move := false
-var last_hit_wall_time := -INF
+var surface_state := PlayerSurfaceState.new()
 
 var just_triggered_jump := false
 var is_rising_from_jump := false
@@ -53,6 +35,8 @@ var jump_count := 0
 # FIXME: Add double jumps after reaching a certain tier.
 var max_jump_count := 1
 
+var has_hit_wall_since_pressing_move := false
+var last_hit_wall_time := -INF
 var was_last_jump_input_consumed := false
 var last_jump_input_time := 0.0
 var last_floor_fall_off_time := 0.0
@@ -96,28 +80,51 @@ func _physics_process(delta_sec: float) -> void:
 
 # Calculates basic surface-related state for the current frame.
 func _update_surface_state() -> void:
-    var was_touching_floor := is_touching_floor
-    var was_touching_ceiling := is_touching_ceiling
-    var was_touching_wall := is_touching_wall
-    is_touching_floor = is_on_floor()
-    is_touching_ceiling = is_on_ceiling()
-    is_touching_wall = is_on_wall()
-    just_touched_floor = !was_touching_floor and is_touching_floor
-    just_touched_ceiling = !was_touching_ceiling and is_touching_ceiling
-    just_touched_wall = !was_touching_wall and is_touching_wall
-    just_left_floor = was_touching_floor and !is_touching_floor
-    just_left_ceiling = was_touching_ceiling and !is_touching_ceiling
-    just_left_wall = was_touching_wall and !is_touching_wall
-    var which_wall: int = Utils.get_which_wall_collided_for_body(self)
-    is_touching_left_wall = which_wall == SurfaceSide.LEFT_WALL
-    is_touching_right_wall = which_wall == SurfaceSide.RIGHT_WALL
+    surface_state.collision_count = get_slide_count()
     
-    toward_wall_sign = \
-            (0 if !is_touching_wall else \
+    var was_touching_floor := surface_state.is_touching_floor
+    var was_touching_ceiling := surface_state.is_touching_ceiling
+    var was_touching_wall := surface_state.is_touching_wall
+    var was_touching_a_surface := surface_state.is_touching_a_surface
+    
+    surface_state.is_touching_floor = is_on_floor()
+    surface_state.is_touching_ceiling = is_on_ceiling()
+    surface_state.is_touching_wall = is_on_wall()
+    surface_state.is_touching_a_surface = \
+            surface_state.is_touching_floor or \
+            surface_state.is_touching_ceiling or \
+            surface_state.is_touching_wall
+    
+    surface_state.just_touched_floor = \
+            !was_touching_floor and surface_state.is_touching_floor
+    surface_state.just_touched_ceiling = \
+            !was_touching_ceiling and surface_state.is_touching_ceiling
+    surface_state.just_touched_wall = \
+            !was_touching_wall and surface_state.is_touching_wall
+    surface_state.just_left_floor = \
+            was_touching_floor and !surface_state.is_touching_floor
+    surface_state.just_left_ceiling = \
+            was_touching_ceiling and !surface_state.is_touching_ceiling
+    surface_state.just_left_wall = \
+            was_touching_wall and !surface_state.is_touching_wall
+    
+    surface_state.just_entered_air = \
+            was_touching_a_surface and \
+                    !surface_state.is_touching_a_surface
+    surface_state.just_left_air = \
+            !was_touching_a_surface and \
+                    surface_state.is_touching_a_surface
+    
+    var which_wall: int = Utils.get_which_wall_collided_for_body(self)
+    surface_state.is_touching_left_wall = which_wall == SurfaceSide.LEFT_WALL
+    surface_state.is_touching_right_wall = which_wall == SurfaceSide.RIGHT_WALL
+    
+    surface_state.toward_wall_sign = \
+            (0 if !surface_state.is_touching_wall else \
             (1 if which_wall == SurfaceSide.RIGHT_WALL else \
             -1))
     
-    if just_touched_wall:
+    if surface_state.just_touched_wall:
         has_hit_wall_since_pressing_move = true
     elif Input.is_action_just_pressed("move_left") or \
             Input.is_action_just_pressed("move_right") or \
@@ -125,29 +132,122 @@ func _update_surface_state() -> void:
             Input.is_action_just_released("move_right"):
         has_hit_wall_since_pressing_move = false
     
-    if just_touched_wall:
+    if surface_state.just_touched_wall:
         last_hit_wall_time = Time.elapsed_play_time_sec
     
-    if just_left_floor:
+    if surface_state.just_left_floor:
         last_floor_fall_off_time = Time.elapsed_play_time_sec
+    
+    _update_tile_map_contact()
+
+func _update_tile_map_contact() -> void:
+    var collision := Player.get_surface_collision( \
+            self, \
+            surface_state)
+    assert((collision != null) == surface_state.is_touching_a_surface)
+    
+    if surface_state.is_touching_a_surface:
+        var next_touch_position := collision.position
+        surface_state.just_changed_touch_position = \
+                surface_state.just_left_air or \
+                next_touch_position != surface_state.touch_position
+        surface_state.touch_position = next_touch_position
+        
+        var next_touched_tile_map := collision.collider
+        surface_state.just_changed_tile_map = \
+                surface_state.just_left_air or \
+                next_touched_tile_map != surface_state.touched_tile_map
+        surface_state.touched_tile_map = next_touched_tile_map
+        
+        Geometry.get_collision_tile_map_coord( \
+                surface_state.collision_tile_map_coord_result, \
+                surface_state.touch_position, \
+                surface_state.touched_tile_map, \
+                surface_state.is_touching_floor, \
+                surface_state.is_touching_ceiling, \
+                surface_state.is_touching_left_wall, \
+                surface_state.is_touching_right_wall)
+        
+        if !surface_state.collision_tile_map_coord_result \
+                .is_godot_floor_ceiling_detection_correct:
+            match surface_state.collision_tile_map_coord_result.surface_side:
+                SurfaceSide.FLOOR:
+                    surface_state.is_touching_floor = true
+                    surface_state.is_grabbing_floor = true
+                    surface_state.is_touching_ceiling = false
+                    surface_state.is_grabbing_ceiling = false
+                    surface_state.just_touched_ceiling = false
+                    surface_state.touched_side = SurfaceSide.FLOOR
+                    surface_state.touched_surface_normal = Geometry.UP
+                SurfaceSide.CEILING:
+                    surface_state.is_touching_ceiling = true
+                    surface_state.is_grabbing_ceiling = true
+                    surface_state.is_touching_floor = false
+                    surface_state.is_grabbing_floor = false
+                    surface_state.just_touched_floor = false
+                    surface_state.touched_side = SurfaceSide.CEILING
+                    surface_state.touched_surface_normal = Geometry.DOWN
+                SurfaceSide.LEFT_WALL, \
+                SurfaceSide.RIGHT_WALL:
+                    surface_state.is_touching_ceiling = \
+                            !surface_state.is_touching_ceiling
+                    surface_state.is_touching_floor = \
+                            !surface_state.is_touching_floor
+                    surface_state.is_grabbing_ceiling = false
+                    surface_state.is_grabbing_floor = false
+                    surface_state.just_touched_floor = false
+                    surface_state.just_touched_ceiling = false
+                _:
+                    Utils.error()
+        
+        var next_touch_position_tile_map_coord := \
+                surface_state.collision_tile_map_coord_result.tile_map_coord
+        surface_state.just_changed_tile_map_coord = \
+                surface_state.just_left_air or \
+                next_touch_position_tile_map_coord != \
+                        surface_state.touch_position_tile_map_coord
+        surface_state.touch_position_tile_map_coord = \
+                next_touch_position_tile_map_coord
+        
+        if surface_state.just_changed_tile_map_coord or \
+                surface_state.just_changed_tile_map:
+            surface_state.touched_tile_map_cell = \
+                    surface_state.touched_tile_map.get_cellv( \
+                            surface_state.touch_position_tile_map_coord)
+            surface_state.friction = \
+                    Global.current_level.get_friction_for_tile( \
+                            surface_state.touched_tile_map.tile_set, \
+                            surface_state.touched_tile_map_cell)
+        
+    else:
+        if surface_state.just_entered_air:
+            surface_state.just_changed_touch_position = true
+            surface_state.just_changed_tile_map = true
+            surface_state.just_changed_tile_map_coord = true
+        
+        surface_state.touch_position = Vector2.INF
+        surface_state.touched_tile_map = null
+        surface_state.touch_position_tile_map_coord = Vector2.INF
+        surface_state.touched_tile_map_cell = TileMap.INVALID_CELL
+        surface_state.friction = INF
 
 # Calculate what actions occur during this frame.
 func _update_actions(delta_sec: float) -> void:
     if Input.is_action_pressed("move_right"):
-        horizontal_facing_sign = 1
+        surface_state.horizontal_facing_sign = 1
     elif Input.is_action_pressed("move_left"):
-        horizontal_facing_sign = -1
+        surface_state.horizontal_facing_sign = -1
     
-    horizontal_acceleration_sign = 0
+    surface_state.horizontal_acceleration_sign = 0
     if !has_hit_wall_since_pressing_move or \
             last_hit_wall_time < \
                     Time.elapsed_play_time_sec - WALL_BOUNCE_MOVEMENT_DELAY_SEC:
         if Input.is_action_pressed("move_right"):
-            horizontal_acceleration_sign = 1
+            surface_state.horizontal_acceleration_sign = 1
         elif Input.is_action_pressed("move_left"):
-            horizontal_acceleration_sign = -1
+            surface_state.horizontal_acceleration_sign = -1
     
-    if is_touching_ceiling:
+    if surface_state.is_touching_ceiling:
         is_rising_from_jump = false
     
     if Input.is_action_just_pressed("jump"):
@@ -159,13 +259,13 @@ func _process_actions(delta_sec: float) -> void:
     just_triggered_jump = false
     
     # Bounce horizontal velocity off of walls.
-    if just_touched_wall:
+    if surface_state.just_touched_wall:
         velocity.x = -velocity.x
         velocity.x += \
                 WALL_BOUNCE_HORIZONTAL_BOOST if \
                 velocity.x > 0 else \
                 -WALL_BOUNCE_HORIZONTAL_BOOST
-        if is_touching_left_wall:
+        if surface_state.is_touching_left_wall:
             velocity.x = max(velocity.x, 0)
         else:
             velocity.x = min(velocity.x, 0)
@@ -182,9 +282,12 @@ func _process_actions(delta_sec: float) -> void:
             Time.elapsed_play_time_sec - \
                     JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC
     
-    if is_touching_floor:
+    if surface_state.is_touching_floor:
+        assert(surface_state.friction >= 0.0 and \
+                surface_state.friction <= 1.0)
+        
         jump_count = 0
-        entered_air_by_jumping = false
+        surface_state.entered_air_by_jumping = false
         is_rising_from_jump = false
         
         # The move_and_slide system depends on some vertical gravity always pushing
@@ -196,34 +299,32 @@ func _process_actions(delta_sec: float) -> void:
         if Input.is_action_just_pressed("jump") or \
                 is_previous_jump_input_still_consumable:
             jump_count = 1
-            entered_air_by_jumping = true
+            surface_state.entered_air_by_jumping = true
             just_triggered_jump = true
             is_rising_from_jump = true
             velocity.y = JUMP_BOOST
             was_last_jump_input_consumed = true
             
         else:
-            var friction_multiplier := \
-                    Utils.get_floor_friction_multiplier(self)
-            
             var walk_acceleration := \
                     WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION if \
                     abs(velocity.x) < \
                             LOW_SPEED_THRESHOLD_FOR_WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION and \
-                            friction_multiplier < 1.0 else \
+                            surface_state.friction < 1.0 else \
                     WALK_ACCELERATION
             
             # Horizontal movement.
             velocity.x += \
                     walk_acceleration * \
-                    horizontal_acceleration_sign * \
-                    friction_multiplier
+                    surface_state.horizontal_acceleration_sign * \
+                    surface_state.friction
             
             # Friction.
-            if horizontal_acceleration_sign == 0 or \
-                    (horizontal_acceleration_sign > 0) != (velocity.x > 0):
+            if surface_state.horizontal_acceleration_sign == 0 or \
+                    (surface_state.horizontal_acceleration_sign > 0) != \
+                    (velocity.x > 0):
                 var friction_offset: float = \
-                        friction_multiplier * \
+                        surface_state.friction * \
                         FRICTION_COEFFICIENT * \
                         GRAVITY_FAST_FALL
                 friction_offset = clamp(friction_offset, 0, abs(velocity.x))
@@ -246,7 +347,7 @@ func _process_actions(delta_sec: float) -> void:
                 delta_sec, \
                 Input.is_action_pressed("jump"), \
                 is_first_jump, \
-                horizontal_acceleration_sign, \
+                surface_state.horizontal_acceleration_sign, \
                 IN_AIR_HORIZONTAL_ACCELERATION, \
                 SLOW_RISE_GRAVITY_MULTIPLIER, \
                 RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER, \
@@ -276,11 +377,11 @@ func _process_actions(delta_sec: float) -> void:
     # Cap velocity beyond min/max values.
     var max_horizontal_speed := \
             MAX_HORIZONTAL_ON_FLOOR_SPEED if \
-            is_touching_floor else \
+            surface_state.is_touching_floor else \
             MAX_HORIZONTAL_IN_AIR_SPEED
     velocity = Utils.cap_velocity( \
             velocity, \
-            horizontal_acceleration_sign == 0, \
+            surface_state.horizontal_acceleration_sign == 0, \
             MIN_HORIZONTAL_SPEED, \
             max_horizontal_speed, \
             MIN_VERTICAL_SPEED, \
@@ -290,12 +391,12 @@ func _process_actions(delta_sec: float) -> void:
 func _process_animation() -> void:
     # Flip the horizontal direction of the animation according to which way the
     # player is facing.
-    if horizontal_facing_sign == 1:
+    if surface_state.horizontal_facing_sign == 1:
         animator.face_right()
-    elif horizontal_facing_sign == -1:
+    elif surface_state.horizontal_facing_sign == -1:
         animator.face_left()
     
-    if is_touching_floor:
+    if surface_state.is_touching_floor:
         if Input.is_action_pressed("move_right") or \
                 Input.is_action_pressed("move_left"):
             animator.run()
@@ -313,8 +414,8 @@ func _process_sfx() -> void:
     if just_triggered_jump:
         jump_sfx_player.play()
     
-    if just_touched_floor or just_touched_ceiling:
+    if surface_state.just_touched_floor or surface_state.just_touched_ceiling:
         land_sfx_player.play()
     
-    if just_touched_wall:
+    if surface_state.just_touched_wall:
         bounce_sfx_player.play()

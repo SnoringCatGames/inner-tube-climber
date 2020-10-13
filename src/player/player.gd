@@ -39,3 +39,34 @@ func _process_animation() -> void:
 # Updates sounds for the current frame.
 func _process_sfx() -> void:
     pass
+
+static func get_surface_collision( \
+        body: KinematicBody2D, \
+        surface_state: PlayerSurfaceState) -> KinematicCollision2D:
+    var closest_normal_diff: float = PI
+    var closest_collision: KinematicCollision2D
+    var current_normal_diff: float
+    var current_collision: KinematicCollision2D
+    for i in range(surface_state.collision_count):
+        current_collision = body.get_slide_collision(i)
+        
+        if surface_state.is_touching_floor:
+            current_normal_diff = \
+                    abs(current_collision.normal.angle_to(Geometry.UP))
+        elif surface_state.is_touching_ceiling:
+            current_normal_diff = \
+                    abs(current_collision.normal.angle_to(Geometry.DOWN))
+        elif surface_state.is_touching_left_wall:
+            current_normal_diff = \
+                    abs(current_collision.normal.angle_to(Geometry.RIGHT))
+        elif surface_state.is_touching_right_wall:
+            current_normal_diff = \
+                    abs(current_collision.normal.angle_to(Geometry.LEFT))
+        else:
+            continue
+        
+        if current_normal_diff < closest_normal_diff:
+            closest_normal_diff = current_normal_diff
+            closest_collision = current_collision
+    
+    return closest_collision

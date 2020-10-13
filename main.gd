@@ -4,6 +4,7 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
+# - Fix jerky screen displacement at start (when menu replaces loading screen?).
 # - New tile art:
 #   - Fix issue with tiles at top/bottom of adjacent tiers not matching up /
 #     binding.

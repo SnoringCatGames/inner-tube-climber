@@ -4,19 +4,65 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Fix jerky screen displacement at start (when menu replaces loading screen?).
-# - New tile art:
-#   - Fix issue with tiles at top/bottom of adjacent tiers not matching up /
-#     binding.
-#     - Maybe the fix is to instead remove the top row, and most of the bottom
-#       (except the middle platforms and the two surrounding wall tiles), and
-#       then create a couple possible filler scenes that are just the relevant
-#       between rows for whatever combination of previous/next tier types we're
-#       facing.
-#     - Make the Tier scene a `tool`, and expose a flag to the editor for
-#       configuring whether the given Tier is open or walled.
-#     - Actually, make this be an enum instead of a flag, then we can also
-#       support the upcoming feature of "HORIZONTAL_PANNING".
+# - Render animated pulsing press position phantom circle to help indicate
+#   gestures.
+#   - Also render recent positions?
+#   - Maybe this is easiest to do as just a sequence of independent debounced
+#     positions, that each shows a circle with a sharp/opaque/expand-in with a
+#     slow/trasparent/shrink-out.
+# 
+# - Test ppi calculations by rendering MobileControlDisplay pads at precise
+#   inch values and measuring them.
+# 
+# - Fix GameScreen stretching and centering on mobile display.
+# - _Do_ emulate mouse events with touches, so that menu Controls still work.
+# 
+# - Add pixel art for the control display pads.
+#   - Have the pads consume the entire horizontal width.
+#   - Have a clean border down the middle.
+#   - Have a gradient to transparent at the top, to help indicate that the user
+#     can press anywhere vertically.
+#   - Show pads initially as slightly transparent.
+#   - Then, after first press + a couple seconds, fade pads to much more
+#     transparent.
+# 
+# - Test exporting to iPhone.
+#   - Get dev account for iPhone.
+#   - Test touchiness / usability of both mobile control types.
+#   - Test dimensions of control displays; should match precise inch values by
+#     using ppi-table calculations.
+#     - Print the given OS.get_model_name() value, so I can verify that my
+#       table structure should work.
+#   - Test haptic feedback.
+# 
+# - Also update all other screens/panels to dynamically adjust their dimensions
+#   as well.
+# - Update CanvasLayers to support some layers rendering within game area, and
+#   some within entire viewport.
+# 
+# - Fix easing curve on bounce for main menu animation.
+# 
+# - Refactor level:
+#   - To not have a scene, only a script.
+#   - To support many different levels, each with different tier collections.
+# 
+# - Remove Level.is_game_paused and use Global.pause instead.
+#   - Read Godot docs. Will need to whitelist Nodes to continue processing
+#     during pause.
+# 
+# - Add a main-menu settings sub-menu:
+#   - Toggle visibility of mobile control display pads.
+#   - Toggle haptice feedback.
+#   - Have settings persist to local storage.
+# 
+# - Add-back ability to collide with tier gaps:
+#   - The problem is that collisions get weird with tier-gap-walled-to-open.
+#   - Will need to check many more alternate TileMaps in surface contact update.
+# 
+# - When resetting tier after a fall (or, actually, even just starting any
+#   non-zero tier), set initial camera pan to be lower down.
+#   - And maybe also only start scroll after first input.
+# 
 # - Change score to accumulate between deaths.
 #   - Maybe count current elevation separately.
 #   - Then can make score more complicated, subracting deaths, including a
@@ -111,13 +157,13 @@ class_name Main
 
 const MAIN_MENU_PATH := "res://src/panels/main_menu.tscn"
 const LOADING_SCREEN_PATH := "res://src/panels/loading_screen.tscn"
-const STARTING_LEVEL_RESOURCE_PATH := "res://src/level/level.tscn"
+const GAME_SCREEN_RESOURCE_PATH := "res://src/panels/game_screen.tscn"
 
 var loading_screen: Node
 var camera_controller: CameraController
 var canvas_layers: CanvasLayers
 var main_menu: MainMenu
-var level: Level
+var game_screen: GameScreen
 var is_loading_screen_shown := true
 var high_score: int = 0
 
@@ -141,15 +187,14 @@ func _enter_tree() -> void:
                 LOADING_SCREEN_PATH)
 
 func _process(delta_sec: float) -> void:
-    if level == null and \
-            Time.elapsed_play_time_sec > 0.25:
-        # Start loading the level.
-        level = Utils.add_scene( \
+    if game_screen == null and \
+            Time.elapsed_play_time_sec > 0.1:
+        game_screen = Utils.add_scene( \
                 self, \
-                STARTING_LEVEL_RESOURCE_PATH, \
+                GAME_SCREEN_RESOURCE_PATH, \
                 true, \
                 false)
-        # Start loading the level.
+        game_screen.load_level(0)
         main_menu = Utils.add_scene( \
                 canvas_layers.screen_layer, \
                 MAIN_MENU_PATH, \
@@ -157,7 +202,6 @@ func _process(delta_sec: float) -> void:
                 false)
     
     elif is_loading_screen_shown and \
-            Global.is_level_ready and \
             Time.elapsed_play_time_sec > 0.5:
         is_loading_screen_shown = false
         
@@ -170,30 +214,30 @@ func _process(delta_sec: float) -> void:
         main_menu.set_high_score(high_score)
         main_menu.visible = true
         
-        Global.canvas_layers.on_level_ready()
+        canvas_layers.on_level_ready()
         
         if OS.get_name() == "HTML5":
             JavaScript.eval("window.onLevelReady()")
         
-        level.connect( \
-                "back_to_menu", \
+        Global.connect( \
+                "go_to_main_menu", \
                 self, \
                 "_stop_game")
-        level.connect( \
+        Global.connect( \
                 "game_over", \
                 self, \
                 "_record_high_score")
-        main_menu.connect( \
-                "on_start_game_pressed", \
+        Global.connect( \
+                "go_to_game_screen", \
                 self, \
                 "_start_game")
 
 func _start_game() -> void:
-    level.start(main_menu.selected_tier_index)
+    game_screen.start_level(main_menu.selected_tier_index)
     main_menu.visible = false
 
 func _stop_game() -> void:
-    level.stop()
+    game_screen.stop_level()
     main_menu.visible = true
 
 func _record_high_score(score: int) -> void:

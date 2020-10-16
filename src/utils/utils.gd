@@ -132,9 +132,6 @@ static func add_scene( \
         parent.add_child(node)
     return node
 
-static func get_global_touch_position(input_event: InputEvent) -> Vector2:
-    return Global.current_level.make_input_local(input_event).position
-
 static func update_velocity_in_air( \
         velocity: Vector2, \
         delta_sec: float, \
@@ -142,6 +139,7 @@ static func update_velocity_in_air( \
         is_first_jump: bool, \
         horizontal_acceleration_sign: int, \
         in_air_horizontal_acceleration: float, \
+        in_air_horizontal_deceleration: float, \
         slow_rise_gravity_multiplier: float, \
         rise_double_jump_gravity_multiplier: float, \
         gravity_fast_fall: float) -> Vector2:
@@ -163,10 +161,33 @@ static func update_velocity_in_air( \
             gravity_multiplier
     
     # Horizontal movement.
-    velocity.x += \
-            delta_sec * \
-            in_air_horizontal_acceleration * \
-            horizontal_acceleration_sign
+    if horizontal_acceleration_sign != 0.0:
+        # Accelerate.
+        velocity.x += \
+                delta_sec * \
+                in_air_horizontal_acceleration * \
+                horizontal_acceleration_sign
+    else:
+        # Decelerate.
+        var previous_horizontal_movement_sign := \
+                1.0 if \
+                velocity.x > 0 else \
+                (-1.0 if \
+                velocity.x < 0 else \
+                0.0)
+        velocity.x += \
+                delta_sec * \
+                in_air_horizontal_deceleration * \
+                -previous_horizontal_movement_sign
+        var next_horizontal_movement_sign := \
+                1.0 if \
+                velocity.x > 0 else \
+                (-1.0 if \
+                velocity.x < 0 else \
+                0.0)
+        # Don't allow deceleration to cause movement in the opposite direction.
+        if previous_horizontal_movement_sign != next_horizontal_movement_sign:
+            velocity.x = 0.0
     
     return velocity
 
@@ -201,3 +222,15 @@ static func cap_velocity( \
         velocity.y = 0
     
     return velocity
+
+static func get_is_mobile_device() -> bool:
+    # FIXME: -----------------------
+    return true
+    var os_name := OS.get_name()
+    return os_name == "Android" or os_name == "iOS"
+
+static func get_ppi() -> int:
+    if OS.get_name() == "iOS":
+        return IosResolutions.get_ppi()
+    else:
+        return OS.get_screen_dpi()

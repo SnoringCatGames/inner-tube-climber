@@ -1,8 +1,6 @@
 class_name MainMenu
 extends Panel
 
-signal on_start_game_pressed
-
 const BUTTON_PRESS_SFX_STREAM := preload("res://assets/sfx/menu_select.wav")
 
 const TIER_ITEMS := [
@@ -16,7 +14,7 @@ const TIER_ITEMS := [
     "Level 7",
 ]
 
-const IS_EASY_MODE_ON_BY_DEFAULT := true
+const IS_HARD_MODE_ON_BY_DEFAULT := false
 const DEFAULT_SELECTED_TIER_INDEX := 0
 
 var button_press_sfx_player: AudioStreamPlayer
@@ -30,9 +28,9 @@ func _init() -> void:
     add_child(button_press_sfx_player)
 
 func _ready() -> void:
-    $HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/EasyModeCheckbox.pressed = \
-            IS_EASY_MODE_ON_BY_DEFAULT
-    Global.current_level.is_stuck_in_a_retry_loop = IS_EASY_MODE_ON_BY_DEFAULT
+    $HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/HardModeCheckbox \
+            .pressed = IS_HARD_MODE_ON_BY_DEFAULT
+    Global.current_level.is_stuck_in_a_retry_loop = !IS_HARD_MODE_ON_BY_DEFAULT
     
     var selector := \
             $HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/TierSelector
@@ -41,7 +39,7 @@ func _ready() -> void:
 
 func _on_StartGameButton_pressed() -> void:
     button_press_sfx_player.play()
-    emit_signal("on_start_game_pressed")
+    Global.emit_signal("go_to_game_screen")
 
 func _on_CreditsButton_pressed() -> void:
     button_press_sfx_player.play()

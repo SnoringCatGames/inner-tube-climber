@@ -509,7 +509,8 @@ static func get_collision_tile_map_coord( \
         is_touching_floor: bool, \
         is_touching_ceiling: bool, \
         is_touching_left_wall: bool, \
-        is_touching_right_wall: bool) -> void:
+        is_touching_right_wall: bool, \
+        asserts_on_errors: bool) -> void:
     var half_cell_size = tile_map.cell_size / 2.0
     var used_rect = tile_map.get_used_rect()
     var position_relative_to_tile_map = \
@@ -932,7 +933,7 @@ static func get_collision_tile_map_coord( \
                 is_there_a_tile_at_bottom, \
                 tile_coord, \
             ]
-        if !error_message.empty():
+        if asserts_on_errors and !error_message.empty():
             Utils.error(print_message)
         else:
             print(print_message)

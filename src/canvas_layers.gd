@@ -1,6 +1,8 @@
 extends Node2D
 class_name CanvasLayers
 
+var DEBUG_PANEL_RESOURCE_PATH := "res://src/panels/debug_panel.tscn"
+
 var screen_layer: CanvasLayer
 var menu_layer: CanvasLayer
 var hud_layer: CanvasLayer
@@ -13,6 +15,9 @@ func _enter_tree() -> void:
     _create_menu_layer()
     _create_hud_layer()
     _create_annotation_layer()
+    
+    if Global.is_debug_panel_shown:
+        set_debug_panel_visibility(true)
 
 func on_level_ready() -> void:
     pass
@@ -46,3 +51,17 @@ func _create_annotation_layer() -> void:
     annotation_layer = CanvasLayer.new()
     annotation_layer.layer = 100
     Global.add_overlay_to_current_scene(annotation_layer)
+
+func set_debug_panel_visibility(is_visible: bool) -> void:
+    Global.is_debug_panel_shown = is_visible
+    
+    if is_visible and Global.debug_panel == null:
+        Global.debug_panel = Utils.add_scene( \
+                hud_layer, \
+                DEBUG_PANEL_RESOURCE_PATH, \
+                true, \
+                true)
+    elif !is_visible and Global.debug_panel != null:
+        hud_layer.remove_child(Global.debug_panel)
+        Global.debug_panel.queue_free()
+        Global.debug_panel = null

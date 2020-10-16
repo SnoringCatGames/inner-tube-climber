@@ -127,9 +127,9 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
-margin_left = 41.0
+margin_left = 117.0
 margin_top = 243.0
-margin_right = 336.0
+margin_right = 260.0
 margin_bottom = 391.0
 size_flags_horizontal = 4
 __meta__ = {
@@ -137,8 +137,8 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
-margin_left = 87.0
-margin_right = 207.0
+margin_left = 11.0
+margin_right = 131.0
 margin_bottom = 56.0
 rect_min_size = Vector2( 120, 0 )
 size_flags_horizontal = 4
@@ -165,7 +165,7 @@ text = "Credits"
 
 [node name="Control4" type="Control" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
 margin_top = 60.0
-margin_right = 295.0
+margin_right = 143.0
 margin_bottom = 80.0
 rect_min_size = Vector2( 0, 20 )
 __meta__ = {
@@ -174,19 +174,19 @@ __meta__ = {
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
 margin_top = 84.0
-margin_right = 295.0
+margin_right = 143.0
 margin_bottom = 148.0
 
-[node name="EasyModeCheckbox" type="CheckButton" parent="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2"]
-margin_right = 295.0
+[node name="HardModeCheckbox" type="CheckButton" parent="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2"]
+margin_right = 143.0
 margin_bottom = 40.0
 custom_fonts/font = ExtResource( 7 )
-text = "Easy mode (aka \"Stuck in a retry loop\")"
+text = "Hard mode"
 
 [node name="TierSelector" type="OptionButton" parent="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2"]
-margin_left = 87.0
+margin_left = 11.0
 margin_top = 44.0
-margin_right = 207.0
+margin_right = 131.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 120, 0 )
 size_flags_horizontal = 4
@@ -221,5 +221,5 @@ size_flags_horizontal = 3
 [node name="CreditsPanel" parent="." instance=ExtResource( 5 )]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer/StartGameButton" to="." method="_on_StartGameButton_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer/CreditsButton" to="." method="_on_CreditsButton_pressed"]
-[connection signal="toggled" from="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/EasyModeCheckbox" to="." method="_on_EasyModeCheckbox_toggled"]
+[connection signal="toggled" from="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/HardModeCheckbox" to="." method="_on_EasyModeCheckbox_toggled"]
 [connection signal="item_selected" from="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/TierSelector" to="." method="_on_TierSelector_item_selected"]

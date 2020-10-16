@@ -1,9 +1,6 @@
 extends Node2D
 class_name Level
 
-signal back_to_menu
-signal game_over(score)
-
 const MUSIC_STREAM_0 := \
         preload("res://assets/music/stuck_in_a_crevasse.ogg")
 const MUSIC_STREAM_1 := \
@@ -12,6 +9,9 @@ const MUSIC_STREAM_2 := \
         preload("res://assets/music/out_for_a_loop_ride.ogg")
 const GAME_OVER_SFX_STREAM := preload("res://assets/sfx/yeti_yell.wav")
 const NEW_TIER_SFX_STREAM := preload("res://assets/sfx/new_tier.wav")
+
+const MOBILE_CONTROL_UI_RESOURCE_PATH := "res://src/mobile_control_ui.tscn"
+const SCORE_BOARDS_RESOURCE_PATH := "res://src/score_boards.tscn"
 
 const PLAYER_RESOURCE_PATH := "res://src/player/tuber_player.tscn"
 
@@ -105,6 +105,9 @@ const NUMBER_OF_LEVELS_PER_MUSIC := 1
 
 var is_stuck_in_a_retry_loop := false
 
+var mobile_control_ui: MobileControlUI
+var score_boards: ScoreBoards
+
 var start_tier_index := START_TIER_INDEX
 var current_tier_index := START_TIER_INDEX
 var current_music_player_index := START_MUSIC_INDEX
@@ -164,6 +167,12 @@ func _init_audio_players() -> void:
 
 func _enter_tree() -> void:
     Global.current_level = self
+    
+    score_boards = Utils.add_scene( \
+            Global.canvas_layers.hud_layer, \
+            SCORE_BOARDS_RESOURCE_PATH, \
+            true, \
+            false)
 
 func _ready() -> void:
     # Start playing the default music for the menu screen.
@@ -171,7 +180,23 @@ func _ready() -> void:
     
     _set_camera()
     
-    Global.is_level_ready = true
+    Global.emit_signal("level_loaded")
+
+func _input(event: InputEvent) -> void:
+    if is_game_paused:
+        return
+    if player != null:
+        return
+    
+    # Only instantiate the player once the user has pressed a movement button.
+    if event.is_action_pressed("jump") or \
+            event.is_action_pressed("move_left") or \
+            event.is_action_pressed("move_right") or \
+            ((event is InputEventMouseButton or \
+            event is InputEventScreenTouch) and \
+            event.pressed):
+        _remove_stuck_animation()
+        _add_player(true)
 
 func start(tier_index := START_TIER_INDEX) -> void:
     visible = true
@@ -183,22 +208,17 @@ func start(tier_index := START_TIER_INDEX) -> void:
     _cross_fade_music(current_music_player_index)
     if tier_index != 0:
         _add_player(false)
+    score_boards.visible = true
 
 func stop() -> void:
     _cross_fade_music(MAIN_MENU_MUSIC_PLAYER_INDEX)
     visible = false
     is_game_paused = true
+    score_boards.visible = false
 
 func _physics_process(delta_sec: float) -> void:
     if is_game_paused:
         return
-    
-    # Only instantiate the player once the user has pressed a movement button.
-    if player == null and (Input.is_action_just_pressed("jump") or \
-            Input.is_action_just_pressed("move_left") or \
-            Input.is_action_just_pressed("move_right")):
-        _remove_stuck_animation()
-        _add_player(true)
     
     if player == null:
         return
@@ -237,11 +257,8 @@ func _process(delta_sec: float) -> void:
         _game_over()
     
     # Update score displays.
-    $ScoreBoards.position.y = Global.camera_controller.offset.y + 190
-    $ScoreBoards/VBoxContainer/ScorePanel/ScoreLabel.text = \
-            "Score: %d" % current_score
-    $ScoreBoards/VBoxContainer/FallsPanel/FallsLabel.text = \
-            "Falls: %d" % falls_count
+    score_boards.set_score(current_score)
+    score_boards.set_falls(falls_count)
 
 func _game_over() -> void:
     falls_count += 1
@@ -275,14 +292,14 @@ func _game_over() -> void:
                 self, \
                 "_on_game_over_sfx_finished")
     
-    emit_signal("game_over", game_score)
+    Global.emit_signal("game_over", game_score)
 
 func _on_game_over_sfx_finished() -> void:
     game_over_sfx_player.disconnect( \
             "finished", \
             self, \
             "_on_game_over_sfx_finished")
-    emit_signal("back_to_menu")
+    Global.emit_signal("go_to_main_menu")
 
 func _set_camera() -> void:
     var camera := Camera2D.new()
@@ -341,6 +358,10 @@ func _add_player(is_base_tier := false) -> void:
     add_child(player)
     
     _set_camera_post_stuck_state(is_base_tier)
+    
+    if Utils.get_is_mobile_device():
+        mobile_control_ui = MobileControlUI.new(Global.MOBILE_CONTROL_VERSION)
+        Global.canvas_layers.hud_layer.add_child(mobile_control_ui)
 
 func _destroy_level() -> void:
     current_tier_index = -INF
@@ -350,6 +371,10 @@ func _destroy_level() -> void:
     if player != null:
         player.queue_free()
         remove_child(player)
+    if mobile_control_ui != null:
+        mobile_control_ui.destroy()
+        mobile_control_ui.queue_free()
+        Global.canvas_layers.hud_layer.remove_child(mobile_control_ui)
     if previous_tier != null:
         previous_tier.queue_free()
         remove_child(previous_tier)
@@ -398,6 +423,9 @@ func start_new_level( \
             true, \
             true)
     assert(current_tier.openness_type != OpennessType.UNKNOWN)
+    assert(current_tier_index == 0 or \
+            _get_tier_size(current_tier).y / CELL_SIZE.y >= \
+                    Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     current_tier.position = current_tier_position
     
     var next_tier_position := _get_tier_top_position(current_tier)
@@ -408,6 +436,8 @@ func start_new_level( \
             true, \
             true)
     assert(next_tier.openness_type != OpennessType.UNKNOWN)
+    assert(_get_tier_size(next_tier).y / CELL_SIZE.y >= \
+            Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     next_tier.position = next_tier_position
     
     var next_tier_gap_scene_path := _get_tier_gap_scene_path( \
@@ -442,11 +472,12 @@ func start_new_level( \
         
         current_camera_speed = CAMERA_SPEED_TIER_1
     
-    # Render the basic input instructions sign.
-    $SignAllKeys.visible = true
-    $SignAllKeys.position = INPUT_SIGN_POSITION
-    if current_tier_index != 0:
-        $SignAllKeys.position.y -= CELL_SIZE.y
+    if !Utils.get_is_mobile_device():
+        # Render the basic input instructions sign.
+        $SignAllKeys.visible = true
+        $SignAllKeys.position = INPUT_SIGN_POSITION
+        if current_tier_index != 0:
+            $SignAllKeys.position.y -= CELL_SIZE.y
 
 func _on_entered_new_tier() -> void:
     tier_count += 1
@@ -479,6 +510,8 @@ func _on_entered_new_tier() -> void:
             next_tier_scene_path, \
             true, \
             true)
+    assert(_get_tier_size(next_tier).y / CELL_SIZE.y >= \
+            Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     next_tier.position = next_tier_position
     
     var next_tier_gap_scene_path := _get_tier_gap_scene_path( \
@@ -569,7 +602,14 @@ func _on_cross_fade_music_finished() -> void:
             previous_music_player != current_music_player:
         previous_music_player.stop()
 
+static func _get_tier_size(tier: Tier) -> Vector2:
+    return _get_tier_bounding_box(tier).size
+
 static func _get_tier_top_position(tier: Tier) -> Vector2:
+    var bounding_box := _get_tier_bounding_box(tier)
+    return Vector2(0.0, bounding_box.position.y)
+
+static func _get_tier_bounding_box(tier: Tier) -> Rect2:
     var tile_maps := Utils.get_children_by_type( \
             tier, \
             TileMap)
@@ -578,7 +618,8 @@ static func _get_tier_top_position(tier: Tier) -> Vector2:
     for tile_map in tile_maps:
         bounding_box = bounding_box.merge( \
                 Geometry.get_tile_map_bounds_in_world_coordinates(tile_map))
-    return Vector2(0.0, bounding_box.position.y + tier.position.y)
+    bounding_box.position += tier.position
+    return bounding_box
 
 # Dictionary<OpennessType, Dictionary<OpennessType, String>>
 const OPENNESS_TO_TIER_GAP_SCENE_PATH := {

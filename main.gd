@@ -11,9 +11,6 @@ class_name Main
 #     positions, that each shows a circle with a sharp/opaque/expand-in with a
 #     slow/trasparent/shrink-out.
 # 
-# - Test ppi calculations by rendering MobileControlDisplay pads at precise
-#   inch values and measuring them.
-# 
 # - Fix GameScreen stretching and centering on mobile display.
 # - _Do_ emulate mouse events with touches, so that menu Controls still work.
 # 
@@ -29,8 +26,8 @@ class_name Main
 # - Test exporting to iPhone.
 #   - Get dev account for iPhone.
 #   - Test touchiness / usability of both mobile control types.
-#   - Test dimensions of control displays; should match precise inch values by
-#     using ppi-table calculations.
+#   - Test dimensions of annotations and gestures; should match precise inch
+#     values by using ppi-table calculations and screen-scale calculations.
 #     - Print the given OS.get_model_name() value, so I can verify that my
 #       table structure should work.
 #   - Test haptic feedback.
@@ -62,6 +59,23 @@ class_name Main
 # - When resetting tier after a fall (or, actually, even just starting any
 #   non-zero tier), set initial camera pan to be lower down.
 #   - And maybe also only start scroll after first input.
+# 
+# - Add support for logging stats over the network to a backend.
+#   - Do I need to get user permissions for that?
+#     - Or is it sufficient to post a EULA?
+#   - Things to log:
+#    Utils.get_screen_ppi(),
+#    Utils.get_viewport_ppi(),
+#    OS.get_screen_dpi(),
+#    IosResolutions.get_screen_ppi(),
+#    get_viewport().size.x,
+#    get_viewport().size.y,
+#    OS.get_screen_scale(),
+#    OS.get_screen_size(),
+#    OS.window_size,
+#    OS.get_real_window_size(),
+#    OS.get_name(),
+#    OS.get_model_name(),
 # 
 # - Change score to accumulate between deaths.
 #   - Maybe count current elevation separately.

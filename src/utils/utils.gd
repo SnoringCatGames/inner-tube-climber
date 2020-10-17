@@ -229,8 +229,27 @@ static func get_is_mobile_device() -> bool:
     var os_name := OS.get_name()
     return os_name == "Android" or os_name == "iOS"
 
-static func get_ppi() -> int:
+func get_screen_scale() -> float:
+    # NOTE: OS.get_screen_scale() is only implemented for MacOS, so it's
+    #       useless.
+    if OS.window_size.x < OS.window_size.y:
+        return OS.window_size.x / get_viewport().size.x
+    else:
+        return OS.window_size.y / get_viewport().size.y
+
+# This does not take into account the screen scale. Node.get_viewport().size
+# likely returns a smaller number than OS.window_size, because of screen scale.
+func get_screen_ppi() -> int:
     if OS.get_name() == "iOS":
-        return IosResolutions.get_ppi()
+        return IosResolutions.get_screen_ppi()
     else:
         return OS.get_screen_dpi()
+
+# This takes into account the screen scale, and should enable accurate
+# conversion of event positions from pixels to inches.
+# 
+# NOTE: This assumes that the viewport takes up the entire screen, which will
+#       likely be true only for mobile devices, and is not even guaranteed for
+#       them.
+func get_viewport_ppi() -> float:
+    return get_screen_ppi() / get_screen_scale()

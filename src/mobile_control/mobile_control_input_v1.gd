@@ -14,13 +14,15 @@
 extends MobileControlInput
 class_name MobileControlInputV1
 
-const GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.02, 0.02)
-const REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.08, 0.04)
+const GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.04, 0.04)
+const REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.16, 0.08)
 
 var gesture_velocity_threshold_pixels_per_sec: Vector2 = \
-        GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC * Utils.get_ppi()
+        GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC * Utils.get_viewport_ppi()
 var reverse_gesture_velocity_threshold_pixels_per_sec: Vector2 = \
-        REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC * Utils.get_ppi()
+        REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC * Utils.get_viewport_ppi()
+
+var jump_pointer_position := Vector2.INF
 
 func _input(event: InputEvent) -> void:
     var type_and_position := _get_event_type_and_position(event)
@@ -35,6 +37,7 @@ func _input(event: InputEvent) -> void:
         if event_type == PointerEventType.DOWN or \
                 event_type == PointerEventType.DRAG:
             is_jump_pressed = true
+            jump_pointer_position = pointer_position
         elif event_type == PointerEventType.UP:
             is_jump_pressed = false
     else:

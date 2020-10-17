@@ -243,7 +243,7 @@ const IPOD_SUFFIX_AND_PPIS = [
     },
 ]
 
-static func get_ppi() -> int:
+static func get_screen_ppi() -> int:
     assert(OS.get_name() == "iOS")
     
     var model_name := OS.get_model_name().to_lower()

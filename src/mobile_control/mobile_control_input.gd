@@ -12,6 +12,7 @@ var is_mouse_down := false
 
 # Array<PositionAndTime>
 var recent_gesture_positions := []
+var is_positions_buffer_dirty := false
 
 var is_jump_pressed := false
 var is_move_left_pressed := false
@@ -118,6 +119,8 @@ func _update_position_and_time_buffer(pointer_position: Vector2) -> void:
             Time.elapsed_play_time_sec - \
             GESTURE_RECENT_POSITIONS_BUFFER_DELAY_SEC:
         recent_gesture_positions.pop_back()
+    
+    is_positions_buffer_dirty = true
 
 func _get_velocity() -> Vector2:
     var oldest_drag_position: PositionAndTime = \

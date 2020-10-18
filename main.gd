@@ -5,7 +5,6 @@ class_name Main
 ### MAIN TODO LIST: ###
 # 
 # >>- LEFT OFF HERE: Implementing action/gesture annotator:
-#     - Get move left/right triggers working.
 #     - Then implement pulses.
 #     - Then clean up logic into re-usable helpers.
 #       - Create 2 sub-classes with their own process/update/draw/tween logic

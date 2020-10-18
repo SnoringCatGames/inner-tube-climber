@@ -417,7 +417,7 @@ static func compute_arc_points(
         end_angle: float, \
         sector_arc_length := 4.0) -> PoolVector2Array:
     var angle_diff := end_angle - start_angle
-    var sector_count := floor(angle_diff * radius / sector_arc_length)
+    var sector_count := max(floor(angle_diff * radius / sector_arc_length), 1)
     var delta_theta := angle_diff / sector_count
     var theta := start_angle
     var should_include_partial_sector_at_end: bool = \
@@ -600,7 +600,7 @@ static func draw_triangle_with_one_arc_side( \
     var triangle_side_2_point_angle := direction_angle + PI * 4.0 / 3.0
     
     var triangle_front_point := Vector2(circle_radius, 0.0) \
-            .rotated(triangle_front_point_angle)
+            .rotated(triangle_front_point_angle) + circle_center
     
     var arc_points := compute_arc_points(
             circle_center, \

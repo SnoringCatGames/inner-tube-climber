@@ -1,4 +1,4 @@
-extends Node2D
+extends Annotator
 class_name MobileControlGestureAnnotator
 
 var mobile_control_input: MobileControlInput

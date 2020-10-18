@@ -5,6 +5,7 @@ const STROKE_WIDTH := 24.0
 const SECTOR_ARC_LENGTH := 8.0
 const IS_FILLED := true
 
+var pulse_position: Vector2
 var time_start_sec: float
 var period_sec: float
 var direction_angle: float
@@ -17,7 +18,7 @@ var opacity_end: float
 var progress: float
 
 func _init( \
-        position: Vector2, \
+        pulse_position: Vector2, \
         time_start_sec: float, \
         period_sec: float, \
         direction_angle: float, \
@@ -26,7 +27,7 @@ func _init( \
         base_color: Color, \
         opacity_start: float, \
         opacity_end: float) -> void:
-    self.position = position
+    self.pulse_position = pulse_position
     self.time_start_sec = time_start_sec
     self.period_sec = period_sec
     self.direction_angle = direction_angle
@@ -60,7 +61,7 @@ func _draw() -> void:
     if direction_angle != INF:
         DrawUtils.draw_triangle_with_one_arc_side( \
                 self, \
-                Vector2.ZERO, \
+                pulse_position, \
                 radius, \
                 direction_angle, \
                 color, \
@@ -69,13 +70,13 @@ func _draw() -> void:
                 SECTOR_ARC_LENGTH)
     elif IS_FILLED:
         draw_circle( \
-                Vector2.ZERO, \
+                pulse_position, \
                 radius, \
                 color)
     else:
         DrawUtils.draw_circle_outline( \
                 self, \
-                Vector2.ZERO, \
+                pulse_position, \
                 radius, \
                 color, \
                 STROKE_WIDTH, \

@@ -46,6 +46,7 @@ func _input(event: InputEvent) -> void:
             is_move_left_pressed = false
             is_move_right_pressed = false
             recent_gesture_positions.clear()
+            is_positions_buffer_dirty = true
         
         if event_type == PointerEventType.DOWN or \
                 event_type == PointerEventType.DRAG:

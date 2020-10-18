@@ -359,7 +359,7 @@ func _add_player(is_base_tier := false) -> void:
     
     _set_camera_post_stuck_state(is_base_tier)
     
-    if Utils.get_is_mobile_device():
+    if Global.SHOWS_MOBILE_CONTROLS:
         mobile_control_ui = MobileControlUI.new(Global.MOBILE_CONTROL_VERSION)
         Global.canvas_layers.hud_layer.add_child(mobile_control_ui)
 
@@ -472,7 +472,7 @@ func start_new_level( \
         
         current_camera_speed = CAMERA_SPEED_TIER_1
     
-    if !Utils.get_is_mobile_device():
+    if !Global.SHOWS_MOBILE_CONTROLS:
         # Render the basic input instructions sign.
         $SignAllKeys.visible = true
         $SignAllKeys.position = INPUT_SIGN_POSITION

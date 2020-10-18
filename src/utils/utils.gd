@@ -223,23 +223,40 @@ static func cap_velocity( \
     
     return velocity
 
+static func ease_name_to_param(name: String) -> float:
+    match name:
+        "linear":
+            return 1.0
+        "ease_in":
+            return 2.4
+        "ease_out":
+            return 0.4
+        "ease_in_out":
+            return -2.4
+        _:
+            Utils.error()
+            return INF
+
 static func get_is_mobile_device() -> bool:
-    # FIXME: -----------------------
-    return true
     var os_name := OS.get_name()
     return os_name == "Android" or os_name == "iOS"
 
 func get_screen_scale() -> float:
     # NOTE: OS.get_screen_scale() is only implemented for MacOS, so it's
     #       useless.
-    if OS.window_size.x < OS.window_size.y:
-        return OS.window_size.x / get_viewport().size.x
+    if OS.get_name() == "Android" or OS.get_name() == "iOS":
+        if OS.window_size.x < OS.window_size.y:
+            return OS.window_size.x / get_viewport().size.x
+        else:
+            return OS.window_size.y / get_viewport().size.y
+    elif OS.get_name() == "OSX":
+        return OS.get_screen_scale()
     else:
-        return OS.window_size.y / get_viewport().size.y
+        return 1.0
 
 # This does not take into account the screen scale. Node.get_viewport().size
 # likely returns a smaller number than OS.window_size, because of screen scale.
-func get_screen_ppi() -> int:
+static func get_screen_ppi() -> int:
     if OS.get_name() == "iOS":
         return IosResolutions.get_screen_ppi()
     else:

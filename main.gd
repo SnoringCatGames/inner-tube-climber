@@ -4,12 +4,25 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
+# >>- LEFT OFF HERE: Implementing action/gesture annotator:
+#     - Get move left/right triggers working.
+#     - Then implement pulses.
+#     - Then clean up logic into re-usable helpers.
+#       - Create 2 sub-classes with their own process/update/draw/tween logic
+#         to handle trigger dots and pulse dots (and probably one for the
+#         overall gesture).
+#     - Then implement v2 annotator.
+#     - Add logic to render the shapes for the animations, rather than just
+#       plain circles.
+# 
 # - Render animated pulsing press position phantom circle to help indicate
 #   gestures.
 #   - Also render recent positions?
 #   - Maybe this is easiest to do as just a sequence of independent debounced
 #     positions, that each shows a circle with a sharp/opaque/expand-in with a
 #     slow/trasparent/shrink-out.
+# 
+# - v1 input: test/adjust how gestures work when they cross the mid line.
 # 
 # - Fix GameScreen stretching and centering on mobile display.
 # - _Do_ emulate mouse events with touches, so that menu Controls still work.

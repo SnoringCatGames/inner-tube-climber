@@ -585,3 +585,38 @@ static func draw_ice_cream_cone( \
                 points, \
                 color, \
                 border_width)
+
+static func draw_triangle_with_one_arc_side( \
+        canvas: CanvasItem, \
+        circle_center: Vector2, \
+        circle_radius: float, \
+        direction_angle: float, \
+        color: Color, \
+        is_filled: bool, \
+        border_width := 1.0, \
+        sector_arc_length := 4.0) -> void:
+    var triangle_front_point_angle := direction_angle
+    var triangle_side_1_point_angle := direction_angle + PI * 2.0 / 3.0
+    var triangle_side_2_point_angle := direction_angle + PI * 4.0 / 3.0
+    
+    var triangle_front_point := Vector2(circle_radius, 0.0) \
+            .rotated(triangle_front_point_angle)
+    
+    var arc_points := compute_arc_points(
+            circle_center, \
+            circle_radius, \
+            triangle_side_1_point_angle, \
+            triangle_side_2_point_angle, \
+            sector_arc_length)
+    arc_points.push_back(triangle_front_point)
+    arc_points.push_back(arc_points[0])
+    
+    if is_filled:
+        canvas.draw_colored_polygon( \
+                arc_points, \
+                color)
+    else:
+        canvas.draw_polyline( \
+                arc_points, \
+                color, \
+                border_width)

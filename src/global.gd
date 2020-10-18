@@ -9,6 +9,7 @@ signal display_resized
 const GROUP_NAME_TIER_TILE_MAPS := "tier_tilemaps"
 const GROUP_NAME_TIER_GAP_TILE_MAPS := "tier_gap_tilemaps"
 
+const SHOWS_MOBILE_CONTROLS := true
 const MOBILE_CONTROL_VERSION := 1
 
 const ASPECT_RATIO_MAX := 1.0 / 1.0

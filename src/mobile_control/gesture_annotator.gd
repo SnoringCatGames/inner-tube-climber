@@ -30,10 +30,16 @@ func _sync_gesture_buffer() -> void:
             -INF
     for position in mobile_control_input.recent_gesture_positions:
         if position.time_sec > previous_latest_time_sec:
+            var action := \
+                    "move_left" if \
+                    mobile_control_input.is_move_left_pressed else \
+                    ("move_right" if \
+                    mobile_control_input.is_move_right_pressed else \
+                    "unknown")
             var gesture_item := GestureItem.new( \
                     position.position, \
                     position.time_sec, \
-                    "unknown")
+                    action)
             gesture_buffer.push_front(gesture_item)
             
             gesture_item.annotator = PulseAnnotator.new( \
@@ -49,28 +55,6 @@ func _sync_gesture_buffer() -> void:
             add_child(gesture_item.annotator)
         else:
             break
-    
-    # Update any previous UNKNOWN-type positions.
-    var new_action := \
-        "move_left" if \
-        Input.is_action_just_pressed("move_left") else \
-        ("move_right" if \
-        Input.is_action_just_pressed("move_right") else \
-        "unknown")
-    if new_action != "unknown":
-        var oldest_time_for_new_action := \
-                Time.elapsed_play_time_sec - \
-                MobileControlInput \
-                        .GESTURE_RECENT_POSITIONS_BUFFER_DELAY_SEC
-        for item in gesture_buffer:
-            if item.action == "unknown" and \
-                    item.time_sec >= oldest_time_for_new_action:
-                item.action = new_action
-                item.annotator.direction_angle = \
-                        action_to_direction_angle(item.action)
-                item.annotator.base_color = action_to_color(item.action)
-            else:
-                break
     
     # Update radius and opacity values for all gesture positions.
     for item in gesture_buffer:

@@ -229,10 +229,16 @@ static func ease_name_to_param(name: String) -> float:
             return 1.0
         "ease_in":
             return 2.4
+        "ease_in_strong":
+            return 4.8
         "ease_out":
             return 0.4
+        "ease_out_strong":
+            return 0.2
         "ease_in_out":
             return -2.4
+        "ease_in_out_strong":
+            return -4.8
         _:
             Utils.error()
             return INF

@@ -135,6 +135,7 @@ func _input(event: InputEvent) -> void:
         is_move_right_pressed = false
         recent_gesture_positions.clear()
         is_positions_buffer_dirty = true
+        latest_gesture_position = Vector2.INF
         gesture_start_time_sec = INF
     
 #    if Global.is_debug_panel_shown and \

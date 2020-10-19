@@ -3,25 +3,8 @@ class_name Main
 
 ###############################################################################
 ### MAIN TODO LIST: ###
-# 
-# >>- LEFT OFF HERE: Implementing action/gesture annotator:
-#     - Then implement pulses.
-#     - Then clean up logic into re-usable helpers.
-#       - Create 2 sub-classes with their own process/update/draw/tween logic
-#         to handle trigger dots and pulse dots (and probably one for the
-#         overall gesture).
-#     - Then implement v2 annotator.
-#     - Add logic to render the shapes for the animations, rather than just
-#       plain circles.
-# 
-# - Render animated pulsing press position phantom circle to help indicate
-#   gestures.
-#   - Also render recent positions?
-#   - Maybe this is easiest to do as just a sequence of independent debounced
-#     positions, that each shows a circle with a sharp/opaque/expand-in with a
-#     slow/trasparent/shrink-out.
-# 
-# - v1 input: test/adjust how gestures work when they cross the mid line.
+# #
+# - Implement v2 annotator.
 # 
 # - Fix GameScreen stretching and centering on mobile display.
 # - _Do_ emulate mouse events with touches, so that menu Controls still work.
@@ -71,6 +54,14 @@ class_name Main
 # - When resetting tier after a fall (or, actually, even just starting any
 #   non-zero tier), set initial camera pan to be lower down.
 #   - And maybe also only start scroll after first input.
+# 
+# - Change how speed-up works:
+#   - Configure a speed for each tier within the level tier-collection.
+#   - Then, also configure a level-loop speed-up multiplier, that is applied to
+#     each tier in the level on the next loop, and then again on the next, and
+#     so on.
+#   - Make sure this level-loop speed-up multiplier happens on a log scale, so
+#     that it doesn't become quickly impossible.
 # 
 # - Add support for logging stats over the network to a backend.
 #   - Do I need to get user permissions for that?
@@ -128,13 +119,16 @@ class_name Main
 #     - Show a flag, show a beautiful sun-rise, show them stop and finally free
 #       themselves from their inner tube (maybe with a tool or with some help?),
 #       then show them start tubing down the mountain again, and repeat the
-#       intro animation in order to loop back to the start level.
+#       intro animation in order to loop back to the start tier.
 # - Make the wall-bounce-vertical-boost more consistent/predictable; don't want
 #   it to be better to bounce near bottom of jump instead of top.
 # - Add a delay after falling before restarting.
-# - Make a level te emphasize the slipperiness of ice (mostly snow, but fail on
+# - Make a tier te emphasize the slipperiness of ice (mostly snow, but fail on
 #   ice  near the top, must jump to bounce off wall).
-# - Make a level to emphasize dynamic jump height.
+# - Make a tier to emphasize dynamic jump height.
+# - Make a tier to emphasize fast scroll speed.
+#   - Lots of zig zagging on ground tiles (that can't be jumped through).
+#   - Maximum bouncing for speeeeeed!
 # - Mobile control idea: touch either corner to move sideways, swipe slightly
 #   up on either to jump.
 # 

@@ -13,6 +13,7 @@ var is_mouse_down := false
 # Array<PositionAndTime>
 var recent_gesture_positions := []
 var is_positions_buffer_dirty := false
+var latest_gesture_position := Vector2.INF
 
 var is_jump_pressed := false
 var is_move_left_pressed := false
@@ -108,6 +109,8 @@ func _get_event_type_and_position(event: InputEvent) -> Array:
     ]
 
 func _update_position_and_time_buffer(pointer_position: Vector2) -> void:
+    latest_gesture_position = pointer_position
+    
     # Record the new drag position and time.
     var drag_position_and_time := PositionAndTime.new( \
             pointer_position, \

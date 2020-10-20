@@ -12,11 +12,13 @@ func _init(version: int) -> void:
 func _enter_tree() -> void:
     match version:
         1:
-            mobile_control_display = MobileControlDisplayV1.new()
             mobile_control_input = MobileControlInputV1.new()
+            mobile_control_display = \
+                    MobileControlDisplayV1.new(mobile_control_input)
         2:
-            mobile_control_display = MobileControlDisplayV2.new()
             mobile_control_input = MobileControlInputV2.new()
+            mobile_control_display = \
+                    MobileControlDisplayV2.new(mobile_control_input)
         _:
             Utils.error()
     

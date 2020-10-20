@@ -1,20 +1,23 @@
 extends MobileControlDisplay
 class_name MobileControlDisplayV2
 
-const PAD_SIZE := Vector2( \
-        80.0, \
-        80.0)
+const MOVE_ALL_WAYS_INDICATOR_TEXTURE := \
+        preload("res://assets/images/swipe_all_ways_indicator.png")
 
-var PAD_COLOR := Color.from_hsv( \
-        0.6, \
-        0.9, \
-        0.9, \
-        0.9)
+var mobile_control_input: MobileControlInput
 
-var left_pad_region: Rect2
-var right_pad_region: Rect2
+var move_all_ways_indicator: Sprite
+
+func _init(mobile_control_input: MobileControlInput) -> void:
+    self.mobile_control_input = mobile_control_input
 
 func _enter_tree() -> void:
+    move_all_ways_indicator = Sprite.new()
+    move_all_ways_indicator.texture = MOVE_ALL_WAYS_INDICATOR_TEXTURE
+    move_all_ways_indicator.z_index = 1
+    move_all_ways_indicator.modulate.a = OPACITY_UNPRESSED
+    add_child(move_all_ways_indicator)
+    
     Global.connect( \
             "display_resized", \
             self, \
@@ -23,20 +26,16 @@ func _enter_tree() -> void:
 
 func _on_display_resized() -> void:
     var viewport_size := get_viewport().size
-    var left_pad_position := Vector2( \
-            0.0, \
-            viewport_size.y - PAD_SIZE.y)
     var right_pad_position := Vector2( \
-            viewport_size.x - PAD_SIZE.x, \
-            viewport_size.y - PAD_SIZE.y)
-    left_pad_region = Rect2( \
-            left_pad_position, \
-            PAD_SIZE)
-    right_pad_region = Rect2( \
-            right_pad_position, \
-            PAD_SIZE)
-    update()
+            viewport_size.x - PAD_OFFSET.x, \
+            viewport_size.y - PAD_OFFSET .y)
+    
+    move_all_ways_indicator.position = right_pad_position
 
-func _draw() -> void:
-    draw_rect(left_pad_region, PAD_COLOR)
-    draw_rect(right_pad_region, PAD_COLOR)
+func _process(delta_sec: float) -> void:
+    move_all_ways_indicator.modulate.a = \
+            OPACITY_PRESSED if \
+            mobile_control_input.is_jump_pressed or \
+                    mobile_control_input.is_move_left_pressed or \
+                    mobile_control_input.is_move_right_pressed else \
+            OPACITY_UNPRESSED

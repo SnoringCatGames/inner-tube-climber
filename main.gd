@@ -4,15 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Add pixel art for the control display pads.
-#   - Have the pads consume the entire horizontal width.
-#   - Have a clean border down the middle.
-#   - Have a gradient to transparent at the top, to help indicate that the user
-#     can press anywhere vertically.
-#   - Show pads initially as slightly transparent.
-#   - Then, after first press + a couple seconds, fade pads to much more
-#     transparent.
-# 
 # - Test exporting to iPhone.
 #   - Get dev account for iPhone.
 #   - Test touchiness / usability of both mobile control types.

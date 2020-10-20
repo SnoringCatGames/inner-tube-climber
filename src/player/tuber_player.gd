@@ -30,7 +30,7 @@ const MIN_VERTICAL_SPEED := 0.0
 const MAX_VERTICAL_SPEED := 4000.0
 const MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION := 15.0
 var FRICTION_COEFFICIENT := \
-        0.04 if Global.MOBILE_CONTROL_VERSION == 1 else 0.05
+        0.02 if Global.MOBILE_CONTROL_VERSION == 1 else 0.03
 var WALL_BOUNCE_MOVEMENT_DELAY_SEC := \
         0.7 if Global.MOBILE_CONTROL_VERSION == 1 else 1.0
 const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.2
@@ -151,7 +151,9 @@ func _update_surface_state() -> void:
     is_in_post_bounce_horizontal_acceleration_grace_period = \
             has_hit_wall_since_pressing_move and \
             last_hit_wall_time >= \
-                    Time.elapsed_play_time_sec - WALL_BOUNCE_MOVEMENT_DELAY_SEC
+                    Time.elapsed_play_time_sec - \
+                    WALL_BOUNCE_MOVEMENT_DELAY_SEC and \
+            !surface_state.is_touching_floor
     
     _update_tile_map_contact()
 

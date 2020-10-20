@@ -31,8 +31,8 @@ tracks/0/keys = {
 script = ExtResource( 4 )
 
 [node name="CenteredInFullScreenPanel" parent="." instance=ExtResource( 8 )]
-margin_right = 480.0
-margin_bottom = 480.0
+margin_right = 14.0
+margin_bottom = 14.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenteredInFullScreenPanel"]
 margin_right = 480.0

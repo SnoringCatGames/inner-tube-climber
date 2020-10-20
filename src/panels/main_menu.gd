@@ -1,5 +1,5 @@
+extends Node2D
 class_name MainMenu
-extends Panel
 
 const BUTTON_PRESS_SFX_STREAM := preload("res://assets/sfx/menu_select.wav")
 
@@ -28,12 +28,12 @@ func _init() -> void:
     add_child(button_press_sfx_player)
 
 func _ready() -> void:
-    $HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/HardModeCheckbox \
+    $CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/HardModeCheckbox \
             .pressed = IS_HARD_MODE_ON_BY_DEFAULT
     Global.current_level.is_stuck_in_a_retry_loop = !IS_HARD_MODE_ON_BY_DEFAULT
     
     var selector := \
-            $HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/TierSelector
+            $CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/TierSelector
     for item in TIER_ITEMS:
         selector.add_item(item)
 
@@ -53,5 +53,5 @@ func _on_TierSelector_item_selected(index: int) -> void:
     selected_tier_index = index
 
 func set_high_score(high_score: int) -> void:
-    $HBoxContainer/VBoxContainer/CenterContainer/HighScoreLabel.text = \
-            "Your high score:    %s points" % high_score
+    $CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/CenterContainer/HighScoreLabel \
+            .text = "Your high score:    %s points" % high_score

@@ -2,7 +2,10 @@
 
 [ext_resource path="res://src/level/intro_animation/slope_animation.tscn" type="PackedScene" id=1]
 
-[node name="Node2D" type="Node2D"]
+[node name="ClippedSlopeAnimation" type="Control"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Control" type="Control" parent="."]
 margin_left = -48.0

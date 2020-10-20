@@ -23,6 +23,9 @@ const POST_SIDEWAYS_MOVEMENT_START_JUMP_DELAY := 0.02
 
 var gesture_start_time_sec := INF
 
+var jump_pointer_current_position := Vector2.INF
+var move_sideways_pointer_current_position := Vector2.INF
+
 func _input(event: InputEvent) -> void:
     var type_and_position := _get_event_type_and_position(event)
     var event_type: int = type_and_position[0]
@@ -119,15 +122,27 @@ func _input(event: InputEvent) -> void:
                         is_move_right_pressed = false
                 
                 # Switching directions?
-                if is_velocity_enough_to_start_move_left and is_move_right_pressed:
-                        is_move_left_pressed = true
-                        is_move_right_pressed = false
-                elif is_velocity_enough_to_start_move_right and is_move_left_pressed:
-                        is_move_left_pressed = false
-                        is_move_right_pressed = true
+                if is_velocity_enough_to_start_move_left and \
+                        is_move_right_pressed:
+                    is_move_left_pressed = true
+                    is_move_right_pressed = false
+                elif is_velocity_enough_to_start_move_right and \
+                        is_move_left_pressed:
+                    is_move_left_pressed = false
+                    is_move_right_pressed = true
                 
             else:
                 Utils.error()
+        
+        if is_jump_pressed:
+            jump_pointer_current_position = pointer_position
+        else:
+            jump_pointer_current_position = Vector2.INF
+        
+        if is_move_left_pressed or is_move_right_pressed:
+            move_sideways_pointer_current_position = pointer_position
+        else:
+            move_sideways_pointer_current_position = Vector2.INF
         
     elif event_type == PointerEventType.UP:
         is_jump_pressed = false
@@ -136,25 +151,6 @@ func _input(event: InputEvent) -> void:
         recent_gesture_positions.clear()
         is_positions_buffer_dirty = true
         latest_gesture_position = Vector2.INF
+        jump_pointer_current_position = Vector2.INF
+        move_sideways_pointer_current_position = Vector2.INF
         gesture_start_time_sec = INF
-    
-#    if Global.is_debug_panel_shown and \
-#            event_type != PointerEventType.DRAG and \
-#            event_type != PointerEventType.UNKNOWN:
-#        Global.debug_panel.add_message((
-#                    "%s; " + \
-#                    "pos=(%4d,%4d); " + \
-#                    "dir=%1d" + \
-#                    "buff=%s" + \
-##                    "vwprt=(%4d,%4d); " + \
-#                    ""
-#                ) % [
-#                    PointerEventType.get_pointer_event_type_string( \
-#                            event_type).substr(0, 2),
-#                    pointer_position.x,
-#                    pointer_position.y,
-#                    drag_direction,
-#                    recent_gesture_positions.size(),
-##                    get_viewport().size.x,
-##                    get_viewport().size.y,
-#                ])

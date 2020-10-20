@@ -14,15 +14,14 @@ func _enter_tree() -> void:
         1:
             mobile_control_display = MobileControlDisplayV1.new()
             mobile_control_input = MobileControlInputV1.new()
-            mobile_control_gesture_annotator = \
-                    MobileControlGestureAnnotatorV1.new(mobile_control_input)
         2:
             mobile_control_display = MobileControlDisplayV2.new()
             mobile_control_input = MobileControlInputV2.new()
-            mobile_control_gesture_annotator = \
-                    MobileControlGestureAnnotatorV2.new(mobile_control_input)
         _:
             Utils.error()
+    
+    mobile_control_gesture_annotator = \
+            MobileControlGestureAnnotator.new(mobile_control_input)
     
     add_child(mobile_control_display)
     add_child(mobile_control_input)

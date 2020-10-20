@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/images/loader-spritesheet.png" type="Texture" id=1]
 [ext_resource path="res://assets/images/logo.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://src/panels/credits_panel.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/level/intro_animation/clipped_slope_animation.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/fonts/main_font_s.tres" type="DynamicFont" id=7]
+[ext_resource path="res://src/panels/centered_in_full_screen_panel.tscn" type="PackedScene" id=8]
 
 [sub_resource type="Animation" id=1]
 resource_name = "run"
@@ -26,15 +27,14 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 4, 5, 7 ]
 }
 
-[node name="PanelContainer" type="Panel"]
+[node name="MainMenu" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="CenteredInFullScreenPanel" parent="." instance=ExtResource( 8 )]
 margin_right = 480.0
 margin_bottom = 480.0
-script = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenteredInFullScreenPanel"]
 margin_right = 480.0
 margin_bottom = 480.0
 rect_min_size = Vector2( 480, 480 )
@@ -42,7 +42,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PaddingLeft" type="Control" parent="HBoxContainer"]
+[node name="PaddingLeft" type="Control" parent="CenteredInFullScreenPanel/HBoxContainer"]
 margin_right = 47.0
 margin_bottom = 480.0
 size_flags_horizontal = 3
@@ -50,7 +50,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenteredInFullScreenPanel/HBoxContainer"]
 margin_left = 51.0
 margin_right = 428.0
 margin_bottom = 480.0
@@ -60,18 +60,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PaddingTop" type="Control" parent="HBoxContainer/VBoxContainer"]
+[node name="PaddingTop" type="Control" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer"]
 margin_right = 377.0
 margin_bottom = 39.0
 size_flags_vertical = 3
 
-[node name="Control" type="Control" parent="HBoxContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer"]
 margin_top = 43.0
 margin_right = 377.0
-margin_bottom = 82.0
+margin_bottom = 83.0
 size_flags_vertical = 3
 
-[node name="Title" type="TextureRect" parent="HBoxContainer/VBoxContainer/Control"]
+[node name="Title" type="TextureRect" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/Control"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -87,18 +87,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ProgressIndicator" type="Control" parent="HBoxContainer/VBoxContainer"]
-margin_top = 86.0
+[node name="ProgressIndicator" type="Control" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer"]
+margin_top = 87.0
 margin_right = 377.0
-margin_bottom = 205.0
+margin_bottom = 206.0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="Node2D" parent="HBoxContainer/VBoxContainer/ProgressIndicator" instance=ExtResource( 6 )]
-position = Vector2( 187.338, 85.8893 )
-scale = Vector2( 2, 2 )
+[node name="ClippedSlopeAnimation" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/ProgressIndicator" instance=ExtResource( 6 )]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+rect_scale = Vector2( 2, 2 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ProgressIndicator2" type="Control" parent="HBoxContainer/VBoxContainer"]
+[node name="ProgressIndicator2" type="Control" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer"]
 visible = false
 margin_top = 159.0
 margin_right = 377.0
@@ -106,49 +111,49 @@ margin_bottom = 248.0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="Sprite" type="Sprite" parent="HBoxContainer/VBoxContainer/ProgressIndicator2"]
+[node name="Sprite" type="Sprite" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/ProgressIndicator2"]
 position = Vector2( 188.055, 99.0598 )
 scale = Vector2( 2.67461, 2.67461 )
 texture = ExtResource( 1 )
 hframes = 8
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="HBoxContainer/VBoxContainer/ProgressIndicator2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/ProgressIndicator2"]
 root_node = NodePath("../Sprite")
 autoplay = "run"
 anims/run = SubResource( 1 )
 
-[node name="Control3" type="Control" parent="HBoxContainer/VBoxContainer"]
-margin_top = 209.0
+[node name="Control3" type="Control" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer"]
+margin_top = 210.0
 margin_right = 377.0
-margin_bottom = 239.0
+margin_bottom = 240.0
 rect_min_size = Vector2( 0, 30 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer"]
 margin_left = 117.0
-margin_top = 243.0
+margin_top = 244.0
 margin_right = 260.0
-margin_bottom = 391.0
+margin_bottom = 392.0
 size_flags_horizontal = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer"]
 margin_left = 11.0
 margin_right = 131.0
 margin_bottom = 56.0
 rect_min_size = Vector2( 120, 0 )
 size_flags_horizontal = 4
 
-[node name="StartGameButton" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer"]
+[node name="StartGameButton" type="Button" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer"]
 margin_right = 120.0
 margin_bottom = 20.0
 text = "Start game"
 
-[node name="Control" type="Control" parent="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer"]
 margin_top = 24.0
 margin_right = 120.0
 margin_bottom = 32.0
@@ -157,13 +162,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CreditsButton" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer"]
+[node name="CreditsButton" type="Button" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer"]
 margin_top = 36.0
 margin_right = 120.0
 margin_bottom = 56.0
 text = "Credits"
 
-[node name="Control4" type="Control" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
+[node name="Control4" type="Control" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer"]
 margin_top = 60.0
 margin_right = 143.0
 margin_bottom = 80.0
@@ -172,18 +177,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer"]
 margin_top = 84.0
 margin_right = 143.0
 margin_bottom = 148.0
 
-[node name="HardModeCheckbox" type="CheckButton" parent="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2"]
+[node name="HardModeCheckbox" type="CheckButton" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2"]
 margin_right = 143.0
 margin_bottom = 40.0
 custom_fonts/font = ExtResource( 7 )
 text = "Hard mode"
 
-[node name="TierSelector" type="OptionButton" parent="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2"]
+[node name="TierSelector" type="OptionButton" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2"]
 margin_left = 11.0
 margin_top = 44.0
 margin_right = 131.0
@@ -192,13 +197,13 @@ rect_min_size = Vector2( 120, 0 )
 size_flags_horizontal = 4
 text = "Starting level"
 
-[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/VBoxContainer"]
-margin_top = 395.0
+[node name="CenterContainer" type="CenterContainer" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer"]
+margin_top = 396.0
 margin_right = 377.0
-margin_bottom = 434.0
+margin_bottom = 436.0
 size_flags_vertical = 3
 
-[node name="HighScoreLabel" type="Label" parent="HBoxContainer/VBoxContainer/CenterContainer"]
+[node name="HighScoreLabel" type="Label" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/CenterContainer"]
 margin_left = 97.0
 margin_top = 8.0
 margin_right = 280.0
@@ -206,20 +211,20 @@ margin_bottom = 31.0
 custom_fonts/font = ExtResource( 3 )
 text = "Your high score:    0 points"
 
-[node name="PaddingBottom" type="Control" parent="HBoxContainer/VBoxContainer"]
-margin_top = 438.0
+[node name="PaddingBottom" type="Control" parent="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer"]
+margin_top = 440.0
 margin_right = 377.0
 margin_bottom = 480.0
 size_flags_vertical = 3
 
-[node name="PaddingRight" type="Control" parent="HBoxContainer"]
+[node name="PaddingRight" type="Control" parent="CenteredInFullScreenPanel/HBoxContainer"]
 margin_left = 432.0
 margin_right = 480.0
 margin_bottom = 480.0
 size_flags_horizontal = 3
 
 [node name="CreditsPanel" parent="." instance=ExtResource( 5 )]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer/StartGameButton" to="." method="_on_StartGameButton_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer/CreditsButton" to="." method="_on_CreditsButton_pressed"]
-[connection signal="toggled" from="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/HardModeCheckbox" to="." method="_on_EasyModeCheckbox_toggled"]
-[connection signal="item_selected" from="HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/TierSelector" to="." method="_on_TierSelector_item_selected"]
+[connection signal="pressed" from="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer/StartGameButton" to="." method="_on_StartGameButton_pressed"]
+[connection signal="pressed" from="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer/CreditsButton" to="." method="_on_CreditsButton_pressed"]
+[connection signal="toggled" from="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/HardModeCheckbox" to="." method="_on_EasyModeCheckbox_toggled"]
+[connection signal="item_selected" from="CenteredInFullScreenPanel/HBoxContainer/VBoxContainer/VBoxContainer/VBoxContainer2/TierSelector" to="." method="_on_TierSelector_item_selected"]

@@ -3,11 +3,6 @@ class_name Main
 
 ###############################################################################
 ### MAIN TODO LIST: ###
-# #
-# - Implement v2 annotator.
-# 
-# - Fix GameScreen stretching and centering on mobile display.
-# - _Do_ emulate mouse events with touches, so that menu Controls still work.
 # 
 # - Add pixel art for the control display pads.
 #   - Have the pads consume the entire horizontal width.
@@ -44,6 +39,7 @@ class_name Main
 # 
 # - Add a main-menu settings sub-menu:
 #   - Toggle visibility of mobile control display pads.
+#   - Toggle which moblie control version is used.
 #   - Toggle haptice feedback.
 #   - Have settings persist to local storage.
 # 
@@ -79,6 +75,8 @@ class_name Main
 #    OS.get_real_window_size(),
 #    OS.get_name(),
 #    OS.get_model_name(),
+# 
+# - Add a sound effect for "move_left" / "move_right" just pressed.
 # 
 # - Change score to accumulate between deaths.
 #   - Maybe count current elevation separately.
@@ -205,6 +203,24 @@ func _enter_tree() -> void:
         loading_screen = Utils.add_scene( \
                 canvas_layers.screen_layer, \
                 LOADING_SCREEN_PATH)
+
+func _ready() -> void:
+    if Global.is_debug_panel_shown:
+        Global.debug_panel.add_message((
+                    "ppi=%s; " + \
+                    "vwprt=(%4d, %4d); " + \
+                    "scale=%s; " + \
+                    "scsiz=%s; " + \
+                    "wnsiz=%s; " + \
+                    ""
+                ) % [
+                    Utils.get_viewport_ppi(),
+                    get_viewport().size.x,
+                    get_viewport().size.y,
+                    OS.get_screen_scale(),
+                    OS.get_screen_size(),
+                    OS.get_real_window_size(),
+                ])
 
 func _process(delta_sec: float) -> void:
     if game_screen == null and \

@@ -15,13 +15,14 @@ func _enter_tree() -> void:
 func _update_viewport_region() -> void:
     var game_area_region: Rect2 = Global.get_game_area_region()
     var viewport_size := get_viewport().size
-    $ViewportContainer.rect_size = game_area_region.size
-    $ViewportContainer.rect_position = \
+    $FullScreenPanel/ViewportContainer.rect_position = \
             (viewport_size - game_area_region.size) * 0.5
+    $FullScreenPanel/ViewportContainer/Viewport.size = \
+            game_area_region.size
 
 func load_level(level_index: int) -> void:
     level = Utils.add_scene( \
-            $ViewportContainer/Viewport, \
+            $FullScreenPanel/ViewportContainer/Viewport, \
             STARTING_LEVEL_RESOURCE_PATH, \
             true, \
             false)
@@ -35,6 +36,6 @@ func stop_level() -> void:
     visible = false
 
 func destroy_level() -> void:
-    $ViewportContainer/Viewport.remove_child(level)
+    $FullScreenPanel/ViewportContainer/Viewport.remove_child(level)
     level.queue_free()
     level = null

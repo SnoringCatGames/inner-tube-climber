@@ -61,6 +61,7 @@ func set_debug_panel_visibility(is_visible: bool) -> void:
                 DEBUG_PANEL_RESOURCE_PATH, \
                 true, \
                 true)
+        Global.debug_panel.z_index = 1000
     elif !is_visible and Global.debug_panel != null:
         hud_layer.remove_child(Global.debug_panel)
         Global.debug_panel.queue_free()

@@ -83,7 +83,6 @@ var MUSIC_PLAYERS = [
 ]
 
 const CELL_SIZE := Vector2(32.0, 32.0)
-const VIEWPORT_SIZE := Vector2(480.0, 480.0)
 const INPUT_SIGN_POSITION := Vector2(0.0, 10.0)
 
 const PLAYER_START_POSITION := Vector2(96.0, -32.0)
@@ -96,12 +95,13 @@ const CAMERA_PAN_TO_POST_STUCK_DURATION_SEC := 0.5
 const CAMERA_SPEED_TIER_1 := 15.0
 # TODO: Update this to instead be logarithmic.
 const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 3.0
-const CAMERA_MAX_DISTANCE_BELOW_PLAYER := VIEWPORT_SIZE.y / 4
-const PLAYER_MAX_DISTANCE_BELOW_CAMERA := VIEWPORT_SIZE.y / 2 + CELL_SIZE.y / 2
 const MUSIC_CROSS_FADE_DURATION_SEC := 2.0
 const MUSIC_SILENT_VOLUME_DB := -80.0
 const MAIN_MENU_MUSIC_PLAYER_INDEX := 2
 const NUMBER_OF_LEVELS_PER_MUSIC := 1
+
+var camera_max_distance_below_player := INF
+var player_max_distance_below_camera := INF
 
 var is_stuck_in_a_retry_loop := false
 
@@ -168,6 +168,12 @@ func _init_audio_players() -> void:
 func _enter_tree() -> void:
     Global.current_level = self
     
+    Global.connect( \
+            "display_resized", \
+            self, \
+            "_handle_display_resize")
+    _handle_display_resize()
+    
     score_boards = Utils.add_scene( \
             Global.canvas_layers.hud_layer, \
             SCORE_BOARDS_RESOURCE_PATH, \
@@ -197,6 +203,11 @@ func _input(event: InputEvent) -> void:
             event.pressed):
         _remove_stuck_animation()
         _add_player(true)
+
+func _handle_display_resize() -> void:
+    var game_area_size: Vector2 = Global.get_game_area_region().size
+    camera_max_distance_below_player = game_area_size.y / 4
+    player_max_distance_below_camera = game_area_size.y / 2 + CELL_SIZE.y / 2
 
 func start(tier_index := START_TIER_INDEX) -> void:
     visible = true
@@ -243,16 +254,16 @@ func _process(delta_sec: float) -> void:
         
         # Update camera pan, to never be too far below the player.
         if current_camera_height < \
-                player_current_height - CAMERA_MAX_DISTANCE_BELOW_PLAYER:
+                player_current_height - camera_max_distance_below_player:
             var additional_offset := \
-                    player_current_height - CAMERA_MAX_DISTANCE_BELOW_PLAYER - \
+                    player_current_height - camera_max_distance_below_player - \
                     current_camera_height
             current_camera_height += additional_offset
             Global.camera_controller.offset.y -= additional_offset
     
     # Check for game over.
     current_game_over_height = \
-            current_camera_height - PLAYER_MAX_DISTANCE_BELOW_CAMERA
+            current_camera_height - player_max_distance_below_camera
     if player_current_height < current_game_over_height:
         _game_over()
     

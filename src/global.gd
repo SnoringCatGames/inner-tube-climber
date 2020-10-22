@@ -1,9 +1,5 @@
 extends Node
 
-signal go_to_main_menu
-signal go_to_game_screen
-signal level_loaded
-signal game_over(score)
 signal display_resized
 
 const GROUP_NAME_TIER_TILE_MAPS := "tier_tilemaps"
@@ -22,7 +18,6 @@ const LEVEL_MIN_HEIGHT_CELL_COUNT := \
 const DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC := 0.1
 
 var canvas_layers: CanvasLayers
-var current_level: Level
 var camera_controller: CameraController
 
 var is_debug_panel_shown := true
@@ -84,3 +79,10 @@ func get_game_area_region() -> Rect2:
         game_area_position = Vector2.ZERO
     
     return Rect2(game_area_position, game_area_size)
+
+func register_main(main: Node) -> void:
+    camera_controller = CameraController.new()
+    main.add_child(camera_controller)
+    
+    canvas_layers = CanvasLayers.new()
+    main.add_child(canvas_layers)

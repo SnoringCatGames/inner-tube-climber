@@ -1,10 +1,6 @@
 extends Player
 class_name TuberPlayer
 
-const JUMP_SFX_STREAM := preload("res://assets/sfx/tuber_jump.wav")
-const LAND_SFX_STREAM := preload("res://assets/sfx/tuber_land.wav")
-const BOUNCE_SFX_STREAM := preload("res://assets/sfx/tuber_bounce.wav")
-
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
 const RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER := 0.68
@@ -50,29 +46,6 @@ var is_in_post_bounce_horizontal_acceleration_grace_period := false
 var was_last_jump_input_consumed := false
 var last_jump_input_time := 0.0
 var last_floor_fall_off_time := 0.0
-
-var jump_sfx_player: AudioStreamPlayer
-var land_sfx_player: AudioStreamPlayer
-var bounce_sfx_player: AudioStreamPlayer
-
-func _init() -> void:
-    _init_sfx_players()
-
-func _init_sfx_players() -> void:
-    jump_sfx_player = AudioStreamPlayer.new()
-    jump_sfx_player.stream = JUMP_SFX_STREAM
-    jump_sfx_player.volume_db = -6.0
-    add_child(jump_sfx_player)
-    
-    land_sfx_player = AudioStreamPlayer.new()
-    land_sfx_player.stream = LAND_SFX_STREAM
-    land_sfx_player.volume_db = -0.0
-    add_child(land_sfx_player)
-    
-    bounce_sfx_player = AudioStreamPlayer.new()
-    bounce_sfx_player.stream = BOUNCE_SFX_STREAM
-    bounce_sfx_player.volume_db = -2.0
-    add_child(bounce_sfx_player)
 
 func _physics_process(delta_sec: float) -> void:
     ._physics_process(delta_sec)
@@ -253,7 +226,7 @@ func _update_tile_map_contact() -> void:
                     surface_state.touched_tile_map.get_cellv( \
                             surface_state.touch_position_tile_map_coord)
             surface_state.friction = \
-                    Global.current_level.get_friction_for_tile( \
+                    Nav.screens[ScreenType.GAME].level.get_friction_for_tile( \
                             surface_state.touched_tile_map.tile_set, \
                             surface_state.touched_tile_map_cell)
         
@@ -453,10 +426,10 @@ func _process_animation() -> void:
 # Updates sounds for the current frame.
 func _process_sfx() -> void:
     if just_triggered_jump:
-        jump_sfx_player.play()
+        Audio.jump_sfx_player.play()
     
     if surface_state.just_touched_floor or surface_state.just_touched_ceiling:
-        land_sfx_player.play()
+        Audio.land_sfx_player.play()
     
     if surface_state.just_touched_wall:
-        bounce_sfx_player.play()
+        Audio.bounce_sfx_player.play()

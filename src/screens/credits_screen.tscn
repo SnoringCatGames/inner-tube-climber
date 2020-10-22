@@ -1,0 +1,209 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/images/logo.png" type="Texture" id=1]
+[ext_resource path="res://assets/images/godot-logo-small.png" type="Texture" id=2]
+[ext_resource path="res://src/screens/credits_screen.gd" type="Script" id=3]
+[ext_resource path="res://src/screens/nav_bar.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/screens/centered_in_full_screen_panel.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/fonts/main_font_s.tres" type="DynamicFont" id=6]
+[ext_resource path="res://assets/fonts/main_font_xs.tres" type="DynamicFont" id=7]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 1, 1, 1, 0.835294 )
+
+[node name="CreditsScreen" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="CenteredInFullScreenPanel" parent="." instance=ExtResource( 5 )]
+margin_right = 480.0
+margin_bottom = 480.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenteredInFullScreenPanel"]
+margin_right = 480.0
+margin_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 8.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NavBar" parent="CenteredInFullScreenPanel/VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 480.0
+margin_bottom = 64.0
+
+[node name="PaddingTop" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
+margin_left = 240.0
+margin_top = 68.0
+margin_right = 240.0
+margin_bottom = 88.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Control" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
+margin_left = 119.0
+margin_top = 92.0
+margin_right = 361.0
+margin_bottom = 113.0
+rect_min_size = Vector2( 242, 21 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="TextureRect" parent="CenteredInFullScreenPanel/VBoxContainer/Control"]
+margin_right = 242.0
+margin_bottom = 21.0
+texture = ExtResource( 1 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacer4" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
+margin_left = 240.0
+margin_top = 117.0
+margin_right = 240.0
+margin_bottom = 166.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.6
+
+[node name="Control6" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
+margin_left = 140.0
+margin_top = 170.0
+margin_right = 340.0
+margin_bottom = 210.0
+rect_min_size = Vector2( 200, 40 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+
+[node name="Label" type="LinkButton" parent="CenteredInFullScreenPanel/VBoxContainer/Control6"]
+margin_left = 23.0
+margin_right = 223.0
+margin_bottom = 14.0
+text = "Created by Levi Lindsey."
+underline = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="URL" type="LinkButton" parent="CenteredInFullScreenPanel/VBoxContainer/Control6"]
+margin_left = 52.0
+margin_top = 20.0
+margin_right = 252.0
+margin_bottom = 46.0
+rect_min_size = Vector2( 200, 0 )
+text = "https://levi.dev"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacer3" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
+margin_left = 240.0
+margin_top = 214.0
+margin_right = 240.0
+margin_bottom = 264.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.6
+
+[node name="Control2" type="LinkButton" parent="CenteredInFullScreenPanel/VBoxContainer"]
+margin_left = 184.0
+margin_top = 268.0
+margin_right = 296.0
+margin_bottom = 328.0
+rect_min_size = Vector2( 112, 60 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.5
+
+[node name="Panel" type="Panel" parent="CenteredInFullScreenPanel/VBoxContainer/Control2"]
+margin_right = 112.0
+margin_bottom = 44.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer/Control2/Panel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 91.0
+margin_bottom = 27.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GodotLogo" type="TextureRect" parent="CenteredInFullScreenPanel/VBoxContainer/Control2/Panel/Control"]
+margin_left = -1.94739
+margin_top = -1.83856
+margin_right = 724.053
+margin_bottom = 247.161
+rect_scale = Vector2( 0.14, 0.14 )
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="CenteredInFullScreenPanel/VBoxContainer/Control2"]
+margin_top = 45.0
+margin_right = 112.0
+margin_bottom = 55.0
+size_flags_vertical = 1
+custom_fonts/font = ExtResource( 7 )
+text = "Created using Godot."
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacer1" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
+margin_left = 240.0
+margin_top = 332.0
+margin_right = 240.0
+margin_bottom = 365.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.4
+
+[node name="Control3" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
+margin_left = 240.0
+margin_top = 369.0
+margin_right = 240.0
+margin_bottom = 392.0
+rect_min_size = Vector2( 0, 23 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="CenteredInFullScreenPanel/VBoxContainer/Control3"]
+margin_left = -90.0
+margin_right = 90.0
+margin_bottom = 23.0
+custom_fonts/font = ExtResource( 6 )
+text = "Show third-party licenses"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PaddingBottom" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
+margin_left = 240.0
+margin_top = 396.0
+margin_right = 240.0
+margin_bottom = 480.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/Control6/Label" to="." method="_on_levi_link_pressed"]
+[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/Control6/URL" to="." method="_on_levi_link_pressed"]
+[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/Control2" to="." method="_on_godot_link_pressed"]
+[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/Control3/Button" to="." method="_on_third_party_licenses_button_pressed"]

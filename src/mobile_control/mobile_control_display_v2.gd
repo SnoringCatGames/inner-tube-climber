@@ -2,7 +2,7 @@ extends MobileControlDisplay
 class_name MobileControlDisplayV2
 
 const MOVE_ALL_WAYS_INDICATOR_TEXTURE := \
-        preload("res://assets/images/swipe_all_ways_indicator.png")
+        preload("res://assets/images/signs/swipe_all_ways_indicator.png")
 
 var mobile_control_input: MobileControlInput
 

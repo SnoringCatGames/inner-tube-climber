@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/fonts/main_font_xs.tres" type="DynamicFont" id=1]
+[ext_resource path="res://src/screens/debug_panel.gd" type="Script" id=2]
+
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.313726 )
+
+[node name="DebugPanel" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+margin_right = 214.0
+margin_bottom = 214.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer"]
+margin_right = 214.0
+margin_bottom = 214.0
+rect_min_size = Vector2( 200, 200 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PanelContainer/ScrollContainer"]
+margin_right = 200.0
+margin_bottom = 10.0
+rect_min_size = Vector2( 200, 0 )
+custom_fonts/font = ExtResource( 1 )
+autowrap = true

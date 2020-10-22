@@ -10,9 +10,6 @@ var _current_camera: Camera2D
 var offset: Vector2 setget _set_offset, _get_offset
 var zoom: float setget _set_zoom, _get_zoom
 
-func _ready() -> void:
-    Global.camera_controller = self
-
 func _process(delta_sec: float) -> void:
     if _current_camera != null:
         # Handle zooming.

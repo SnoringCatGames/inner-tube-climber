@@ -1,15 +1,6 @@
 extends Node2D
 class_name Level
 
-const MUSIC_STREAM_0 := \
-        preload("res://assets/music/stuck_in_a_crevasse.ogg")
-const MUSIC_STREAM_1 := \
-        preload("res://assets/music/no_escape_from_the_loop.ogg")
-const MUSIC_STREAM_2 := \
-        preload("res://assets/music/out_for_a_loop_ride.ogg")
-const GAME_OVER_SFX_STREAM := preload("res://assets/sfx/yeti_yell.wav")
-const NEW_TIER_SFX_STREAM := preload("res://assets/sfx/new_tier.wav")
-
 const MOBILE_CONTROL_UI_RESOURCE_PATH := "res://src/mobile_control_ui.tscn"
 const SCORE_BOARDS_RESOURCE_PATH := "res://src/score_boards.tscn"
 
@@ -74,13 +65,6 @@ const SLIPPERY_TILES := [
 ]
 
 const START_TIER_INDEX := 0
-const START_MUSIC_INDEX := 0
-
-var MUSIC_PLAYERS = [
-    AudioStreamPlayer.new(),
-    AudioStreamPlayer.new(),
-    AudioStreamPlayer.new(),
-]
 
 const CELL_SIZE := Vector2(32.0, 32.0)
 const INPUT_SIGN_POSITION := Vector2(0.0, 10.0)
@@ -95,30 +79,16 @@ const CAMERA_PAN_TO_POST_STUCK_DURATION_SEC := 0.5
 const CAMERA_SPEED_TIER_1 := 15.0
 # TODO: Update this to instead be logarithmic.
 const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 3.0
-const MUSIC_CROSS_FADE_DURATION_SEC := 2.0
-const MUSIC_SILENT_VOLUME_DB := -80.0
-const MAIN_MENU_MUSIC_PLAYER_INDEX := 2
 const NUMBER_OF_LEVELS_PER_MUSIC := 1
 
 var camera_max_distance_below_player := INF
 var player_max_distance_below_camera := INF
-
-var is_stuck_in_a_retry_loop := false
 
 var mobile_control_ui: MobileControlUI
 var score_boards: ScoreBoards
 
 var start_tier_index := START_TIER_INDEX
 var current_tier_index := START_TIER_INDEX
-var current_music_player_index := START_MUSIC_INDEX
-
-var previous_music_player: AudioStreamPlayer
-var current_music_player: AudioStreamPlayer
-var game_over_sfx_player: AudioStreamPlayer
-var new_tier_sfx_player: AudioStreamPlayer
-
-var fade_out_tween: Tween
-var fade_in_tween: Tween
 
 var previous_tier: Tier
 var current_tier: Tier
@@ -141,33 +111,8 @@ var is_game_paused := true
 func _init() -> void:
     for path in TIER_SCENE_PATHS:
         load(path)
-    
-    _init_audio_players()
-
-func _init_audio_players() -> void:
-    MUSIC_PLAYERS[0].stream = MUSIC_STREAM_0
-    MUSIC_PLAYERS[0].volume_db = -0.0
-    add_child(MUSIC_PLAYERS[0])
-    MUSIC_PLAYERS[1].stream = MUSIC_STREAM_1
-    MUSIC_PLAYERS[1].volume_db = -0.0
-    add_child(MUSIC_PLAYERS[1])
-    MUSIC_PLAYERS[2].stream = MUSIC_STREAM_2
-    MUSIC_PLAYERS[2].volume_db = -0.0
-    add_child(MUSIC_PLAYERS[2])
-    
-    game_over_sfx_player = AudioStreamPlayer.new()
-    game_over_sfx_player.stream = GAME_OVER_SFX_STREAM
-    game_over_sfx_player.volume_db = -6.0
-    add_child(game_over_sfx_player)
-    
-    new_tier_sfx_player = AudioStreamPlayer.new()
-    new_tier_sfx_player.stream = NEW_TIER_SFX_STREAM
-    new_tier_sfx_player.volume_db = -6.0
-    add_child(new_tier_sfx_player)
 
 func _enter_tree() -> void:
-    Global.current_level = self
-    
     Global.connect( \
             "display_resized", \
             self, \
@@ -181,12 +126,7 @@ func _enter_tree() -> void:
             false)
 
 func _ready() -> void:
-    # Start playing the default music for the menu screen.
-    _cross_fade_music(MAIN_MENU_MUSIC_PLAYER_INDEX)
-    
     _set_camera()
-    
-    Global.emit_signal("level_loaded")
 
 func _input(event: InputEvent) -> void:
     if is_game_paused:
@@ -215,14 +155,14 @@ func start(tier_index := START_TIER_INDEX) -> void:
     falls_count = 0
     start_new_level( \
             tier_index, \
-            START_MUSIC_INDEX)
-    _cross_fade_music(current_music_player_index)
+            Audio.START_MUSIC_INDEX)
+    Audio.cross_fade_music(Audio.current_music_player_index)
     if tier_index != 0:
         _add_player(false)
     score_boards.visible = true
 
 func stop() -> void:
-    _cross_fade_music(MAIN_MENU_MUSIC_PLAYER_INDEX)
+    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
     visible = false
     is_game_paused = true
     score_boards.visible = false
@@ -284,33 +224,35 @@ func _game_over() -> void:
     current_camera_height = player_current_height
     Global.camera_controller.offset = Vector2(0.0, -current_camera_height)
     
-    game_over_sfx_player.play()
+    Audio.game_over_sfx_player.play()
     
-    if is_stuck_in_a_retry_loop:
+    # TODO
+    if true:
         # Reset state to replay the level at the latest tier.
         start_new_level( \
                 retry_tier_index, \
-                current_music_player_index)
+                Audio.current_music_player_index)
         _add_player(false)
         current_camera_speed = camera_retry_speed
         is_game_paused = false
     else:
         Global.camera_controller.offset = CAMERA_START_POSITION_PRE_STUCK
         Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
-        current_music_player.stop()
-        game_over_sfx_player.connect( \
+        Audio.current_music_player.stop()
+        Audio.game_over_sfx_player.connect( \
                 "finished", \
                 self, \
                 "_on_game_over_sfx_finished")
-    
-    Global.emit_signal("game_over", game_score)
 
 func _on_game_over_sfx_finished() -> void:
-    game_over_sfx_player.disconnect( \
+    stop()
+    Audio.game_over_sfx_player.disconnect( \
             "finished", \
             self, \
             "_on_game_over_sfx_finished")
-    Global.emit_signal("go_to_main_menu")
+    Nav.set_screen_is_open( \
+            ScreenType.MAIN_MENU, \
+            true)
 
 func _set_camera() -> void:
     var camera := Camera2D.new()
@@ -402,17 +344,17 @@ func _destroy_level() -> void:
         next_tier_gap.queue_free()
         remove_child(next_tier_gap)
     
-    _on_cross_fade_music_finished()
+    Audio.on_cross_fade_music_finished()
     $SignAllKeys.visible = false
 
 func start_new_level( \
         tier_index := 0, \
-        music_player_index := START_MUSIC_INDEX) -> void:
+        music_player_index := Audio.START_MUSIC_INDEX) -> void:
     player_current_height = 0.0
     player_max_height = 0.0
     current_score = 0
     tier_count = 0
-    current_music_player_index = music_player_index
+    Audio.current_music_player_index = music_player_index
     
     current_camera_height = -CAMERA_START_POSITION_POST_STUCK.y
     current_camera_speed = 0.0
@@ -539,9 +481,10 @@ func _on_entered_new_tier() -> void:
     if (start_tier_index != 0 or \
             tier_count != 1) and \
             tier_count % NUMBER_OF_LEVELS_PER_MUSIC == 0:
-        current_music_player_index = \
-                (current_music_player_index + 1) % MUSIC_PLAYERS.size()
-        _cross_fade_music(current_music_player_index)
+        Audio.current_music_player_index = \
+                (Audio.current_music_player_index + 1) % \
+                Audio.MUSIC_PLAYERS.size()
+        Audio.cross_fade_music(Audio.current_music_player_index)
     
     # Update camera pan speed.
     if tier_count == 1:
@@ -549,69 +492,7 @@ func _on_entered_new_tier() -> void:
     else:
         current_camera_speed *= CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER
     
-    new_tier_sfx_player.play()
-
-func _cross_fade_music(next_music_player_index: int) -> void:
-    if fade_out_tween != null:
-        _on_cross_fade_music_finished()
-    if previous_music_player != null and previous_music_player.playing:
-        # TODO: This shouldn't happen, but it does sometimes.
-        pass
-    
-    var next_music_player: AudioStreamPlayer = \
-            MUSIC_PLAYERS[next_music_player_index]
-    previous_music_player = current_music_player
-    current_music_player = next_music_player
-    
-    if previous_music_player == current_music_player and \
-            current_music_player.playing:
-        return
-    
-    if previous_music_player != null and previous_music_player.playing:
-        fade_out_tween = Tween.new()
-        add_child(fade_out_tween)
-        fade_out_tween.interpolate_property( \
-                previous_music_player, \
-                "volume_db", \
-                0.0, \
-                MUSIC_SILENT_VOLUME_DB, \
-                MUSIC_CROSS_FADE_DURATION_SEC, \
-                Tween.TRANS_QUAD, \
-                Tween.EASE_IN)
-        fade_out_tween.start()
-    
-    current_music_player.volume_db = MUSIC_SILENT_VOLUME_DB
-    current_music_player.play()
-    
-    fade_in_tween = Tween.new()
-    add_child(fade_in_tween)
-    fade_in_tween.interpolate_property( \
-            current_music_player, \
-            "volume_db", \
-            MUSIC_SILENT_VOLUME_DB, \
-            0.0, \
-            MUSIC_CROSS_FADE_DURATION_SEC, \
-            Tween.TRANS_QUAD, \
-            Tween.EASE_OUT)
-    fade_in_tween.start()
-    
-    fade_in_tween.connect( \
-            "tween_completed", \
-            self, \
-            "_on_cross_fade_music_finished")
-
-func _on_cross_fade_music_finished() -> void:
-    if fade_out_tween != null:
-        remove_child(fade_out_tween)
-        fade_out_tween.queue_free()
-        fade_out_tween = null
-    if fade_in_tween != null:
-        remove_child(fade_in_tween)
-        fade_in_tween.queue_free()
-        fade_in_tween = null
-    if previous_music_player != null and \
-            previous_music_player != current_music_player:
-        previous_music_player.stop()
+    Audio.new_tier_sfx_player.play()
 
 static func _get_tier_size(tier: Tier) -> Vector2:
     return _get_tier_bounding_box(tier).size

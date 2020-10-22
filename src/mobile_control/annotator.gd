@@ -5,8 +5,12 @@ signal finished
 
 const GESTURE_POSITION_DURATION_SEC := 0.7
 
+#586e9a
 var WALL_COLOR := Color.from_hsv(0.611, 0.43, 0.6, 1.0)
+#273149
 var BACKGROUND_DARKEST_COLOR := Color.from_hsv(0.617, 0.47, 0.29, 1.0)
+#146363
+var BUTTON_COLOR := Color.from_hsv(0.5, 0.8, 0.39, 1.0) 
 
 var JUMP_COLOR := Color.from_hsv(0.45, 1.0, 0.9, 1.0)
 var MOVE_LEFT_COLOR := Color.from_hsv(0.117, 1.0, 0.9, 1.0)

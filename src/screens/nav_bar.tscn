@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/screens/nav_bar.gd" type="Script" id=1]
+[ext_resource path="res://assets/images/icons/left_caret_hover.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/icons/left_caret_normal.png" type="Texture" id=3]
+[ext_resource path="res://assets/images/icons/left_caret_active.png" type="Texture" id=4]
+[ext_resource path="res://assets/fonts/main_font_normal.tres" type="DynamicFont" id=5]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[node name="NavBar" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -448.0
+margin_bottom = -448.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackButton" type="TextureButton" parent="."]
+margin_right = 64.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 2 )
+expand = true
+stretch_mode = 3
+
+[node name="Header" type="Label" parent="."]
+margin_top = 20.0
+margin_right = 64.0
+margin_bottom = 43.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 5 )
+align = 1
+valign = 1
+clip_text = true
+[connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]

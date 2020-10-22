@@ -4,6 +4,75 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
+# - Experiment with signal syncronicity and content projection.
+# - Fix back button and screen nav in general.
+# - Add Screen transition Tweens, with delays to set visibility.
+# - Refactor use of Level.is_game_paused.
+# - Make player twice as big.
+# 
+# - Pause screen
+#   - Restart level
+#   - Exit to main menu.
+#   - Skip to tier?
+#   - Show current height/time/falls and best height/time/falls.
+# - Level-select screen
+#   - Show best heights and times for completed levels
+#   - Lock future levels
+#     - The next level requires beating the previous level (with any rating)
+#     - Have a couple locked bonus levels that require beating all levels with
+#       A rating, or with A+ rating, to unlock.
+#   - Give a rating for the user's best time on each level.
+#     - A, B, C?
+#     - Or gold, silver, bronze
+#     - Give a plus/other-indicator to the rating if the user didn't die at all
+#       during their run.
+#     - Give another indicator to the rating if the user ever looped through
+#       the level 3 total times (independent of fall-count rating).
+#   - 
+# - Settings menu
+#   - 
+# - Replace main menu button text with icons
+#   - Both somewhat pixelated
+#   - "Start game" -> tuber jumping
+#   - "Settings" -> gear
+#   - Also, try to replace text in other menus. In general, I want this to not
+#     use much text, so it can be accessible to international audiences.
+# 
+# - Refactor all panels:
+#   - Add support to handle Android back button.
+#   - What about iOS? Create a new on-screen back button? Include that same
+#     back button for Android? Is it possible to tell the Android OS when to
+#     hide the nav buttons at the bottom of the screen?
+#   - Create the settings panel.
+#   - Update/remove the loading screen?
+#   - Update main.gd logic for new setup.
+#   - Update credits panel to mention Copyright Levi, all rights reserved.
+#   - Global search for urls, "levi", "surfacer".
+#   - Refactor UtilityPanel:
+#     - Remove old thing.
+#     - Use SettingsScreen instead.
+#     - Create a static, always present icon/button at the top-right of the
+#       screen.
+#       - Gear symbol?
+#       - Pause symbol?
+#     - This will pause the game and open _some_ screen, from which the user
+#       can navigate to other screens or resume playing.
+#   - Test how to get the nav bar to appear on android and whether mobile
+#     controls are ever likely to make it appear annoyingly by accident.
+# 
+# - Change swipe-up icon to be a tap icon.
+# 
+# - Add a foot-snow-crunching sound effect when walking.
+# - And add a hard-ice-tapping sound effect when walking on ice.
+# 
+# - Have three difficulty tiers. 
+#   - Have the difference between them be an artificial slow down of frame rate.
+#   - Start out on medium tier by default.
+#   - Suggest switching to slower or faster tier after enough falls on a level,
+#     or enough levels without a fall.
+#   - Make difficulty selectable in Settings, and make auto suggestion for
+#     changing difficulty be toggleable in Settings too.
+# 
 # - Test exporting to iPhone.
 #   - Get dev account for iPhone.
 #   - Test touchiness / usability of both mobile control types.
@@ -13,12 +82,8 @@ class_name Main
 #       table structure should work.
 #   - Test haptic feedback.
 # 
-# - Also update all other screens/panels to dynamically adjust their dimensions
-#   as well.
 # - Update CanvasLayers to support some layers rendering within game area, and
 #   some within entire viewport.
-# 
-# - Fix easing curve on bounce for main menu animation.
 # 
 # - Refactor level:
 #   - To not have a scene, only a script.
@@ -31,7 +96,9 @@ class_name Main
 # - Add a main-menu settings sub-menu:
 #   - Toggle visibility of mobile control display pads.
 #   - Toggle which moblie control version is used.
-#   - Toggle haptice feedback.
+#   - Toggle haptic feedback.
+#   - Toggle hard mode.
+#     - Or just remove hard mode entirely?
 #   - Have settings persist to local storage.
 # 
 # - Add-back ability to collide with tier gaps:
@@ -49,23 +116,6 @@ class_name Main
 #     so on.
 #   - Make sure this level-loop speed-up multiplier happens on a log scale, so
 #     that it doesn't become quickly impossible.
-# 
-# - Add support for logging stats over the network to a backend.
-#   - Do I need to get user permissions for that?
-#     - Or is it sufficient to post a EULA?
-#   - Things to log:
-#    Utils.get_screen_ppi(),
-#    Utils.get_viewport_ppi(),
-#    OS.get_screen_dpi(),
-#    IosResolutions.get_screen_ppi(),
-#    get_viewport().size.x,
-#    get_viewport().size.y,
-#    OS.get_screen_scale(),
-#    OS.get_screen_size(),
-#    OS.window_size,
-#    OS.get_real_window_size(),
-#    OS.get_name(),
-#    OS.get_model_name(),
 # 
 # - Add a sound effect for "move_left" / "move_right" just pressed.
 # 
@@ -162,38 +212,33 @@ class_name Main
 # - Add shading to the tuber player animations.
 # - Add an animation to shake the screen on game over.
 # 
+# 
+# - Add support for logging stats over the network to a backend.
+#   - Do I need to get user permissions for that?
+#     - Or is it sufficient to post a EULA?
+#   - Things to log:
+#     Utils.get_screen_ppi(),
+#     Utils.get_viewport_ppi(),
+#     OS.get_screen_dpi(),
+#     IosResolutions.get_screen_ppi(),
+#     get_viewport().size.x,
+#     get_viewport().size.y,
+#     OS.get_screen_scale(),
+#     OS.get_screen_size(),
+#     OS.window_size,
+#     OS.get_real_window_size(),
+#     OS.get_name(),
+#     OS.get_model_name(),
+#   - Research legal/app-store requirements around this.
+# - Add internationalization.
+#   - Research what my options are for this.
+# 
 ###############################################################################
 
-const MAIN_MENU_PATH := "res://src/panels/main_menu.tscn"
-const LOADING_SCREEN_PATH := "res://src/panels/loading_screen.tscn"
-const GAME_SCREEN_RESOURCE_PATH := "res://src/panels/game_screen.tscn"
-
-var loading_screen: Node
-var camera_controller: CameraController
-var canvas_layers: CanvasLayers
-var main_menu: MainMenu
-var game_screen: GameScreen
-var is_loading_screen_shown := true
-var high_score: int = 0
-
 func _enter_tree() -> void:
-    camera_controller = CameraController.new()
-    add_child(camera_controller)
-    
-    canvas_layers = CanvasLayers.new()
-    add_child(canvas_layers)
-    
-    if OS.get_name() == "HTML5":
-        # For HTML, don't use the Godot loading screen, and instead use an
-        # HTML screen, which will be more consistent with the other screens
-        # shown before.
-        JavaScript.eval("window.onLoadingScreenReady()")
-        high_score = JavaScript.eval("window.getHighScore()")
-    else:
-        # For non-HTML platforms, show a loading screen in Godot.
-        loading_screen = Utils.add_scene( \
-                canvas_layers.screen_layer, \
-                LOADING_SCREEN_PATH)
+    Global.register_main(self)
+    Nav.start_loading()
+    get_tree().root.set_pause_mode(Node.PAUSE_MODE_PROCESS)
 
 func _ready() -> void:
     if Global.is_debug_panel_shown:
@@ -214,62 +259,11 @@ func _ready() -> void:
                 ])
 
 func _process(delta_sec: float) -> void:
-    if game_screen == null and \
+    if Nav.screens.empty() and \
             Time.elapsed_play_time_sec > 0.1:
-        game_screen = Utils.add_scene( \
-                self, \
-                GAME_SCREEN_RESOURCE_PATH, \
-                true, \
-                false)
-        game_screen.load_level(0)
-        main_menu = Utils.add_scene( \
-                canvas_layers.screen_layer, \
-                MAIN_MENU_PATH, \
-                true, \
-                false)
+        Nav.create_screens()
+        Nav.screens[ScreenType.GAME].load_level(0)
     
-    elif is_loading_screen_shown and \
+    elif Nav.is_loading_screen_shown and \
             Time.elapsed_play_time_sec > 0.5:
-        is_loading_screen_shown = false
-        
-        # Hide the loading screen.
-        if loading_screen != null:
-            canvas_layers.screen_layer.remove_child(loading_screen)
-            loading_screen.queue_free()
-            loading_screen = null
-        
-        main_menu.set_high_score(high_score)
-        main_menu.visible = true
-        
-        canvas_layers.on_level_ready()
-        
-        if OS.get_name() == "HTML5":
-            JavaScript.eval("window.onLevelReady()")
-        
-        Global.connect( \
-                "go_to_main_menu", \
-                self, \
-                "_stop_game")
-        Global.connect( \
-                "game_over", \
-                self, \
-                "_record_high_score")
-        Global.connect( \
-                "go_to_game_screen", \
-                self, \
-                "_start_game")
-
-func _start_game() -> void:
-    game_screen.start_level(main_menu.selected_tier_index)
-    main_menu.visible = false
-
-func _stop_game() -> void:
-    game_screen.stop_level()
-    main_menu.visible = true
-
-func _record_high_score(score: int) -> void:
-    if score > high_score:
-        high_score = score
-        main_menu.set_high_score(high_score)
-        if OS.get_name() == "HTML5":
-            JavaScript.eval("window.setHighScore(%d)" % high_score)
+        Nav.finish_loading()

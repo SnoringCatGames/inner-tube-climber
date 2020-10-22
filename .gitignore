@@ -32,3 +32,4 @@ secure-config.js
 .mono
 .import
 *.kra~
+dist/ios/*

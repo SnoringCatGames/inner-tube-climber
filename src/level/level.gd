@@ -106,7 +106,7 @@ var falls_count := 0
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
 var current_camera_speed := 0.0
 var current_game_over_height := -INF
-var is_game_paused := true
+var is_game_playing := true
 
 func _init() -> void:
     for path in TIER_SCENE_PATHS:
@@ -129,7 +129,7 @@ func _ready() -> void:
     _set_camera()
 
 func _input(event: InputEvent) -> void:
-    if is_game_paused:
+    if is_game_playing:
         return
     if player != null:
         return
@@ -151,7 +151,7 @@ func _handle_display_resize() -> void:
 
 func start(tier_index := START_TIER_INDEX) -> void:
     visible = true
-    is_game_paused = false
+    is_game_playing = false
     falls_count = 0
     start_new_level( \
             tier_index, \
@@ -164,11 +164,11 @@ func start(tier_index := START_TIER_INDEX) -> void:
 func stop() -> void:
     Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
     visible = false
-    is_game_paused = true
+    is_game_playing = true
     score_boards.visible = false
 
 func _physics_process(delta_sec: float) -> void:
-    if is_game_paused:
+    if is_game_playing:
         return
     
     if player == null:
@@ -183,7 +183,7 @@ func _physics_process(delta_sec: float) -> void:
     current_score = floor(player_max_height / 10.0) as int
 
 func _process(delta_sec: float) -> void:
-    if is_game_paused:
+    if is_game_playing:
         return
     
     if Global.camera_controller != null:
@@ -234,7 +234,7 @@ func _game_over() -> void:
                 Audio.current_music_player_index)
         _add_player(false)
         current_camera_speed = camera_retry_speed
-        is_game_paused = false
+        is_game_playing = false
     else:
         Global.camera_controller.offset = CAMERA_START_POSITION_PRE_STUCK
         Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
@@ -318,7 +318,7 @@ func _add_player(is_base_tier := false) -> void:
 
 func _destroy_level() -> void:
     current_tier_index = -INF
-    is_game_paused = true
+    is_game_playing = true
     current_score = 0
     
     if player != null:

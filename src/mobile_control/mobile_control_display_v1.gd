@@ -2,7 +2,7 @@ extends MobileControlDisplay
 class_name MobileControlDisplayV1
 
 const JUMP_INDICATOR_TEXTURE := \
-        preload("res://assets/images/signs/swipe_up_indicator.png")
+        preload("res://assets/images/signs/tap_indicator.png")
 const MOVE_SIDEWAYS_INDICATOR_TEXTURE := \
         preload("res://assets/images/signs/swipe_sideways_indicator.png")
 

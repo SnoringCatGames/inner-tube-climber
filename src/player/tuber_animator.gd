@@ -50,6 +50,7 @@ func face_left() -> void:
             PlayerAnimator.FLIPPED_HORIZONTAL_SCALE if \
             FACES_RIGHT_BY_DEFAULT else \
             PlayerAnimator.UNFLIPPED_HORIZONTAL_SCALE
+    scale *= Global.PLAYER_SIZE_MULTIPLIER
     set_scale(scale)
 
 func face_right() -> void:
@@ -57,6 +58,7 @@ func face_right() -> void:
             PlayerAnimator.UNFLIPPED_HORIZONTAL_SCALE if \
             FACES_RIGHT_BY_DEFAULT else \
             PlayerAnimator.FLIPPED_HORIZONTAL_SCALE
+    scale *= Global.PLAYER_SIZE_MULTIPLIER
     set_scale(scale)
 
 func run() -> void:

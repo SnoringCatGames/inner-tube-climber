@@ -4,9 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Refactor use of Level.is_game_paused.
-# - Make player twice as big.
-# 
 # - Pause screen
 #   - Restart level
 #   - Exit to main menu.
@@ -56,8 +53,6 @@ class_name Main
 #       can navigate to other screens or resume playing.
 #   - Test how to get the nav bar to appear on android and whether mobile
 #     controls are ever likely to make it appear annoyingly by accident.
-# 
-# - Change swipe-up icon to be a tap icon.
 # 
 # - Add a foot-snow-crunching sound effect when walking.
 # - And add a hard-ice-tapping sound effect when walking on ice.

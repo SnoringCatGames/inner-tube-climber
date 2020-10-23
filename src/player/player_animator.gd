@@ -1,8 +1,8 @@
 extends Node2D
 class_name PlayerAnimator
 
-const UNFLIPPED_HORIZONTAL_SCALE := Vector2(1,1)
-const FLIPPED_HORIZONTAL_SCALE := Vector2(-1,1)
+const UNFLIPPED_HORIZONTAL_SCALE := Vector2(1,  1)
+const FLIPPED_HORIZONTAL_SCALE := Vector2(-1, 1)
 
 var animation_player: AnimationPlayer
 

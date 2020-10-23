@@ -6,7 +6,6 @@
 [ext_resource path="res://assets/images/tiles/ice-platform-tile-template.png" type="Texture" id=4]
 [ext_resource path="res://src/level/tileset_overrides.gd" type="Script" id=5]
 
-
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 

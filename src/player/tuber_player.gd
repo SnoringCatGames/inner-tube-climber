@@ -1,6 +1,9 @@
 extends Player
 class_name TuberPlayer
 
+const CAPSULE_RADIUS_DEFAULT := 12.106
+const CAPSULE_HEIGHT_DEFAULT := 7.747
+
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
 const RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER := 0.68
@@ -46,6 +49,12 @@ var is_in_post_bounce_horizontal_acceleration_grace_period := false
 var was_last_jump_input_consumed := false
 var last_jump_input_time := 0.0
 var last_floor_fall_off_time := 0.0
+
+func _enter_tree() -> void:
+    $CollisionShape2D.shape.radius = \
+            CAPSULE_RADIUS_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
+    $CollisionShape2D.shape.height = \
+            CAPSULE_HEIGHT_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
 
 func _physics_process(delta_sec: float) -> void:
     ._physics_process(delta_sec)

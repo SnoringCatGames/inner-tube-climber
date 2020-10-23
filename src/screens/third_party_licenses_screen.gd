@@ -1,2 +1,0 @@
-extends Screen
-class_name ThirdPartyLicensesScreen

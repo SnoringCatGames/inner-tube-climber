@@ -1,10 +1,12 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://src/screens/nav_bar.gd" type="Script" id=1]
+[ext_resource path="res://src/controls/nav_bar.gd" type="Script" id=1]
 [ext_resource path="res://assets/images/icons/left_caret_hover.png" type="Texture" id=2]
 [ext_resource path="res://assets/images/icons/left_caret_normal.png" type="Texture" id=3]
 [ext_resource path="res://assets/images/icons/left_caret_active.png" type="Texture" id=4]
 [ext_resource path="res://assets/fonts/main_font_normal.tres" type="DynamicFont" id=5]
+
+
 
 [sub_resource type="StyleBoxEmpty" id=1]
 

@@ -1,9 +1,13 @@
 extends Screen
 class_name GameScreen
 
+const TYPE := ScreenType.GAME
 const STARTING_LEVEL_RESOURCE_PATH := "res://src/level/level.tscn"
 
 var level: Level
+
+func _init().(TYPE) -> void:
+    pass
 
 func _enter_tree() -> void:
     Global.connect( \

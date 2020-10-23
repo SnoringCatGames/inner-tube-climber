@@ -1,6 +1,7 @@
 extends Screen
 class_name LevelSelectScreen
 
+const TYPE := ScreenType.LEVEL_SELECT
 const TIER_ITEMS := [
     "Tier 0",
     "Tier 1",
@@ -11,10 +12,12 @@ const TIER_ITEMS := [
     "Tier 6",
     "Tier 7",
 ]
-
 const DEFAULT_SELECTED_TIER_INDEX := 0
 
 var selected_tier_index := DEFAULT_SELECTED_TIER_INDEX
+
+func _init().(TYPE) -> void:
+    pass
 
 func _ready() -> void:
     var selector := \

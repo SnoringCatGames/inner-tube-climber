@@ -1,6 +1,11 @@
 extends Screen
 class_name PauseScreen
 
+const TYPE := ScreenType.PAUSE
+
+func _init().(TYPE) -> void:
+    pass
+
 func _on_SettingsButton_pressed():
     Audio.button_press_sfx_player.play()
     Nav.set_screen_is_open( \

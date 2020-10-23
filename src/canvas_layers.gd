@@ -1,7 +1,7 @@
 extends Node2D
 class_name CanvasLayers
 
-var DEBUG_PANEL_RESOURCE_PATH := "res://src/screens/debug_panel.tscn"
+var DEBUG_PANEL_RESOURCE_PATH := "res://src/controls/debug_panel.tscn"
 
 var game_screen_layer: CanvasLayer
 var menu_screen_layer: CanvasLayer

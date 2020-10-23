@@ -1,9 +1,11 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/images/logo.png" type="Texture" id=2]
-[ext_resource path="res://src/screens/main_menu_screen.gd" type="Script" id=4]
+[ext_resource path="res://src/controls/screens/main_menu_screen.gd" type="Script" id=4]
 [ext_resource path="res://src/intro_animation/clipped_slope_animation.tscn" type="PackedScene" id=6]
-[ext_resource path="res://src/screens/centered_in_full_screen_panel.tscn" type="PackedScene" id=8]
+[ext_resource path="res://src/controls/centered_in_full_screen_panel.tscn" type="PackedScene" id=8]
+
+
 
 [sub_resource type="StyleBoxEmpty" id=1]
 content_margin_left = 16.0

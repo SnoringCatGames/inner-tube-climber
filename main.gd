@@ -4,9 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Experiment with signal syncronicity and content projection.
-# - Fix back button and screen nav in general.
-# - Add Screen transition Tweens, with delays to set visibility.
 # - Refactor use of Level.is_game_paused.
 # - Make player twice as big.
 # 

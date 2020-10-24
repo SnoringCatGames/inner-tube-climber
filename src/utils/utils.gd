@@ -293,18 +293,23 @@ static func get_screen_ppi() -> int:
 func get_viewport_ppi() -> float:
     return get_screen_ppi() / get_screen_scale()
 
+func get_viewport_size_inches() -> Vector2:
+    return get_viewport().size / get_viewport_ppi()
+
+func get_viewport_safe_area() -> Rect2:
+    var os_safe_area := OS.get_window_safe_area()
+    return Rect2( \
+            os_safe_area.position / get_screen_scale(), \
+            os_safe_area.size / get_screen_scale())
+
 func get_safe_area_margin_top() -> float:
-    return OS.get_window_safe_area().position.y
+    return Utils.get_viewport_safe_area().position.y
 
 func get_safe_area_margin_bottom() -> float:
-    # TODO: Test this on other devices and determine whether it would be better
-    #       to use OS.get_window_safe_area() instead.
-    return OS.window_size.y - OS.get_window_safe_area().end.y
+    return get_viewport().size.y - Utils.get_viewport_safe_area().end.y
 
 func get_safe_area_margin_left() -> float:
-    return OS.get_window_safe_area().position.x
+    return Utils.get_viewport_safe_area().position.x
 
 func get_safe_area_margin_right() -> float:
-    # TODO: Test this on other devices and determine whether it would be better
-    #       to use OS.get_window_safe_area() instead.
-    return OS.window_size.x - OS.get_window_safe_area().end.x
+    return get_viewport().size.x - OS.get_window_safe_area().end.x

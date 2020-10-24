@@ -6,6 +6,11 @@ class_name Main
 # 
 # - Make sound work on iPhone.
 # - Add button vibrate on Android.
+# - Fix sideways gesture annotators on iPhone:
+#   - They dont work after pressing jump.
+#   - They dont seem to show position buffer updates after the first sideways
+#     gesture.
+#   >>>- SOMEHOW, this is a NPE: move_sideways_pulse_annotator.pulse_position = \
 # 
 # - Test the following on the iPhone:
 #   - Account for OS.get_window_safe_area.

@@ -1,11 +1,17 @@
 extends Node
 
-const MUSIC_STREAM_0 := \
-        preload("res://assets/music/stuck_in_a_crevasse.ogg")
-const MUSIC_STREAM_1 := \
-        preload("res://assets/music/no_escape_from_the_loop.ogg")
-const MUSIC_STREAM_2 := \
-        preload("res://assets/music/out_for_a_loop_ride.ogg")
+var MUSIC_STREAM_0: AudioStream = \
+        load("res://assets/music/stuck_in_a_crevasse.wav") if \
+        Utils.get_is_ios_device() else \
+        load("res://assets/music/stuck_in_a_crevasse.ogg")
+var MUSIC_STREAM_1: AudioStream = \
+        load("res://assets/music/no_escape_from_the_loop.wav") if \
+        Utils.get_is_ios_device() else \
+        load("res://assets/music/no_escape_from_the_loop.ogg")
+var MUSIC_STREAM_2: AudioStream = \
+        load("res://assets/music/out_for_a_loop_ride.wav") if \
+        Utils.get_is_ios_device() else \
+        load("res://assets/music/out_for_a_loop_ride.ogg")
 
 const BUTTON_PRESS_SFX_STREAM := preload("res://assets/sfx/menu_select.wav")
 const GAME_OVER_SFX_STREAM := preload("res://assets/sfx/yeti_yell.wav")

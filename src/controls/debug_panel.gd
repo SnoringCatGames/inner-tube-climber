@@ -42,11 +42,14 @@ func _log_device_settings() -> void:
             "\n  OS.window_size=%s" + \
             "\n  OS.get_real_window_size()=%s" + \
             "\n  OS.get_screen_size()=%s" + \
+            "\n  Utils.get_screen_scale()=%s" + \
             "\n  OS.get_screen_scale()=%s" + \
             "\n  Utils.get_screen_ppi()=%s" + \
             "\n  Utils.get_viewport_ppi()=%s" + \
             "\n  OS.get_screen_dpi()=%s" + \
             "\n  IosResolutions.get_screen_ppi()=%s" + \
+            "\n  Utils.get_viewport_size_inches()=%s" + \
+            "\n  Utils.get_viewport_safe_area()=%s" + \
             "\n  OS.get_window_safe_area()=%s" + \
             "\n  Utils.get_safe_area_margin_top()=%s" + \
             "\n  Utils.get_safe_area_margin_bottom()=%s" + \
@@ -61,6 +64,7 @@ func _log_device_settings() -> void:
                 OS.window_size,
                 OS.get_real_window_size(),
                 OS.get_screen_size(),
+                Utils.get_screen_scale(),
                 OS.get_screen_scale(),
                 Utils.get_screen_ppi(),
                 Utils.get_viewport_ppi(),
@@ -68,6 +72,8 @@ func _log_device_settings() -> void:
                 IosResolutions.get_screen_ppi() if \
                         Utils.get_is_ios_device() else \
                         "N/A",
+                Utils.get_viewport_size_inches(),
+                Utils.get_viewport_safe_area(),
                 OS.get_window_safe_area(),
                 Utils.get_safe_area_margin_top(),
                 Utils.get_safe_area_margin_bottom(),

@@ -14,8 +14,8 @@
 extends MobileControlInput
 class_name MobileControlInputV1
 
-const GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.04, 0.04)
-const REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.16, 0.08)
+const GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.08, 0.08)
+const REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.32, 0.16)
 
 var gesture_velocity_threshold_pixels_per_sec: Vector2 = \
         GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC * Utils.get_viewport_ppi()
@@ -78,14 +78,9 @@ func _input(event: InputEvent) -> void:
         elif is_a_move_sideways_event:
             _handle_move_sideways_drag(pointer_position)
         else:
-            # There was no corresponding down event for this drag event?
-            if Global.is_debug_panel_shown:
-                Global.debug_panel.add_message(( \
-                        "ERROR: DRAG with no corresponding DOWN: " + \
-                        "(%4d, %4d)") % [
-                            pointer_position.x,
-                            pointer_position.y,
-                        ])
+            # There was no corresponding down event for this drag event.
+            # This can happen when a finger is pressed while the level starts.
+            pass
         
     elif event_type == PointerEventType.UP:
         if is_a_jump_event:
@@ -102,13 +97,8 @@ func _input(event: InputEvent) -> void:
             move_sideways_pointer_current_position = Vector2.INF
         else:
             # There was no corresponding down event for this up event?
-            if Global.is_debug_panel_shown:
-                Global.debug_panel.add_message(( \
-                        "ERROR: UP with no corresponding DOWN: " + \
-                        "(%4d, %4d)") % [
-                            pointer_position.x,
-                            pointer_position.y,
-                        ])
+            # This can happen when a finger is pressed while the level starts.
+            pass
 
 func _handle_move_sideways_drag(pointer_position: Vector2) -> void:
     move_sideways_pointer_current_position = pointer_position

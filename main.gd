@@ -4,6 +4,28 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
+# - Test the following on the iPhone:
+#   - Account for OS.get_window_safe_area.
+#     - Test my new functions on iPhone.
+#   - Offset display pads a bit more to account for rounded corners (maybe favor
+#     offsetting more vertically).
+#   - Fix delay of tap response on ios.
+#   - Remove vibrate from ios.
+# 
+# - Refactor level:
+#   - Support restarting at any point.
+#   - Add a lives count.
+#   - Add a framerate speed control...
+#   - Fix scroll speed.
+#   - Reword score to height.
+#   - Create a concept of a zoom amount for each tier.
+#     - Configure this with the tier definitions.
+#     - Set the camera zoom accordingly within level when switching tiers.
+#     - Have the zoom change animate.
+#   - Count the number of deaths within the current playthrough of the current
+#     tier.
+#   - Count the number of tiers climbed without dying.
+# 
 # - Pause screen
 #   - Restart level
 #   - Exit to main menu.
@@ -24,7 +46,17 @@ class_name Main
 #       the level 3 total times (independent of fall-count rating).
 #   - 
 # - Settings menu
-#   - 
+#   - Toggle visibility of mobile control display pads.
+#   - Toggle which moblie control version is used.
+#   - Toggle haptic feedback (only on Android).
+#   - Toggle hard mode.
+#     - Or just remove hard mode entirely?
+#   - Change sensitivity of gestures.
+#     - Make it a slider.
+#     - Don't label with a unit, other than more/less sensitive.
+#     - Flat multiplier? Or quadratic?
+#   - Have settings persist to local storage.
+#   - Toggle sfx; toggle music.
 # - Replace main menu button text with icons
 #   - Both somewhat pixelated
 #   - "Start game" -> tuber jumping
@@ -41,7 +73,6 @@ class_name Main
 #   - Update/remove the loading screen?
 #   - Update main.gd logic for new setup.
 #   - Update credits panel to mention Copyright Levi, all rights reserved.
-#   - Global search for urls, "levi", "surfacer".
 #   - Refactor UtilityPanel:
 #     - Remove old thing.
 #     - Use SettingsScreen instead.
@@ -56,6 +87,8 @@ class_name Main
 # 
 # - Add a foot-snow-crunching sound effect when walking.
 # - And add a hard-ice-tapping sound effect when walking on ice.
+# - Also create an additional sound effect for move-sideways event triggering.
+#   - Will help inform player when switching directions.
 # 
 # - Have three difficulty tiers. 
 #   - Have the difference between them be an artificial slow down of frame rate.
@@ -84,14 +117,6 @@ class_name Main
 # - Remove Level.is_game_paused and use Global.pause instead.
 #   - Read Godot docs. Will need to whitelist Nodes to continue processing
 #     during pause.
-# 
-# - Add a main-menu settings sub-menu:
-#   - Toggle visibility of mobile control display pads.
-#   - Toggle which moblie control version is used.
-#   - Toggle haptic feedback.
-#   - Toggle hard mode.
-#     - Or just remove hard mode entirely?
-#   - Have settings persist to local storage.
 # 
 # - Add-back ability to collide with tier gaps:
 #   - The problem is that collisions get weird with tier-gap-walled-to-open.
@@ -221,6 +246,7 @@ class_name Main
 #     OS.get_real_window_size(),
 #     OS.get_name(),
 #     OS.get_model_name(),
+#     OS.get_window_safe_area (),
 #   - Research legal/app-store requirements around this.
 # - Add internationalization.
 #   - Research what my options are for this.
@@ -231,24 +257,6 @@ func _enter_tree() -> void:
     Global.register_main(self)
     Nav.start_loading()
     get_tree().root.set_pause_mode(Node.PAUSE_MODE_PROCESS)
-
-func _ready() -> void:
-    if Global.is_debug_panel_shown:
-        Global.debug_panel.add_message((
-                    "ppi=%s; " + \
-                    "vwprt=(%4d, %4d); " + \
-                    "scale=%s; " + \
-                    "scsiz=%s; " + \
-                    "wnsiz=%s; " + \
-                    ""
-                ) % [
-                    Utils.get_viewport_ppi(),
-                    get_viewport().size.x,
-                    get_viewport().size.y,
-                    OS.get_screen_scale(),
-                    OS.get_screen_size(),
-                    OS.get_real_window_size(),
-                ])
 
 func _process(delta_sec: float) -> void:
     if Nav.screens.empty() and \

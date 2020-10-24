@@ -26,9 +26,12 @@ func _enter_tree() -> void:
 
 func _on_display_resized() -> void:
     var viewport_size := get_viewport().size
+    var right_offset := PAD_OFFSET
+    right_offset.y = max(right_offset.y, Utils.get_safe_area_margin_bottom())
+    right_offset.x = max(right_offset.x, Utils.get_safe_area_margin_right())
     var right_pad_position := Vector2( \
-            viewport_size.x - PAD_OFFSET.x, \
-            viewport_size.y - PAD_OFFSET .y)
+            viewport_size.x - right_offset.x, \
+            viewport_size.y - right_offset.y)
     
     move_all_ways_indicator.position = right_pad_position
 

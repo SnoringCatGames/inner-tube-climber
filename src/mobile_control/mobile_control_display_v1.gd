@@ -35,12 +35,18 @@ func _enter_tree() -> void:
 
 func _on_display_resized() -> void:
     var viewport_size := get_viewport().size
+    var left_offset := PAD_OFFSET
+    left_offset.y = max(left_offset.y, Utils.get_safe_area_margin_bottom())
+    left_offset.x = max(left_offset.x, Utils.get_safe_area_margin_left())
+    var right_offset := PAD_OFFSET
+    right_offset.y = max(right_offset.y, Utils.get_safe_area_margin_bottom())
+    right_offset.x = max(right_offset.x, Utils.get_safe_area_margin_right())
     var left_pad_position := Vector2( \
-            PAD_OFFSET.x, \
-            viewport_size.y - PAD_OFFSET .y)
+            left_offset.x, \
+            viewport_size.y - left_offset.y)
     var right_pad_position := Vector2( \
-            viewport_size.x - PAD_OFFSET.x, \
-            viewport_size.y - PAD_OFFSET .y)
+            viewport_size.x - right_offset.x, \
+            viewport_size.y - right_offset.y)
     
     jump_indicator.position = left_pad_position
     move_sideways_indicator.position = right_pad_position

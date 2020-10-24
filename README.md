@@ -14,7 +14,7 @@ This is an endless climber (2D platformer) game, with novel wall-bouncing mechan
 
 _**Ludum Dare 47 Submission: https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube/**_
 
-This game is based off of a "Compo" submission for the [Ludum Dare 47 game jam](https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube/). All design, code, images, sound effects, and music were created by Levi in under 48 hours. The creation of this game was also [livestreamed on Twitch](https://www.twitch.tv/ukulelefury/videos). You can see Levi's original submission version at https://github.com/levilindsey/tube-climber.
+This game is based off of a "Compo" submission for the [Ludum Dare 47 game jam](https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube/). You can see Levi's original submission version at https://github.com/levilindsey/tube-climber.
 
 ### The theme: "Stuck in a loop"
 

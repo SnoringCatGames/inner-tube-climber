@@ -6,8 +6,6 @@
 [ext_resource path="res://assets/images/icons/left_caret_active.png" type="Texture" id=4]
 [ext_resource path="res://assets/fonts/main_font_normal.tres" type="DynamicFont" id=5]
 
-
-
 [sub_resource type="StyleBoxEmpty" id=1]
 
 [node name="NavBar" type="PanelContainer"]
@@ -23,7 +21,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BackButton" type="TextureButton" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_right = 64.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+
+[node name="BackButton" type="TextureButton" parent="MarginContainer"]
 margin_right = 64.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 64, 64 )
@@ -35,7 +42,7 @@ texture_hover = ExtResource( 2 )
 expand = true
 stretch_mode = 3
 
-[node name="Header" type="Label" parent="."]
+[node name="Header" type="Label" parent="MarginContainer"]
 margin_top = 20.0
 margin_right = 64.0
 margin_bottom = 43.0
@@ -44,4 +51,4 @@ custom_fonts/font = ExtResource( 5 )
 align = 1
 valign = 1
 clip_text = true
-[connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="pressed" from="MarginContainer/BackButton" to="." method="_on_BackButton_pressed"]

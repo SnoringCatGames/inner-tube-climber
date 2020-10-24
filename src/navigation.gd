@@ -159,7 +159,7 @@ func close_current_screen() -> void:
             false)
 
 func start_loading() -> void:
-    if OS.get_name() == "HTML5":
+    if Utils.get_is_browser():
         # For HTML, don't use the Godot loading screen, and instead use an
         # HTML screen, which will be more consistent with the other screens
         # shown before.
@@ -183,7 +183,7 @@ func finish_loading() -> void:
             ScreenType.MAIN_MENU, \
             true)
     
-    if OS.get_name() == "HTML5":
+    if Utils.get_is_browser():
         JavaScript.eval("window.onLevelReady()")
     
     # Start playing the default music for the menu screen.

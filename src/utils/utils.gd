@@ -243,19 +243,30 @@ static func ease_name_to_param(name: String) -> float:
             Utils.error()
             return INF
 
+static func get_is_android_device() -> bool:
+    return OS.get_name() == "Android"
+
+static func get_is_ios_device() -> bool:
+    return OS.get_name() == "iOS"
+
+static func get_is_browser() -> bool:
+    return OS.get_name() == "HTML5"
+
+static func get_is_mac_device() -> bool:
+    return OS.get_name() == "OSX"
+
 static func get_is_mobile_device() -> bool:
-    var os_name := OS.get_name()
-    return os_name == "Android" or os_name == "iOS"
+    return get_is_android_device() or get_is_ios_device()
 
 func get_screen_scale() -> float:
     # NOTE: OS.get_screen_scale() is only implemented for MacOS, so it's
     #       useless.
-    if OS.get_name() == "Android" or OS.get_name() == "iOS":
+    if get_is_mobile_device():
         if OS.window_size.x < OS.window_size.y:
             return OS.window_size.x / get_viewport().size.x
         else:
             return OS.window_size.y / get_viewport().size.y
-    elif OS.get_name() == "OSX":
+    elif get_is_mac_device():
         return OS.get_screen_scale()
     else:
         return 1.0
@@ -263,7 +274,7 @@ func get_screen_scale() -> float:
 # This does not take into account the screen scale. Node.get_viewport().size
 # likely returns a smaller number than OS.window_size, because of screen scale.
 static func get_screen_ppi() -> int:
-    if OS.get_name() == "iOS":
+    if get_is_ios_device():
         return IosResolutions.get_screen_ppi()
     else:
         return OS.get_screen_dpi()
@@ -276,3 +287,19 @@ static func get_screen_ppi() -> int:
 #       them.
 func get_viewport_ppi() -> float:
     return get_screen_ppi() / get_screen_scale()
+
+func get_safe_area_margin_top() -> float:
+    return OS.get_window_safe_area().position.y
+
+func get_safe_area_margin_bottom() -> float:
+    # TODO: Test this on other devices and determine whether it would be better
+    #       to use OS.get_window_safe_area() instead.
+    return OS.window_size.y - OS.get_window_safe_area().end.y
+
+func get_safe_area_margin_left() -> float:
+    return OS.get_window_safe_area().position.x
+
+func get_safe_area_margin_right() -> float:
+    # TODO: Test this on other devices and determine whether it would be better
+    #       to use OS.get_window_safe_area() instead.
+    return OS.window_size.x - OS.get_window_safe_area().end.x

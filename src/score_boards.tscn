@@ -4,7 +4,6 @@
 [ext_resource path="res://assets/fonts/main_font_xs.tres" type="DynamicFont" id=2]
 [ext_resource path="res://src/score_boards.gd" type="Script" id=3]
 
-
 [node name="ScoreBoards" type="Node2D"]
 z_index = 1
 script = ExtResource( 3 )

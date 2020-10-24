@@ -258,6 +258,11 @@ static func get_is_mac_device() -> bool:
 static func get_is_mobile_device() -> bool:
     return get_is_android_device() or get_is_ios_device()
 
+static func get_model_name() -> String:
+    return IosModelNames.get_model_name() if \
+        get_is_ios_device() else \
+        OS.get_model_name()
+
 func get_screen_scale() -> float:
     # NOTE: OS.get_screen_scale() is only implemented for MacOS, so it's
     #       useless.

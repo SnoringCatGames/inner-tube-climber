@@ -37,6 +37,7 @@ func _log_device_settings() -> void:
             ("Device settings:" + \
             "\n  OS.get_name()=%s" + \
             "\n  OS.get_model_name()=%s" + \
+            "\n  Utils.get_model_name()=%s" + \
             "\n  get_viewport().size=(%4d,%4d)" + \
             "\n  OS.window_size=%s" + \
             "\n  OS.get_real_window_size()=%s" + \
@@ -54,6 +55,7 @@ func _log_device_settings() -> void:
             "") % [
                 OS.get_name(),
                 OS.get_model_name(),
+                Utils.get_model_name(),
                 get_viewport().size.x,
                 get_viewport().size.y,
                 OS.window_size,

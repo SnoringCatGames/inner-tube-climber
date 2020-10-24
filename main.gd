@@ -4,6 +4,9 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
+# - Make sound work on iPhone.
+# - Add button vibrate on Android.
+# 
 # - Test the following on the iPhone:
 #   - Account for OS.get_window_safe_area.
 #     - Test my new functions on iPhone.

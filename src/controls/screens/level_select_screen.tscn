@@ -4,8 +4,6 @@
 [ext_resource path="res://src/controls/centered_in_full_screen_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/controls/nav_bar.tscn" type="PackedScene" id=3]
 
-
-
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -47,11 +45,11 @@ margin_right = 140.0
 margin_bottom = 39.0
 text = "Start game"
 
-[node name="TierSelector" type="OptionButton" parent="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer"]
+[node name="LevelSelector" type="OptionButton" parent="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer"]
 margin_top = 51.0
 margin_right = 140.0
 margin_bottom = 90.0
-text = "Select tier"
+text = "Select level"
 align = 1
 
 [node name="Spacer2" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
@@ -62,5 +60,5 @@ margin_bottom = 480.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
 [connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/StartGameButton" to="." method="_on_StartGameButton_pressed"]
-[connection signal="item_selected" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/TierSelector" to="." method="_on_TierSelector_item_selected"]
-[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/TierSelector" to="." method="_on_TierSelector_pressed"]
+[connection signal="item_selected" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/LevelSelector" to="." method="_on_LevelSelector_item_selected"]
+[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/LevelSelector" to="." method="_on_LevelSelector_pressed"]

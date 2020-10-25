@@ -235,7 +235,7 @@ func _update_tile_map_contact() -> void:
                     surface_state.touched_tile_map.get_cellv( \
                             surface_state.touch_position_tile_map_coord)
             surface_state.friction = \
-                    Nav.screens[ScreenType.GAME].level.get_friction_for_tile( \
+                    LevelConfig.get_friction_for_tile( \
                             surface_state.touched_tile_map.tile_set, \
                             surface_state.touched_tile_map_cell)
         

@@ -5,13 +5,12 @@ class_name Main
 ### MAIN TODO LIST: ###
 # 
 # - Make sound work on iPhone.
-# - Add button vibrate on Android.
 # - Fix sideways gesture annotators on iPhone:
 #   - They dont work after pressing jump.
 #   - They dont seem to show position buffer updates after the first sideways
 #     gesture.
-#   >>>- SOMEHOW, this is a NPE: move_sideways_pulse_annotator.pulse_position = \
-# - Screen size discrepency:
+#   >>>- SOMEHOW, this is a NPE on MacOS: move_sideways_pulse_annotator.pulse_position = \
+# - iPhone XR screen size discrepency:
 #   - 6.06 actual (diagonal)
 #   - 5.48717706322 reported (diagonal)
 #   - 5.48717706322/6.06 = 0.9054747629
@@ -25,6 +24,8 @@ class_name Main
 #   - Remove vibrate from ios.
 # 
 # - Refactor level:
+#   >>- Change how base-level case is handled; don't encode in config; auto-append when starting level.
+#   - To support many different levels, each with different tier collections.
 #   - Support restarting at any point.
 #   - Add a lives count.
 #   - Add a framerate speed control...
@@ -38,11 +39,19 @@ class_name Main
 #     tier.
 #   - Count the number of tiers climbed without dying.
 # 
+# - Make a new sound effect for button press that is more subtle.
+#   - Still use the old one on start-game press though.
+# 
+# - Consider refactoring into stuck zoom animation to instead just use the
+#   zoom_multiplier on LevelConfig for TIERS[0].
+# 
 # - Pause screen
 #   - Restart level
 #   - Exit to main menu.
 #   - Skip to tier?
 #   - Show current height/time/falls and best height/time/falls.
+#   - Show level number/name.
+#   - Show current tier number within level (Tier 7/10)?
 # 
 # - Level-select screen
 #   - Show best heights and times for completed levels
@@ -86,8 +95,6 @@ class_name Main
 #     back button for Android? Is it possible to tell the Android OS when to
 #     hide the nav buttons at the bottom of the screen?
 #   - Create the settings panel.
-#   - Update/remove the loading screen?
-#   - Update main.gd logic for new setup.
 #   - Update credits panel to mention Copyright Levi, all rights reserved.
 #   - Refactor UtilityPanel:
 #     - Remove old thing.
@@ -125,14 +132,6 @@ class_name Main
 # 
 # - Update CanvasLayers to support some layers rendering within game area, and
 #   some within entire viewport.
-# 
-# - Refactor level:
-#   - To not have a scene, only a script.
-#   - To support many different levels, each with different tier collections.
-# 
-# - Remove Level.is_game_paused and use Global.pause instead.
-#   - Read Godot docs. Will need to whitelist Nodes to continue processing
-#     during pause.
 # 
 # - Add-back ability to collide with tier gaps:
 #   - The problem is that collisions get weird with tier-gap-walled-to-open.
@@ -271,15 +270,12 @@ class_name Main
 
 func _enter_tree() -> void:
     Global.register_main(self)
-    Nav.start_loading()
     get_tree().root.set_pause_mode(Node.PAUSE_MODE_PROCESS)
+    Nav.create_screens()
 
-func _process(delta_sec: float) -> void:
-    if Nav.screens.empty() and \
-            Time.elapsed_play_time_sec > 0.1:
-        Nav.create_screens()
-        Nav.screens[ScreenType.GAME].load_level(0)
-    
-    elif Nav.is_loading_screen_shown and \
-            Time.elapsed_play_time_sec > 0.5:
-        Nav.finish_loading()
+func _ready() -> void:
+    Nav.set_screen_is_open( \
+            ScreenType.MAIN_MENU, \
+            true)
+    # Start playing the default music for the menu screen.
+    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)

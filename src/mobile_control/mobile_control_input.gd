@@ -4,10 +4,7 @@ class_name MobileControlInput
 # How many seconds worth of drag positions to buffer.
 const GESTURE_RECENT_POSITIONS_BUFFER_DELAY_SEC := 0.1
 
-const INPUT_VIBRATE_DURATION_SEC := 0.01
-
 var is_mobile_device := false
-var is_giving_haptic_feedback := false
 
 var is_mouse_down := false
 
@@ -22,7 +19,6 @@ var is_move_right_pressed := false
 
 func _init() -> void:
     self.is_mobile_device = Utils.get_is_mobile_device()
-    self.is_giving_haptic_feedback = Utils.get_is_android_device()
     
 func _physics_process(delta_sec: float) -> void:
     # NOTE: Regarding sequencing:
@@ -40,8 +36,8 @@ func _physics_process(delta_sec: float) -> void:
             !Input.is_action_pressed("jump") and is_jump_pressed or \
             !Input.is_action_pressed("move_left") and is_move_left_pressed or \
             !Input.is_action_pressed("move_right") and is_move_right_pressed
-    if is_some_action_just_pressed and is_giving_haptic_feedback:
-        Input.vibrate_handheld(INPUT_VIBRATE_DURATION_SEC * 1000)
+    if is_some_action_just_pressed:
+        Global.vibrate()
     
     if Input.is_action_pressed("jump") != is_jump_pressed:
         var action := InputEventAction.new() 

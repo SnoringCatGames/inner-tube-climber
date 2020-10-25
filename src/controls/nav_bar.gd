@@ -16,5 +16,5 @@ func _set_text(value: String) -> void:
     $MarginContainer/Header.text = text
 
 func _on_BackButton_pressed():
-    Audio.button_press_sfx_player.play()
+    Global.give_button_press_feedback()
     Nav.close_current_screen()

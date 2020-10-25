@@ -6,65 +6,7 @@ const SCORE_BOARDS_RESOURCE_PATH := "res://src/score_boards.tscn"
 
 const PLAYER_RESOURCE_PATH := "res://src/player/tuber_player.tscn"
 
-const TIER_SCENE_PATHS := [
-    "res://src/level/tiers/tier_base.tscn",
-    "res://src/level/tiers/tier_1.tscn",
-    "res://src/level/tiers/tier_2.tscn",
-    "res://src/level/tiers/tier_3.tscn",
-    "res://src/level/tiers/tier_4.tscn",
-    "res://src/level/tiers/tier_5.tscn",
-    "res://src/level/tiers/tier_6.tscn",
-    "res://src/level/tiers/tier_7.tscn",
-#    "res://src/level/tiers/tier_8.tscn",
-#    "res://src/level/tiers/tier_9.tscn",
-]
-const TIER_BLANK_SCENE_PATH := "res://src/level/tiers/tier_blank.tscn"
-
-const TIER_GAP_OPEN_TO_OPEN_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_open_to_open.tscn"
-const TIER_GAP_OPEN_TO_WALLED_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_open_to_walled.tscn"
-const TIER_GAP_OPEN_TO_WALLED_LEFT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_open_to_walled_left.tscn"
-const TIER_GAP_OPEN_TO_WALLED_RIGHT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_open_to_walled_right.tscn"
-
-const TIER_GAP_WALLED_TO_OPEN_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_to_open.tscn"
-const TIER_GAP_WALLED_TO_WALLED_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_to_walled.tscn"
-const TIER_GAP_WALLED_TO_WALLED_LEFT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_to_walled_left.tscn"
-const TIER_GAP_WALLED_TO_WALLED_RIGHT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_to_walled_right.tscn"
-
-const TIER_GAP_WALLED_LEFT_TO_OPEN_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_left_to_open.tscn"
-const TIER_GAP_WALLED_LEFT_TO_WALLED_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_left_to_walled.tscn"
-const TIER_GAP_WALLED_LEFT_TO_WALLED_LEFT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_left_to_walled_left.tscn"
-const TIER_GAP_WALLED_LEFT_TO_WALLED_RIGHT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_left_to_walled_right.tscn"
-
-const TIER_GAP_WALLED_RIGHT_TO_OPEN_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_right_to_open.tscn"
-const TIER_GAP_WALLED_RIGHT_TO_WALLED_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_right_to_walled.tscn"
-const TIER_GAP_WALLED_RIGHT_TO_WALLED_LEFT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_right_to_walled_left.tscn"
-const TIER_GAP_WALLED_RIGHT_TO_WALLED_RIGHT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_right_to_walled_right.tscn"
-
-const SLIPPERY_FRICTION_MULTIPLIER := 0.02
-const NON_SLIPPERY_FRICTION_MULTIPLIER := 1.0
-
-const SLIPPERY_TILES := [
-    "ice_wall_tile",
-    "ice_platform_tile",
-]
-
-const START_TIER_INDEX := 0
+const START_TIER_ID := "0"
 
 const CELL_SIZE := Vector2(32.0, 32.0)
 const INPUT_SIGN_POSITION := Vector2(0.0, 10.0)
@@ -87,8 +29,10 @@ var player_max_distance_below_camera := INF
 var mobile_control_ui: MobileControlUI
 var score_boards: ScoreBoards
 
-var start_tier_index := START_TIER_INDEX
-var current_tier_index := START_TIER_INDEX
+var level_id := ""
+
+var start_tier_id := START_TIER_ID
+var current_tier_id := START_TIER_ID
 
 var previous_tier: Tier
 var current_tier: Tier
@@ -107,10 +51,6 @@ var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
 var current_camera_speed := 0.0
 var current_game_over_height := -INF
 var is_game_playing := true
-
-func _init() -> void:
-    for path in TIER_SCENE_PATHS:
-        load(path)
 
 func _enter_tree() -> void:
     Global.connect( \
@@ -149,15 +89,18 @@ func _handle_display_resize() -> void:
     camera_max_distance_below_player = game_area_size.y / 4
     player_max_distance_below_camera = game_area_size.y / 2 + CELL_SIZE.y / 2
 
-func start(tier_index := START_TIER_INDEX) -> void:
+func start( \
+        level_id: String, \
+        tier_id := START_TIER_ID) -> void:
+    self.level_id = level_id
     visible = true
     is_game_playing = false
     falls_count = 0
     start_new_level( \
-            tier_index, \
+            tier_id, \
             Audio.START_MUSIC_INDEX)
     Audio.cross_fade_music(Audio.current_music_player_index)
-    if tier_index != 0:
+    if tier_id != "0":
         _add_player(false)
     score_boards.visible = true
 
@@ -215,7 +158,7 @@ func _game_over() -> void:
     falls_count += 1
     var game_score := current_score
     
-    var retry_tier_index := current_tier_index
+    var retry_tier_id := current_tier_id
     var camera_retry_speed := current_camera_speed
     
     _destroy_level()
@@ -230,7 +173,7 @@ func _game_over() -> void:
     if true:
         # Reset state to replay the level at the latest tier.
         start_new_level( \
-                retry_tier_index, \
+                retry_tier_id, \
                 Audio.current_music_player_index)
         _add_player(false)
         current_camera_speed = camera_retry_speed
@@ -317,7 +260,7 @@ func _add_player(is_base_tier := false) -> void:
         Global.canvas_layers.hud_layer.add_child(mobile_control_ui)
 
 func _destroy_level() -> void:
-    current_tier_index = -INF
+    current_tier_id = ""
     is_game_playing = true
     current_score = 0
     
@@ -348,7 +291,7 @@ func _destroy_level() -> void:
     $SignAllKeys.visible = false
 
 func start_new_level( \
-        tier_index := 0, \
+        tier_id := "0", \
         music_player_index := Audio.START_MUSIC_INDEX) -> void:
     player_current_height = 0.0
     player_max_height = 0.0
@@ -360,42 +303,49 @@ func start_new_level( \
     current_camera_speed = 0.0
     current_game_over_height = -INF
     
-    start_tier_index = tier_index
-    current_tier_index = tier_index
+    start_tier_id = tier_id
+    current_tier_id = tier_id
     
-    var next_tier_index := current_tier_index + 1
-    if next_tier_index == TIER_SCENE_PATHS.size():
+    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
+    
+    # FIXME: ----------------
+    assert(level_config.tiers.has(current_tier_id))
+    var next_tier_index: int = level_config.tiers.find(current_tier_id) + 1
+    if next_tier_index == level_config.tiers.size():
         # Loop back around, and skip the first/base tier.
         next_tier_index = 1
+    var next_tier_id: String = level_config.tiers[next_tier_index]
     
     var current_tier_position := Vector2.ZERO
-    var current_tier_scene_path: String = TIER_SCENE_PATHS[current_tier_index]
+    var current_tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
     current_tier = Utils.add_scene( \
             self, \
-            current_tier_scene_path, \
+            current_tier_config.scene_path, \
             true, \
             true)
     assert(current_tier.openness_type != OpennessType.UNKNOWN)
-    assert(current_tier_index == 0 or \
-            _get_tier_size(current_tier).y / CELL_SIZE.y >= \
+    assert(current_tier_id == "0" or \
+            LevelConfig.get_tier_size(current_tier).y / CELL_SIZE.y >= \
                     Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     current_tier.position = current_tier_position
     
-    var next_tier_position := _get_tier_top_position(current_tier)
-    var next_tier_scene_path: String = TIER_SCENE_PATHS[next_tier_index]
+    var next_tier_position: Vector2 = \
+            LevelConfig.get_tier_top_position(current_tier)
+    var next_tier_config: Dictionary = LevelConfig.TIERS[next_tier_id]
     next_tier = Utils.add_scene( \
             self, \
-            next_tier_scene_path, \
+            next_tier_config.scene_path, \
             true, \
             true)
     assert(next_tier.openness_type != OpennessType.UNKNOWN)
-    assert(_get_tier_size(next_tier).y / CELL_SIZE.y >= \
+    assert(LevelConfig.get_tier_size(next_tier).y / CELL_SIZE.y >= \
             Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     next_tier.position = next_tier_position
     
-    var next_tier_gap_scene_path := _get_tier_gap_scene_path( \
-            current_tier.openness_type, \
-            next_tier.openness_type)
+    var next_tier_gap_scene_path: String = \
+            LevelConfig.get_tier_gap_scene_path( \
+                    current_tier.openness_type, \
+                    next_tier.openness_type)
     next_tier_gap = Utils.add_scene( \
             self, \
             next_tier_gap_scene_path, \
@@ -403,19 +353,22 @@ func start_new_level( \
             true)
     next_tier_gap.position = next_tier_position
     
-    if current_tier_index != 0:
-        var previous_tier_scene_path := TIER_BLANK_SCENE_PATH
+    if current_tier_id != "0":
+        var previous_tier_scene_path: String = \
+                LevelConfig.TIER_BLANK_SCENE_PATH
         previous_tier = Utils.add_scene( \
                 self, \
                 previous_tier_scene_path, \
                 true, \
                 true)
-        var previous_tier_position := -_get_tier_top_position(previous_tier)
+        var previous_tier_position: Vector2 = \
+                -LevelConfig.get_tier_top_position(previous_tier)
         previous_tier.position = previous_tier_position
         
-        var previous_tier_gap_scene_path := _get_tier_gap_scene_path( \
-                OpennessType.WALLED, \
-                current_tier.openness_type)
+        var previous_tier_gap_scene_path: String = \
+                LevelConfig.get_tier_gap_scene_path( \
+                        OpennessType.WALLED, \
+                        current_tier.openness_type)
         previous_tier_gap = Utils.add_scene( \
                 self, \
                 previous_tier_gap_scene_path, \
@@ -429,7 +382,7 @@ func start_new_level( \
         # Render the basic input instructions sign.
         $SignAllKeys.visible = true
         $SignAllKeys.position = INPUT_SIGN_POSITION
-        if current_tier_index != 0:
+        if current_tier_id != "0":
             $SignAllKeys.position.y -= CELL_SIZE.y
 
 func _on_entered_new_tier() -> void:
@@ -447,29 +400,37 @@ func _on_entered_new_tier() -> void:
     current_tier = next_tier
     previous_tier_gap = next_tier_gap
     
-    current_tier_index += 1
-    if current_tier_index == TIER_SCENE_PATHS.size():
+    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
+    
+    # FIXME: -------------
+    assert(level_config.tiers.has(current_tier_id))
+    var current_tier_index: int = level_config.tiers.find(current_tier_id) + 1
+    if current_tier_index == level_config.tiers.size():
         # Loop back around, and skip the first/base tier.
         current_tier_index = 1
+    current_tier_id = level_config.tiers[current_tier_index]
     var next_tier_index := current_tier_index + 1
-    if next_tier_index == TIER_SCENE_PATHS.size():
+    if next_tier_index == level_config.tiers.size():
         # Loop back around, and skip the first/base tier.
         next_tier_index = 1
+    var next_tier_id: String = level_config.tiers[next_tier_index]
     
-    var next_tier_position := _get_tier_top_position(current_tier)
-    var next_tier_scene_path: String = TIER_SCENE_PATHS[next_tier_index]
+    var next_tier_position: Vector2 = \
+            LevelConfig.get_tier_top_position(current_tier)
+    var next_tier_config: Dictionary = LevelConfig.TIERS[next_tier_id]
     next_tier = Utils.add_scene( \
             self, \
-            next_tier_scene_path, \
+            next_tier_config.scene_path, \
             true, \
             true)
-    assert(_get_tier_size(next_tier).y / CELL_SIZE.y >= \
+    assert(LevelConfig.get_tier_size(next_tier).y / CELL_SIZE.y >= \
             Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     next_tier.position = next_tier_position
     
-    var next_tier_gap_scene_path := _get_tier_gap_scene_path( \
-            current_tier.openness_type, \
-            next_tier.openness_type)
+    var next_tier_gap_scene_path: String = \
+            LevelConfig.get_tier_gap_scene_path( \
+                    current_tier.openness_type, \
+                    next_tier.openness_type)
     next_tier_gap = Utils.add_scene( \
             self, \
             next_tier_gap_scene_path, \
@@ -478,7 +439,7 @@ func _on_entered_new_tier() -> void:
     next_tier_gap.position = next_tier_position
     
     # Maybe play new music.
-    if (start_tier_index != 0 or \
+    if (start_tier_id != "0" or \
             tier_count != 1) and \
             tier_count % NUMBER_OF_LEVELS_PER_MUSIC == 0:
         Audio.current_music_player_index = \
@@ -493,98 +454,3 @@ func _on_entered_new_tier() -> void:
         current_camera_speed *= CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER
     
     Audio.new_tier_sfx_player.play()
-
-static func _get_tier_size(tier: Tier) -> Vector2:
-    return _get_tier_bounding_box(tier).size
-
-static func _get_tier_top_position(tier: Tier) -> Vector2:
-    var bounding_box := _get_tier_bounding_box(tier)
-    return Vector2(0.0, bounding_box.position.y)
-
-static func _get_tier_bounding_box(tier: Tier) -> Rect2:
-    var tile_maps := Utils.get_children_by_type( \
-            tier, \
-            TileMap)
-    var bounding_box: Rect2 = \
-            Geometry.get_tile_map_bounds_in_world_coordinates(tile_maps[0])
-    for tile_map in tile_maps:
-        bounding_box = bounding_box.merge( \
-                Geometry.get_tile_map_bounds_in_world_coordinates(tile_map))
-    bounding_box.position += tier.position
-    return bounding_box
-
-# Dictionary<OpennessType, Dictionary<OpennessType, String>>
-const OPENNESS_TO_TIER_GAP_SCENE_PATH := {
-    OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: {
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: \
-                TIER_GAP_OPEN_TO_OPEN_SCENE_PATH,
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN: \
-                TIER_GAP_OPEN_TO_OPEN_SCENE_PATH,
-        OpennessType.WALLED: \
-                TIER_GAP_OPEN_TO_WALLED_SCENE_PATH,
-        OpennessType.WALLED_LEFT: \
-                TIER_GAP_OPEN_TO_WALLED_LEFT_SCENE_PATH,
-        OpennessType.WALLED_RIGHT: \
-                TIER_GAP_OPEN_TO_WALLED_RIGHT_SCENE_PATH,
-    },
-    OpennessType.OPEN_WITH_HORIZONTAL_PAN: {
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: \
-                TIER_GAP_OPEN_TO_OPEN_SCENE_PATH,
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN: \
-                TIER_GAP_OPEN_TO_OPEN_SCENE_PATH,
-        OpennessType.WALLED: \
-                TIER_GAP_OPEN_TO_WALLED_SCENE_PATH,
-        OpennessType.WALLED_LEFT: \
-                TIER_GAP_OPEN_TO_WALLED_LEFT_SCENE_PATH,
-        OpennessType.WALLED_RIGHT: \
-                TIER_GAP_OPEN_TO_WALLED_RIGHT_SCENE_PATH,
-    },
-    OpennessType.WALLED: {
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: \
-                TIER_GAP_WALLED_TO_OPEN_SCENE_PATH,
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN: \
-                TIER_GAP_WALLED_TO_OPEN_SCENE_PATH,
-        OpennessType.WALLED: \
-                TIER_GAP_WALLED_TO_WALLED_SCENE_PATH,
-        OpennessType.WALLED_LEFT: \
-                TIER_GAP_WALLED_TO_WALLED_LEFT_SCENE_PATH,
-        OpennessType.WALLED_RIGHT: \
-                TIER_GAP_WALLED_TO_WALLED_RIGHT_SCENE_PATH,
-    },
-    OpennessType.WALLED_LEFT: {
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: \
-                TIER_GAP_WALLED_LEFT_TO_OPEN_SCENE_PATH,
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN: \
-                TIER_GAP_WALLED_LEFT_TO_OPEN_SCENE_PATH,
-        OpennessType.WALLED: \
-                TIER_GAP_WALLED_LEFT_TO_WALLED_SCENE_PATH,
-        OpennessType.WALLED_LEFT: \
-                TIER_GAP_WALLED_LEFT_TO_WALLED_LEFT_SCENE_PATH,
-        OpennessType.WALLED_RIGHT: \
-                TIER_GAP_WALLED_LEFT_TO_WALLED_RIGHT_SCENE_PATH,
-    },
-    OpennessType.WALLED_RIGHT: {
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: \
-                TIER_GAP_WALLED_RIGHT_TO_OPEN_SCENE_PATH,
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN: \
-                TIER_GAP_WALLED_RIGHT_TO_OPEN_SCENE_PATH,
-        OpennessType.WALLED: \
-                TIER_GAP_WALLED_RIGHT_TO_WALLED_SCENE_PATH,
-        OpennessType.WALLED_LEFT: \
-                TIER_GAP_WALLED_RIGHT_TO_WALLED_LEFT_SCENE_PATH,
-        OpennessType.WALLED_RIGHT: \
-                TIER_GAP_WALLED_RIGHT_TO_WALLED_RIGHT_SCENE_PATH,
-    },
-}
-
-static func _get_tier_gap_scene_path( \
-        from_openness_type: int,  \
-        to_openness_type: int) -> String:
-    return OPENNESS_TO_TIER_GAP_SCENE_PATH[from_openness_type][to_openness_type]
-
-static func get_friction_for_tile( \
-        tile_set: TileSet, \
-        tile_id: int) -> float:
-    return SLIPPERY_FRICTION_MULTIPLIER if \
-            SLIPPERY_TILES.has(tile_set.tile_get_name(tile_id)) else \
-            NON_SLIPPERY_FRICTION_MULTIPLIER

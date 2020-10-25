@@ -1,6 +1,5 @@
 extends Node
 
-const LOADING_SCREEN_PATH := "res://src/controls/screens/loading_screen.tscn"
 const MAIN_MENU_SCREEN_PATH := \
         "res://src/controls/screens/main_menu_screen.tscn"
 const GAME_SCREEN_PATH := "res://src/controls/screens/game_screen.tscn"
@@ -18,9 +17,6 @@ const SCREEN_SLIDE_DURATION_SEC := 0.3
 var screens := {}
 # Array<Screen>
 var active_screen_stack := []
-
-var loading_screen: Node
-var is_loading_screen_shown := true
 
 func create_screens() -> void:
     screens[ScreenType.MAIN_MENU] = Utils.add_scene( \
@@ -157,34 +153,3 @@ func close_current_screen() -> void:
     set_screen_is_open( \
             active_screen_stack.back().type, \
             false)
-
-func start_loading() -> void:
-    if Utils.get_is_browser():
-        # For HTML, don't use the Godot loading screen, and instead use an
-        # HTML screen, which will be more consistent with the other screens
-        # shown before.
-        JavaScript.eval("window.onLoadingScreenReady()")
-    else:
-        # For non-HTML platforms, show a loading screen in Godot.
-        loading_screen = Utils.add_scene( \
-                Global.canvas_layers.menu_screen_layer, \
-                LOADING_SCREEN_PATH)
-
-func finish_loading() -> void:
-    is_loading_screen_shown = false
-    
-    # Hide the loading screen.
-    if loading_screen != null:
-        Global.canvas_layers.menu_screen_layer.remove_child(loading_screen)
-        loading_screen.queue_free()
-        loading_screen = null
-    
-    set_screen_is_open( \
-            ScreenType.MAIN_MENU, \
-            true)
-    
-    if Utils.get_is_browser():
-        JavaScript.eval("window.onLevelReady()")
-    
-    # Start playing the default music for the menu screen.
-    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)

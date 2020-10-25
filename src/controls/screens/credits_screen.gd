@@ -9,15 +9,15 @@ func _init().(TYPE) -> void:
     pass
 
 func _on_third_party_licenses_button_pressed():
-    Audio.button_press_sfx_player.play()
+    Global.give_button_press_feedback()
     Nav.set_screen_is_open( \
             ScreenType.THIRD_PARTY_LICENSES, \
             true)
 
 func _on_levi_link_pressed():
-    Audio.button_press_sfx_player.play()
+    Global.give_button_press_feedback()
     OS.shell_open(LEVI_URL)
 
 func _on_godot_link_pressed():
-    Audio.button_press_sfx_player.play()
+    Global.give_button_press_feedback()
     OS.shell_open(GODOT_URL)

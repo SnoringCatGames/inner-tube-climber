@@ -16,7 +16,11 @@ const LEVEL_VISIBLE_WIDTH_CELL_COUNT := 15.0
 const LEVEL_MIN_HEIGHT_CELL_COUNT := \
         LEVEL_VISIBLE_WIDTH_CELL_COUNT / ASPECT_RATIO_MIN
 
+const INPUT_VIBRATE_DURATION_SEC := 0.01
+
 const DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC := 0.1
+
+var is_giving_haptic_feedback := false
 
 var canvas_layers: CanvasLayers
 var camera_controller: CameraController
@@ -27,6 +31,9 @@ var debug_panel: DebugPanel
 var throttled_size_changed: FuncRef = Time.throttle( \
         funcref(self, "_on_throttled_size_changed"), \
         DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC)
+
+func _init() -> void:
+    self.is_giving_haptic_feedback = Utils.get_is_android_device()
 
 func _enter_tree() -> void:
     get_viewport().connect( \
@@ -87,3 +94,11 @@ func register_main(main: Node) -> void:
     
     canvas_layers = CanvasLayers.new()
     main.add_child(canvas_layers)
+
+func vibrate() -> void:
+    if is_giving_haptic_feedback:
+        Input.vibrate_handheld(INPUT_VIBRATE_DURATION_SEC * 1000)
+
+func give_button_press_feedback() -> void:
+    vibrate()
+    Audio.button_press_sfx_player.play()

@@ -39,13 +39,13 @@ func _process(delta_sec: float) -> void:
                 ACTION_PULSE_OPACITY_END)
         _start_child_annotator(jump_pulse_annotator)
     
-    if Input.is_action_just_released("jump"):
-        if jump_pulse_annotator != null:
-            jump_pulse_annotator.emit_signal("finished")
-    
     if jump_pulse_annotator != null:
         jump_pulse_annotator.pulse_position = \
                 mobile_control_input.jump_pointer_current_position
+    
+    if Input.is_action_just_released("jump"):
+        if jump_pulse_annotator != null:
+            jump_pulse_annotator.emit_signal("finished")
     
     if Input.is_action_just_pressed("move_left"):
         var move_left_trigger_annotator := TriggerAnnotator.new( \
@@ -113,16 +113,16 @@ func _process(delta_sec: float) -> void:
             move_sideways_pulse_annotator.base_color = \
                     MOVE_RIGHT_COLOR
     
+    if move_sideways_pulse_annotator != null:
+        move_sideways_pulse_annotator.pulse_position = \
+                mobile_control_input.latest_gesture_position
+    
     if (Input.is_action_just_released("move_left") or \
             Input.is_action_just_released("move_right")) and \
             !Input.is_action_just_pressed("move_left") and \
             !Input.is_action_just_pressed("move_right"):
         if move_sideways_pulse_annotator != null:
             move_sideways_pulse_annotator.emit_signal("finished")
-    
-    if move_sideways_pulse_annotator != null:
-        move_sideways_pulse_annotator.pulse_position = \
-                mobile_control_input.latest_gesture_position
     
     if mobile_control_input.is_positions_buffer_dirty:
         mobile_control_input.is_positions_buffer_dirty = false

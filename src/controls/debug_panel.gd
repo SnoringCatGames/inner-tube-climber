@@ -49,6 +49,7 @@ func _log_device_settings() -> void:
             "\n  OS.get_screen_dpi()=%s" + \
             "\n  IosResolutions.get_screen_ppi()=%s" + \
             "\n  Utils.get_viewport_size_inches()=%s" + \
+            "\n  Utils.get_viewport_diagonal_inches()=%s" + \
             "\n  Utils.get_viewport_safe_area()=%s" + \
             "\n  OS.get_window_safe_area()=%s" + \
             "\n  Utils.get_safe_area_margin_top()=%s" + \
@@ -73,6 +74,7 @@ func _log_device_settings() -> void:
                         Utils.get_is_ios_device() else \
                         "N/A",
                 Utils.get_viewport_size_inches(),
+                Utils.get_viewport_diagonal_inches(),
                 Utils.get_viewport_safe_area(),
                 OS.get_window_safe_area(),
                 Utils.get_safe_area_margin_top(),

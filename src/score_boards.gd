@@ -6,7 +6,6 @@ const CORNER_OFFSET := Vector2(10.0, 10.0)
 func _enter_tree() -> void:
     position.y = max(CORNER_OFFSET.y, Utils.get_safe_area_margin_top())
     position.x = max(CORNER_OFFSET.x, Utils.get_safe_area_margin_left())
-    Global.debug_panel.add_message("score_board.pos=%s" % position)
 
 func set_score(score: int) -> void:
     $VBoxContainer/ScorePanel/ScoreLabel.text = "Score: %d" % score

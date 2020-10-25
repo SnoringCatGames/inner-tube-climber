@@ -11,6 +11,10 @@ class_name Main
 #   - They dont seem to show position buffer updates after the first sideways
 #     gesture.
 #   >>>- SOMEHOW, this is a NPE: move_sideways_pulse_annotator.pulse_position = \
+# - Screen size discrepency:
+#   - 6.06 actual (diagonal)
+#   - 5.48717706322 reported (diagonal)
+#   - 5.48717706322/6.06 = 0.9054747629
 # 
 # - Test the following on the iPhone:
 #   - Account for OS.get_window_safe_area.
@@ -39,6 +43,7 @@ class_name Main
 #   - Exit to main menu.
 #   - Skip to tier?
 #   - Show current height/time/falls and best height/time/falls.
+# 
 # - Level-select screen
 #   - Show best heights and times for completed levels
 #   - Lock future levels
@@ -53,6 +58,7 @@ class_name Main
 #     - Give another indicator to the rating if the user ever looped through
 #       the level 3 total times (independent of fall-count rating).
 #   - 
+# 
 # - Settings menu
 #   - Toggle visibility of mobile control display pads.
 #   - Toggle which moblie control version is used.
@@ -65,6 +71,8 @@ class_name Main
 #     - Flat multiplier? Or quadratic?
 #   - Have settings persist to local storage.
 #   - Toggle sfx; toggle music.
+#   - Toggle debug panel visible.
+# 
 # - Replace main menu button text with icons
 #   - Both somewhat pixelated
 #   - "Start game" -> tuber jumping

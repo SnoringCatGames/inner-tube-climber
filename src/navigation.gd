@@ -81,7 +81,7 @@ func set_screen_is_open( \
     if is_open:
         if !active_screen_stack.has(next_screen):
             active_screen_stack.push_back(next_screen)
-            next_screen.z_index = active_screen_stack.size()
+            next_screen.z_index = -100 + active_screen_stack.size()
         else:
             # Do nothing. Screen is already active.
             pass

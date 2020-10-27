@@ -4,24 +4,10 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Make sound work on iPhone.
-# - Fix sideways gesture annotators on iPhone:
-#   - They dont work after pressing jump.
-#   - They dont seem to show position buffer updates after the first sideways
-#     gesture.
-#   >>>- SOMEHOW, this is a NPE on MacOS: move_sideways_pulse_annotator.pulse_position = \
 # - iPhone XR screen size discrepency:
 #   - 6.06 actual (diagonal)
 #   - 5.48717706322 reported (diagonal)
 #   - 5.48717706322/6.06 = 0.9054747629
-# 
-# - Test the following on the iPhone:
-#   - Account for OS.get_window_safe_area.
-#     - Test my new functions on iPhone.
-#   - Offset display pads a bit more to account for rounded corners (maybe favor
-#     offsetting more vertically).
-#   - Fix delay of tap response on ios.
-#   - Remove vibrate from ios.
 # 
 # - Refactor level:
 #   - To support many different levels, each with different tier collections.

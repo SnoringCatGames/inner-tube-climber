@@ -16,10 +16,15 @@ func _init().(TYPE) -> void:
 func _ready() -> void:
     var selector := \
             $CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/LevelSelector
+    
     for id in LevelConfig.LEVELS:
         var item := "%s%s" % [LEVEL_ITEM_PREFIX, id]
         level_items.push_back(item)
         selector.add_item(item)
+    
+    var default_label := "%s%s" % [LEVEL_ITEM_PREFIX, selected_level_id]
+    var default_index := level_items.find(default_label)
+    selector.select(default_index)
 
 func _on_LevelSelector_pressed():
     Global.give_button_press_feedback()

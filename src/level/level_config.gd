@@ -159,6 +159,11 @@ const LEVELS := {
         zoom_multiplier = 1.0,
         tiers = ["0", "1", "2", "3", "4", "5", "6", "7"],
     },
+    "2": {
+        scroll_speed_multiplier = 1.0,
+        zoom_multiplier = 1.0,
+        tiers = ["0", "3", "5", "6"],
+    },
 }
 
 func _init() -> void:

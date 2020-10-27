@@ -96,7 +96,7 @@ func start( \
     visible = true
     is_game_playing = false
     falls_count = 0
-    start_new_level( \
+    _start_new_level( \
             tier_id, \
             Audio.START_MUSIC_INDEX)
     Audio.cross_fade_music(Audio.current_music_player_index)
@@ -172,7 +172,7 @@ func _game_over() -> void:
     # TODO
     if true:
         # Reset state to replay the level at the latest tier.
-        start_new_level( \
+        _start_new_level( \
                 retry_tier_id, \
                 Audio.current_music_player_index)
         _add_player(false)
@@ -290,7 +290,7 @@ func _destroy_level() -> void:
     Audio.on_cross_fade_music_finished()
     $SignAllKeys.visible = false
 
-func start_new_level( \
+func _start_new_level( \
         tier_id := "0", \
         music_player_index := Audio.START_MUSIC_INDEX) -> void:
     player_current_height = 0.0

@@ -24,7 +24,6 @@ class_name Main
 #   - Remove vibrate from ios.
 # 
 # - Refactor level:
-#   >>- Change how base-level case is handled; don't encode in config; auto-append when starting level.
 #   - To support many different levels, each with different tier collections.
 #   - Support restarting at any point.
 #   - Add a lives count.
@@ -38,6 +37,11 @@ class_name Main
 #   - Count the number of deaths within the current playthrough of the current
 #     tier.
 #   - Count the number of tiers climbed without dying.
+#   - Change how base-level case is handled.
+#     - Don't encode in config.
+#     - Auto-append when starting level.
+#   - Consolidate some logic between Level._start_new_level and
+#     Level._on_entered_new_tier.
 # 
 # - Make a new sound effect for button press that is more subtle.
 #   - Still use the old one on start-game press though.

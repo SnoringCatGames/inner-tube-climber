@@ -58,13 +58,14 @@ func _enter_tree() -> void:
 
 func _physics_process(delta_sec: float) -> void:
     ._physics_process(delta_sec)
+    delta_sec *= Time.physics_framerate_multiplier
     
     # We don't need to multiply velocity by delta because MoveAndSlide already
     # takes delta time into account.
     # TODO: Use the remaining pre-collision movement that move_and_slide
     #       returns. This might be needed in order to move along slopes?
     move_and_slide( \
-            velocity, \
+            velocity * Time.physics_framerate_multiplier, \
             Geometry.UP, \
             false, \
             4, \
@@ -125,15 +126,15 @@ func _update_surface_state() -> void:
         has_hit_wall_since_pressing_move = false
     
     if surface_state.just_touched_wall:
-        last_hit_wall_time = Time.elapsed_play_time_sec
+        last_hit_wall_time = Time.elapsed_play_time_modified_sec
     
     if surface_state.just_left_floor:
-        last_floor_fall_off_time = Time.elapsed_play_time_sec
+        last_floor_fall_off_time = Time.elapsed_play_time_modified_sec
     
     is_in_post_bounce_horizontal_acceleration_grace_period = \
             has_hit_wall_since_pressing_move and \
             last_hit_wall_time >= \
-                    Time.elapsed_play_time_sec - \
+                    Time.elapsed_play_time_modified_sec - \
                     WALL_BOUNCE_MOVEMENT_DELAY_SEC and \
             !surface_state.is_touching_floor
     
@@ -253,6 +254,8 @@ func _update_tile_map_contact() -> void:
 
 # Calculate what actions occur during this frame.
 func _update_actions(delta_sec: float) -> void:
+    delta_sec *= Time.physics_framerate_multiplier
+    
     if Input.is_action_pressed("move_right"):
         surface_state.horizontal_facing_sign = 1
     elif Input.is_action_pressed("move_left"):
@@ -269,11 +272,13 @@ func _update_actions(delta_sec: float) -> void:
         is_rising_from_jump = false
     
     if Input.is_action_just_pressed("jump"):
-        last_jump_input_time = Time.elapsed_play_time_sec
+        last_jump_input_time = Time.elapsed_play_time_modified_sec
         was_last_jump_input_consumed = false
     
 # Updates physics and player states in response to the current actions.
 func _process_actions(delta_sec: float) -> void:
+    delta_sec *= Time.physics_framerate_multiplier
+    
     just_triggered_jump = false
     
     # Bounce horizontal velocity off of walls.
@@ -294,10 +299,10 @@ func _process_actions(delta_sec: float) -> void:
             !was_last_jump_input_consumed and \
             last_jump_input_time + \
                     JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC > \
-                    Time.elapsed_play_time_sec
+                    Time.elapsed_play_time_modified_sec
     var is_jump_after_recent_fall_still_consumable := \
             last_floor_fall_off_time > \
-            Time.elapsed_play_time_sec - \
+            Time.elapsed_play_time_modified_sec - \
                     JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC
     
     if surface_state.is_touching_floor:

@@ -14,7 +14,7 @@ func _process(delta_sec: float) -> void:
 func _sync_gesture_buffer() -> void:
     # Remove any stale positions.
     var oldest_rendered_gesture_time := \
-            Time.elapsed_play_time_sec - GESTURE_POSITION_DURATION_SEC
+            Time.elapsed_play_time_actual_sec - GESTURE_POSITION_DURATION_SEC
     while !gesture_buffer.empty() and \
             gesture_buffer.back().time_sec < oldest_rendered_gesture_time:
         var child_annotator: Annotator = gesture_buffer.back().annotator
@@ -59,7 +59,7 @@ func _sync_gesture_buffer() -> void:
     # Update radius and opacity values for all gesture positions.
     for item in gesture_buffer:
         var progress: float = \
-                (Time.elapsed_play_time_sec - item.time_sec) / \
+                (Time.elapsed_play_time_actual_sec - item.time_sec) / \
                 GESTURE_POSITION_DURATION_SEC
         progress = ease( \
                 progress, \

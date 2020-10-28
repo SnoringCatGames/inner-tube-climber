@@ -2,6 +2,8 @@ extends Node
 
 const PHYSICS_TIME_STEP_SEC := 1 / 60.0
 
+var physics_framerate_multiplier := 0.8
+
 # TODO: Verify that all render-frame _process calls in the scene tree happen
 #       without interleaving with any _physics_process calls from other nodes
 #       in the scene tree.
@@ -16,7 +18,10 @@ var _last_timeout_id := -1
 var _throttled_callbacks := {}
 
 # Keeps track of the current total elapsed time of unpaused gameplay.
-var elapsed_play_time_sec: float setget ,_get_elapsed_play_time_sec
+var elapsed_play_time_actual_sec: float \
+        setget ,_get_elapsed_play_time_actual_sec
+var elapsed_play_time_modified_sec: float \
+        setget ,_get_elapsed_play_time_modified_sec
 
 func _ready() -> void:
     _elapsed_physics_play_time_sec = 0.0
@@ -50,8 +55,11 @@ func _physics_process(delta_sec: float) -> void:
     _elapsed_physics_play_time_sec += delta_sec
     _elapsed_latest_play_time_sec = _elapsed_physics_play_time_sec
 
-func _get_elapsed_play_time_sec() -> float:
+func _get_elapsed_play_time_actual_sec() -> float:
     return _elapsed_latest_play_time_sec
+
+func _get_elapsed_play_time_modified_sec() -> float:
+    return _elapsed_latest_play_time_sec * physics_framerate_multiplier
 
 func set_timeout( \
         callback: FuncRef, \

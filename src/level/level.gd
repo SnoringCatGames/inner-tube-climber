@@ -113,6 +113,8 @@ func stop() -> void:
     score_boards.visible = false
 
 func _physics_process(delta_sec: float) -> void:
+    delta_sec *= Time.physics_framerate_multiplier
+    
     if is_game_playing:
         return
     
@@ -128,6 +130,8 @@ func _physics_process(delta_sec: float) -> void:
     display_height = floor(player_max_height / 10.0) as int
 
 func _process(delta_sec: float) -> void:
+    delta_sec *= Time.physics_framerate_multiplier
+    
     if is_game_playing:
         return
     

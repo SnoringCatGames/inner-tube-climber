@@ -26,10 +26,14 @@ func _update_surface_state() -> void:
 
 # Calculate what actions occur during this frame.
 func _update_actions(delta_sec: float) -> void:
+    delta_sec *= Time.physics_framerate_multiplier
+    
     pass
     
 # Updates physics and player states in response to the current actions.
 func _process_actions(delta_sec: float) -> void:
+    delta_sec *= Time.physics_framerate_multiplier
+    
     pass
 
 # Updates the animation state for the current frame.

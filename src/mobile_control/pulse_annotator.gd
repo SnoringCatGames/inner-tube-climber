@@ -40,7 +40,7 @@ func _init( \
 func _process(delta_sec: float) -> void:
     update()
     progress = sin(fmod( \
-            (Time.elapsed_play_time_sec - time_start_sec) / period_sec, \
+            (Time.elapsed_play_time_actual_sec - time_start_sec) / period_sec, \
             1.0) * PI)
 
 func _draw() -> void:

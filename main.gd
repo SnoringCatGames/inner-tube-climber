@@ -10,7 +10,6 @@ class_name Main
 #   - 5.48717706322/6.06 = 0.9054747629
 # 
 # - Refactor level:
-#   - Add a framerate speed control...
 #   - Fix scroll speed.
 #   - Create a concept of a zoom amount for each tier.
 #     - Configure this with the tier definitions.
@@ -24,6 +23,15 @@ class_name Main
 #     - Auto-append when starting level.
 #   - Consolidate some logic between Level._start_new_level and
 #     Level._on_entered_new_tier.
+# 
+# - Add all of the difficulty mode and score calculation logic logic described
+#   below.
+#   - Account for the following in score:
+#     - Max height.
+#     - Difficulty mode and/or Time.physics_framerate_multiplier.
+#     - Lives count (score slightly more when you've died less; or maybe just
+#       have a constant score deduction for each fall?).
+#     - 
 # 
 # - Make a new sound effect for button press that is more subtle.
 #   - Still use the old one on start-game press though.
@@ -66,6 +74,7 @@ class_name Main
 #     - Flat multiplier? Or quadratic?
 #   - Have settings persist to local storage.
 #   - Toggle sfx; toggle music.
+#   - The difficulty setting and/or Time.physics_framerate_multiplier.
 #   - Toggle debug panel visible.
 #   - Set starting lives count.
 #   - Set scroll-speed-up rate and max.

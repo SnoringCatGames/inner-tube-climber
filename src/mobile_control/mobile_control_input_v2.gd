@@ -68,7 +68,7 @@ func _input(event: InputEvent) -> void:
             
             if is_velocity_enough_to_start_jump or \
                     is_velocity_enough_to_start_move_sideways:
-                gesture_start_time_sec = Time.elapsed_play_time_sec
+                gesture_start_time_sec = Time.elapsed_play_time_actual_sec
                 
                 if is_velocity_enough_to_start_jump and \
                         is_velocity_enough_to_start_move_sideways:
@@ -90,7 +90,7 @@ func _input(event: InputEvent) -> void:
                 var is_delay_enough_to_start_move_sideways := \
                         gesture_start_time_sec + \
                                 POST_JUMP_START_SIDEWAYS_MOVEMENT_DELAY < \
-                        Time.elapsed_play_time_sec
+                        Time.elapsed_play_time_actual_sec
                 
                 if is_velocity_enough_to_start_move_sideways and \
                         is_delay_enough_to_start_move_sideways:
@@ -112,7 +112,7 @@ func _input(event: InputEvent) -> void:
                 var is_delay_enough_to_keep_move_sideways := \
                         gesture_start_time_sec + \
                                 POST_SIDEWAYS_MOVEMENT_START_JUMP_DELAY < \
-                        Time.elapsed_play_time_sec
+                        Time.elapsed_play_time_actual_sec
                 
                 if is_velocity_enough_to_start_jump:
                     is_jump_pressed = true

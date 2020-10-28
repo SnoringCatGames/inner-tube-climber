@@ -44,7 +44,8 @@ func _init( \
 func _process(delta_sec: float) -> void:
     if progress < 1.0:
         update()
-        progress = (Time.elapsed_play_time_sec - time_start_sec) / duration_sec
+        progress = (Time.elapsed_play_time_actual_sec - time_start_sec) / \
+                duration_sec
     else:
         emit_signal("finished")
 

@@ -112,12 +112,12 @@ func _update_position_and_time_buffer(pointer_position: Vector2) -> void:
     # Record the new drag position and time.
     var drag_position_and_time := PositionAndTime.new( \
             pointer_position, \
-            Time.elapsed_play_time_sec)
+            Time.elapsed_play_time_actual_sec)
     recent_gesture_positions.push_front(drag_position_and_time)
     
     # Pop any old drag positions and times that have become stale.
     while recent_gesture_positions.back().time_sec < \
-            Time.elapsed_play_time_sec - \
+            Time.elapsed_play_time_actual_sec - \
             GESTURE_RECENT_POSITIONS_BUFFER_DELAY_SEC:
         recent_gesture_positions.pop_back()
     

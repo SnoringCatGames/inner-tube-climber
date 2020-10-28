@@ -14,7 +14,7 @@ func _process(delta_sec: float) -> void:
     if Input.is_action_just_pressed("jump"):
         var jump_trigger_annotator := TriggerAnnotator.new( \
                 mobile_control_input.jump_pointer_current_position, \
-                Time.elapsed_play_time_sec, \
+                Time.elapsed_play_time_actual_sec, \
                 ACTION_TRIGGER_DURATION_SEC, \
                 JUMP_DIRECTION_ANGLE, \
                 ACTION_TRIGGER_RADIUS_START_PIXELS, \
@@ -29,7 +29,7 @@ func _process(delta_sec: float) -> void:
             jump_pulse_annotator.emit_signal("finished")
         jump_pulse_annotator = PulseAnnotator.new( \
                 mobile_control_input.jump_pointer_current_position, \
-                Time.elapsed_play_time_sec, \
+                Time.elapsed_play_time_actual_sec, \
                 ACTION_PULSE_PERIOD_SEC, \
                 JUMP_DIRECTION_ANGLE, \
                 ACTION_PULSE_RADIUS_START_PIXELS, \
@@ -51,7 +51,7 @@ func _process(delta_sec: float) -> void:
         var move_left_trigger_annotator := TriggerAnnotator.new( \
                 mobile_control_input.recent_gesture_positions.front() \
                         .position, \
-                Time.elapsed_play_time_sec, \
+                Time.elapsed_play_time_actual_sec, \
                 ACTION_TRIGGER_DURATION_SEC, \
                 MOVE_LEFT_DIRECTION_ANGLE, \
                 ACTION_TRIGGER_RADIUS_START_PIXELS, \
@@ -65,7 +65,7 @@ func _process(delta_sec: float) -> void:
         if !is_instance_valid(move_sideways_pulse_annotator):
             move_sideways_pulse_annotator = PulseAnnotator.new( \
                     mobile_control_input.latest_gesture_position, \
-                    Time.elapsed_play_time_sec, \
+                    Time.elapsed_play_time_actual_sec, \
                     ACTION_PULSE_PERIOD_SEC, \
                     MOVE_LEFT_DIRECTION_ANGLE, \
                     ACTION_PULSE_RADIUS_START_PIXELS, \
@@ -84,7 +84,7 @@ func _process(delta_sec: float) -> void:
         var move_right_trigger_annotator := TriggerAnnotator.new( \
                 mobile_control_input.recent_gesture_positions.front() \
                         .position, \
-                Time.elapsed_play_time_sec, \
+                Time.elapsed_play_time_actual_sec, \
                 ACTION_TRIGGER_DURATION_SEC, \
                 MOVE_RIGHT_DIRECTION_ANGLE, \
                 ACTION_TRIGGER_RADIUS_START_PIXELS, \
@@ -98,7 +98,7 @@ func _process(delta_sec: float) -> void:
         if !is_instance_valid(move_sideways_pulse_annotator):
             move_sideways_pulse_annotator = PulseAnnotator.new( \
                     mobile_control_input.latest_gesture_position, \
-                    Time.elapsed_play_time_sec, \
+                    Time.elapsed_play_time_actual_sec, \
                     ACTION_PULSE_PERIOD_SEC, \
                     MOVE_RIGHT_DIRECTION_ANGLE, \
                     ACTION_PULSE_RADIUS_START_PIXELS, \

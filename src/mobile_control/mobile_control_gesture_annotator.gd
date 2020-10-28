@@ -11,7 +11,8 @@ func _init(mobile_control_input: MobileControlInput) -> void:
     self.mobile_control_input = mobile_control_input
 
 func _process(delta_sec: float) -> void:
-    if Input.is_action_just_pressed("jump"):
+    if Input.is_action_just_pressed("jump") and \
+            mobile_control_input.jump_pointer_current_position != Vector2.INF:
         var jump_trigger_annotator := TriggerAnnotator.new( \
                 mobile_control_input.jump_pointer_current_position, \
                 Time.elapsed_play_time_actual_sec, \
@@ -47,7 +48,8 @@ func _process(delta_sec: float) -> void:
         if is_instance_valid(jump_pulse_annotator):
             jump_pulse_annotator.emit_signal("finished")
     
-    if Input.is_action_just_pressed("move_left"):
+    if Input.is_action_just_pressed("move_left") and \
+            !mobile_control_input.recent_gesture_positions.empty():
         var move_left_trigger_annotator := TriggerAnnotator.new( \
                 mobile_control_input.recent_gesture_positions.front() \
                         .position, \
@@ -80,7 +82,8 @@ func _process(delta_sec: float) -> void:
             move_sideways_pulse_annotator.base_color = \
                     MOVE_LEFT_COLOR
     
-    if Input.is_action_just_pressed("move_right"):
+    if Input.is_action_just_pressed("move_right") and \
+            !mobile_control_input.recent_gesture_positions.empty():
         var move_right_trigger_annotator := TriggerAnnotator.new( \
                 mobile_control_input.recent_gesture_positions.front() \
                         .position, \

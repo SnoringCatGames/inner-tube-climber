@@ -22,6 +22,8 @@ const DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC := 0.1
 
 var is_giving_haptic_feedback := false
 
+var difficulty_mode := DifficultyMode.MODERATE
+
 var canvas_layers: CanvasLayers
 var camera_controller: CameraController
 

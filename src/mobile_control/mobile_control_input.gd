@@ -8,6 +8,8 @@ var is_mobile_device := false
 
 var is_mouse_down := false
 
+var was_last_event_from_keyboard := true
+
 # Array<PositionAndTime>
 var recent_gesture_positions := []
 var is_positions_buffer_dirty := false
@@ -19,7 +21,14 @@ var is_move_right_pressed := false
 
 func _init() -> void:
     self.is_mobile_device = Utils.get_is_mobile_device()
-    
+
+func _input(event: InputEvent) -> void:
+    if event is InputEventKey:
+        was_last_event_from_keyboard = true
+    elif event is InputEventScreenTouch or \
+            event is InputEventMouseButton:
+        was_last_event_from_keyboard = false
+
 func _physics_process(delta_sec: float) -> void:
     # NOTE: Regarding sequencing:
     # -   We need to continually emit move-sideways actions each frame,
@@ -31,6 +40,9 @@ func _physics_process(delta_sec: float) -> void:
     #     we're handling actions one frame later than we potentially could.
     # -   Touch events cannot be polled; they can only be captured through the
     #     _unhandled_input method.
+    
+    if was_last_event_from_keyboard:
+        return
     
     var is_some_action_just_pressed := \
             !Input.is_action_pressed("jump") and is_jump_pressed or \

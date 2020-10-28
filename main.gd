@@ -9,29 +9,61 @@ class_name Main
 #   - 5.48717706322 reported (diagonal)
 #   - 5.48717706322/6.06 = 0.9054747629
 # 
+# - Fix scroll speed.
+# 
+# - After losing all lives and returning to main menu, playing another level
+#   fails (z-index? visibility?).
+# 
+# - 4 difficulty modes: Easy, Moderate, Hard, Dynamic.
+#   - Add all of the difficulty mode and score calculation logic described below.
+#     - Account for the following in score:
+#       - Max height.
+#       - Difficulty mode and/or Time.physics_framerate_multiplier.
+#       - Lives count (score slightly more when you've died less; or maybe just
+#         have a constant score deduction for each fall?).
+#       - OR, have a score multiplier on the side that steadily increases with
+#         height until falling.
+#         - Show fancy animation for making the multiplier seem impressive.
+#           - Rotate slightly back and fourth.
+#           - Shake/jitter randomly.
+#           - Pulse bigger and smaller.
+#           - Pulse font more red.
+#           - Gradually increase base size and font redness.
+#           - Pay attention to the easing curves for all of these.
+#         - Make a special fast/crazy/energetic music piece to transition to when
+#           hitting a certain multiplier?
+#         - OR, maybe have the score multiplier depend on the recent average
+#           climb speed.
+#           - Then, there will be a correlation between the excitement and the
+#             gameplay speed.
+#           - Hmmm, it might be fun to experiment with a mode (toggleable in
+#             Settings) that adjusts Time.physics_framerate_multiplier each frame
+#             to match the current recent climb speed.
+# 
+#   - Have three difficulty tiers. 
+#     - Have the difference between them be an artificial slow down of frame rate.
+#     - Start out on medium tier by default.
+#     - Suggest switching to slower or faster tier after enough falls on a level,
+#       or enough levels without a fall.
+#     - Make difficulty selectable in Settings, and make auto suggestion for
+#       changing difficulty be toggleable in Settings too.
+# 
 # - Refactor level:
-#   - Fix scroll speed.
+#   - Count the number of deaths within the current playthrough of the current
+#     tier.
+#   - Count the number of tiers climbed without dying.
+#   - Add stubs for triggering popups suggesting changing difficulty.
+#   - Implement the popups for for suggesting changing difficulty.
+#     - Include two buttons in each: "Dismiss" and "Update difficulty".
 #   - Create a concept of a zoom amount for each tier.
 #     - Configure this with the tier definitions.
 #     - Set the camera zoom accordingly within level when switching tiers.
 #     - Have the zoom change animate.
-#   - Count the number of deaths within the current playthrough of the current
-#     tier.
-#   - Count the number of tiers climbed without dying.
 #   - Change how base-level case is handled.
 #     - Don't encode in config.
 #     - Auto-append when starting level.
 #   - Consolidate some logic between Level._start_new_level and
 #     Level._on_entered_new_tier.
-# 
-# - Add all of the difficulty mode and score calculation logic logic described
-#   below.
-#   - Account for the following in score:
-#     - Max height.
-#     - Difficulty mode and/or Time.physics_framerate_multiplier.
-#     - Lives count (score slightly more when you've died less; or maybe just
-#       have a constant score deduction for each fall?).
-#     - 
 # 
 # - Make a new sound effect for button press that is more subtle.
 #   - Still use the old one on start-game press though.
@@ -78,6 +110,9 @@ class_name Main
 #   - Toggle debug panel visible.
 #   - Set starting lives count.
 #   - Set scroll-speed-up rate and max.
+#   - Toggle whether the auto-difficulty update suggestion popups appear.
+#   - Toggle whether framerate-multiplier/difficulty automatically track to the
+#     current climb speed.
 # 
 # - Replace main menu button text with icons
 #   - Both somewhat pixelated
@@ -109,23 +144,6 @@ class_name Main
 # - And add a hard-ice-tapping sound effect when walking on ice.
 # - Also create an additional sound effect for move-sideways event triggering.
 #   - Will help inform player when switching directions.
-# 
-# - Have three difficulty tiers. 
-#   - Have the difference between them be an artificial slow down of frame rate.
-#   - Start out on medium tier by default.
-#   - Suggest switching to slower or faster tier after enough falls on a level,
-#     or enough levels without a fall.
-#   - Make difficulty selectable in Settings, and make auto suggestion for
-#     changing difficulty be toggleable in Settings too.
-# 
-# - Test exporting to iPhone.
-#   - Get dev account for iPhone.
-#   - Test touchiness / usability of both mobile control types.
-#   - Test dimensions of annotations and gestures; should match precise inch
-#     values by using ppi-table calculations and screen-scale calculations.
-#     - Print the given OS.get_model_name() value, so I can verify that my
-#       table structure should work.
-#   - Test haptic feedback.
 # 
 # - Update CanvasLayers to support some layers rendering within game area, and
 #   some within entire viewport.

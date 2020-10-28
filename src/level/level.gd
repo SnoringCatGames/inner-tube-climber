@@ -69,6 +69,7 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
     _set_camera()
+    set_difficulty(Global.difficulty_mode)
 
 func _input(event: InputEvent) -> void:
     if is_game_playing:
@@ -461,3 +462,17 @@ func _on_entered_new_tier() -> void:
         current_camera_speed *= CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER
     
     Audio.new_tier_sfx_player.play()
+
+func set_difficulty(difficulty_mode: int) -> void:
+    match difficulty_mode:
+        DifficultyMode.EASY:
+            Time.physics_framerate_multiplier = 0.7
+        DifficultyMode.MODERATE:
+            Time.physics_framerate_multiplier = 1.0
+        DifficultyMode.HARD:
+            Time.physics_framerate_multiplier = 1.5
+        DifficultyMode.DYNAMIC:
+            # FIXME: -------------------------
+            Time.physics_framerate_multiplier = 1.0
+        _:
+            Utils.error()

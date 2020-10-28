@@ -7,8 +7,8 @@ func _enter_tree() -> void:
     position.y = max(CORNER_OFFSET.y, Utils.get_safe_area_margin_top())
     position.x = max(CORNER_OFFSET.x, Utils.get_safe_area_margin_left())
 
-func set_score(score: int) -> void:
-    $VBoxContainer/ScorePanel/ScoreLabel.text = "Score: %d" % score
+func set_height(height: int) -> void:
+    $VBoxContainer/HeightPanel/HeightCount.text = str(height)
 
-func set_falls(falls: int) -> void:
-    $VBoxContainer/FallsPanel/FallsLabel.text = "Falls: %d" % falls
+func set_lives(lives: int) -> void:
+    $VBoxContainer/LivesPanel/LivesCount.text = str(lives)

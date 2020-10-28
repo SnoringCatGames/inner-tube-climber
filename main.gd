@@ -10,12 +10,8 @@ class_name Main
 #   - 5.48717706322/6.06 = 0.9054747629
 # 
 # - Refactor level:
-#   - To support many different levels, each with different tier collections.
-#   - Support restarting at any point.
-#   - Add a lives count.
 #   - Add a framerate speed control...
 #   - Fix scroll speed.
-#   - Reword score to height.
 #   - Create a concept of a zoom amount for each tier.
 #     - Configure this with the tier definitions.
 #     - Set the camera zoom accordingly within level when switching tiers.
@@ -71,6 +67,8 @@ class_name Main
 #   - Have settings persist to local storage.
 #   - Toggle sfx; toggle music.
 #   - Toggle debug panel visible.
+#   - Set starting lives count.
+#   - Set scroll-speed-up rate and max.
 # 
 # - Replace main menu button text with icons
 #   - Both somewhat pixelated
@@ -152,7 +150,7 @@ class_name Main
 #       - Maybe it's easy, just give X (3?) lives per level attempt.
 #         - Then can still slow scroll a bit on each death, and we don't need
 #           to worry too much about how to adjust score, and/or even force an
-#           end condnition.
+#           end condition.
 #       - But then also have a hard-mode with one life, and faster initial
 #         speed, but slower acceleration.
 # - Fix scroll speed bug.

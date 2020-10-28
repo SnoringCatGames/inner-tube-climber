@@ -7,6 +7,7 @@ const SCORE_BOARDS_RESOURCE_PATH := "res://src/score_boards.tscn"
 const PLAYER_RESOURCE_PATH := "res://src/player/tuber_player.tscn"
 
 const START_TIER_ID := "0"
+const DEFAULT_LIVES_COUNT := 3
 
 const CELL_SIZE := Vector2(32.0, 32.0)
 const INPUT_SIGN_POSITION := Vector2(0.0, 10.0)
@@ -41,15 +42,16 @@ var previous_tier_gap: TierGap
 var next_tier_gap: TierGap
 
 var player: TuberPlayer
-var player_current_height := 0.0
-var player_max_height := 0.0
-var tier_count := 0
-var current_score: int = 0
-var falls_count := 0
+var player_current_height: float = 0.0
+var player_max_height: float = 0.0
+var tier_count: int = 0
+var display_height: int = 0
+var falls_count: int = 0
+var lives_count: int = DEFAULT_LIVES_COUNT
 
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
 var current_camera_speed := 0.0
-var current_game_over_height := -INF
+var current_fall_height := -INF
 var is_game_playing := true
 
 func _enter_tree() -> void:
@@ -123,7 +125,7 @@ func _physics_process(delta_sec: float) -> void:
     if player_current_height > next_tier_height:
         _on_entered_new_tier()
     player_max_height = max(player_max_height, player_current_height)
-    current_score = floor(player_max_height / 10.0) as int
+    display_height = floor(player_max_height / 10.0) as int
 
 func _process(delta_sec: float) -> void:
     if is_game_playing:
@@ -145,18 +147,18 @@ func _process(delta_sec: float) -> void:
             Global.camera_controller.offset.y -= additional_offset
     
     # Check for game over.
-    current_game_over_height = \
+    current_fall_height = \
             current_camera_height - player_max_distance_below_camera
-    if player_current_height < current_game_over_height:
-        _game_over()
+    if player_current_height < current_fall_height:
+        _fall()
     
     # Update score displays.
-    score_boards.set_score(current_score)
-    score_boards.set_falls(falls_count)
+    score_boards.set_height(display_height)
+    score_boards.set_lives(lives_count)
 
-func _game_over() -> void:
+func _fall() -> void:
     falls_count += 1
-    var game_score := current_score
+    var game_score := display_height
     
     var retry_tier_id := current_tier_id
     var camera_retry_speed := current_camera_speed
@@ -169,8 +171,8 @@ func _game_over() -> void:
     
     Audio.game_over_sfx_player.play()
     
-    # TODO
-    if true:
+    if lives_count > 1:
+        lives_count -= 1
         # Reset state to replay the level at the latest tier.
         _start_new_level( \
                 retry_tier_id, \
@@ -179,6 +181,7 @@ func _game_over() -> void:
         current_camera_speed = camera_retry_speed
         is_game_playing = false
     else:
+        score_boards.set_lives(0)
         Global.camera_controller.offset = CAMERA_START_POSITION_PRE_STUCK
         Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
         Audio.current_music_player.stop()
@@ -262,7 +265,7 @@ func _add_player(is_base_tier := false) -> void:
 func _destroy_level() -> void:
     current_tier_id = ""
     is_game_playing = true
-    current_score = 0
+    display_height = 0
     
     if player != null:
         player.queue_free()
@@ -295,13 +298,13 @@ func _start_new_level( \
         music_player_index := Audio.START_MUSIC_INDEX) -> void:
     player_current_height = 0.0
     player_max_height = 0.0
-    current_score = 0
+    display_height = 0
     tier_count = 0
     Audio.current_music_player_index = music_player_index
     
     current_camera_height = -CAMERA_START_POSITION_POST_STUCK.y
     current_camera_speed = 0.0
-    current_game_over_height = -INF
+    current_fall_height = -INF
     
     start_tier_id = tier_id
     current_tier_id = tier_id

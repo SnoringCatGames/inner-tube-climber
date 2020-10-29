@@ -34,13 +34,13 @@ func _show_sprite(animation_name: String) -> void:
     
     # Show the current sprite.
     match animation_name:
-        "Run":
+        RUN_NAME:
             $Run.visible = true
-        "Stand":
+        STAND_NAME:
             $Stand.visible = true
-        "Jump":
+        JUMP_NAME:
             $Jump.visible = true
-        "Fall":
+        FALL_NAME:
             $Fall.visible = true
         _:
             Utils.error()

@@ -124,7 +124,8 @@ class _Throttler:
     
     func on_call() -> void:
         if !_is_callback_scheduled:
-            var current_call_time_sec: float = Time.elapsed_play_time_sec
+            var current_call_time_sec: float = \
+                    Time.elapsed_play_time_actual_sec
             var next_call_time_sec := _last_call_time_sec + _interval_sec
             if current_call_time_sec > next_call_time_sec:
                 _trigger_callback()
@@ -139,6 +140,6 @@ class _Throttler:
         _is_callback_scheduled = false
     
     func _trigger_callback() -> void:
-        _last_call_time_sec = Time.elapsed_play_time_sec
+        _last_call_time_sec = Time.elapsed_play_time_actual_sec
         _is_callback_scheduled = false
         _callback.call_func()

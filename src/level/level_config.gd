@@ -110,59 +110,84 @@ const SLIPPERY_TILES := [
     "ice_platform_tile",
 ]
 
+const DEFAULT_ZOOM_MULTIPLIER := 1.0
+const DEFAULT_SCROLL_SPEED_MULTIPLIER := 1.0
+const DEFAULT_SCROLL_SPEED_MIN := 15.0
+const DEFAULT_SCROLL_SPEED_MAX := 180.0
+
 const TIERS := {
     "0": {
         scene_path = "res://src/level/tiers/tier_base.tscn",
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = 0.0,
-        zoom_multiplier = 1.0,
+        scroll_speed_min = 0.0,
+        scroll_speed_max = 0.0,
     },
     "1": {
         scene_path = "res://src/level/tiers/tier_1.tscn",
-        scroll_speed_multiplier = 1.0,
-        zoom_multiplier = 1.0,
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
+        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
+        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
+        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
     "2": {
         scene_path = "res://src/level/tiers/tier_2.tscn",
-        scroll_speed_multiplier = 1.0,
-        zoom_multiplier = 1.0,
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
+        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
+        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
+        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
     "3": {
         scene_path = "res://src/level/tiers/tier_3.tscn",
-        scroll_speed_multiplier = 1.0,
-        zoom_multiplier = 1.0,
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
+        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
+        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
+        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
     "4": {
         scene_path = "res://src/level/tiers/tier_4.tscn",
-        scroll_speed_multiplier = 1.0,
-        zoom_multiplier = 1.0,
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
+        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
+        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
+        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
     "5": {
         scene_path = "res://src/level/tiers/tier_5.tscn",
-        scroll_speed_multiplier = 1.0,
-        zoom_multiplier = 1.0,
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
+        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
+        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
+        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
     "6": {
         scene_path = "res://src/level/tiers/tier_6.tscn",
-        scroll_speed_multiplier = 1.0,
-        zoom_multiplier = 1.0,
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
+        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
+        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
+        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
     "7": {
         scene_path = "res://src/level/tiers/tier_7.tscn",
-        scroll_speed_multiplier = 1.0,
-        zoom_multiplier = 1.0,
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
+        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
+        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
+        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
 }
 
 const LEVELS := {
     "1": {
-        scroll_speed_multiplier = 1.0,
-        zoom_multiplier = 1.0,
         tiers = ["0", "1", "2", "3", "4", "5", "6", "7"],
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
+        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
+        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
+        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
     "2": {
-        scroll_speed_multiplier = 1.0,
-        zoom_multiplier = 1.0,
         tiers = ["0", "3", "5", "6"],
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
+        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
+        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
+        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
 }
 

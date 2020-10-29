@@ -19,10 +19,24 @@ const CAMERA_START_ZOOM_PRE_STUCK := 0.4
 const CAMERA_START_POSITION_PRE_STUCK := PLAYER_START_POSITION
 const CAMERA_START_POSITION_POST_STUCK := Vector2(0.0, -128.0)
 const CAMERA_PAN_TO_POST_STUCK_DURATION_SEC := 0.5
-const CAMERA_SPEED_TIER_1 := 15.0
 # TODO: Update this to instead be logarithmic.
 const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 3.0
 const NUMBER_OF_LEVELS_PER_MUSIC := 1
+
+# How many pixels correspond to a single display-height unit. 
+const DISPLAY_HEIGHT_INTERVAL := 32.0
+
+# This is how many tiers the player must pass through without falling before
+# hitting the max camera scroll speed.
+const CAMERA_MAX_SPEED_INDEX := 10
+
+const CAMERA_SPEED_INCREASE_EASING := "linear"
+
+const CAMERA_SPEED_INDEX_DECREMENT_AMOUNT := 1
+
+var has_input_been_pressed := false
+
+var camera_speed_index := 0
 
 var camera_max_distance_below_player := INF
 var player_max_distance_below_camera := INF
@@ -50,7 +64,7 @@ var falls_count: int = 0
 var lives_count: int = DEFAULT_LIVES_COUNT
 
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
-var current_camera_speed := 0.0
+var camera_speed := 0.0
 var current_fall_height := -INF
 var is_game_playing := true
 
@@ -72,20 +86,24 @@ func _ready() -> void:
     set_difficulty(Global.difficulty_mode)
 
 func _input(event: InputEvent) -> void:
-    if is_game_playing:
-        return
-    if player != null:
-        return
-    
-    # Only instantiate the player once the user has pressed a movement button.
-    if event.is_action_pressed("jump") or \
+    if !has_input_been_pressed and \
+            (event.is_action_pressed("jump") or \
             event.is_action_pressed("move_left") or \
             event.is_action_pressed("move_right") or \
             ((event is InputEventMouseButton or \
             event is InputEventScreenTouch) and \
-            event.pressed):
-        _remove_stuck_animation()
-        _add_player(true)
+            event.pressed)):
+        has_input_been_pressed = true
+        
+        # Only instantiate the player once the user has pressed a movement
+        # button.
+        if !is_game_playing and player == null:
+            _remove_stuck_animation()
+            _add_player(true)
+        
+        if current_tier_id != "0":
+            camera_speed_index = 0
+            _update_camera_speed()
 
 func _handle_display_resize() -> void:
     var game_area_size: Vector2 = Global.get_game_area_region().size
@@ -99,8 +117,9 @@ func start( \
     visible = true
     is_game_playing = false
     falls_count = 0
-    _start_new_level( \
+    _start_new_tier( \
             tier_id, \
+            Vector2.ZERO, \
             Audio.START_MUSIC_INDEX)
     Audio.cross_fade_music(Audio.current_music_player_index)
     if tier_id != "0":
@@ -128,7 +147,7 @@ func _physics_process(delta_sec: float) -> void:
     if player_current_height > next_tier_height:
         _on_entered_new_tier()
     player_max_height = max(player_max_height, player_current_height)
-    display_height = floor(player_max_height / 10.0) as int
+    display_height = floor(player_max_height / DISPLAY_HEIGHT_INTERVAL) as int
 
 func _process(delta_sec: float) -> void:
     delta_sec *= Time.physics_framerate_multiplier
@@ -138,7 +157,7 @@ func _process(delta_sec: float) -> void:
     
     if Global.camera_controller != null:
         # Update camera pan, according to auto-scroll speed.
-        var camera_displacement_for_frame := current_camera_speed * delta_sec
+        var camera_displacement_for_frame := camera_speed * delta_sec
         current_camera_height += camera_displacement_for_frame
         Global.camera_controller.offset.y -= camera_displacement_for_frame
         
@@ -151,44 +170,47 @@ func _process(delta_sec: float) -> void:
             current_camera_height += additional_offset
             Global.camera_controller.offset.y -= additional_offset
     
+    # Update score displays.
+    score_boards.set_height(display_height)
+    score_boards.set_lives(lives_count)
+    
     # Check for game over.
     current_fall_height = \
             current_camera_height - player_max_distance_below_camera
     if player_current_height < current_fall_height:
         _fall()
-    
-    # Update score displays.
-    score_boards.set_height(display_height)
-    score_boards.set_lives(lives_count)
 
 func _fall() -> void:
     falls_count += 1
-    var game_score := display_height
-    
-    var retry_tier_id := current_tier_id
-    var camera_retry_speed := current_camera_speed
-    
-    _destroy_level()
-    player_current_height = -PLAYER_START_POSITION.y + CELL_SIZE.y * 2
-    player_max_height = player_current_height
-    current_camera_height = player_current_height
-    Global.camera_controller.offset = Vector2(0.0, -current_camera_height)
+    lives_count -= 1
     
     Audio.game_over_sfx_player.play()
     
-    if lives_count > 1:
-        lives_count -= 1
+    if lives_count > 0:
+        var current_tier_position := current_tier.position
+        
+        _destroy_player()
+        _destroy_tiers()
+        
         # Reset state to replay the level at the latest tier.
-        _start_new_level( \
-                retry_tier_id, \
+        _start_new_tier( \
+                current_tier_id, \
+                current_tier_position, \
                 Audio.current_music_player_index)
+        _decrement_camera_speed()
         _add_player(false)
-        current_camera_speed = camera_retry_speed
         is_game_playing = false
+        
+        # Match player and camera positions to the current tier height.
+        player.position.y += current_tier_position.y
+        player_current_height = -player.position.y - PLAYER_HALF_HEIGHT
+        player_max_height = max(player_max_height, player_current_height)
+        current_camera_height = \
+                -CAMERA_START_POSITION_POST_STUCK.y + current_tier_position.y
+        Global.camera_controller.offset = Vector2(0.0, -current_camera_height)
     else:
-        score_boards.set_lives(0)
-        Global.camera_controller.offset = CAMERA_START_POSITION_PRE_STUCK
-        Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
+        _destroy_level()
+        
         Audio.current_music_player.stop()
         Audio.game_over_sfx_player.connect( \
                 "finished", \
@@ -259,7 +281,6 @@ func _add_player(is_base_tier := false) -> void:
             PLAYER_START_POSITION
     player.position = position
     player.velocity = PLAYER_START_VELOCITY
-    add_child(player)
     
     _set_camera_post_stuck_state(is_base_tier)
     
@@ -267,11 +288,7 @@ func _add_player(is_base_tier := false) -> void:
         mobile_control_ui = MobileControlUI.new(Global.MOBILE_CONTROL_VERSION)
         Global.canvas_layers.hud_layer.add_child(mobile_control_ui)
 
-func _destroy_level() -> void:
-    current_tier_id = ""
-    is_game_playing = true
-    display_height = 0
-    
+func _destroy_player() -> void:
     if player != null:
         player.queue_free()
         remove_child(player)
@@ -279,6 +296,8 @@ func _destroy_level() -> void:
         mobile_control_ui.destroy()
         mobile_control_ui.queue_free()
         Global.canvas_layers.hud_layer.remove_child(mobile_control_ui)
+
+func _destroy_tiers() -> void:
     if previous_tier != null:
         previous_tier.queue_free()
         remove_child(previous_tier)
@@ -294,21 +313,33 @@ func _destroy_level() -> void:
     if next_tier_gap != null:
         next_tier_gap.queue_free()
         remove_child(next_tier_gap)
-    
-    Audio.on_cross_fade_music_finished()
-    $SignAllKeys.visible = false
 
-func _start_new_level( \
-        tier_id := "0", \
-        music_player_index := Audio.START_MUSIC_INDEX) -> void:
+func _destroy_level() -> void:
+    current_tier_id = ""
+    is_game_playing = true
     player_current_height = 0.0
     player_max_height = 0.0
     display_height = 0
     tier_count = 0
+    camera_speed_index = 0
+    
+    _destroy_player()
+    _destroy_tiers()
+    
+    score_boards.set_lives(0)
+    $SignAllKeys.visible = false
+    Audio.on_cross_fade_music_finished()
+    
+    Global.camera_controller.offset = CAMERA_START_POSITION_PRE_STUCK
+    Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
+
+func _start_new_tier( \
+        tier_id := "0", \
+        tier_position := Vector2.ZERO, \
+        music_player_index := Audio.START_MUSIC_INDEX) -> void:
     Audio.current_music_player_index = music_player_index
     
     current_camera_height = -CAMERA_START_POSITION_POST_STUCK.y
-    current_camera_speed = 0.0
     current_fall_height = -INF
     
     start_tier_id = tier_id
@@ -324,7 +355,7 @@ func _start_new_level( \
         next_tier_index = 1
     var next_tier_id: String = level_config.tiers[next_tier_index]
     
-    var current_tier_position := Vector2.ZERO
+    var current_tier_position := tier_position
     var current_tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
     current_tier = Utils.add_scene( \
             self, \
@@ -370,7 +401,8 @@ func _start_new_level( \
                 true, \
                 true)
         var previous_tier_position: Vector2 = \
-                -LevelConfig.get_tier_top_position(previous_tier)
+                current_tier_position - \
+                LevelConfig.get_tier_top_position(previous_tier)
         previous_tier.position = previous_tier_position
         
         var previous_tier_gap_scene_path: String = \
@@ -383,8 +415,8 @@ func _start_new_level( \
                 true, \
                 true)
         previous_tier_gap.position = current_tier_position
-        
-        current_camera_speed = CAMERA_SPEED_TIER_1
+    
+    camera_speed = 0.0
     
     if !Global.SHOWS_MOBILE_CONTROLS:
         # Render the basic input instructions sign.
@@ -455,11 +487,7 @@ func _on_entered_new_tier() -> void:
                 Audio.MUSIC_PLAYERS.size()
         Audio.cross_fade_music(Audio.current_music_player_index)
     
-    # Update camera pan speed.
-    if tier_count == 1:
-        current_camera_speed = CAMERA_SPEED_TIER_1
-    else:
-        current_camera_speed *= CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER
+    _increment_camera_speed()
     
     Audio.new_tier_sfx_player.play()
 
@@ -476,3 +504,64 @@ func set_difficulty(difficulty_mode: int) -> void:
             Time.physics_framerate_multiplier = 1.0
         _:
             Utils.error()
+
+func _increment_camera_speed() -> void:
+    if tier_count > 1:
+        camera_speed_index += 1
+        camera_speed_index = min(camera_speed_index, CAMERA_MAX_SPEED_INDEX)
+    _update_camera_speed()
+
+func _decrement_camera_speed() -> void:
+    camera_speed_index -= CAMERA_SPEED_INDEX_DECREMENT_AMOUNT
+    camera_speed_index = max(camera_speed_index, 0)
+    _update_camera_speed()
+
+func _update_camera_speed() -> void:
+    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
+    var tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
+    
+    var level_speed_min: float = \
+            level_config.scroll_speed_min if \
+            level_config.has("scroll_speed_min") else \
+            LevelConfig.DEFAULT_SCROLL_SPEED_MIN
+    var level_speed_max: float = \
+            level_config.scroll_speed_max if \
+            level_config.has("scroll_speed_max") else \
+            LevelConfig.DEFAULT_SCROLL_SPEED_MAX
+    var level_speed_multiplier: float = \
+            level_config.scroll_speed_multiplier if \
+            level_config.has("scroll_speed_multiplier") else \
+            LevelConfig.DEFAULT_SCROLL_SPEED_MULTIPLIER
+    var tier_speed_min: float = \
+            tier_config.scroll_speed_min if \
+            tier_config.has("scroll_speed_min") else \
+            LevelConfig.DEFAULT_SCROLL_SPEED_MIN
+    var tier_speed_max: float = \
+            tier_config.scroll_speed_max if \
+            tier_config.has("scroll_speed_max") else \
+            LevelConfig.DEFAULT_SCROLL_SPEED_MAX
+    var tier_speed_multiplier: float = \
+            tier_config.scroll_speed_multiplier if \
+            tier_config.has("scroll_speed_multiplier") else \
+            LevelConfig.DEFAULT_SCROLL_SPEED_MULTIPLIER
+    
+    var speed_min := max(level_speed_min, tier_speed_min)
+    var speed_max := min(level_speed_max, tier_speed_max)
+    var speed_index_progress := \
+            float(camera_speed_index) / float(CAMERA_MAX_SPEED_INDEX)
+    # An ease-out curve.
+    speed_index_progress = ease( \
+            speed_index_progress, \
+            Utils.ease_name_to_param(CAMERA_SPEED_INCREASE_EASING))
+    
+    camera_speed = speed_min + (speed_max - speed_min) * speed_index_progress
+    camera_speed *= tier_speed_multiplier
+    camera_speed *= level_speed_multiplier
+    camera_speed = clamp(camera_speed, speed_min, speed_max)
+    
+    if Global.debug_panel != null:
+        Global.debug_panel.add_message( \
+                "Updated scroll speed: index=%s; speed=%s" % [
+                    camera_speed_index,
+                    camera_speed,
+                ])

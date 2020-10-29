@@ -7,7 +7,7 @@
 [ext_resource path="res://src/player/tuber_animator.gd" type="Script" id=5]
 
 [sub_resource type="Animation" id=1]
-resource_name = "JumpFall"
+resource_name = "Fall"
 length = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("Fall:frame")
@@ -23,7 +23,7 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id=2]
-resource_name = "JumpRise"
+resource_name = "Jump"
 length = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("Jump:frame")
@@ -91,7 +91,7 @@ texture = ExtResource( 2 )
 texture = ExtResource( 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/JumpFall = SubResource( 1 )
-anims/JumpRise = SubResource( 2 )
+anims/Fall = SubResource( 1 )
+anims/Jump = SubResource( 2 )
 anims/Run = SubResource( 3 )
 anims/Stand = SubResource( 4 )

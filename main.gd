@@ -9,10 +9,12 @@ class_name Main
 #   - 5.48717706322 reported (diagonal)
 #   - 5.48717706322/6.06 = 0.9054747629
 # 
-# - Fix scroll speed.
-# 
 # - After losing all lives and returning to main menu, playing another level
 #   fails (z-index? visibility?).
+# 
+# - Configure (and settable within Settings) how many camera-speed indices are
+#   decremented when falling.
+#   - Make this change with the difficulty setting? Maybe not...
 # 
 # - 4 difficulty modes: Easy, Moderate, Hard, Dynamic.
 #   - Add all of the difficulty mode and score calculation logic described below.
@@ -65,8 +67,19 @@ class_name Main
 #   - Consolidate some logic between Level._start_new_level and
 #     Level._on_entered_new_tier.
 # 
-# - Make a new sound effect for button press that is more subtle.
-#   - Still use the old one on start-game press though.
+# - Fix bug where player can double-jump if second jump is very quickly after 
+#   first.
+# 
+# - Make new sound effects:
+#   - For button press, that is more subtle.
+#     - Still use the old one on start-game press though.
+#   - For game over (lost all lives), that is different than fall sound effect.
+#     - Dies irae?
+#   - Foot-snow-crunching sound effect when walking.
+#   - Hard-ice-tapping sound effect when walking on ice.
+#   - For move-sideways event triggering.
+#     - Will help inform player when switching directions.
+#   - For "move_left" / "move_right" just pressed.
 # 
 # - Consider refactoring into stuck zoom animation to instead just use the
 #   zoom_multiplier on LevelConfig for TIERS[0].
@@ -113,6 +126,7 @@ class_name Main
 #   - Toggle whether the auto-difficulty update suggestion popups appear.
 #   - Toggle whether framerate-multiplier/difficulty automatically track to the
 #     current climb speed.
+#   - Set how many camera-speed indices are decremented when falling.
 # 
 # - Replace main menu button text with icons
 #   - Both somewhat pixelated
@@ -140,11 +154,6 @@ class_name Main
 #   - Test how to get the nav bar to appear on android and whether mobile
 #     controls are ever likely to make it appear annoyingly by accident.
 # 
-# - Add a foot-snow-crunching sound effect when walking.
-# - And add a hard-ice-tapping sound effect when walking on ice.
-# - Also create an additional sound effect for move-sideways event triggering.
-#   - Will help inform player when switching directions.
-# 
 # - Update CanvasLayers to support some layers rendering within game area, and
 #   some within entire viewport.
 # 
@@ -163,8 +172,6 @@ class_name Main
 #     so on.
 #   - Make sure this level-loop speed-up multiplier happens on a log scale, so
 #     that it doesn't become quickly impossible.
-# 
-# - Add a sound effect for "move_left" / "move_right" just pressed.
 # 
 # - Change score to accumulate between deaths.
 #   - Maybe count current elevation separately.
@@ -249,7 +256,6 @@ class_name Main
 #   tier.
 # - Add an unlock for double jump after a certain tier.
 # >- Take screenshot?
-# - Add dies irae as game-over/you-lose sound?
 # - Balance volumes of sfx and music.
 # - Create alternate art for foreground and background for different tiers, in
 #   order to add more variety.

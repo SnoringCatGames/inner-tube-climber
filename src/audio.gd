@@ -141,7 +141,9 @@ func cross_fade_music(next_music_player_index: int) -> void:
             self, \
             "on_cross_fade_music_finished")
 
-func on_cross_fade_music_finished() -> void:
+func on_cross_fade_music_finished( \
+        object = null, \
+        key = null) -> void:
     if fade_out_tween != null:
         remove_child(fade_out_tween)
         fade_out_tween.queue_free()

@@ -32,7 +32,13 @@ const CAMERA_MAX_SPEED_INDEX := 10
 
 const CAMERA_SPEED_INCREASE_EASING := "linear"
 
-const CAMERA_SPEED_INDEX_DECREMENT_AMOUNT := 1
+const CAMERA_SPEED_INDEX_DECREMENT_AMOUNT := 2
+
+const SCORE_PER_HEIGHT_PIXELS := 10.0 / 32.0
+const SCORE_MULTIPLIER_DELTA_FOR_EASY_DIFFICULTY := -0.15
+const SCORE_MULTIPLIER_DELTA_FOR_MODERATE_DIFFICULTY := 0.0
+const SCORE_MULTIPLIER_DELTA_FOR_HARD_DIFFICULTY := 0.25
+const SCORE_MULTIPLIER_DELTA_PER_LIFE := 0.05
 
 var has_input_been_pressed := false
 
@@ -66,7 +72,11 @@ var lives_count: int = DEFAULT_LIVES_COUNT
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
 var camera_speed := 0.0
 var current_fall_height := -INF
-var is_game_playing := true
+var is_game_playing := false
+
+# FIXME: --------------------------------
+var tiers_count_since_falling := 0
+var falls_count_since_reaching_level_end := 0
 
 func _enter_tree() -> void:
     Global.connect( \
@@ -97,7 +107,7 @@ func _input(event: InputEvent) -> void:
         
         # Only instantiate the player once the user has pressed a movement
         # button.
-        if !is_game_playing and player == null:
+        if is_game_playing and player == null:
             _remove_stuck_animation()
             _add_player(true)
         
@@ -115,7 +125,7 @@ func start( \
         tier_id := START_TIER_ID) -> void:
     self.level_id = level_id
     visible = true
-    is_game_playing = false
+    is_game_playing = true
     falls_count = 0
     _start_new_tier( \
             tier_id, \
@@ -126,19 +136,11 @@ func start( \
         _add_player(false)
     score_boards.visible = true
 
-func stop() -> void:
-    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
-    visible = false
-    is_game_playing = true
-    score_boards.visible = false
-
 func _physics_process(delta_sec: float) -> void:
     delta_sec *= Time.physics_framerate_multiplier
     
-    if is_game_playing:
-        return
-    
-    if player == null:
+    if !is_game_playing or \
+            player == null:
         return
     
     # Keep track of player height.
@@ -152,7 +154,7 @@ func _physics_process(delta_sec: float) -> void:
 func _process(delta_sec: float) -> void:
     delta_sec *= Time.physics_framerate_multiplier
     
-    if is_game_playing:
+    if !is_game_playing:
         return
     
     if Global.camera_controller != null:
@@ -183,6 +185,8 @@ func _process(delta_sec: float) -> void:
 func _fall() -> void:
     falls_count += 1
     lives_count -= 1
+    tiers_count_since_falling = 0
+    falls_count_since_reaching_level_end += 1
     
     Audio.game_over_sfx_player.play()
     
@@ -199,17 +203,22 @@ func _fall() -> void:
                 Audio.current_music_player_index)
         _decrement_camera_speed()
         _add_player(false)
-        is_game_playing = false
+        is_game_playing = true
         
         # Match player and camera positions to the current tier height.
         player.position.y += current_tier_position.y
         player_current_height = -player.position.y - PLAYER_HALF_HEIGHT
         player_max_height = max(player_max_height, player_current_height)
         current_camera_height = \
-                -CAMERA_START_POSITION_POST_STUCK.y + current_tier_position.y
+                -CAMERA_START_POSITION_POST_STUCK.y - current_tier_position.y
         Global.camera_controller.offset = Vector2(0.0, -current_camera_height)
     else:
-        _destroy_level()
+        is_game_playing = false
+        camera_speed_index = 0
+        score_boards.set_lives(0)
+        $SignAllKeys.visible = false
+        Audio.on_cross_fade_music_finished()
+        _destroy_player()
         
         Audio.current_music_player.stop()
         Audio.game_over_sfx_player.connect( \
@@ -218,7 +227,8 @@ func _fall() -> void:
                 "_on_game_over_sfx_finished")
 
 func _on_game_over_sfx_finished() -> void:
-    stop()
+    _destroy_level()
+    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
     Audio.game_over_sfx_player.disconnect( \
             "finished", \
             self, \
@@ -265,9 +275,11 @@ func _interpolate_camera_to_post_stuck_state(progress: float) -> void:
     Global.camera_controller.zoom = current_zoom
 
 func _remove_stuck_animation() -> void:
-    var stuck_animation := current_tier.get_node("TuberStuckAnimation")
-    remove_child(stuck_animation)
-    stuck_animation.queue_free()
+    # Only the base tier has the stuck-tuber animation.
+    if current_tier_id == "0":
+        var stuck_animation := current_tier.get_node("TuberStuckAnimation")
+        remove_child(stuck_animation)
+        stuck_animation.queue_free()
 
 func _add_player(is_base_tier := false) -> void:
     player = Utils.add_scene( \
@@ -316,17 +328,21 @@ func _destroy_tiers() -> void:
 
 func _destroy_level() -> void:
     current_tier_id = ""
-    is_game_playing = true
+    is_game_playing = false
+    has_input_been_pressed = false
     player_current_height = 0.0
     player_max_height = 0.0
     display_height = 0
     tier_count = 0
     camera_speed_index = 0
+    falls_count_since_reaching_level_end = 0
+    tiers_count_since_falling = 0
     
     _destroy_player()
     _destroy_tiers()
     
     score_boards.set_lives(0)
+    score_boards.visible = false
     $SignAllKeys.visible = false
     Audio.on_cross_fade_music_finished()
     
@@ -427,6 +443,7 @@ func _start_new_tier( \
 
 func _on_entered_new_tier() -> void:
     tier_count += 1
+    tiers_count_since_falling += 1
     
     # Destory the old previous tier.
     if previous_tier != null:
@@ -559,9 +576,39 @@ func _update_camera_speed() -> void:
     camera_speed *= level_speed_multiplier
     camera_speed = clamp(camera_speed, speed_min, speed_max)
     
-    if Global.debug_panel != null:
-        Global.debug_panel.add_message( \
-                "Updated scroll speed: index=%s; speed=%s" % [
-                    camera_speed_index,
-                    camera_speed,
-                ])
+    Global.debug_panel.add_message( \
+            "Updated scroll speed: index=%s; speed=%s" % [
+                camera_speed_index,
+                camera_speed,
+            ])
+
+func _calculate_score_for_height_delta(height_delta_pixels: float) -> float:
+#    var score_multiplier_delta_for_tiers_count_since_falling := \
+#            0.5 + sqrt(tiers_count_since_falling)
+    var score_multiplier_delta_for_tiers_count_since_falling := \
+            tiers_count_since_falling * 0.5
+    
+    var score_multiplier_delta_for_difficulty := 0.0
+    match Global.difficulty_mode:
+        DifficultyMode.EASY:
+            score_multiplier_delta_for_difficulty = \
+                    SCORE_MULTIPLIER_DELTA_FOR_EASY_DIFFICULTY
+        DifficultyMode.MODERATE:
+            score_multiplier_delta_for_difficulty = \
+                    SCORE_MULTIPLIER_DELTA_FOR_MODERATE_DIFFICULTY
+        DifficultyMode.HARD:
+            score_multiplier_delta_for_difficulty = \
+                    SCORE_MULTIPLIER_DELTA_FOR_HARD_DIFFICULTY
+        _:
+            Utils.error()
+    
+    var score_multiplier_delta_for_lives_count := \
+            lives_count * SCORE_MULTIPLIER_DELTA_PER_LIFE
+    
+    var score_multiplier := \
+        1.0 + \
+        score_multiplier_delta_for_tiers_count_since_falling + \
+        score_multiplier_delta_for_difficulty + \
+        score_multiplier_delta_for_lives_count
+    
+    return height_delta_pixels * SCORE_PER_HEIGHT_PIXELS * score_multiplier

@@ -82,15 +82,13 @@ func set_screen_is_open( \
         if !active_screen_stack.has(next_screen):
             active_screen_stack.push_back(next_screen)
             next_screen.z_index = -100 + active_screen_stack.size()
-        else:
-            # Do nothing. Screen is already active.
-            pass
-    else:
-        var index := active_screen_stack.find(next_screen)
-        while index + 1 < active_screen_stack.size():
-            var removed_screen: Screen = active_screen_stack.back()
-            active_screen_stack.pop_back()
-            removed_screen.visible = false
+    
+    # Remove all (potential) following screens from the stack.
+    var index := active_screen_stack.find(next_screen)
+    while index + 1 < active_screen_stack.size():
+        var removed_screen: Screen = active_screen_stack.back()
+        active_screen_stack.pop_back()
+        removed_screen.visible = false
     
     get_tree().paused = is_paused
     

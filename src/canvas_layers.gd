@@ -8,14 +8,14 @@ var menu_screen_layer: CanvasLayer
 var hud_layer: CanvasLayer
 var annotation_layer: CanvasLayer
 
+var is_debug_panel_shown := true setget \
+        _set_is_debug_panel_shown, _get_is_debug_panel_shown
+
 func _enter_tree() -> void:
     _create_menu_screen_layer()
     _create_hud_layer()
     _create_annotation_layer()
     _create_game_screen_layer()
-    
-    if Global.is_debug_panel_shown:
-        set_debug_panel_visibility(true)
 
 func _process(delta_sec: float) -> void:
     # Transform the annotation layer to follow the camera.
@@ -40,24 +40,22 @@ func _create_hud_layer() -> void:
     hud_layer.layer = 300
     Global.add_overlay_to_current_scene(hud_layer)
     
-    # TODO: Add HUD content.
+    Global.debug_panel = Utils.add_scene( \
+            hud_layer, \
+            DEBUG_PANEL_RESOURCE_PATH, \
+            true, \
+            true)
+    Global.debug_panel.z_index = 1000
+    _set_is_debug_panel_shown(true)
 
 func _create_annotation_layer() -> void:
     annotation_layer = CanvasLayer.new()
     annotation_layer.layer = 200
     Global.add_overlay_to_current_scene(annotation_layer)
 
-func set_debug_panel_visibility(is_visible: bool) -> void:
-    Global.is_debug_panel_shown = is_visible
-    
-    if is_visible and Global.debug_panel == null:
-        Global.debug_panel = Utils.add_scene( \
-                hud_layer, \
-                DEBUG_PANEL_RESOURCE_PATH, \
-                true, \
-                true)
-        Global.debug_panel.z_index = 1000
-    elif !is_visible and Global.debug_panel != null:
-        hud_layer.remove_child(Global.debug_panel)
-        Global.debug_panel.queue_free()
-        Global.debug_panel = null
+func _set_is_debug_panel_shown(is_visible: bool) -> void:
+    is_debug_panel_shown = is_visible
+    Global.debug_panel.visible = is_visible
+
+func _get_is_debug_panel_shown() -> bool:
+    return is_debug_panel_shown

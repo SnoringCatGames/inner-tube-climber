@@ -27,7 +27,6 @@ var difficulty_mode := DifficultyMode.MODERATE
 var canvas_layers: CanvasLayers
 var camera_controller: CameraController
 
-var is_debug_panel_shown := true
 var debug_panel: DebugPanel
 
 var throttled_size_changed: FuncRef = Time.throttle( \

@@ -9,49 +9,37 @@ class_name Main
 #   - 5.48717706322 reported (diagonal)
 #   - 5.48717706322/6.06 = 0.9054747629
 # 
-# - Implement tier ratio score board (e.g. 7/7).
-# - Implement and call Level._on_last_tier_completed()
-#   - Trigger a new sound effect.
-#   - Implement an animation effect? Confetti?
-#   - A message?
-#   - Animate tier ratio (e.g. 7/7).
-# - Update tiers_count_since_falling (increment and reset).
-# - Update falls_count_since_reaching_level_end (increment and reset).
-# 
-# - 4 difficulty modes: Easy, Moderate, Hard, Dynamic.
-#   - Account for the following in score:
-#     /- Max height.
-#     /- Difficulty mode and/or Time.physics_framerate_multiplier.
-#     /- Lives count (score slightly more when you've died less; or maybe just
-#       have a constant score deduction for each fall?).
-#     - OR, have a score multiplier on the side that steadily increases with
-#       height until falling.
-#       - Show fancy animation for making the multiplier seem impressive.
-#         - Rotate slightly back and fourth.
-#         - Shake/jitter randomly.
-#         - Pulse bigger and smaller.
-#         - Pulse font more red.
-#         - Gradually increase base size and font redness.
-#         - Pay attention to the easing curves for all of these.
-#       - Make a special fast/crazy/energetic music piece to transition to when
-#         hitting a certain multiplier?
-#       - OR, maybe have the score multiplier depend on the recent average
-#         climb speed.
-#         - Then, there will be a correlation between the excitement and the
-#           gameplay speed.
-#         - Hmmm, it might be fun to experiment with a mode (toggleable in
-#           Settings) that adjusts Time.physics_framerate_multiplier each frame
-#           to match the current recent climb speed.
-# 
-#     - Suggest switching to slower or faster tier after enough falls on a level,
-#       or enough levels without a fall.
-#     - Make difficulty selectable in Settings, and make auto suggestion for
-#       changing difficulty be toggleable in Settings too.
+# - Additional updates to score / difficulty:
+#   - OR, have a score multiplier on the side that steadily increases with
+#     height until falling.
+#     - Show fancy animation for making the multiplier seem impressive.
+#       - Rotate slightly back and fourth.
+#       - Shake/jitter randomly.
+#       - Pulse bigger and smaller.
+#       - Pulse font more red.
+#       - Gradually increase base size and font redness.
+#       - Pay attention to the easing curves for all of these.
+#     - Show temporary messages somehow everytime the score multiplier
+#       changes, in order to indicate what the player did to cause the change.
+#     - Make a special fast/crazy/energetic music piece to transition to when
+#       hitting a certain multiplier?
+#     - OR, maybe have the score multiplier depend on the recent average
+#       climb speed.
+#       - Then, there will be a correlation between the excitement and the
+#         gameplay speed.
+#       - Hmmm, it might be fun to experiment with a mode (toggleable in
+#         Settings) that adjusts Time.physics_framerate_multiplier each frame
+#         to match the current recent climb speed.
+# - 
+#   - Suggest switching to slower or faster tier after enough falls on a level,
+#     or enough levels without a fall.
+#   - Make difficulty selectable in Settings, and make auto suggestion for
+#     changing difficulty be toggleable in Settings too.
 # 
 # - Refactor level:
-#   - Count the number of deaths within the current playthrough of the current
+#   /- Count the number of deaths within the current playthrough of the current
 #     tier.
-#   - Count the number of tiers climbed without dying.
+#   /- Count the number of tiers climbed without dying.
 #   - Add stubs for triggering popups suggesting changing difficulty.
 #   - Implement the popups for for suggesting changing difficulty.
 #     - Include two buttons in each: "Dismiss" and "Update difficulty".
@@ -62,6 +50,7 @@ class_name Main
 #   - Change how base-level case is handled.
 #     - Don't encode in config.
 #     - Auto-append when starting level.
+#     - Change tier ratio display values to show index + 1 as numerator.
 #   - Consolidate some logic between Level._start_new_level and
 #     Level._on_entered_new_tier.
 # 
@@ -79,6 +68,12 @@ class_name Main
 #     - Will help inform player when switching directions.
 #   - For "move_left" / "move_right" just pressed.
 #   - For _on_last_tier_completed.
+# 
+# - Implement Level._on_final_tier_completed()
+#   - Trigger a new sound effect.
+#   - Implement an animation effect? Confetti?
+#   - A message?
+#   - Animate tier ratio (e.g. 7/7).
 # 
 # - Consider refactoring into stuck zoom animation to instead just use the
 #   zoom_multiplier on LevelConfig for TIERS[0].
@@ -126,6 +121,8 @@ class_name Main
 #   - Toggle whether framerate-multiplier/difficulty automatically track to the
 #     current climb speed.
 #   - Set how many camera-speed indices are decremented when falling.
+#   - Toggle whether score, height, lives, level tier completion ratio, and
+#     multiplier boards are shown.
 # 
 # - Replace main menu button text with icons
 #   - Both somewhat pixelated

@@ -29,6 +29,8 @@ var camera_controller: CameraController
 
 var debug_panel: DebugPanel
 
+var falls_count_since_reaching_level_end := 0
+
 var throttled_size_changed: FuncRef = Time.throttle( \
         funcref(self, "_on_throttled_size_changed"), \
         DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC)

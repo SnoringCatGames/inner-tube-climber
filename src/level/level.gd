@@ -55,6 +55,8 @@ var level_id := ""
 var start_tier_id := START_TIER_ID
 var current_tier_id := START_TIER_ID
 
+var current_tier_index := -1
+
 var previous_tier: Tier
 var current_tier: Tier
 var next_tier: Tier
@@ -68,15 +70,15 @@ var tier_count: int = 0
 var display_height: int = 0
 var falls_count: int = 0
 var lives_count: int = DEFAULT_LIVES_COUNT
+var score := 0.0
+var score_multiplier := 1.0
 
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
 var camera_speed := 0.0
 var current_fall_height := -INF
 var is_game_playing := false
 
-# FIXME: --------------------------------
 var tiers_count_since_falling := 0
-var falls_count_since_reaching_level_end := 0
 
 func _enter_tree() -> void:
     Global.connect( \
@@ -127,6 +129,8 @@ func start( \
     visible = true
     is_game_playing = true
     falls_count = 0
+    score = 0.0
+    score_multiplier = 1.0
     _start_new_tier( \
             tier_id, \
             Vector2.ZERO, \
@@ -145,11 +149,17 @@ func _physics_process(delta_sec: float) -> void:
     
     # Keep track of player height.
     player_current_height = -player.position.y - PLAYER_HALF_HEIGHT
+    var height_delta := \
+            player_current_height - player_max_height if \
+            player_current_height > player_max_height else \
+            0.0
     var next_tier_height := -next_tier.position.y + CELL_SIZE.y
     if player_current_height > next_tier_height:
         _on_entered_new_tier()
     player_max_height = max(player_max_height, player_current_height)
     display_height = floor(player_max_height / DISPLAY_HEIGHT_INTERVAL) as int
+    
+    _update_score(height_delta)
 
 func _process(delta_sec: float) -> void:
     delta_sec *= Time.physics_framerate_multiplier
@@ -157,23 +167,30 @@ func _process(delta_sec: float) -> void:
     if !is_game_playing:
         return
     
-    if Global.camera_controller != null:
-        # Update camera pan, according to auto-scroll speed.
-        var camera_displacement_for_frame := camera_speed * delta_sec
-        current_camera_height += camera_displacement_for_frame
-        Global.camera_controller.offset.y -= camera_displacement_for_frame
-        
-        # Update camera pan, to never be too far below the player.
-        if current_camera_height < \
-                player_current_height - camera_max_distance_below_player:
-            var additional_offset := \
-                    player_current_height - camera_max_distance_below_player - \
-                    current_camera_height
-            current_camera_height += additional_offset
-            Global.camera_controller.offset.y -= additional_offset
+    if Global.camera_controller == null:
+        return
+    
+    # Update camera pan, according to auto-scroll speed.
+    var camera_displacement_for_frame := camera_speed * delta_sec
+    current_camera_height += camera_displacement_for_frame
+    Global.camera_controller.offset.y -= camera_displacement_for_frame
+    
+    # Update camera pan, to never be too far below the player.
+    if current_camera_height < \
+            player_current_height - camera_max_distance_below_player:
+        var additional_offset := \
+                player_current_height - camera_max_distance_below_player - \
+                current_camera_height
+        current_camera_height += additional_offset
+        Global.camera_controller.offset.y -= additional_offset
     
     # Update score displays.
+    score_boards.set_tier_ratio( \
+            current_tier_index, \
+            LevelConfig.LEVELS[level_id].tiers.size())
     score_boards.set_height(display_height)
+    score_boards.set_score(score)
+    score_boards.set_multiplier(score_multiplier)
     score_boards.set_lives(lives_count)
     
     # Check for game over.
@@ -186,7 +203,7 @@ func _fall() -> void:
     falls_count += 1
     lives_count -= 1
     tiers_count_since_falling = 0
-    falls_count_since_reaching_level_end += 1
+    Global.falls_count_since_reaching_level_end += 1
     
     Audio.game_over_sfx_player.play()
     
@@ -335,7 +352,6 @@ func _destroy_level() -> void:
     display_height = 0
     tier_count = 0
     camera_speed_index = 0
-    falls_count_since_reaching_level_end = 0
     tiers_count_since_falling = 0
     
     _destroy_player()
@@ -365,6 +381,10 @@ func _start_new_tier( \
     
     # FIXME: ----------------
     assert(level_config.tiers.has(current_tier_id))
+    current_tier_index = \
+            level_config.tiers.find(current_tier_id) if \
+            tier_id != "0" else \
+            0
     var next_tier_index: int = level_config.tiers.find(current_tier_id) + 1
     if next_tier_index == level_config.tiers.size():
         # Loop back around, and skip the first/base tier.
@@ -461,9 +481,11 @@ func _on_entered_new_tier() -> void:
     
     # FIXME: -------------
     assert(level_config.tiers.has(current_tier_id))
-    var current_tier_index: int = level_config.tiers.find(current_tier_id) + 1
+    var was_final_tier_completed := false
+    current_tier_index = level_config.tiers.find(current_tier_id) + 1
     if current_tier_index == level_config.tiers.size():
         # Loop back around, and skip the first/base tier.
+        was_final_tier_completed = true
         current_tier_index = 1
     current_tier_id = level_config.tiers[current_tier_index]
     var next_tier_index := current_tier_index + 1
@@ -507,6 +529,9 @@ func _on_entered_new_tier() -> void:
     _increment_camera_speed()
     
     Audio.new_tier_sfx_player.play()
+    
+    if was_final_tier_completed:
+        _on_final_tier_completed()
 
 func set_difficulty(difficulty_mode: int) -> void:
     match difficulty_mode:
@@ -582,7 +607,11 @@ func _update_camera_speed() -> void:
                 camera_speed,
             ])
 
-func _calculate_score_for_height_delta(height_delta_pixels: float) -> float:
+func _update_score(height_delta_pixels: float) -> void:
+    _update_score_multiplier()
+    score += height_delta_pixels * SCORE_PER_HEIGHT_PIXELS * score_multiplier
+
+func _update_score_multiplier() -> void:
 #    var score_multiplier_delta_for_tiers_count_since_falling := \
 #            0.5 + sqrt(tiers_count_since_falling)
     var score_multiplier_delta_for_tiers_count_since_falling := \
@@ -605,10 +634,12 @@ func _calculate_score_for_height_delta(height_delta_pixels: float) -> float:
     var score_multiplier_delta_for_lives_count := \
             lives_count * SCORE_MULTIPLIER_DELTA_PER_LIFE
     
-    var score_multiplier := \
-        1.0 + \
-        score_multiplier_delta_for_tiers_count_since_falling + \
-        score_multiplier_delta_for_difficulty + \
-        score_multiplier_delta_for_lives_count
-    
-    return height_delta_pixels * SCORE_PER_HEIGHT_PIXELS * score_multiplier
+    score_multiplier = \
+            1.0 + \
+            score_multiplier_delta_for_tiers_count_since_falling + \
+            score_multiplier_delta_for_difficulty + \
+            score_multiplier_delta_for_lives_count
+
+func _on_final_tier_completed() -> void:
+    Global.falls_count_since_reaching_level_end = 0
+    # FIXME: ------------------

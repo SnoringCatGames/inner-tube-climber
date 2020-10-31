@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/images/score-board-long.png" type="Texture" id=1]
+[ext_resource path="res://src/score_board.gd" type="Script" id=2]
+[ext_resource path="res://assets/fonts/main_font_xs.tres" type="DynamicFont" id=3]
+
+[node name="ScoreBoard" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -360.0
+margin_bottom = -459.0
+rect_min_size = Vector2( 120, 21 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+label = "Label"
+value = "0"
+
+[node name="Background" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+offset = Vector2( 60, 10.5 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 6.0
+margin_top = 5.0
+margin_right = 64.0
+margin_bottom = 28.0
+custom_fonts/font = ExtResource( 3 )
+text = "Label"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Value" type="Label" parent="."]
+margin_left = 56.0
+margin_top = 5.0
+margin_right = 114.0
+margin_bottom = 28.0
+custom_fonts/font = ExtResource( 3 )
+text = "0"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}

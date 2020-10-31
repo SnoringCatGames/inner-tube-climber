@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://assets/images/score-board-long.png" type="Texture" id=1]
-[ext_resource path="res://assets/fonts/main_font_xs.tres" type="DynamicFont" id=2]
 [ext_resource path="res://src/score_boards.gd" type="Script" id=3]
+[ext_resource path="res://src/score_board.tscn" type="PackedScene" id=4]
 
 [node name="ScoreBoards" type="Node2D"]
 z_index = 1
@@ -11,77 +10,47 @@ script = ExtResource( 3 )
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 61.0
 margin_bottom = 46.0
+custom_constants/separation = 5
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HeightPanel" type="Panel" parent="VBoxContainer"]
+[node name="TierRatioBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_right = 120.0
 margin_bottom = 21.0
-rect_min_size = Vector2( 120, 21 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+label = "Current tier:"
+value = "0 / 0"
 
-[node name="Sprite" type="Sprite" parent="VBoxContainer/HeightPanel"]
-texture = ExtResource( 1 )
-offset = Vector2( 60, 10.5 )
-
-[node name="HeightLabel" type="Label" parent="VBoxContainer/HeightPanel"]
-margin_left = 6.0
-margin_top = 5.0
-margin_right = 64.0
-margin_bottom = 28.0
-custom_fonts/font = ExtResource( 2 )
-text = "Elevation:  "
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HeightCount" type="Label" parent="VBoxContainer/HeightPanel"]
-margin_left = 56.0
-margin_top = 5.0
-margin_right = 114.0
-margin_bottom = 28.0
-custom_fonts/font = ExtResource( 2 )
-text = "0"
-align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="LivesPanel" type="Panel" parent="VBoxContainer"]
-margin_top = 25.0
+[node name="HeightBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 26.0
 margin_right = 120.0
-margin_bottom = 46.0
-rect_min_size = Vector2( 120, 21 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_bottom = 47.0
+label = "Height:"
 
-[node name="Sprite" type="Sprite" parent="VBoxContainer/LivesPanel"]
-texture = ExtResource( 1 )
-offset = Vector2( 60, 10.5 )
+[node name="ScoreBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 52.0
+margin_right = 120.0
+margin_bottom = 73.0
+label = "Score:"
 
-[node name="LivesLabel" type="Label" parent="VBoxContainer/LivesPanel"]
-margin_left = 6.0
-margin_top = 5.0
-margin_right = 64.0
-margin_bottom = 28.0
-custom_fonts/font = ExtResource( 2 )
-text = "Lives: "
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="MultiplierBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 78.0
+margin_right = 120.0
+margin_bottom = 99.0
+label = "Multiplier:"
 
-[node name="LivesCount" type="Label" parent="VBoxContainer/LivesPanel"]
-margin_left = 56.0
-margin_top = 5.0
-margin_right = 114.0
-margin_bottom = 28.0
-custom_fonts/font = ExtResource( 2 )
-text = "0"
-align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="LivesBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 104.0
+margin_right = 120.0
+margin_bottom = 125.0
+label = "Lives:"

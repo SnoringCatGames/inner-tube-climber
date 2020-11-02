@@ -9,6 +9,9 @@ class_name Main
 #   - 5.48717706322 reported (diagonal)
 #   - 5.48717706322/6.06 = 0.9054747629
 # 
+# - Maybe have "difficulty"-framerate increase for all difficulties, but just
+#   at different rates for easy/mod/hard.
+# 
 # - Additional updates to score / difficulty:
 #   - OR, have a score multiplier on the side that steadily increases with
 #     height until falling.
@@ -56,6 +59,8 @@ class_name Main
 # 
 # - Fix bug where player can double-jump if second jump is very quickly after 
 #   first.
+# 
+# - Make wall-bounce give more extra vertical speed.
 # 
 # - Make new sound effects:
 #   - For button press, that is more subtle.

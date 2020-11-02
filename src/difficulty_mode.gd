@@ -5,7 +5,6 @@ enum {
     EASY,
     MODERATE,
     HARD,
-    DYNAMIC,
 }
 
 static func get_type_string(type: int) -> String:
@@ -18,8 +17,6 @@ static func get_type_string(type: int) -> String:
             return "MODERATE"
         HARD:
             return "HARD"
-        DYNAMIC:
-            return "DYNAMIC"
         _:
             Utils.error("Invalid DifficultyMode: %s" % type)
             return "???"

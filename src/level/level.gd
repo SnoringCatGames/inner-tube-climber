@@ -27,12 +27,10 @@ const NUMBER_OF_LEVELS_PER_MUSIC := 1
 const DISPLAY_HEIGHT_INTERVAL := 32.0
 
 # This is how many tiers the player must pass through without falling before
-# hitting the max camera scroll speed.
-const CAMERA_MAX_SPEED_INDEX := 10
-
-const CAMERA_SPEED_INCREASE_EASING := "linear"
-
-const CAMERA_SPEED_INDEX_DECREMENT_AMOUNT := 2
+# hitting the max camera scroll speed and framerate speed.
+const MAX_SPEED_INDEX := 10
+const SPEED_INDEX_DECREMENT_AMOUNT := 2
+const SPEED_INCREASE_EASING := "linear"
 
 const SCORE_PER_HEIGHT_PIXELS := 10.0 / 32.0
 const SCORE_MULTIPLIER_DELTA_FOR_EASY_DIFFICULTY := -0.15
@@ -42,7 +40,7 @@ const SCORE_MULTIPLIER_DELTA_PER_LIFE := 0.05
 
 var has_input_been_pressed := false
 
-var camera_speed_index := 0
+var speed_index := 0
 
 var camera_max_distance_below_player := INF
 var player_max_distance_below_camera := INF
@@ -95,7 +93,6 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
     _set_camera()
-    set_difficulty(Global.difficulty_mode)
 
 func _input(event: InputEvent) -> void:
     if !has_input_been_pressed and \
@@ -114,8 +111,8 @@ func _input(event: InputEvent) -> void:
             _add_player(true)
         
         if current_tier_id != "0":
-            camera_speed_index = 0
-            _update_camera_speed()
+            speed_index = 0
+            _update_speed()
 
 func _handle_display_resize() -> void:
     var game_area_size: Vector2 = Global.get_game_area_region().size
@@ -218,7 +215,7 @@ func _fall() -> void:
                 current_tier_id, \
                 current_tier_position, \
                 Audio.current_music_player_index)
-        _decrement_camera_speed()
+        _decrement_speed()
         _add_player(false)
         is_game_playing = true
         
@@ -231,7 +228,7 @@ func _fall() -> void:
         Global.camera_controller.offset = Vector2(0.0, -current_camera_height)
     else:
         is_game_playing = false
-        camera_speed_index = 0
+        speed_index = 0
         score_boards.set_lives(0)
         $SignAllKeys.visible = false
         Audio.on_cross_fade_music_finished()
@@ -351,7 +348,7 @@ func _destroy_level() -> void:
     player_max_height = 0.0
     display_height = 0
     tier_count = 0
-    camera_speed_index = 0
+    speed_index = 0
     tiers_count_since_falling = 0
     
     _destroy_player()
@@ -453,6 +450,7 @@ func _start_new_tier( \
         previous_tier_gap.position = current_tier_position
     
     camera_speed = 0.0
+    Time.physics_framerate_multiplier = _get_min_framerate_multiplier()
     
     if !Global.SHOWS_MOBILE_CONTROLS:
         # Render the basic input instructions sign.
@@ -526,85 +524,111 @@ func _on_entered_new_tier() -> void:
                 Audio.MUSIC_PLAYERS.size()
         Audio.cross_fade_music(Audio.current_music_player_index)
     
-    _increment_camera_speed()
+    _increment_speed()
     
     Audio.new_tier_sfx_player.play()
     
     if was_final_tier_completed:
         _on_final_tier_completed()
 
-func set_difficulty(difficulty_mode: int) -> void:
-    match difficulty_mode:
+func _get_min_framerate_multiplier() -> float:
+    match Global.difficulty_mode:
         DifficultyMode.EASY:
-            Time.physics_framerate_multiplier = 0.7
+            return LevelConfig.FRAMERATE_MULTIPLIER_EASY_MIN
         DifficultyMode.MODERATE:
-            Time.physics_framerate_multiplier = 1.0
+            return LevelConfig.FRAMERATE_MULTIPLIER_MODERATE_MIN
         DifficultyMode.HARD:
-            Time.physics_framerate_multiplier = 1.5
-        DifficultyMode.DYNAMIC:
-            # FIXME: -------------------------
-            Time.physics_framerate_multiplier = 1.0
+            return LevelConfig.FRAMERATE_MULTIPLIER_HARD_MIN
         _:
             Utils.error()
+            return INF
 
-func _increment_camera_speed() -> void:
+func _get_max_framerate_multiplier() -> float:
+    match Global.difficulty_mode:
+        DifficultyMode.EASY:
+            return LevelConfig.FRAMERATE_MULTIPLIER_EASY_MAX
+        DifficultyMode.MODERATE:
+            return LevelConfig.FRAMERATE_MULTIPLIER_MODERATE_MAX
+        DifficultyMode.HARD:
+            return LevelConfig.FRAMERATE_MULTIPLIER_HARD_MAX
+        _:
+            Utils.error()
+            return INF
+
+func _increment_speed() -> void:
     if tier_count > 1:
-        camera_speed_index += 1
-        camera_speed_index = min(camera_speed_index, CAMERA_MAX_SPEED_INDEX)
-    _update_camera_speed()
+        speed_index += 1
+        speed_index = min(speed_index, MAX_SPEED_INDEX)
+    _update_speed()
 
-func _decrement_camera_speed() -> void:
-    camera_speed_index -= CAMERA_SPEED_INDEX_DECREMENT_AMOUNT
-    camera_speed_index = max(camera_speed_index, 0)
-    _update_camera_speed()
+func _decrement_speed() -> void:
+    speed_index -= SPEED_INDEX_DECREMENT_AMOUNT
+    speed_index = max(speed_index, 0)
+    _update_speed()
 
-func _update_camera_speed() -> void:
+func _update_speed() -> void:
+    var speed_index_progress := \
+            float(speed_index) / float(MAX_SPEED_INDEX)
+    # An ease-out curve.
+    speed_index_progress = ease( \
+            speed_index_progress, \
+            Utils.ease_name_to_param(SPEED_INCREASE_EASING))
+    
     var level_config: Dictionary = LevelConfig.LEVELS[level_id]
     var tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
     
-    var level_speed_min: float = \
+    var level_camera_speed_min: float = \
             level_config.scroll_speed_min if \
             level_config.has("scroll_speed_min") else \
             LevelConfig.DEFAULT_SCROLL_SPEED_MIN
-    var level_speed_max: float = \
+    var level_camera_speed_max: float = \
             level_config.scroll_speed_max if \
             level_config.has("scroll_speed_max") else \
             LevelConfig.DEFAULT_SCROLL_SPEED_MAX
-    var level_speed_multiplier: float = \
+    var level_camera_speed_multiplier: float = \
             level_config.scroll_speed_multiplier if \
             level_config.has("scroll_speed_multiplier") else \
             LevelConfig.DEFAULT_SCROLL_SPEED_MULTIPLIER
-    var tier_speed_min: float = \
+    var tier_camera_speed_min: float = \
             tier_config.scroll_speed_min if \
             tier_config.has("scroll_speed_min") else \
             LevelConfig.DEFAULT_SCROLL_SPEED_MIN
-    var tier_speed_max: float = \
+    var tier_camera_speed_max: float = \
             tier_config.scroll_speed_max if \
             tier_config.has("scroll_speed_max") else \
             LevelConfig.DEFAULT_SCROLL_SPEED_MAX
-    var tier_speed_multiplier: float = \
+    var tier_camera_speed_multiplier: float = \
             tier_config.scroll_speed_multiplier if \
             tier_config.has("scroll_speed_multiplier") else \
             LevelConfig.DEFAULT_SCROLL_SPEED_MULTIPLIER
     
-    var speed_min := max(level_speed_min, tier_speed_min)
-    var speed_max := min(level_speed_max, tier_speed_max)
-    var speed_index_progress := \
-            float(camera_speed_index) / float(CAMERA_MAX_SPEED_INDEX)
-    # An ease-out curve.
-    speed_index_progress = ease( \
-            speed_index_progress, \
-            Utils.ease_name_to_param(CAMERA_SPEED_INCREASE_EASING))
+    var camera_speed_min := max(level_camera_speed_min, tier_camera_speed_min)
+    var camera_speed_max := min(level_camera_speed_max, tier_camera_speed_max)
     
-    camera_speed = speed_min + (speed_max - speed_min) * speed_index_progress
-    camera_speed *= tier_speed_multiplier
-    camera_speed *= level_speed_multiplier
-    camera_speed = clamp(camera_speed, speed_min, speed_max)
+    camera_speed = lerp( \
+            camera_speed_min, \
+            camera_speed_max, \
+            speed_index_progress)
+    camera_speed *= tier_camera_speed_multiplier
+    camera_speed *= level_camera_speed_multiplier
+    camera_speed = clamp(camera_speed, camera_speed_min, camera_speed_max)
+    
+    var frame_rate_multiplier_min := _get_min_framerate_multiplier()
+    var frame_rate_multiplier_max := _get_max_framerate_multiplier()
+    
+    Time.physics_framerate_multiplier = lerp( \
+            frame_rate_multiplier_min, \
+            frame_rate_multiplier_max, \
+            speed_index_progress)
     
     Global.debug_panel.add_message( \
-            "Updated scroll speed: index=%s; speed=%s" % [
-                camera_speed_index,
+            ("Updated speed: " + \
+            "index=%s; " + \
+            "scroll_speed=%s; " + \
+            "frame_rate_mulitplier=%s") % [
+                speed_index,
                 camera_speed,
+                Time.physics_framerate_multiplier,
             ])
 
 func _update_score(height_delta_pixels: float) -> void:

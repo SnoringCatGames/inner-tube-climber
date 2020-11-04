@@ -9,8 +9,41 @@ class_name Main
 #   - 5.48717706322 reported (diagonal)
 #   - 5.48717706322/6.06 = 0.9054747629
 # 
-# - Maybe have "difficulty"-framerate increase for all difficulties, but just
-#   at different rates for easy/mod/hard.
+# - Finish implementing cooldown indicator draw.
+# - Add cooldown indicator as child of level.
+# - Add max-height indicator.
+# - Add extra animations to both indicators.
+# 
+# - Render max-height indicators along sides of screen.
+#   - They should render in the same x-coordinates within the screen regardless
+#     of whether walls are shown.
+#     - Have them track with the camera horizontal position.
+#   - Show a slight outward pulse animation with each max-height change.
+# 
+# - Render a cool-down timer that resets whenever max-height changes.
+#   - Render as a classic round clock/pie-graph shape.
+#   - Have be dependent on current time that's modified by the framerate
+#     multiplier.
+#   - Have it toggle a has_max_height_changed_recently variable.
+#   - Have it actually show three pieces of information:
+#     - The middle pie slice shows the current cool-down.
+#       - It animates quickly from the current cooldown value to the full state.
+#     - A thick border shows progress toward the next score multiplier.
+#       - This should take more and more time with progressive values.
+#       - This should cap at a certain value.
+#     - A simple "xN" label in the middle of the circle indicates the current
+#       multiplier value.
+#   - Animate a few different things on the indicator:
+#     - Have the step-progress border stroke thickness get slightly thicker as
+#       it nears completion.
+#     - Have the circle radius double-pulse when the multiplier is active.
+#       - Have the pulse rate increase with higher multiplier values.
+#     - Have the color of middle and border change?
+#       - With multiplier values?
+#       - With cooldown/step progress?
+#       - Maybe only change saturation and lightness, in order to keep overall
+#         color scheme consistent?
+#         - Maybe also have hue change slightly with multiplier value?
 # 
 # - Additional updates to score / difficulty:
 #   - OR, have a score multiplier on the side that steadily increases with
@@ -90,6 +123,7 @@ class_name Main
 #   - Show current height/time/falls and best height/time/falls.
 #   - Show level number/name.
 #   - Show current tier number within level (Tier 7/10)?
+#   - Explain score calcualtion.
 # 
 # - Level-select screen
 #   - Show best heights and times for completed levels
@@ -128,6 +162,7 @@ class_name Main
 #   - Set how many camera-speed indices are decremented when falling.
 #   - Toggle whether score, height, lives, level tier completion ratio, and
 #     multiplier boards are shown.
+#   - Toggle whether max-height indicators are shown along sides of screen.
 # 
 # - Replace main menu button text with icons
 #   - Both somewhat pixelated
@@ -173,6 +208,22 @@ class_name Main
 #     so on.
 #   - Make sure this level-loop speed-up multiplier happens on a log scale, so
 #     that it doesn't become quickly impossible.
+# 
+# - Change max-height indicators to be pixel images.
+# 
+# - Create a special tutorial level.
+#   - Pause the level at the start of each tier and show an explanatory
+#     info-graphic overlay that can be x-ed out with a button in the top-left
+#     corner.
+#   - Explain one concept per tier.
+#   - Make each tier short and simple.
+#   - Explain concepts in the info-graphics, and also during tier gameplay,
+#     with radial highlights and arrows.
+#   - Show a very transparent black screen behind the info-graphic overlay.
+#   - Info-graphics can also show player moving through a sequence with arrows.
+# 
+# - In general, make all tiers a lot easier if you know the trick for how to
+#   approach the tier.
 # 
 # - Change score to accumulate between deaths.
 #   - Maybe count current elevation separately.

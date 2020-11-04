@@ -33,10 +33,11 @@ const SPEED_INDEX_DECREMENT_AMOUNT := 2
 const SPEED_INCREASE_EASING := "linear"
 
 const SCORE_PER_HEIGHT_PIXELS := 10.0 / 32.0
-const SCORE_MULTIPLIER_DELTA_FOR_EASY_DIFFICULTY := -0.15
+const SCORE_MULTIPLIER_DELTA_FOR_EASY_DIFFICULTY := -0.25
 const SCORE_MULTIPLIER_DELTA_FOR_MODERATE_DIFFICULTY := 0.0
 const SCORE_MULTIPLIER_DELTA_FOR_HARD_DIFFICULTY := 0.25
 const SCORE_MULTIPLIER_DELTA_PER_LIFE := 0.05
+const SCORE_MULTIPLIER_DELTA_PER_TIER_SINCE_FALLING := 0.5
 
 var has_input_been_pressed := false
 
@@ -47,6 +48,8 @@ var player_max_distance_below_camera := INF
 
 var mobile_control_ui: MobileControlUI
 var score_boards: ScoreBoards
+var cooldown_indicator: ScoreMultiplierCooldownIndicator
+var max_height_indicator: MaxHeightIndicator
 
 var level_id := ""
 
@@ -90,6 +93,12 @@ func _enter_tree() -> void:
             SCORE_BOARDS_RESOURCE_PATH, \
             true, \
             false)
+    
+    cooldown_indicator = ScoreMultiplierCooldownIndicator.new()
+    Global.canvas_layers.hud_layer.add_child(cooldown_indicator)
+    
+    max_height_indicator = MaxHeightIndicator.new()
+    add_child(max_height_indicator)
 
 func _ready() -> void:
     _set_camera()
@@ -157,6 +166,9 @@ func _physics_process(delta_sec: float) -> void:
     display_height = floor(player_max_height / DISPLAY_HEIGHT_INTERVAL) as int
     
     _update_score(height_delta)
+    
+    cooldown_indicator.check_for_updates(player_max_height)
+    max_height_indicator.check_for_updates(player_max_height)
 
 func _process(delta_sec: float) -> void:
     delta_sec *= Time.physics_framerate_multiplier
@@ -639,7 +651,8 @@ func _update_score_multiplier() -> void:
 #    var score_multiplier_delta_for_tiers_count_since_falling := \
 #            0.5 + sqrt(tiers_count_since_falling)
     var score_multiplier_delta_for_tiers_count_since_falling := \
-            tiers_count_since_falling * 0.5
+            tiers_count_since_falling * \
+            SCORE_MULTIPLIER_DELTA_PER_TIER_SINCE_FALLING
     
     var score_multiplier_delta_for_difficulty := 0.0
     match Global.difficulty_mode:

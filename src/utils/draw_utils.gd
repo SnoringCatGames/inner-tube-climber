@@ -404,6 +404,8 @@ static func draw_arc( \
             start_angle, \
             end_angle, \
             sector_arc_length)
+    if points.size() == 1:
+       points.push_back(points[0]) 
     
     canvas.draw_polyline( \
             points, \
@@ -417,6 +419,9 @@ static func compute_arc_points(
         end_angle: float, \
         sector_arc_length := 4.0) -> PoolVector2Array:
     var angle_diff := end_angle - start_angle
+    if angle_diff == 0:
+        return PoolVector2Array([ \
+                Vector2(cos(start_angle), sin(start_angle)) * radius + center])
     var sector_count := max(floor(angle_diff * radius / sector_arc_length), 1)
     var delta_theta := angle_diff / sector_count
     var theta := start_angle
@@ -620,3 +625,26 @@ static func draw_triangle_with_one_arc_side( \
                 arc_points, \
                 color, \
                 border_width)
+
+static func draw_pie_slice( \
+        canvas: CanvasItem, \
+        center: Vector2, \
+        radius: float, \
+        ratio: float, \
+        color: Color, \
+        sector_arc_length := 4.0) -> void:
+    var start_angle := -PI / 2.0
+    var end_angle := start_angle + 2.0 * PI * ratio
+    
+    var points := compute_arc_points(
+            center, \
+            radius, \
+            start_angle, \
+            end_angle, \
+            sector_arc_length)
+    points.push_back(center)
+    points.push_back(points[0])
+    
+    canvas.draw_colored_polygon( \
+            points, \
+            color)

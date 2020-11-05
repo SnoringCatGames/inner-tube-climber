@@ -5,18 +5,6 @@ signal finished
 
 const GESTURE_POSITION_DURATION_SEC := 0.7
 
-#586e9a
-var WALL_COLOR := Color.from_hsv(0.611, 0.43, 0.6, 1.0)
-#273149
-var BACKGROUND_DARKEST_COLOR := Color.from_hsv(0.617, 0.47, 0.29, 1.0)
-#146363
-var BUTTON_COLOR := Color.from_hsv(0.5, 0.8, 0.39, 1.0) 
-
-var JUMP_COLOR := Color.from_hsv(0.45, 1.0, 0.9, 1.0)
-var MOVE_LEFT_COLOR := Color.from_hsv(0.117, 1.0, 0.9, 1.0)
-var MOVE_RIGHT_COLOR := Color.from_hsv(0.783, 1.0, 0.9, 1.0)
-var UNKNOWN_COLOR := Color.from_hsv(0.0, 0.0, 0.8, 1.0)
-
 const JUMP_DIRECTION_ANGLE := -PI / 2.0
 const MOVE_LEFT_DIRECTION_ANGLE := PI
 const MOVE_RIGHT_DIRECTION_ANGLE := 0.0
@@ -67,13 +55,13 @@ static func action_to_direction_angle(action: String) -> float:
 func action_to_color(action: String) -> Color:
     match action:
         "jump":
-            return JUMP_COLOR
+            return Constants.JUMP_COLOR
         "move_left":
-            return MOVE_LEFT_COLOR
+            return Constants.MOVE_LEFT_COLOR
         "move_right":
-            return MOVE_RIGHT_COLOR
+            return Constants.MOVE_RIGHT_COLOR
         "unknown":
-            return UNKNOWN_COLOR
+            return Constants.UNKNOWN_COLOR
         _:
             Utils.error()
             return Color.white

@@ -50,6 +50,7 @@ var mobile_control_ui: MobileControlUI
 var score_boards: ScoreBoards
 var cooldown_indicator: ScoreMultiplierCooldownIndicator
 var max_height_indicator: MaxHeightIndicator
+var max_height_on_current_height_indicator: MaxHeightIndicator
 
 var level_id := ""
 
@@ -67,6 +68,7 @@ var next_tier_gap: TierGap
 var player: TuberPlayer
 var player_current_height: float = 0.0
 var player_max_height: float = 0.0
+var player_max_height_on_current_life: float = 0.0
 var tier_count: int = 0
 var display_height: int = 0
 var falls_count: int = 0
@@ -97,7 +99,25 @@ func _enter_tree() -> void:
     cooldown_indicator = ScoreMultiplierCooldownIndicator.new()
     Global.canvas_layers.hud_layer.add_child(cooldown_indicator)
     
-    max_height_indicator = MaxHeightIndicator.new()
+    var extra_radius := 2.0
+    var extra_distance_from_cone_end_point_to_circle_center := \
+            extra_radius * 1.5
+    var origin_offset := extra_distance_from_cone_end_point_to_circle_center
+    
+    max_height_on_current_height_indicator = MaxHeightIndicator.new( \
+            Constants.PLAYER_JACKET_YELLOW_COLOR, \
+            extra_radius, \
+            extra_distance_from_cone_end_point_to_circle_center, \
+            0.0, \
+            true)
+    add_child(max_height_on_current_height_indicator)
+    
+    max_height_indicator = MaxHeightIndicator.new( \
+            Constants.PLAYER_PANTS_BLUE_COLOR, \
+            0.0, \
+            0.0, \
+            origin_offset, \
+            false)
     add_child(max_height_indicator)
 
 func _ready() -> void:
@@ -163,12 +183,16 @@ func _physics_process(delta_sec: float) -> void:
     if player_current_height > next_tier_height:
         _on_entered_new_tier()
     player_max_height = max(player_max_height, player_current_height)
+    player_max_height_on_current_life = \
+            max(player_max_height_on_current_life, player_current_height)
     display_height = floor(player_max_height / DISPLAY_HEIGHT_INTERVAL) as int
     
     _update_score(height_delta)
     
-    cooldown_indicator.check_for_updates(player_max_height)
+    cooldown_indicator.check_for_updates(player_max_height_on_current_life)
     max_height_indicator.check_for_updates(player_max_height)
+    max_height_on_current_height_indicator.check_for_updates( \
+            player_max_height_on_current_life)
 
 func _process(delta_sec: float) -> void:
     delta_sec *= Time.physics_framerate_multiplier
@@ -212,7 +236,9 @@ func _fall() -> void:
     falls_count += 1
     lives_count -= 1
     tiers_count_since_falling = 0
+    player_max_height_on_current_life = 0.0
     Global.falls_count_since_reaching_level_end += 1
+    cooldown_indicator.stop_cooldown()
     
     Audio.game_over_sfx_player.play()
     
@@ -235,6 +261,8 @@ func _fall() -> void:
         player.position.y += current_tier_position.y
         player_current_height = -player.position.y - PLAYER_HALF_HEIGHT
         player_max_height = max(player_max_height, player_current_height)
+        player_max_height_on_current_life = \
+                max(player_max_height_on_current_life, player_current_height)
         current_camera_height = \
                 -CAMERA_START_POSITION_POST_STUCK.y - current_tier_position.y
         Global.camera_controller.offset = Vector2(0.0, -current_camera_height)
@@ -253,7 +281,7 @@ func _fall() -> void:
                 "_on_game_over_sfx_finished")
 
 func _on_game_over_sfx_finished() -> void:
-    _destroy_level()
+    destroy()
     Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
     Audio.game_over_sfx_player.disconnect( \
             "finished", \
@@ -352,12 +380,13 @@ func _destroy_tiers() -> void:
         next_tier_gap.queue_free()
         remove_child(next_tier_gap)
 
-func _destroy_level() -> void:
+func destroy() -> void:
     current_tier_id = ""
     is_game_playing = false
     has_input_been_pressed = false
     player_current_height = 0.0
     player_max_height = 0.0
+    player_max_height_on_current_life = 0.0
     display_height = 0
     tier_count = 0
     speed_index = 0
@@ -366,13 +395,31 @@ func _destroy_level() -> void:
     _destroy_player()
     _destroy_tiers()
     
-    score_boards.set_lives(0)
-    score_boards.visible = false
     $SignAllKeys.visible = false
     Audio.on_cross_fade_music_finished()
     
     Global.camera_controller.offset = CAMERA_START_POSITION_PRE_STUCK
     Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
+    
+    if score_boards != null:
+        Global.canvas_layers.hud_layer.remove_child(score_boards)
+        score_boards.queue_free()
+        score_boards = null
+    
+    if cooldown_indicator != null:
+        Global.canvas_layers.hud_layer.remove_child(cooldown_indicator)
+        cooldown_indicator.queue_free()
+        cooldown_indicator = null
+    
+    if max_height_indicator != null:
+        remove_child(max_height_indicator)
+        max_height_indicator.queue_free()
+        max_height_indicator = null
+    
+    if max_height_on_current_height_indicator != null:
+        remove_child(max_height_on_current_height_indicator)
+        max_height_on_current_height_indicator.queue_free()
+        max_height_on_current_height_indicator = null
 
 func _start_new_tier( \
         tier_id := "0", \

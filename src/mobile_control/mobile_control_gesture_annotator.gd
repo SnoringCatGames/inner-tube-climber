@@ -20,7 +20,7 @@ func _process(delta_sec: float) -> void:
                 JUMP_DIRECTION_ANGLE, \
                 ACTION_TRIGGER_RADIUS_START_PIXELS, \
                 ACTION_TRIGGER_RADIUS_END_PIXELS, \
-                JUMP_COLOR, \
+                Constants.JUMP_COLOR, \
                 ACTION_TRIGGER_OPACITY_START, \
                 ACTION_TRIGGER_OPACITY_END, \
                 ACTION_TRIGGER_EASING)
@@ -35,7 +35,7 @@ func _process(delta_sec: float) -> void:
                 JUMP_DIRECTION_ANGLE, \
                 ACTION_PULSE_RADIUS_START_PIXELS, \
                 ACTION_PULSE_RADIUS_END_PIXELS, \
-                JUMP_COLOR, \
+                Constants.JUMP_COLOR, \
                 ACTION_PULSE_OPACITY_START, \
                 ACTION_PULSE_OPACITY_END)
         _start_child_annotator(jump_pulse_annotator)
@@ -58,7 +58,7 @@ func _process(delta_sec: float) -> void:
                 MOVE_LEFT_DIRECTION_ANGLE, \
                 ACTION_TRIGGER_RADIUS_START_PIXELS, \
                 ACTION_TRIGGER_RADIUS_END_PIXELS, \
-                MOVE_LEFT_COLOR, \
+                Constants.MOVE_LEFT_COLOR, \
                 ACTION_TRIGGER_OPACITY_START, \
                 ACTION_TRIGGER_OPACITY_END, \
                 ACTION_TRIGGER_EASING)
@@ -72,7 +72,7 @@ func _process(delta_sec: float) -> void:
                     MOVE_LEFT_DIRECTION_ANGLE, \
                     ACTION_PULSE_RADIUS_START_PIXELS, \
                     ACTION_PULSE_RADIUS_END_PIXELS, \
-                    MOVE_LEFT_COLOR, \
+                    Constants.MOVE_LEFT_COLOR, \
                     ACTION_PULSE_OPACITY_START, \
                     ACTION_PULSE_OPACITY_END)
             _start_child_annotator(move_sideways_pulse_annotator)
@@ -80,7 +80,7 @@ func _process(delta_sec: float) -> void:
             move_sideways_pulse_annotator.direction_angle = \
                     MOVE_LEFT_DIRECTION_ANGLE
             move_sideways_pulse_annotator.base_color = \
-                    MOVE_LEFT_COLOR
+                    Constants.MOVE_LEFT_COLOR
     
     if Input.is_action_just_pressed("move_right") and \
             !mobile_control_input.recent_gesture_positions.empty():
@@ -92,7 +92,7 @@ func _process(delta_sec: float) -> void:
                 MOVE_RIGHT_DIRECTION_ANGLE, \
                 ACTION_TRIGGER_RADIUS_START_PIXELS, \
                 ACTION_TRIGGER_RADIUS_END_PIXELS, \
-                MOVE_RIGHT_COLOR, \
+                Constants.MOVE_RIGHT_COLOR, \
                 ACTION_TRIGGER_OPACITY_START, \
                 ACTION_TRIGGER_OPACITY_END, \
                 ACTION_TRIGGER_EASING)
@@ -106,7 +106,7 @@ func _process(delta_sec: float) -> void:
                     MOVE_RIGHT_DIRECTION_ANGLE, \
                     ACTION_PULSE_RADIUS_START_PIXELS, \
                     ACTION_PULSE_RADIUS_END_PIXELS, \
-                    MOVE_RIGHT_COLOR, \
+                    Constants.MOVE_RIGHT_COLOR, \
                     ACTION_PULSE_OPACITY_START, \
                     ACTION_PULSE_OPACITY_END)
             _start_child_annotator(move_sideways_pulse_annotator)
@@ -114,7 +114,7 @@ func _process(delta_sec: float) -> void:
             move_sideways_pulse_annotator.direction_angle = \
                     MOVE_RIGHT_DIRECTION_ANGLE
             move_sideways_pulse_annotator.base_color = \
-                    MOVE_RIGHT_COLOR
+                    Constants.MOVE_RIGHT_COLOR
     
     if is_instance_valid(move_sideways_pulse_annotator):
         move_sideways_pulse_annotator.pulse_position = \

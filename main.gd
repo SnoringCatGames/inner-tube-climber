@@ -9,41 +9,20 @@ class_name Main
 #   - 5.48717706322 reported (diagonal)
 #   - 5.48717706322/6.06 = 0.9054747629
 # 
-# - Finish implementing cooldown indicator draw.
-# - Add cooldown indicator as child of level.
-# - Add max-height indicator.
-# - Add extra animations to both indicators.
-# 
-# - Render max-height indicators along sides of screen.
-#   - They should render in the same x-coordinates within the screen regardless
-#     of whether walls are shown.
-#     - Have them track with the camera horizontal position.
-#   - Show a slight outward pulse animation with each max-height change.
-# 
-# - Render a cool-down timer that resets whenever max-height changes.
-#   - Render as a classic round clock/pie-graph shape.
-#   - Have be dependent on current time that's modified by the framerate
-#     multiplier.
-#   - Have it toggle a has_max_height_changed_recently variable.
-#   - Have it actually show three pieces of information:
-#     - The middle pie slice shows the current cool-down.
-#       - It animates quickly from the current cooldown value to the full state.
-#     - A thick border shows progress toward the next score multiplier.
-#       - This should take more and more time with progressive values.
-#       - This should cap at a certain value.
-#     - A simple "xN" label in the middle of the circle indicates the current
-#       multiplier value.
-#   - Animate a few different things on the indicator:
-#     - Have the step-progress border stroke thickness get slightly thicker as
-#       it nears completion.
-#     - Have the circle radius double-pulse when the multiplier is active.
-#       - Have the pulse rate increase with higher multiplier values.
-#     - Have the color of middle and border change?
-#       - With multiplier values?
-#       - With cooldown/step progress?
-#       - Maybe only change saturation and lightness, in order to keep overall
-#         color scheme consistent?
-#         - Maybe also have hue change slightly with multiplier value?
+# - Add a pulse animation for the cooldown indicator when it hits a new
+#   multiplier.
+# - Have the max-height indicators track with the camera horizontal position.
+# - Animate a few different things on the indicator:
+#   - Have the step-progress border stroke thickness get slightly thicker as
+#     it nears completion.
+#   - Have the circle radius double-pulse when the multiplier is active.
+#     - Have the pulse rate increase with higher multiplier values.
+#   - Have the color of middle and border change?
+#     - With multiplier values?
+#     - With cooldown/step progress?
+#     - Maybe only change saturation and lightness, in order to keep overall
+#       color scheme consistent?
+#       - Maybe also have hue change slightly with multiplier value?
 # 
 # - Additional updates to score / difficulty:
 #   - OR, have a score multiplier on the side that steadily increases with

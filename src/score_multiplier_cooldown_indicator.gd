@@ -1,4 +1,4 @@
-extends Node2D
+extends Annotator
 class_name ScoreMultiplierCooldownIndicator
 
 const MAIN_FONT_NORMAL: Font = \
@@ -13,8 +13,8 @@ const LABEL_OFFSET := Vector2(-1.0, -4.0)
 const RADIUS := 18.0
 const NEXT_STEP_STROKE_WIDTH := 5.0
 const SECTOR_ARC_LENGTH := 4.0
-var COOLDOWN_COLOR := Color.from_hsv(0.1583, 0.78, 1.0, 1.0)
-var NEXT_STEP_COLOR := Color.from_hsv(0.6083, 0.68, 0.95, 1.0)
+var COOLDOWN_COLOR: Color = Constants.PLAYER_JACKET_YELLOW_COLOR
+var NEXT_STEP_COLOR: Color = Constants.PLAYER_PANTS_BLUE_COLOR
 var TEXT_COLOR := Color.from_hsv(0.0, 0.0, 1.0, 1.0)
 var TEXT_OUTLINE_COLOR := Color.from_hsv(0.0, 0.0, 0.0, 0.7)
 const INACTIVE_OPACITY := 0.3
@@ -105,11 +105,7 @@ func check_for_updates(max_height: float) -> void:
         update()
     
     if has_cooldown_expired:
-        is_multiplier_active = false
-        step_start_time_sec = -INF
-        cooldown_start_time_sec = -INF
-        step_index = 0
-        update()
+        stop_cooldown()
         
     elif has_step_duration_passed:
         step_index = min( \
@@ -132,6 +128,13 @@ func check_for_updates(max_height: float) -> void:
     
     if is_multiplier_active:
         update()
+
+func stop_cooldown() -> void:
+    is_multiplier_active = false
+    step_start_time_sec = -INF
+    cooldown_start_time_sec = -INF
+    step_index = 0
+    update()
 
 func _draw() -> void:
     var cooldown_color := \

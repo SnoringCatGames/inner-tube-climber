@@ -412,7 +412,7 @@ static func draw_arc( \
             color, \
             border_width)
 
-static func compute_arc_points(
+static func compute_arc_points_OLD(
         center: Vector2, \
         radius: float, \
         start_angle: float, \
@@ -434,6 +434,46 @@ static func compute_arc_points(
             sector_count + 2 if \
             should_include_partial_sector_at_end else \
             sector_count + 1
+    var points := PoolVector2Array()
+    points.resize(vertex_count)
+    var vertex: Vector2
+    
+    for i in range(sector_count + 1):
+        points[i] = Vector2(cos(theta), sin(theta)) * radius + center
+        theta += delta_theta
+    
+    # Handle the fence-post problem.
+    if should_include_partial_sector_at_end:
+        points[vertex_count - 1] = \
+                Vector2(cos(end_angle), sin(end_angle)) * radius + center
+    
+    return points
+
+static func compute_arc_points(
+        center: Vector2, \
+        radius: float, \
+        start_angle: float, \
+        end_angle: float, \
+        sector_arc_length := 4.0) -> PoolVector2Array:
+    assert(sector_arc_length > 0.0)
+    
+    var angle_diff := end_angle - start_angle
+    var sector_count := floor(abs(angle_diff) * radius / sector_arc_length)
+    var delta_theta := sector_arc_length / radius
+    var theta := start_angle
+    
+    if angle_diff == 0:
+        return PoolVector2Array([ \
+                Vector2(cos(start_angle), sin(start_angle)) * radius + center])
+    elif angle_diff < 0:
+        delta_theta = -delta_theta
+    
+    var should_include_partial_sector_at_end := \
+            abs(angle_diff) - sector_count * delta_theta > 0.01
+    var vertex_count := sector_count + 1
+    if should_include_partial_sector_at_end:
+        vertex_count += 1
+    
     var points := PoolVector2Array()
     points.resize(vertex_count)
     var vertex: Vector2

@@ -61,9 +61,9 @@ func _sync_gesture_buffer() -> void:
         var progress: float = \
                 (Time.elapsed_play_time_actual_sec - item.time_sec) / \
                 GESTURE_POSITION_DURATION_SEC
-        progress = ease( \
+        progress = Utils.ease_by_name( \
                 progress, \
-                Utils.ease_name_to_param(ACTION_GESTURE_EASING))
+                ACTION_GESTURE_EASING)
         item.annotator.radius_start = lerp( \
                 ACTION_PULSE_RADIUS_START_PIXELS * 
                         ACTION_GESTURE_RADIUS_START_MULTIPLIER, \

@@ -412,43 +412,6 @@ static func draw_arc( \
             color, \
             border_width)
 
-static func compute_arc_points_OLD(
-        center: Vector2, \
-        radius: float, \
-        start_angle: float, \
-        end_angle: float, \
-        sector_arc_length := 4.0) -> PoolVector2Array:
-    var angle_diff := end_angle - start_angle
-    if angle_diff == 0:
-        return PoolVector2Array([ \
-                Vector2(cos(start_angle), sin(start_angle)) * radius + center])
-    var sector_count := max(floor(angle_diff * radius / sector_arc_length), 1)
-    var delta_theta := angle_diff / sector_count
-    var theta := start_angle
-    var should_include_partial_sector_at_end: bool = \
-            !Geometry.are_floats_equal_with_epsilon( \
-                    angle_diff / delta_theta, \
-                    0.0, \
-                    0.01)
-    var vertex_count := \
-            sector_count + 2 if \
-            should_include_partial_sector_at_end else \
-            sector_count + 1
-    var points := PoolVector2Array()
-    points.resize(vertex_count)
-    var vertex: Vector2
-    
-    for i in range(sector_count + 1):
-        points[i] = Vector2(cos(theta), sin(theta)) * radius + center
-        theta += delta_theta
-    
-    # Handle the fence-post problem.
-    if should_include_partial_sector_at_end:
-        points[vertex_count - 1] = \
-                Vector2(cos(end_angle), sin(end_angle)) * radius + center
-    
-    return points
-
 static func compute_arc_points(
         center: Vector2, \
         radius: float, \

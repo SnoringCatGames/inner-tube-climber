@@ -9,12 +9,9 @@ class_name Main
 #   - 5.48717706322 reported (diagonal)
 #   - 5.48717706322/6.06 = 0.9054747629
 # 
-# - Add a pulse animation for the cooldown indicator when it hits a new
-#   multiplier.
-# - Have the max-height indicators track with the camera horizontal position.
-# - Animate a few different things on the indicator:
-#   - Have the step-progress border stroke thickness get slightly thicker as
-#     it nears completion.
+# - Actually include the multiplier cooldown value in the score multiplier.
+# 
+# - Animate a few different things on the cooldown indicator:
 #   - Have the circle radius double-pulse when the multiplier is active.
 #     - Have the pulse rate increase with higher multiplier values.
 #   - Have the color of middle and border change?
@@ -23,6 +20,7 @@ class_name Main
 #     - Maybe only change saturation and lightness, in order to keep overall
 #       color scheme consistent?
 #       - Maybe also have hue change slightly with multiplier value?
+# - Have the max-height indicators track with the camera horizontal position.
 # 
 # - Additional updates to score / difficulty:
 #   - OR, have a score multiplier on the side that steadily increases with

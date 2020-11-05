@@ -50,7 +50,7 @@ func _process(delta_sec: float) -> void:
         emit_signal("finished")
 
 func _draw() -> void:
-    var eased_progress := ease(progress, Utils.ease_name_to_param(easing))
+    var eased_progress := Utils.ease_by_name(progress, easing)
     var opacity: float = lerp( \
             opacity_start, \
             opacity_end, \

@@ -77,6 +77,7 @@ var score := 0.0
 var score_multiplier := 1.0
 
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
+var camera_position := -Vector2.INF
 var camera_speed := 0.0
 var current_fall_height := -INF
 var is_game_playing := false
@@ -101,11 +102,11 @@ func _enter_tree() -> void:
     
     var extra_radius := 2.0
     var extra_distance_from_cone_end_point_to_circle_center := \
-            extra_radius * 1.5
+            extra_radius * 1.8
     var origin_offset := extra_distance_from_cone_end_point_to_circle_center
     
     max_height_on_current_height_indicator = MaxHeightIndicator.new( \
-            Constants.PLAYER_JACKET_YELLOW_COLOR, \
+            Constants.PLAYER_PANTS_BLUE_COLOR, \
             extra_radius, \
             extra_distance_from_cone_end_point_to_circle_center, \
             0.0, \
@@ -113,7 +114,7 @@ func _enter_tree() -> void:
     add_child(max_height_on_current_height_indicator)
     
     max_height_indicator = MaxHeightIndicator.new( \
-            Constants.PLAYER_PANTS_BLUE_COLOR, \
+            Constants.PLAYER_JACKET_YELLOW_COLOR, \
             0.0, \
             0.0, \
             origin_offset, \
@@ -206,7 +207,7 @@ func _process(delta_sec: float) -> void:
     # Update camera pan, according to auto-scroll speed.
     var camera_displacement_for_frame := camera_speed * delta_sec
     current_camera_height += camera_displacement_for_frame
-    Global.camera_controller.offset.y -= camera_displacement_for_frame
+    camera_position.y -= camera_displacement_for_frame
     
     # Update camera pan, to never be too far below the player.
     if current_camera_height < \
@@ -215,7 +216,9 @@ func _process(delta_sec: float) -> void:
                 player_current_height - camera_max_distance_below_player - \
                 current_camera_height
         current_camera_height += additional_offset
-        Global.camera_controller.offset.y -= additional_offset
+        camera_position.y -= additional_offset
+    
+    Global.camera_controller.offset.y = floor(camera_position.y)
     
     # Update score displays.
     score_boards.set_tier_ratio( \
@@ -265,7 +268,8 @@ func _fall() -> void:
                 max(player_max_height_on_current_life, player_current_height)
         current_camera_height = \
                 -CAMERA_START_POSITION_POST_STUCK.y - current_tier_position.y
-        Global.camera_controller.offset = Vector2(0.0, -current_camera_height)
+        camera_position = Vector2(0.0, -current_camera_height)
+        Global.camera_controller.offset = Utils.floor_vector(camera_position)
     else:
         is_game_playing = false
         speed_index = 0
@@ -296,7 +300,8 @@ func _set_camera() -> void:
     add_child(camera)
     # Register the current camera, so it's globally accessible.
     Global.camera_controller.set_current_camera(camera)
-    Global.camera_controller.offset = CAMERA_START_POSITION_PRE_STUCK
+    camera_position = CAMERA_START_POSITION_PRE_STUCK
+    Global.camera_controller.offset = Utils.floor_vector(camera_position)
     Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
 
 func _set_camera_post_stuck_state(is_base_tier: bool) -> void:
@@ -320,8 +325,8 @@ func _interpolate_camera_to_post_stuck_state(progress: float) -> void:
             CAMERA_START_POSITION_PRE_STUCK - CAMERA_START_POSITION_POST_STUCK
     var end_offset := Vector2.ZERO
     var current_offset := start_offset.linear_interpolate(end_offset, progress)
-    Global.camera_controller.offset = \
-            Vector2(0.0, -current_camera_height) + current_offset
+    camera_position = Vector2(0.0, -current_camera_height) + current_offset
+    Global.camera_controller.offset = Utils.floor_vector(camera_position)
     
     var start_zoom := CAMERA_START_ZOOM_PRE_STUCK
     var end_zoom := CameraController.DEFAULT_CAMERA_ZOOM
@@ -398,7 +403,8 @@ func destroy() -> void:
     $SignAllKeys.visible = false
     Audio.on_cross_fade_music_finished()
     
-    Global.camera_controller.offset = CAMERA_START_POSITION_PRE_STUCK
+    camera_position = CAMERA_START_POSITION_PRE_STUCK
+    Global.camera_controller.offset = Utils.floor_vector(camera_position)
     Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
     
     if score_boards != null:
@@ -629,9 +635,9 @@ func _update_speed() -> void:
     var speed_index_progress := \
             float(speed_index) / float(MAX_SPEED_INDEX)
     # An ease-out curve.
-    speed_index_progress = ease( \
+    speed_index_progress = Utils.ease_by_name( \
             speed_index_progress, \
-            Utils.ease_name_to_param(SPEED_INCREASE_EASING))
+            SPEED_INCREASE_EASING)
     
     var level_config: Dictionary = LevelConfig.LEVELS[level_id]
     var tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]

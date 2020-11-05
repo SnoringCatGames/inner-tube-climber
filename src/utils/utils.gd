@@ -243,6 +243,11 @@ static func ease_name_to_param(name: String) -> float:
             Utils.error()
             return INF
 
+static func ease_by_name( \
+        progress: float, \
+        ease_name: String) -> float:
+    return ease(progress, ease_name_to_param(ease_name))
+
 static func get_is_android_device() -> bool:
     return OS.get_name() == "Android"
 
@@ -316,3 +321,6 @@ func get_safe_area_margin_left() -> float:
 
 func get_safe_area_margin_right() -> float:
     return get_viewport().size.x - OS.get_window_safe_area().end.x
+
+static func floor_vector(v: Vector2) -> Vector2:
+    return Vector2(floor(v.x), floor(v.y))

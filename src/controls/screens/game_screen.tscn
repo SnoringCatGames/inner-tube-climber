@@ -2,7 +2,6 @@
 
 [ext_resource path="res://src/controls/screens/game_screen.gd" type="Script" id=1]
 
-
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.152941, 0.192157, 0.286275, 1 )
 
@@ -21,8 +20,8 @@ __meta__ = {
 margin_right = 480.0
 margin_bottom = 480.0
 rect_clip_content = true
-size_flags_horizontal = 0
-size_flags_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }

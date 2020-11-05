@@ -11,7 +11,8 @@ const CORNER_OFFSET := Vector2(72.0, 72.0)
 const LABEL_SCALE := Vector2(1.2, 1.2)
 const LABEL_OFFSET := Vector2(-1.0, -4.0)
 const RADIUS := 18.0
-const NEXT_STEP_STROKE_WIDTH := 5.0
+const NEXT_STEP_STROKE_WIDTH_START := 1.0
+const NEXT_STEP_STROKE_WIDTH_END := 7.0
 const SECTOR_ARC_LENGTH := 4.0
 var COOLDOWN_COLOR: Color = Constants.PLAYER_JACKET_YELLOW_COLOR
 var NEXT_STEP_COLOR: Color = Constants.PLAYER_PANTS_BLUE_COLOR
@@ -19,22 +20,34 @@ var TEXT_COLOR := Color.from_hsv(0.0, 0.0, 1.0, 1.0)
 var TEXT_OUTLINE_COLOR := Color.from_hsv(0.0, 0.0, 0.0, 0.7)
 const INACTIVE_OPACITY := 0.3
 
+const NEXT_STEP_PULSE_DURATION_SEC := 0.3
+const NEXT_STEP_PULSE_RADIUS_START := 18.0
+const NEXT_STEP_PULSE_RADIUS_END := 28.0
+const NEXT_STEP_PULSE_OPACITY_START := 1.0
+const NEXT_STEP_PULSE_OPACITY_END := 0.0
+var NEXT_STEP_PULSE_COLOR: Color = Constants.PLAYER_PANTS_BLUE_COLOR
+
+# FIXME: --------------------- Revert debug step durations.
 const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     {
         multiplier = 1,
-        step_duration_sec = 16.0,
+        step_duration_sec = 4.0,
+#        step_duration_sec = 16.0,
     },
     {
         multiplier = 2,
-        step_duration_sec = 32.0,
+        step_duration_sec = 6.0,
+#        step_duration_sec = 32.0,
     },
     {
         multiplier = 4,
-        step_duration_sec = 64.0,
+        step_duration_sec = 8.0,
+#        step_duration_sec = 64.0,
     },
     {
         multiplier = 8,
-        step_duration_sec = 128.0,
+        step_duration_sec = 8.0,
+#        step_duration_sec = 128.0,
     },
     {
         multiplier = 16,
@@ -51,7 +64,8 @@ var next_step_ratio := 0.0
 var is_multiplier_maxed := false
 
 var step_index := 0
-var step_start_time_sec := -INF
+var step_start_actual_time_sec := -INF
+var step_start_modified_time_sec := -INF
 var cooldown_start_time_sec := -INF
 var previous_max_height := -INF
 
@@ -93,12 +107,13 @@ func check_for_updates(max_height: float) -> void:
     var step_duration_sec: float = \
             MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index].step_duration_sec
     var has_step_duration_passed := \
-            step_start_time_sec != -INF and \
-            (step_start_time_sec + step_duration_sec <= current_time_sec)
+            step_start_modified_time_sec != -INF and \
+            (step_start_modified_time_sec + step_duration_sec <= \
+                    current_time_sec)
     
     if has_max_height_changed:
         if !is_multiplier_active:
-            step_start_time_sec = current_time_sec
+            step_start_modified_time_sec = current_time_sec
         is_multiplier_active = true
         cooldown_start_time_sec = current_time_sec
         has_cooldown_expired = false
@@ -111,7 +126,8 @@ func check_for_updates(max_height: float) -> void:
         step_index = min( \
                 step_index + 1, \
                 MULTIPLIER_VALUES_AND_STEP_DURATIONS.size() - 1)
-        step_start_time_sec = current_time_sec
+        step_start_modified_time_sec = current_time_sec
+        step_start_actual_time_sec = Time.elapsed_play_time_actual_sec
         is_multiplier_maxed = \
                 step_index == MULTIPLIER_VALUES_AND_STEP_DURATIONS.size() - 1
         update()
@@ -122,7 +138,8 @@ func check_for_updates(max_height: float) -> void:
             is_multiplier_active else \
             0.0
     next_step_ratio = \
-            (current_time_sec - step_start_time_sec) / step_duration_sec if \
+            (current_time_sec - step_start_modified_time_sec) / \
+                    step_duration_sec if \
             is_multiplier_active else \
             0.0
     
@@ -131,7 +148,8 @@ func check_for_updates(max_height: float) -> void:
 
 func stop_cooldown() -> void:
     is_multiplier_active = false
-    step_start_time_sec = -INF
+    step_start_actual_time_sec = -INF
+    step_start_modified_time_sec = -INF
     cooldown_start_time_sec = -INF
     step_index = 0
     update()
@@ -162,6 +180,33 @@ func _draw() -> void:
                     TEXT_COLOR.v, \
                     INACTIVE_OPACITY)
     
+    # Draw the next-step pulse?
+    var pulse_progress := \
+            (Time.elapsed_play_time_actual_sec - \
+                    step_start_actual_time_sec) / \
+            NEXT_STEP_PULSE_DURATION_SEC
+    if pulse_progress < 1.0:
+        pulse_progress = Utils.ease_by_name( \
+                pulse_progress, \
+                "ease_out")
+        var pulse_radius: float = lerp( \
+                NEXT_STEP_PULSE_RADIUS_START, \
+                NEXT_STEP_PULSE_RADIUS_END, \
+                pulse_progress)
+        var pulse_opacity: float = lerp( \
+                NEXT_STEP_PULSE_OPACITY_START, \
+                NEXT_STEP_PULSE_OPACITY_END, \
+                pulse_progress)
+        var pulse_color := Color.from_hsv( \
+                NEXT_STEP_PULSE_COLOR.h, \
+                NEXT_STEP_PULSE_COLOR.s, \
+                NEXT_STEP_PULSE_COLOR.v, \
+                pulse_opacity)
+        draw_circle( \
+                center, \
+                pulse_radius, \
+                pulse_color)
+    
     # Draw cooldown progress (circle center / pie slice).
     DrawUtils.draw_pie_slice( \
             self, \
@@ -173,16 +218,21 @@ func _draw() -> void:
     
     # Draw step progress (circle border).
     if is_multiplier_maxed:
+        var next_step_stroke_width := NEXT_STEP_STROKE_WIDTH_END
         DrawUtils.draw_circle_outline( \
                 self, \
                 center, \
                 RADIUS, \
                 next_step_color, \
-                NEXT_STEP_STROKE_WIDTH, \
+                next_step_stroke_width, \
                 SECTOR_ARC_LENGTH)
     else:
         var start_angle := -PI / 2.0
         var end_angle := start_angle + 2.0 * PI * next_step_ratio
+        var next_step_stroke_width: float = lerp( \
+                NEXT_STEP_STROKE_WIDTH_START, \
+                NEXT_STEP_STROKE_WIDTH_END, \
+                next_step_ratio)
         DrawUtils.draw_arc( \
                 self, \
                 center, \
@@ -190,7 +240,7 @@ func _draw() -> void:
                 start_angle, \
                 end_angle, \
                 next_step_color, \
-                NEXT_STEP_STROKE_WIDTH, \
+                next_step_stroke_width, \
                 SECTOR_ARC_LENGTH)
     
     # Draw multiplier label.

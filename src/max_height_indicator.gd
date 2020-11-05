@@ -2,13 +2,13 @@ extends Annotator
 class_name MaxHeightIndicator
 
 const DEFAULT_WALL_POSITION_X := 32.0 * 6.0
-const BASE_DISTANCE_FROM_CONE_END_POINT_TO_CIRCLE_CENTER := 15.0
-const BASE_RADIUS := 6.0
-const SECTOR_ARC_LENGTH := 4.0
+const BASE_DISTANCE_FROM_CONE_END_POINT_TO_CIRCLE_CENTER := 12.0
+const BASE_RADIUS := 4.0
+const SECTOR_ARC_LENGTH := 3.0
 
 const PULSE_DURATION_SEC := 0.3
 const PULSE_START_SCALE := 1.0
-const PULSE_END_SCALE := 4.0
+const PULSE_END_SCALE := 2.6
 const PULSE_START_OPACITY := 1.0
 const PULSE_END_OPACITY := 0.0
 
@@ -74,6 +74,9 @@ func _draw() -> void:
             (Time.elapsed_play_time_actual_sec - pulse_start_time) / \
             PULSE_DURATION_SEC
     if is_pulse_active and pulse_progress < 1.0:
+        pulse_progress = Utils.ease_by_name( \
+                pulse_progress, \
+                "ease_out")
         var pulse_scale: float = lerp( \
                 PULSE_START_SCALE, \
                 PULSE_END_SCALE, \

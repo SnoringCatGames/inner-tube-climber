@@ -9,7 +9,7 @@ const COOLDOWN_DURATION_SEC := 4.0
 const CORNER_OFFSET := Vector2(72.0, 72.0)
 
 const LABEL_SCALE := Vector2(1.2, 1.2)
-const LABEL_OFFSET := Vector2(-1.0, -4.0)
+const LABEL_OFFSET := Vector2(-2.8, -4.0)
 const RADIUS := 18.0
 const NEXT_STEP_STROKE_WIDTH_START := 1.0
 const NEXT_STEP_STROKE_WIDTH_END := 7.0
@@ -27,31 +27,53 @@ const NEXT_STEP_PULSE_OPACITY_START := 1.0
 const NEXT_STEP_PULSE_OPACITY_END := 0.0
 var NEXT_STEP_PULSE_COLOR: Color = Constants.PLAYER_PANTS_BLUE_COLOR
 
+var FIRST_PULSE_HEARTBEAT_DURATION_RATIO := 0.5
+var SECOND_PULSE_HEARTBEAT_DURATION_RATIO := 0.4
+var INTER_PULSE_HEARTBEAT_GAP_RATIO := 0.1
+var HEARTBEAT_OPACITY_MAX := 0.3
+var HEARTBEAT_OPACITY_MIN := 0.99
+var HEARTBEAT_COLOR := NEXT_STEP_COLOR
+
 # FIXME: --------------------- Revert debug step durations.
 const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     {
         multiplier = 1,
         step_duration_sec = 4.0,
 #        step_duration_sec = 16.0,
+        heartbeat_pulse_bpm = 40.0,
+        heartbeat_radius_ratio = 1.15,
+        heartbeat_post_second_pulse_gap_ratio = 0.6,
     },
     {
         multiplier = 2,
         step_duration_sec = 6.0,
 #        step_duration_sec = 32.0,
+        heartbeat_pulse_bpm = 52.0,
+        heartbeat_radius_ratio = 1.25,
+        heartbeat_post_second_pulse_gap_ratio = 0.55,
     },
     {
         multiplier = 4,
         step_duration_sec = 8.0,
 #        step_duration_sec = 64.0,
+        heartbeat_pulse_bpm = 72.0,
+        heartbeat_radius_ratio = 1.35,
+        heartbeat_post_second_pulse_gap_ratio = 0.5,
     },
     {
         multiplier = 8,
         step_duration_sec = 8.0,
 #        step_duration_sec = 128.0,
+        heartbeat_pulse_bpm = 100.0,
+        heartbeat_radius_ratio = 1.5,
+        heartbeat_post_second_pulse_gap_ratio = 0.45,
     },
     {
         multiplier = 16,
         step_duration_sec = INF,
+        heartbeat_pulse_bpm = 120.0,
+        heartbeat_radius_ratio = 1.7,
+        heartbeat_post_second_pulse_gap_ratio = 0.4,
     },
 ]
 
@@ -68,6 +90,11 @@ var step_start_actual_time_sec := -INF
 var step_start_modified_time_sec := -INF
 var cooldown_start_time_sec := -INF
 var previous_max_height := -INF
+
+var multiplier: float setget ,_get_multiplier
+
+func _get_multiplier() -> float:
+    return MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index].multiplier
 
 func _enter_tree() -> void:
     multiplier_label = Label.new()
@@ -113,6 +140,7 @@ func check_for_updates(max_height: float) -> void:
     
     if has_max_height_changed:
         if !is_multiplier_active:
+            step_start_actual_time_sec = Time.elapsed_play_time_actual_sec
             step_start_modified_time_sec = current_time_sec
         is_multiplier_active = true
         cooldown_start_time_sec = current_time_sec
@@ -126,8 +154,8 @@ func check_for_updates(max_height: float) -> void:
         step_index = min( \
                 step_index + 1, \
                 MULTIPLIER_VALUES_AND_STEP_DURATIONS.size() - 1)
-        step_start_modified_time_sec = current_time_sec
         step_start_actual_time_sec = Time.elapsed_play_time_actual_sec
+        step_start_modified_time_sec = current_time_sec
         is_multiplier_maxed = \
                 step_index == MULTIPLIER_VALUES_AND_STEP_DURATIONS.size() - 1
         update()
@@ -155,6 +183,9 @@ func stop_cooldown() -> void:
     update()
 
 func _draw() -> void:
+    var step_config: Dictionary = \
+            MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index]
+    
     var cooldown_color := \
             COOLDOWN_COLOR if \
             is_multiplier_active else \
@@ -207,49 +238,153 @@ func _draw() -> void:
                 pulse_radius, \
                 pulse_color)
     
-    # Draw cooldown progress (circle center / pie slice).
-    DrawUtils.draw_pie_slice( \
-            self, \
-            center, \
-            RADIUS, \
-            1.0 - cooldown_ratio, \
-            cooldown_color, \
-            SECTOR_ARC_LENGTH)
+    var radius: float
+    var label_scale: float
+    if is_multiplier_active:
+        # Draw a double-pulse heartbeat circle.
+        
+        var heartbeat_pulse_period_sec: float = \
+                60.0 / step_config.heartbeat_pulse_bpm
+        var heartbeat_radius_min := RADIUS
+        var heartbeat_radius_max: float = \
+                RADIUS * step_config.heartbeat_radius_ratio
+        var heartbeat_pulses_first_part_duration_sec: float = \
+                heartbeat_pulse_period_sec * \
+                (1 - step_config.heartbeat_post_second_pulse_gap_ratio)
+        
+        var first_pulse_duration_sec := \
+                FIRST_PULSE_HEARTBEAT_DURATION_RATIO * \
+                heartbeat_pulses_first_part_duration_sec
+        var second_pulse_duration_sec := \
+                SECOND_PULSE_HEARTBEAT_DURATION_RATIO * \
+                heartbeat_pulses_first_part_duration_sec
+        var inter_pulse_heartbeat_gap_sec := \
+                INTER_PULSE_HEARTBEAT_GAP_RATIO * \
+                heartbeat_pulses_first_part_duration_sec
+        var second_pulse_delay_sec := \
+                heartbeat_pulse_period_sec - second_pulse_duration_sec
+        var first_pulse_delay_sec := \
+                second_pulse_delay_sec - \
+                inter_pulse_heartbeat_gap_sec - \
+                first_pulse_duration_sec
+        assert(first_pulse_delay_sec >= 0.0)
+        
+        var elapsed_step_time_actual_sec := \
+                Time.elapsed_play_time_actual_sec - step_start_actual_time_sec
+        var elapsed_heartbeat_time_sec := \
+                fmod(elapsed_step_time_actual_sec, heartbeat_pulse_period_sec)
+        var is_before_first_pulse := \
+                elapsed_heartbeat_time_sec < first_pulse_delay_sec
+        var is_in_first_pulse := \
+                elapsed_heartbeat_time_sec >= first_pulse_delay_sec and \
+                elapsed_heartbeat_time_sec <= \
+                        first_pulse_delay_sec + first_pulse_duration_sec
+        var is_in_second_pulse := \
+                elapsed_heartbeat_time_sec >= second_pulse_delay_sec and \
+                elapsed_heartbeat_time_sec <= \
+                        second_pulse_delay_sec + second_pulse_duration_sec
+        var is_between_pulses := \
+                elapsed_heartbeat_time_sec > \
+                        first_pulse_delay_sec + first_pulse_duration_sec and \
+                elapsed_heartbeat_time_sec < second_pulse_delay_sec
+        var is_after_second_pulse := \
+                elapsed_heartbeat_time_sec > \
+                        second_pulse_delay_sec + second_pulse_duration_sec
+        
+        var heartbeat_radius_progress: float
+        if is_in_first_pulse:
+            heartbeat_radius_progress = \
+                    (elapsed_heartbeat_time_sec - first_pulse_delay_sec) / \
+                    first_pulse_duration_sec
+        elif is_in_second_pulse:
+            heartbeat_radius_progress = \
+                    (elapsed_heartbeat_time_sec - second_pulse_delay_sec) / \
+                    second_pulse_duration_sec
+        elif is_before_first_pulse or \
+                is_between_pulses or \
+                is_after_second_pulse:
+            heartbeat_radius_progress = 0.0
+        else:
+            Utils.error()
+            heartbeat_radius_progress = 0.0
+        heartbeat_radius_progress = \
+                Utils.ease_by_name(heartbeat_radius_progress, "ease_out")
+        heartbeat_radius_progress = sin(heartbeat_radius_progress * PI)
+        
+        var heartbeat_radius: float = lerp( \
+                heartbeat_radius_min, \
+                heartbeat_radius_max, \
+                heartbeat_radius_progress)
+        var heartbeat_opacity: float = lerp( \
+                HEARTBEAT_OPACITY_MIN, \
+                HEARTBEAT_OPACITY_MAX, \
+                heartbeat_radius_progress)
+        var heartbeat_color := Color.from_hsv( \
+                HEARTBEAT_COLOR.h, \
+                HEARTBEAT_COLOR.s, \
+                HEARTBEAT_COLOR.v, \
+                heartbeat_opacity)
+        
+        radius = heartbeat_radius
+        label_scale = lerp( \
+                1.0, \
+                step_config.heartbeat_radius_ratio, \
+                heartbeat_radius_progress)
+        
+    else:
+        radius = RADIUS
+        label_scale = 1.0
     
-    # Draw step progress (circle border).
-    if is_multiplier_maxed:
-        var next_step_stroke_width := NEXT_STEP_STROKE_WIDTH_END
-        DrawUtils.draw_circle_outline( \
+    if is_multiplier_active:
+        # Draw cooldown progress (circle center / pie slice).
+        DrawUtils.draw_pie_slice( \
                 self, \
                 center, \
-                RADIUS, \
-                next_step_color, \
-                next_step_stroke_width, \
+                radius, \
+                1.0 - cooldown_ratio, \
+                cooldown_color, \
                 SECTOR_ARC_LENGTH)
     else:
-        var start_angle := -PI / 2.0
-        var end_angle := start_angle + 2.0 * PI * next_step_ratio
-        var next_step_stroke_width: float = lerp( \
-                NEXT_STEP_STROKE_WIDTH_START, \
-                NEXT_STEP_STROKE_WIDTH_END, \
-                next_step_ratio)
-        DrawUtils.draw_arc( \
-                self, \
+        draw_circle( \
                 center, \
-                RADIUS, \
-                start_angle, \
-                end_angle, \
-                next_step_color, \
-                next_step_stroke_width, \
-                SECTOR_ARC_LENGTH)
+                radius, \
+                cooldown_color)
+    
+    if is_multiplier_active:
+        # Draw step progress (circle border).
+        if is_multiplier_maxed:
+            var next_step_stroke_width := NEXT_STEP_STROKE_WIDTH_END
+            DrawUtils.draw_circle_outline( \
+                    self, \
+                    center, \
+                    radius, \
+                    next_step_color, \
+                    next_step_stroke_width, \
+                    SECTOR_ARC_LENGTH)
+        else:
+            var start_angle := -PI / 2.0
+            var end_angle := start_angle + 2.0 * PI * next_step_ratio
+            var next_step_stroke_width: float = lerp( \
+                    NEXT_STEP_STROKE_WIDTH_START, \
+                    NEXT_STEP_STROKE_WIDTH_END, \
+                    next_step_ratio)
+            DrawUtils.draw_arc( \
+                    self, \
+                    center, \
+                    radius, \
+                    start_angle, \
+                    end_angle, \
+                    next_step_color, \
+                    next_step_stroke_width, \
+                    SECTOR_ARC_LENGTH)
     
     # Draw multiplier label.
-    var multiplier_text: String = "x%1d" % \
-            MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index].multiplier
+    var multiplier_text: String = "x%1d" % step_config.multiplier
     multiplier_label.text = multiplier_text
     multiplier_label.add_color_override("font_color", text_color)
+    multiplier_label.rect_scale = LABEL_SCALE * label_scale
     multiplier_label.rect_position = \
             center - \
             MAIN_FONT_NORMAL.get_string_size(multiplier_text) / 2.0 - \
-            LABEL_SCALE + \
-            LABEL_OFFSET
+            LABEL_SCALE * label_scale * label_scale + \
+            LABEL_OFFSET * label_scale * label_scale

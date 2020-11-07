@@ -4,16 +4,7 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - iPhone XR screen size discrepency:
-#   - 6.06 actual (diagonal)
-#   - 5.48717706322 reported (diagonal)
-#   - 5.48717706322/6.06 = 0.9054747629
-# 
-# - Actually include the multiplier cooldown value in the score multiplier.
-# 
 # - Animate a few different things on the cooldown indicator:
-#   - Have the circle radius double-pulse when the multiplier is active.
-#     - Have the pulse rate increase with higher multiplier values.
 #   - Have the color of middle and border change?
 #     - With multiplier values?
 #     - With cooldown/step progress?

@@ -724,11 +724,15 @@ func _update_score_multiplier() -> void:
     var score_multiplier_delta_for_lives_count := \
             lives_count * SCORE_MULTIPLIER_DELTA_PER_LIFE
     
+    var score_multiplier_for_time_on_current_life := \
+            cooldown_indicator.multiplier
+    
     score_multiplier = \
-            1.0 + \
+            (1.0 + \
             score_multiplier_delta_for_tiers_count_since_falling + \
             score_multiplier_delta_for_difficulty + \
-            score_multiplier_delta_for_lives_count
+            score_multiplier_delta_for_lives_count) * \
+            score_multiplier_for_time_on_current_life
 
 func _on_final_tier_completed() -> void:
     Global.falls_count_since_reaching_level_end = 0

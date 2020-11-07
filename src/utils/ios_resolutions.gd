@@ -1,5 +1,12 @@
 extends Node
 
+# TODO: Our only iOS data point (iPhone XR) has a 10% error in the reported
+#       screen size compared to the actual screen size. But, this is probably
+#       close enough for our current purposes.
+#   - 6.06'' actual (diagonal)
+#   - 5.48717706322'' reported (diagonal)
+#   - 5.48717706322/6.06 = 0.9054747629
+
 const IPHONE_SUFFIX_AND_PPIS := [
     {
         suffix = "12 Pro Max",

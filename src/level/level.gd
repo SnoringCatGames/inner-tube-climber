@@ -106,7 +106,7 @@ func _enter_tree() -> void:
     var origin_offset := extra_distance_from_cone_end_point_to_circle_center
     
     max_height_on_current_height_indicator = MaxHeightIndicator.new( \
-            Constants.PLAYER_PANTS_BLUE_COLOR, \
+            Constants.INDICATOR_BLUE_COLOR, \
             extra_radius, \
             extra_distance_from_cone_end_point_to_circle_center, \
             0.0, \
@@ -114,7 +114,7 @@ func _enter_tree() -> void:
     add_child(max_height_on_current_height_indicator)
     
     max_height_indicator = MaxHeightIndicator.new( \
-            Constants.PLAYER_JACKET_YELLOW_COLOR, \
+            Constants.INDICATOR_GREEN_COLOR, \
             0.0, \
             0.0, \
             origin_offset, \

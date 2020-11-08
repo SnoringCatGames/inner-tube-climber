@@ -14,8 +14,8 @@ const RADIUS := 18.0
 const NEXT_STEP_STROKE_WIDTH_START := 1.0
 const NEXT_STEP_STROKE_WIDTH_END := 7.0
 const SECTOR_ARC_LENGTH := 4.0
-var COOLDOWN_COLOR: Color = Constants.PLAYER_JACKET_YELLOW_COLOR
-var NEXT_STEP_COLOR: Color = Constants.PLAYER_PANTS_BLUE_COLOR
+var COOLDOWN_COLOR: Color = Constants.INDICATOR_GREEN_COLOR
+var NEXT_STEP_COLOR: Color = Constants.INDICATOR_BLUE_COLOR
 var TEXT_COLOR := Color.from_hsv(0.0, 0.0, 1.0, 1.0)
 var TEXT_OUTLINE_COLOR := Color.from_hsv(0.0, 0.0, 0.0, 0.7)
 const INACTIVE_OPACITY := 0.3
@@ -25,7 +25,7 @@ const NEXT_STEP_PULSE_RADIUS_START := 18.0
 const NEXT_STEP_PULSE_RADIUS_END := 28.0
 const NEXT_STEP_PULSE_OPACITY_START := 1.0
 const NEXT_STEP_PULSE_OPACITY_END := 0.0
-var NEXT_STEP_PULSE_COLOR: Color = Constants.PLAYER_PANTS_BLUE_COLOR
+var NEXT_STEP_PULSE_COLOR: Color = Constants.INDICATOR_BLUE_COLOR
 
 var FIRST_PULSE_HEARTBEAT_DURATION_RATIO := 0.5
 var SECOND_PULSE_HEARTBEAT_DURATION_RATIO := 0.4
@@ -34,45 +34,40 @@ var HEARTBEAT_OPACITY_MAX := 0.3
 var HEARTBEAT_OPACITY_MIN := 0.99
 var HEARTBEAT_COLOR := NEXT_STEP_COLOR
 
-# FIXME: --------------------- Revert debug step durations.
 const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     {
         multiplier = 1,
-        step_duration_sec = 4.0,
-#        step_duration_sec = 16.0,
+        step_duration_sec = 16.0,
         heartbeat_pulse_bpm = 40.0,
         heartbeat_radius_ratio = 1.15,
         heartbeat_post_second_pulse_gap_ratio = 0.6,
     },
     {
         multiplier = 2,
-        step_duration_sec = 6.0,
-#        step_duration_sec = 32.0,
+        step_duration_sec = 32.0,
         heartbeat_pulse_bpm = 52.0,
-        heartbeat_radius_ratio = 1.25,
+        heartbeat_radius_ratio = 1.2,
         heartbeat_post_second_pulse_gap_ratio = 0.55,
     },
     {
         multiplier = 4,
-        step_duration_sec = 8.0,
-#        step_duration_sec = 64.0,
+        step_duration_sec = 64.0,
         heartbeat_pulse_bpm = 72.0,
-        heartbeat_radius_ratio = 1.35,
+        heartbeat_radius_ratio = 1.25,
         heartbeat_post_second_pulse_gap_ratio = 0.5,
     },
     {
         multiplier = 8,
-        step_duration_sec = 8.0,
-#        step_duration_sec = 128.0,
+        step_duration_sec = 128.0,
         heartbeat_pulse_bpm = 100.0,
-        heartbeat_radius_ratio = 1.5,
+        heartbeat_radius_ratio = 1.3,
         heartbeat_post_second_pulse_gap_ratio = 0.45,
     },
     {
         multiplier = 16,
         step_duration_sec = INF,
         heartbeat_pulse_bpm = 120.0,
-        heartbeat_radius_ratio = 1.7,
+        heartbeat_radius_ratio = 1.35,
         heartbeat_post_second_pulse_gap_ratio = 0.4,
     },
 ]

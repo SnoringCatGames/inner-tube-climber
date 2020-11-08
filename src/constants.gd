@@ -7,6 +7,8 @@ var BACKGROUND_DARKEST_COLOR := Color.from_hsv(0.617, 0.47, 0.29, 1.0)
 #146363
 var BUTTON_COLOR := Color.from_hsv(0.5, 0.8, 0.39, 1.0) 
 
+var INDICATOR_GREEN_COLOR := Color.from_hsv(0.569, 0.78, 0.68, 1.0)
+var INDICATOR_BLUE_COLOR := Color.from_hsv(0.472, 0.40, 0.77, 1.0)
 var PLAYER_JACKET_YELLOW_COLOR := Color.from_hsv(0.1583, 1.0, 1.0, 1.0)
 var PLAYER_PANTS_BLUE_COLOR := Color.from_hsv(0.6083, 0.68, 0.95, 1.0)
 

@@ -4,6 +4,11 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
+# >>>- finish shiver
+# 
+# - Maybe try a shivering animation instead / in-addition-to the heartbeat?
+#   - Maybe have shiver harder toward end of cooldown?
+# 
 # - Animate a few different things on the cooldown indicator:
 #   - Have the color of middle and border change?
 #     - With multiplier values?

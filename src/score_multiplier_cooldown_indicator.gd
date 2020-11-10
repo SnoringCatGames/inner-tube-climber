@@ -32,47 +32,85 @@ var SECOND_PULSE_HEARTBEAT_DURATION_RATIO := 0.4
 var INTER_PULSE_HEARTBEAT_GAP_RATIO := 0.1
 var HEARTBEAT_OPACITY_MAX := 0.3
 var HEARTBEAT_OPACITY_MIN := 0.99
-var HEARTBEAT_COLOR := NEXT_STEP_COLOR
 
+const SHIVER_PARAMS := [
+    {
+        shiver_offset_max = 0.0,
+        shiver_per_sec = 0.00001,
+    },
+    {
+        shiver_offset_max = 1.0,
+        shiver_per_sec = 20,
+    },
+    {
+        shiver_offset_max = 1.5,
+        shiver_per_sec = 40,
+    },
+    {
+        shiver_offset_max = 1.8,
+        shiver_per_sec = 60,
+    },
+    {
+        shiver_offset_max = 0.0,
+        shiver_per_sec = 0.00001,
+    },
+]
+
+# FIXME: --------------------- Revert debug step durations.
 const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     {
         multiplier = 1,
-        step_duration_sec = 16.0,
+        step_duration_sec = 4.0,
+#        step_duration_sec = 16.0,
         heartbeat_pulse_bpm = 40.0,
         heartbeat_radius_ratio = 1.15,
         heartbeat_post_second_pulse_gap_ratio = 0.6,
+        indicator_saturation_ratio = 1.0,
+        indicator_value_ratio = 1.0,
     },
     {
         multiplier = 2,
-        step_duration_sec = 32.0,
+        step_duration_sec = 6.0,
+#        step_duration_sec = 32.0,
         heartbeat_pulse_bpm = 52.0,
-        heartbeat_radius_ratio = 1.2,
+        heartbeat_radius_ratio = 1.21,
         heartbeat_post_second_pulse_gap_ratio = 0.55,
+        indicator_saturation_ratio = 0.8,
+        indicator_value_ratio = 1.2,
     },
     {
         multiplier = 4,
-        step_duration_sec = 64.0,
+        step_duration_sec = 8.0,
+#        step_duration_sec = 64.0,
         heartbeat_pulse_bpm = 72.0,
-        heartbeat_radius_ratio = 1.25,
+        heartbeat_radius_ratio = 1.28,
         heartbeat_post_second_pulse_gap_ratio = 0.5,
+        indicator_saturation_ratio = 0.6,
+        indicator_value_ratio = 1.4,
     },
     {
         multiplier = 8,
-        step_duration_sec = 128.0,
+        step_duration_sec = 8.0,
+#        step_duration_sec = 128.0,
         heartbeat_pulse_bpm = 100.0,
-        heartbeat_radius_ratio = 1.3,
+        heartbeat_radius_ratio = 1.35,
         heartbeat_post_second_pulse_gap_ratio = 0.45,
+        indicator_saturation_ratio = 0.4,
+        indicator_value_ratio = 1.6,
     },
     {
         multiplier = 16,
         step_duration_sec = INF,
         heartbeat_pulse_bpm = 120.0,
-        heartbeat_radius_ratio = 1.35,
+        heartbeat_radius_ratio = 1.42,
         heartbeat_post_second_pulse_gap_ratio = 0.4,
+        indicator_saturation_ratio = 0.2,
+        indicator_value_ratio = 1.8,
     },
 ]
 
-var center := Vector2.INF
+var current_center := Vector2.INF
+var shiver_center := Vector2.INF
 var multiplier_label: Label
 
 var is_multiplier_active := false
@@ -84,6 +122,8 @@ var step_index := 0
 var step_start_actual_time_sec := -INF
 var step_start_modified_time_sec := -INF
 var cooldown_start_time_sec := -INF
+var last_shiver_time_sec := -INF
+var last_shiver_param_index := -INF
 var previous_max_height := -INF
 
 var multiplier: float setget ,_get_multiplier
@@ -112,33 +152,32 @@ func _on_display_resized() -> void:
     offset.x = max(CORNER_OFFSET.x, Utils.get_safe_area_margin_right())
     offset.y = max(CORNER_OFFSET.y, Utils.get_safe_area_margin_top())
     
-    center.x = get_viewport().size.x - offset.x
-    center.y = offset.y
+    current_center.x = get_viewport().size.x - offset.x
+    current_center.y = offset.y
+    update()
 
 func check_for_updates(max_height: float) -> void:
-    var current_time_sec := Time.elapsed_play_time_modified_sec
-    
     var has_max_height_changed := max_height != previous_max_height
     previous_max_height = max_height
     
     var has_cooldown_expired := \
             cooldown_start_time_sec == -INF or \
             (cooldown_start_time_sec + COOLDOWN_DURATION_SEC <= \
-                    current_time_sec)
+                    Time.elapsed_play_time_modified_sec)
     
     var step_duration_sec: float = \
             MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index].step_duration_sec
     var has_step_duration_passed := \
             step_start_modified_time_sec != -INF and \
             (step_start_modified_time_sec + step_duration_sec <= \
-                    current_time_sec)
+                    Time.elapsed_play_time_modified_sec)
     
     if has_max_height_changed:
         if !is_multiplier_active:
             step_start_actual_time_sec = Time.elapsed_play_time_actual_sec
-            step_start_modified_time_sec = current_time_sec
+            step_start_modified_time_sec = Time.elapsed_play_time_modified_sec
         is_multiplier_active = true
-        cooldown_start_time_sec = current_time_sec
+        cooldown_start_time_sec = Time.elapsed_play_time_modified_sec
         has_cooldown_expired = false
         update()
     
@@ -150,21 +189,48 @@ func check_for_updates(max_height: float) -> void:
                 step_index + 1, \
                 MULTIPLIER_VALUES_AND_STEP_DURATIONS.size() - 1)
         step_start_actual_time_sec = Time.elapsed_play_time_actual_sec
-        step_start_modified_time_sec = current_time_sec
+        step_start_modified_time_sec = Time.elapsed_play_time_modified_sec
         is_multiplier_maxed = \
                 step_index == MULTIPLIER_VALUES_AND_STEP_DURATIONS.size() - 1
         update()
     
     cooldown_ratio = \
-            (current_time_sec - cooldown_start_time_sec) / \
+            (Time.elapsed_play_time_modified_sec - cooldown_start_time_sec) / \
                     COOLDOWN_DURATION_SEC if \
             is_multiplier_active else \
             0.0
     next_step_ratio = \
-            (current_time_sec - step_start_modified_time_sec) / \
+            (Time.elapsed_play_time_modified_sec - \
+                    step_start_modified_time_sec) / \
                     step_duration_sec if \
             is_multiplier_active else \
             0.0
+    
+    var current_shiver_param_index := \
+            4 if \
+            cooldown_ratio == 0.0 else \
+            (0 if \
+            cooldown_ratio < 0.25 else \
+            (1 if \
+            cooldown_ratio < 0.5 else \
+            (2 if \
+            cooldown_ratio < 0.75 else \
+            3)))
+    var shiver_params: Dictionary = SHIVER_PARAMS[current_shiver_param_index]
+    var is_time_for_next_shiver: float = \
+            last_shiver_time_sec + 1.0 / shiver_params.shiver_per_sec < \
+            Time.elapsed_play_time_actual_sec
+    var is_time_for_next_shiver_param := \
+            last_shiver_param_index != current_shiver_param_index
+    last_shiver_param_index = current_shiver_param_index
+    if is_time_for_next_shiver or is_time_for_next_shiver_param:
+        shiver_params = SHIVER_PARAMS[current_shiver_param_index]
+        last_shiver_time_sec = Time.elapsed_play_time_actual_sec
+        var shiver_offset: Vector2 = \
+                -Vector2.ONE * shiver_params.shiver_offset_max + \
+                Vector2(randf(), randf()) * \
+                        shiver_params.shiver_offset_max * 2.0
+        shiver_center = current_center + shiver_offset
     
     if is_multiplier_active:
         update()
@@ -174,23 +240,53 @@ func stop_cooldown() -> void:
     step_start_actual_time_sec = -INF
     step_start_modified_time_sec = -INF
     cooldown_start_time_sec = -INF
+    last_shiver_time_sec = -INF
+    last_shiver_param_index = -INF
     step_index = 0
+    shiver_center = current_center
+    cooldown_ratio = 0.0
+    next_step_ratio = 0.0
+    is_multiplier_maxed = false
     update()
 
 func _draw() -> void:
     var step_config: Dictionary = \
             MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index]
     
+    var cooldown_saturation := clamp( \
+            COOLDOWN_COLOR.s * step_config.indicator_saturation_ratio, \
+            0.0, \
+            1.0)
+    var cooldown_value := clamp( \
+            COOLDOWN_COLOR.v * step_config.indicator_value_ratio, \
+            0.0, \
+            1.0)
     var cooldown_color := \
-            COOLDOWN_COLOR if \
+            Color.from_hsv( \
+                    COOLDOWN_COLOR.h, \
+                    cooldown_saturation, \
+                    cooldown_value, \
+                    COOLDOWN_COLOR.a) if \
             is_multiplier_active else \
             Color.from_hsv( \
                     COOLDOWN_COLOR.h, \
                     COOLDOWN_COLOR.s, \
                     COOLDOWN_COLOR.v, \
                     INACTIVE_OPACITY)
+    var next_step_saturation := clamp( \
+            NEXT_STEP_COLOR.s * step_config.indicator_saturation_ratio, \
+            0.0, \
+            1.0)
+    var next_step_value := clamp( \
+            NEXT_STEP_COLOR.v * step_config.indicator_value_ratio, \
+            0.0, \
+            1.0)
     var next_step_color := \
-            NEXT_STEP_COLOR if \
+            Color.from_hsv( \
+                    NEXT_STEP_COLOR.h, \
+                    next_step_saturation, \
+                    next_step_value, \
+                    NEXT_STEP_COLOR.a) if \
             is_multiplier_active else \
             Color.from_hsv( \
                     NEXT_STEP_COLOR.h, \
@@ -229,7 +325,7 @@ func _draw() -> void:
                 NEXT_STEP_PULSE_COLOR.v, \
                 pulse_opacity)
         draw_circle( \
-                center, \
+                current_center, \
                 pulse_radius, \
                 pulse_color)
     
@@ -302,23 +398,15 @@ func _draw() -> void:
         else:
             Utils.error()
             heartbeat_radius_progress = 0.0
-        heartbeat_radius_progress = \
-                Utils.ease_by_name(heartbeat_radius_progress, "ease_out")
+        heartbeat_radius_progress = Utils.ease_by_name( \
+                heartbeat_radius_progress, \
+                "ease_out_weak")
         heartbeat_radius_progress = sin(heartbeat_radius_progress * PI)
         
         var heartbeat_radius: float = lerp( \
                 heartbeat_radius_min, \
                 heartbeat_radius_max, \
                 heartbeat_radius_progress)
-        var heartbeat_opacity: float = lerp( \
-                HEARTBEAT_OPACITY_MIN, \
-                HEARTBEAT_OPACITY_MAX, \
-                heartbeat_radius_progress)
-        var heartbeat_color := Color.from_hsv( \
-                HEARTBEAT_COLOR.h, \
-                HEARTBEAT_COLOR.s, \
-                HEARTBEAT_COLOR.v, \
-                heartbeat_opacity)
         
         radius = heartbeat_radius
         label_scale = lerp( \
@@ -334,14 +422,14 @@ func _draw() -> void:
         # Draw cooldown progress (circle center / pie slice).
         DrawUtils.draw_pie_slice( \
                 self, \
-                center, \
+                current_center, \
                 radius, \
                 1.0 - cooldown_ratio, \
                 cooldown_color, \
                 SECTOR_ARC_LENGTH)
     else:
         draw_circle( \
-                center, \
+                current_center, \
                 radius, \
                 cooldown_color)
     
@@ -351,7 +439,7 @@ func _draw() -> void:
             var next_step_stroke_width := NEXT_STEP_STROKE_WIDTH_END
             DrawUtils.draw_circle_outline( \
                     self, \
-                    center, \
+                    current_center, \
                     radius, \
                     next_step_color, \
                     next_step_stroke_width, \
@@ -365,7 +453,7 @@ func _draw() -> void:
                     next_step_ratio)
             DrawUtils.draw_arc( \
                     self, \
-                    center, \
+                    current_center, \
                     radius, \
                     start_angle, \
                     end_angle, \
@@ -373,13 +461,16 @@ func _draw() -> void:
                     next_step_stroke_width, \
                     SECTOR_ARC_LENGTH)
     
+    # FIXME: ------------------
+    label_scale = 1.0
+    
     # Draw multiplier label.
     var multiplier_text: String = "x%1d" % step_config.multiplier
     multiplier_label.text = multiplier_text
     multiplier_label.add_color_override("font_color", text_color)
     multiplier_label.rect_scale = LABEL_SCALE * label_scale
     multiplier_label.rect_position = \
-            center - \
+            shiver_center - \
             MAIN_FONT_NORMAL.get_string_size(multiplier_text) / 2.0 - \
             LABEL_SCALE * label_scale * label_scale + \
             LABEL_OFFSET * label_scale * label_scale

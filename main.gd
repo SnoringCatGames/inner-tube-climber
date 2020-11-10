@@ -4,41 +4,18 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# >>>- finish shiver
+# - Problem: With current multiplier setup, the player is rewarded for going
+#   slower, since they can get the multiplier to a higher value earlier in the
+#   level.
+#   - We instead want to reward the player for going as fast as possible.
+#   - Possible ways to refactor the multiplier:
+#       - Only have the cooldown relate to time spent on a given platform
+#         elevation.
+#       - Reset the multiplier whenever the player touches a lower platform
+#         than the previous platform.
+#       - Landing back on the same platform we jumped from, or on another
+#         platform at the same height, doesn't affect the cooldown.
 # 
-# - Maybe try a shivering animation instead / in-addition-to the heartbeat?
-#   - Maybe have shiver harder toward end of cooldown?
-# 
-# - Animate a few different things on the cooldown indicator:
-#   - Have the color of middle and border change?
-#     - With multiplier values?
-#     - With cooldown/step progress?
-#     - Maybe only change saturation and lightness, in order to keep overall
-#       color scheme consistent?
-#       - Maybe also have hue change slightly with multiplier value?
-# - Have the max-height indicators track with the camera horizontal position.
-# 
-# - Additional updates to score / difficulty:
-#   - OR, have a score multiplier on the side that steadily increases with
-#     height until falling.
-#     - Show fancy animation for making the multiplier seem impressive.
-#       - Rotate slightly back and fourth.
-#       - Shake/jitter randomly.
-#       - Pulse bigger and smaller.
-#       - Pulse font more red.
-#       - Gradually increase base size and font redness.
-#       - Pay attention to the easing curves for all of these.
-#     - Show temporary messages somehow everytime the score multiplier
-#       changes, in order to indicate what the player did to cause the change.
-#     - Make a special fast/crazy/energetic music piece to transition to when
-#       hitting a certain multiplier?
-#     - OR, maybe have the score multiplier depend on the recent average
-#       climb speed.
-#       - Then, there will be a correlation between the excitement and the
-#         gameplay speed.
-#       - Hmmm, it might be fun to experiment with a mode (toggleable in
-#         Settings) that adjusts Time.physics_framerate_multiplier each frame
-#         to match the current recent climb speed.
 # - 
 #   - Suggest switching to slower or faster tier after enough falls on a level,
 #     or enough levels without a fall.
@@ -79,6 +56,8 @@ class_name Main
 #     - Will help inform player when switching directions.
 #   - For "move_left" / "move_right" just pressed.
 #   - For _on_last_tier_completed.
+#   - Multiplier value increased.
+#   - Multiplier value reset.
 # 
 # - Implement Level._on_final_tier_completed()
 #   - Trigger a new sound effect.

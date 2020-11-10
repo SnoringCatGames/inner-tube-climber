@@ -22,7 +22,7 @@ const INACTIVE_OPACITY := 0.3
 
 const NEXT_STEP_PULSE_DURATION_SEC := 0.3
 const NEXT_STEP_PULSE_RADIUS_START := 18.0
-const NEXT_STEP_PULSE_RADIUS_END := 28.0
+const NEXT_STEP_PULSE_RADIUS_END := 38.0
 const NEXT_STEP_PULSE_OPACITY_START := 1.0
 const NEXT_STEP_PULSE_OPACITY_END := 0.0
 var NEXT_STEP_PULSE_COLOR: Color = Constants.INDICATOR_BLUE_COLOR
@@ -67,6 +67,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
         heartbeat_post_second_pulse_gap_ratio = 0.6,
         indicator_saturation_ratio = 1.0,
         indicator_value_ratio = 1.0,
+        audio_speed = 1.0,
     },
     {
         multiplier = 2,
@@ -77,6 +78,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
         heartbeat_post_second_pulse_gap_ratio = 0.55,
         indicator_saturation_ratio = 0.8,
         indicator_value_ratio = 1.2,
+        audio_speed = 1.2,
     },
     {
         multiplier = 4,
@@ -87,6 +89,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
         heartbeat_post_second_pulse_gap_ratio = 0.5,
         indicator_saturation_ratio = 0.6,
         indicator_value_ratio = 1.4,
+        audio_speed = 1.4,
     },
     {
         multiplier = 8,
@@ -97,6 +100,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
         heartbeat_post_second_pulse_gap_ratio = 0.45,
         indicator_saturation_ratio = 0.4,
         indicator_value_ratio = 1.6,
+        audio_speed = 1.6,
     },
     {
         multiplier = 16,
@@ -106,6 +110,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
         heartbeat_post_second_pulse_gap_ratio = 0.4,
         indicator_saturation_ratio = 0.2,
         indicator_value_ratio = 1.8,
+        audio_speed = 1.8,
     },
 ]
 
@@ -165,8 +170,10 @@ func check_for_updates(max_height: float) -> void:
             (cooldown_start_time_sec + COOLDOWN_DURATION_SEC <= \
                     Time.elapsed_play_time_modified_sec)
     
-    var step_duration_sec: float = \
-            MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index].step_duration_sec
+    var step_config: Dictionary = \
+            MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index]
+    
+    var step_duration_sec: float = step_config.step_duration_sec
     var has_step_duration_passed := \
             step_start_modified_time_sec != -INF and \
             (step_start_modified_time_sec + step_duration_sec <= \
@@ -188,10 +195,12 @@ func check_for_updates(max_height: float) -> void:
         step_index = min( \
                 step_index + 1, \
                 MULTIPLIER_VALUES_AND_STEP_DURATIONS.size() - 1)
+        step_config = MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index]
         step_start_actual_time_sec = Time.elapsed_play_time_actual_sec
         step_start_modified_time_sec = Time.elapsed_play_time_modified_sec
         is_multiplier_maxed = \
                 step_index == MULTIPLIER_VALUES_AND_STEP_DURATIONS.size() - 1
+        Audio.set_playback_speed(step_config.audio_speed)
         update()
     
     cooldown_ratio = \
@@ -247,6 +256,7 @@ func stop_cooldown() -> void:
     cooldown_ratio = 0.0
     next_step_ratio = 0.0
     is_multiplier_maxed = false
+    Audio.set_playback_speed(1.0)
     update()
 
 func _draw() -> void:
@@ -409,10 +419,13 @@ func _draw() -> void:
                 heartbeat_radius_progress)
         
         radius = heartbeat_radius
-        label_scale = lerp( \
-                1.0, \
-                step_config.heartbeat_radius_ratio, \
-                heartbeat_radius_progress)
+        # We removed the heartbeat label-size change, in favor of instead
+        # having the label position shiver.
+        label_scale = 1.0
+#        label_scale = lerp( \
+#                1.0, \
+#                step_config.heartbeat_radius_ratio, \
+#                heartbeat_radius_progress)
         
     else:
         radius = RADIUS
@@ -460,9 +473,6 @@ func _draw() -> void:
                     next_step_color, \
                     next_step_stroke_width, \
                     SECTOR_ARC_LENGTH)
-    
-    # FIXME: ------------------
-    label_scale = 1.0
     
     # Draw multiplier label.
     var multiplier_text: String = "x%1d" % step_config.multiplier

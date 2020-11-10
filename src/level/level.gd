@@ -69,6 +69,9 @@ var player: TuberPlayer
 var player_current_height: float = 0.0
 var player_max_height: float = 0.0
 var player_max_height_on_current_life: float = 0.0
+var player_latest_platform_height: float = 0.0
+var player_max_platform_height: float = 0.0
+var player_max_platform_height_on_current_life: float = 0.0
 var tier_count: int = 0
 var display_height: int = 0
 var falls_count: int = 0
@@ -186,14 +189,23 @@ func _physics_process(delta_sec: float) -> void:
     player_max_height = max(player_max_height, player_current_height)
     player_max_height_on_current_life = \
             max(player_max_height_on_current_life, player_current_height)
+    if player.surface_state.just_touched_floor:
+        player_latest_platform_height = player_current_height
+        player_max_platform_height = \
+                max(player_max_platform_height, player_current_height)
+        player_max_platform_height_on_current_life = max( \
+                player_max_platform_height_on_current_life, \
+                player_current_height)
     display_height = floor(player_max_height / DISPLAY_HEIGHT_INTERVAL) as int
     
     _update_score(height_delta)
     
-    cooldown_indicator.check_for_updates(player_max_height_on_current_life)
-    max_height_indicator.check_for_updates(player_max_height)
+    cooldown_indicator.check_for_updates( \
+            player_max_platform_height_on_current_life, \
+            player_latest_platform_height)
+    max_height_indicator.check_for_updates(player_max_platform_height)
     max_height_on_current_height_indicator.check_for_updates( \
-            player_max_height_on_current_life)
+            player_max_platform_height_on_current_life)
 
 func _process(delta_sec: float) -> void:
     delta_sec *= Time.physics_framerate_multiplier
@@ -240,6 +252,8 @@ func _fall() -> void:
     lives_count -= 1
     tiers_count_since_falling = 0
     player_max_height_on_current_life = 0.0
+    player_latest_platform_height = 0.0
+    player_max_platform_height_on_current_life = 0.0
     Global.falls_count_since_reaching_level_end += 1
     cooldown_indicator.stop_cooldown()
     
@@ -392,6 +406,9 @@ func destroy() -> void:
     player_current_height = 0.0
     player_max_height = 0.0
     player_max_height_on_current_life = 0.0
+    player_latest_platform_height = 0.0
+    player_max_platform_height = 0.0
+    player_max_platform_height_on_current_life = 0.0
     display_height = 0
     tier_count = 0
     speed_index = 0

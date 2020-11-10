@@ -56,12 +56,12 @@ const SHIVER_PARAMS := [
     },
 ]
 
-# FIXME: --------------------- Revert debug step durations.
+# FIXME: --------------------- Revert debug step heights.
 const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     {
         multiplier = 1,
-        step_duration_sec = 4.0,
-#        step_duration_sec = 16.0,
+        step_height = 400.0,
+#        step_height = 1600.0,
         heartbeat_pulse_bpm = 40.0,
         heartbeat_radius_ratio = 1.15,
         heartbeat_post_second_pulse_gap_ratio = 0.6,
@@ -71,8 +71,8 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     },
     {
         multiplier = 2,
-        step_duration_sec = 6.0,
-#        step_duration_sec = 32.0,
+        step_height = 600.0,
+#        step_height = 3200.0,
         heartbeat_pulse_bpm = 52.0,
         heartbeat_radius_ratio = 1.21,
         heartbeat_post_second_pulse_gap_ratio = 0.55,
@@ -82,8 +82,8 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     },
     {
         multiplier = 4,
-        step_duration_sec = 8.0,
-#        step_duration_sec = 64.0,
+        step_height = 800.0,
+#        step_height = 6400.0,
         heartbeat_pulse_bpm = 72.0,
         heartbeat_radius_ratio = 1.28,
         heartbeat_post_second_pulse_gap_ratio = 0.5,
@@ -93,8 +93,8 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     },
     {
         multiplier = 8,
-        step_duration_sec = 8.0,
-#        step_duration_sec = 128.0,
+        step_height = 800.0,
+#        step_height = 12800.0,
         heartbeat_pulse_bpm = 100.0,
         heartbeat_radius_ratio = 1.35,
         heartbeat_post_second_pulse_gap_ratio = 0.45,
@@ -104,7 +104,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     },
     {
         multiplier = 16,
-        step_duration_sec = INF,
+        step_height = INF,
         heartbeat_pulse_bpm = 120.0,
         heartbeat_radius_ratio = 1.42,
         heartbeat_post_second_pulse_gap_ratio = 0.4,
@@ -125,11 +125,12 @@ var is_multiplier_maxed := false
 
 var step_index := 0
 var step_start_actual_time_sec := -INF
-var step_start_modified_time_sec := -INF
+var step_start_height := -INF
 var cooldown_start_time_sec := -INF
 var last_shiver_time_sec := -INF
 var last_shiver_param_index := -INF
-var previous_max_height := -INF
+var previous_max_platform_height := -INF
+var previous_latest_platform_height := -INF
 
 var multiplier: float setget ,_get_multiplier
 
@@ -161,9 +162,15 @@ func _on_display_resized() -> void:
     current_center.y = offset.y
     update()
 
-func check_for_updates(max_height: float) -> void:
-    var has_max_height_changed := max_height != previous_max_height
-    previous_max_height = max_height
+func check_for_updates( \
+        max_platform_height: float, \
+        latest_platform_height: float) -> void:
+    var has_max_platform_height_increased := \
+            max_platform_height > previous_max_platform_height + 0.1
+    var has_latest_platform_height_decreased := \
+            latest_platform_height < previous_latest_platform_height - 0.1
+    previous_max_platform_height = max_platform_height
+    previous_latest_platform_height = latest_platform_height
     
     var has_cooldown_expired := \
             cooldown_start_time_sec == -INF or \
@@ -173,22 +180,21 @@ func check_for_updates(max_height: float) -> void:
     var step_config: Dictionary = \
             MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index]
     
-    var step_duration_sec: float = step_config.step_duration_sec
+    var step_height: float = step_config.step_height
     var has_step_duration_passed := \
-            step_start_modified_time_sec != -INF and \
-            (step_start_modified_time_sec + step_duration_sec <= \
-                    Time.elapsed_play_time_modified_sec)
+            step_start_height != -INF and \
+            max_platform_height - step_start_height > step_height
     
-    if has_max_height_changed:
+    if has_max_platform_height_increased:
         if !is_multiplier_active:
             step_start_actual_time_sec = Time.elapsed_play_time_actual_sec
-            step_start_modified_time_sec = Time.elapsed_play_time_modified_sec
+            step_start_height = max_platform_height
         is_multiplier_active = true
         cooldown_start_time_sec = Time.elapsed_play_time_modified_sec
         has_cooldown_expired = false
         update()
     
-    if has_cooldown_expired:
+    if has_cooldown_expired or has_latest_platform_height_decreased:
         stop_cooldown()
         
     elif has_step_duration_passed:
@@ -197,7 +203,7 @@ func check_for_updates(max_height: float) -> void:
                 MULTIPLIER_VALUES_AND_STEP_DURATIONS.size() - 1)
         step_config = MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index]
         step_start_actual_time_sec = Time.elapsed_play_time_actual_sec
-        step_start_modified_time_sec = Time.elapsed_play_time_modified_sec
+        step_start_height = max_platform_height
         is_multiplier_maxed = \
                 step_index == MULTIPLIER_VALUES_AND_STEP_DURATIONS.size() - 1
         Audio.set_playback_speed(step_config.audio_speed)
@@ -209,9 +215,7 @@ func check_for_updates(max_height: float) -> void:
             is_multiplier_active else \
             0.0
     next_step_ratio = \
-            (Time.elapsed_play_time_modified_sec - \
-                    step_start_modified_time_sec) / \
-                    step_duration_sec if \
+            (max_platform_height - step_start_height) / step_height if \
             is_multiplier_active else \
             0.0
     
@@ -247,7 +251,7 @@ func check_for_updates(max_height: float) -> void:
 func stop_cooldown() -> void:
     is_multiplier_active = false
     step_start_actual_time_sec = -INF
-    step_start_modified_time_sec = -INF
+    step_start_height = -INF
     cooldown_start_time_sec = -INF
     last_shiver_time_sec = -INF
     last_shiver_param_index = -INF

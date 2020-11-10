@@ -4,17 +4,8 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Problem: With current multiplier setup, the player is rewarded for going
-#   slower, since they can get the multiplier to a higher value earlier in the
-#   level.
-#   - We instead want to reward the player for going as fast as possible.
-#   - Possible ways to refactor the multiplier:
-#       - Only have the cooldown relate to time spent on a given platform
-#         elevation.
-#       - Reset the multiplier whenever the player touches a lower platform
-#         than the previous platform.
-#       - Landing back on the same platform we jumped from, or on another
-#         platform at the same height, doesn't affect the cooldown.
+# - Add tweens for transitioning the max-height indicators' positions.
+# - Add a tween for the next-step ratio of the cooldown indicator.
 # 
 # - 
 #   - Suggest switching to slower or faster tier after enough falls on a level,

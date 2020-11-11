@@ -190,7 +190,7 @@ func _physics_process(delta_sec: float) -> void:
     player_max_height_on_current_life = \
             max(player_max_height_on_current_life, player_current_height)
     if player.surface_state.just_touched_floor:
-        player_latest_platform_height = player_current_height
+        player_latest_platform_height = -player.surface_state.touch_position.y
         player_max_platform_height = \
                 max(player_max_platform_height, player_current_height)
         player_max_platform_height_on_current_life = max( \
@@ -202,7 +202,8 @@ func _physics_process(delta_sec: float) -> void:
     
     cooldown_indicator.check_for_updates( \
             player_max_platform_height_on_current_life, \
-            player_latest_platform_height)
+            player_latest_platform_height, \
+            !player.surface_state.is_touching_a_surface)
     max_height_indicator.check_for_updates(player_max_platform_height)
     max_height_on_current_height_indicator.check_for_updates( \
             player_max_platform_height_on_current_life)

@@ -4,9 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Add tweens for transitioning the max-height indicators' positions.
-# - Add a tween for the next-step ratio of the cooldown indicator.
-# 
 # - 
 #   - Suggest switching to slower or faster tier after enough falls on a level,
 #     or enough levels without a fall.

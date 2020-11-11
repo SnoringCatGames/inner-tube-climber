@@ -33,6 +33,8 @@ var INTER_PULSE_HEARTBEAT_GAP_RATIO := 0.1
 var HEARTBEAT_OPACITY_MAX := 0.3
 var HEARTBEAT_OPACITY_MIN := 0.99
 
+var NEXT_STEP_RATIO_TWEEN_DURATION_SEC := 0.2
+
 const SHIVER_PARAMS := [
     {
         shiver_offset_max = 0.0,
@@ -60,8 +62,8 @@ const SHIVER_PARAMS := [
 const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     {
         multiplier = 1,
-        step_height = 400.0,
-#        step_height = 1600.0,
+#        step_height = 400.0,
+        step_height = 1600.0,
         heartbeat_pulse_bpm = 40.0,
         heartbeat_radius_ratio = 1.15,
         heartbeat_post_second_pulse_gap_ratio = 0.6,
@@ -71,8 +73,8 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     },
     {
         multiplier = 2,
-        step_height = 600.0,
-#        step_height = 3200.0,
+#        step_height = 600.0,
+        step_height = 3200.0,
         heartbeat_pulse_bpm = 52.0,
         heartbeat_radius_ratio = 1.21,
         heartbeat_post_second_pulse_gap_ratio = 0.55,
@@ -114,6 +116,10 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     },
 ]
 
+var next_step_ratio_tween := Tween.new()
+var next_step_tween_ratio := 0.0
+var is_next_step_ratio_tween_active := false
+
 var current_center := Vector2.INF
 var shiver_center := Vector2.INF
 var multiplier_label: Label
@@ -152,6 +158,12 @@ func _enter_tree() -> void:
             self, \
             "_on_display_resized")
     _on_display_resized()
+    
+    next_step_ratio_tween.connect( \
+            "tween_completed", \
+            self, \
+            "_on_next_step_ratio_tween_completed")
+    add_child(next_step_ratio_tween)
 
 func _on_display_resized() -> void:
     var offset := Vector2()
@@ -164,7 +176,8 @@ func _on_display_resized() -> void:
 
 func check_for_updates( \
         max_platform_height: float, \
-        latest_platform_height: float) -> void:
+        latest_platform_height: float, \
+        is_player_in_air: bool) -> void:
     var has_max_platform_height_increased := \
             max_platform_height > previous_max_platform_height + 0.1
     var has_latest_platform_height_decreased := \
@@ -172,10 +185,12 @@ func check_for_updates( \
     previous_max_platform_height = max_platform_height
     previous_latest_platform_height = latest_platform_height
     
+    # Don't stop the cooldown if the player is still in the air.
     var has_cooldown_expired := \
             cooldown_start_time_sec == -INF or \
-            (cooldown_start_time_sec + COOLDOWN_DURATION_SEC <= \
-                    Time.elapsed_play_time_modified_sec)
+            ((cooldown_start_time_sec + COOLDOWN_DURATION_SEC <= \
+                    Time.elapsed_play_time_modified_sec) and \
+            !is_player_in_air)
     
     var step_config: Dictionary = \
             MULTIPLIER_VALUES_AND_STEP_DURATIONS[step_index]
@@ -209,15 +224,24 @@ func check_for_updates( \
         Audio.set_playback_speed(step_config.audio_speed)
         update()
     
-    cooldown_ratio = \
-            (Time.elapsed_play_time_modified_sec - cooldown_start_time_sec) / \
-                    COOLDOWN_DURATION_SEC if \
-            is_multiplier_active else \
-            0.0
+    if is_multiplier_active:
+        cooldown_ratio = \
+                (Time.elapsed_play_time_modified_sec - \
+                        cooldown_start_time_sec) / \
+                COOLDOWN_DURATION_SEC
+        # Don't stop the cooldown if the player is still in the air.
+        if is_player_in_air:
+            cooldown_ratio = min(cooldown_ratio, 0.97)
+    else:
+        cooldown_ratio = 0.0
+    
+    var previous_next_step_ratio := next_step_ratio
     next_step_ratio = \
             (max_platform_height - step_start_height) / step_height if \
             is_multiplier_active else \
             0.0
+    var has_next_step_ratio_changed := \
+            previous_next_step_ratio != next_step_ratio
     
     var current_shiver_param_index := \
             4 if \
@@ -245,10 +269,29 @@ func check_for_updates( \
                         shiver_params.shiver_offset_max * 2.0
         shiver_center = current_center + shiver_offset
     
+    if has_next_step_ratio_changed:
+        is_next_step_ratio_tween_active = true
+        next_step_ratio_tween.stop(self)
+        next_step_ratio_tween.interpolate_property( \
+                self, \
+                "next_step_tween_ratio", \
+                next_step_tween_ratio, \
+                next_step_ratio, \
+                NEXT_STEP_RATIO_TWEEN_DURATION_SEC, \
+                Tween.TRANS_QUAD, \
+                Tween.EASE_IN_OUT)
+        next_step_ratio_tween.start()
+    
     if is_multiplier_active:
+        update()
+    
+    if is_next_step_ratio_tween_active:
         update()
 
 func stop_cooldown() -> void:
+    next_step_ratio_tween.stop(self)
+    next_step_tween_ratio = 0.0
+    is_next_step_ratio_tween_active = false
     is_multiplier_active = false
     step_start_actual_time_sec = -INF
     step_start_height = -INF
@@ -262,6 +305,9 @@ func stop_cooldown() -> void:
     is_multiplier_maxed = false
     Audio.set_playback_speed(1.0)
     update()
+
+func _on_next_step_ratio_tween_completed() -> void:
+    is_next_step_ratio_tween_active = false
 
 func _draw() -> void:
     var step_config: Dictionary = \
@@ -463,11 +509,11 @@ func _draw() -> void:
                     SECTOR_ARC_LENGTH)
         else:
             var start_angle := -PI / 2.0
-            var end_angle := start_angle + 2.0 * PI * next_step_ratio
+            var end_angle := start_angle + 2.0 * PI * next_step_tween_ratio
             var next_step_stroke_width: float = lerp( \
                     NEXT_STEP_STROKE_WIDTH_START, \
                     NEXT_STEP_STROKE_WIDTH_END, \
-                    next_step_ratio)
+                    next_step_tween_ratio)
             DrawUtils.draw_arc( \
                     self, \
                     current_center, \

@@ -12,13 +12,20 @@ const PULSE_END_SCALE := 2.6
 const PULSE_START_OPACITY := 1.0
 const PULSE_END_OPACITY := 0.0
 
+const HEIGHT_TWEEN_DURATION_SEC := 0.2
+
+var height_tween := Tween.new()
+var active_tween_count := 0
+
 var color: Color
 var radius: float
 var origin_offset: float
 var distance_from_cone_end_point_to_circle_center: float
 var pulses: bool
 
-var previous_max_height := -INF
+var previous_max_height := 0.0
+var current_tween_height := 0.0
+var latest_pulse_height := 0.0
 var did_max_height_change_last_frame := false
 var is_pulse_active := false
 var pulse_start_time := -INF
@@ -38,6 +45,13 @@ func _init( \
     self.pulses = pulses
     z_index = 1
 
+func _enter_tree() -> void:
+    height_tween.connect( \
+            "tween_completed", \
+            self, \
+            "_on_height_tween_completed")
+    add_child(height_tween)
+
 func check_for_updates(max_height: float) -> void:
     var current_time := Time.elapsed_play_time_actual_sec
     
@@ -49,31 +63,52 @@ func check_for_updates(max_height: float) -> void:
     
     did_max_height_change_last_frame = has_max_height_changed
     
-    if has_max_height_changed or is_pulse_active:
+    if has_max_height_changed:
+        latest_pulse_height = max_height
+        
+        height_tween.stop(self)
+        height_tween.interpolate_property( \
+                self, \
+                "current_tween_height", \
+                current_tween_height, \
+                max_height, \
+                HEIGHT_TWEEN_DURATION_SEC, \
+                Tween.TRANS_QUAD, \
+                Tween.EASE_IN_OUT)
+        height_tween.start()
+        active_tween_count += 1
+    
+    if has_max_height_changed or \
+            is_pulse_active or \
+            active_tween_count > 0:
         is_pulse_active = \
                 pulses and \
                 pulse_start_time + PULSE_DURATION_SEC >= current_time
         update()
+        
+
+func _on_height_tween_completed() -> void:
+    active_tween_count -= 1
 
 func _draw() -> void:
-    var left_end_point := \
-            Vector2(-DEFAULT_WALL_POSITION_X - origin_offset, \
-                    -previous_max_height)
-    var left_center := \
-            left_end_point + \
-            Vector2(-distance_from_cone_end_point_to_circle_center, 0.0)
-    var right_end_point := \
-            Vector2(DEFAULT_WALL_POSITION_X + origin_offset, \
-                    -previous_max_height)
-    var right_center := \
-            right_end_point + \
-            Vector2(distance_from_cone_end_point_to_circle_center, 0.0)
-    
     # Draw pulses.
     var pulse_progress := \
             (Time.elapsed_play_time_actual_sec - pulse_start_time) / \
             PULSE_DURATION_SEC
     if is_pulse_active and pulse_progress < 1.0:
+        var pulse_left_end_point := \
+                Vector2(-DEFAULT_WALL_POSITION_X - origin_offset, \
+                        -latest_pulse_height)
+        var pulse_left_center := \
+                pulse_left_end_point + \
+                Vector2(-distance_from_cone_end_point_to_circle_center, 0.0)
+        var pulse_right_end_point := \
+                Vector2(DEFAULT_WALL_POSITION_X + origin_offset, \
+                        -latest_pulse_height)
+        var pulse_right_center := \
+                pulse_right_end_point + \
+                Vector2(distance_from_cone_end_point_to_circle_center, 0.0)
+        
         pulse_progress = Utils.ease_by_name( \
                 pulse_progress, \
                 "ease_out")
@@ -94,12 +129,12 @@ func _draw() -> void:
                 color.s, \
                 color.v, \
                 pulse_opacity)
-        var left_pulse_center := left_center
+        var left_pulse_center := pulse_left_center
         var left_pulse_end_point := \
                 left_pulse_center + \
                 Vector2(pulse_distance_from_cone_end_point_to_circle_center, \
                         0.0)
-        var right_pulse_center := right_center
+        var right_pulse_center := pulse_right_center
         var right_pulse_end_point := \
                 right_pulse_center + \
                 Vector2(-pulse_distance_from_cone_end_point_to_circle_center, \
@@ -125,6 +160,18 @@ func _draw() -> void:
                 SECTOR_ARC_LENGTH)
     
     # Draw indicators.
+    var left_end_point := \
+            Vector2(-DEFAULT_WALL_POSITION_X - origin_offset, \
+                    -current_tween_height)
+    var left_center := \
+            left_end_point + \
+            Vector2(-distance_from_cone_end_point_to_circle_center, 0.0)
+    var right_end_point := \
+            Vector2(DEFAULT_WALL_POSITION_X + origin_offset, \
+                    -current_tween_height)
+    var right_center := \
+            right_end_point + \
+            Vector2(distance_from_cone_end_point_to_circle_center, 0.0)
     DrawUtils.draw_ice_cream_cone( \
             self, \
             left_end_point, \

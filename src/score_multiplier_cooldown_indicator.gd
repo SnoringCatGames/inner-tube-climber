@@ -91,7 +91,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
         heartbeat_post_second_pulse_gap_ratio = 0.5,
         indicator_saturation_ratio = 0.6,
         indicator_value_ratio = 1.4,
-        audio_speed = 1.4,
+        audio_speed = 1.45,
     },
     {
         multiplier = 8,
@@ -102,7 +102,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
         heartbeat_post_second_pulse_gap_ratio = 0.45,
         indicator_saturation_ratio = 0.4,
         indicator_value_ratio = 1.6,
-        audio_speed = 1.6,
+        audio_speed = 1.75,
     },
     {
         multiplier = 16,
@@ -112,7 +112,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
         heartbeat_post_second_pulse_gap_ratio = 0.4,
         indicator_saturation_ratio = 0.2,
         indicator_value_ratio = 1.8,
-        audio_speed = 1.8,
+        audio_speed = 2.1,
     },
 ]
 

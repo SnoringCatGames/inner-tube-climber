@@ -125,6 +125,7 @@ const FRAMERATE_MULTIPLIER_HARD_MAX := 1.6
 const TIERS := {
     "0": {
         scene_path = "res://src/level/tiers/tier_base.tscn",
+        camera_horizontally_locked = true,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = 0.0,
         scroll_speed_min = 0.0,
@@ -132,13 +133,15 @@ const TIERS := {
     },
     "1": {
         scene_path = "res://src/level/tiers/tier_1.tscn",
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
+        camera_horizontally_locked = false,
+        zoom_multiplier = 0.8, # FIXME: -------------------- Reset back to DEFAULT_ZOOM_MULTIPLIER.
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
     "2": {
         scene_path = "res://src/level/tiers/tier_2.tscn",
+        camera_horizontally_locked = true,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
@@ -146,6 +149,7 @@ const TIERS := {
     },
     "3": {
         scene_path = "res://src/level/tiers/tier_3.tscn",
+        camera_horizontally_locked = true,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
@@ -153,6 +157,7 @@ const TIERS := {
     },
     "4": {
         scene_path = "res://src/level/tiers/tier_4.tscn",
+        camera_horizontally_locked = true,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
@@ -160,6 +165,7 @@ const TIERS := {
     },
     "5": {
         scene_path = "res://src/level/tiers/tier_5.tscn",
+        camera_horizontally_locked = true,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
@@ -167,6 +173,7 @@ const TIERS := {
     },
     "6": {
         scene_path = "res://src/level/tiers/tier_6.tscn",
+        camera_horizontally_locked = true,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
@@ -174,6 +181,7 @@ const TIERS := {
     },
     "7": {
         scene_path = "res://src/level/tiers/tier_7.tscn",
+        camera_horizontally_locked = true,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
@@ -183,14 +191,14 @@ const TIERS := {
 
 const LEVELS := {
     "1": {
-        tiers = ["0", "1", "2", "3", "4", "5", "6", "7"],
+        tiers = ["1", "2", "3", "4", "5", "6", "7"],
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
     },
     "2": {
-        tiers = ["0", "3", "5", "6"],
+        tiers = ["3", "5", "6"],
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,

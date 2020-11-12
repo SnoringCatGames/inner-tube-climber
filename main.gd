@@ -4,65 +4,10 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Refactor level:
-#   - Create a concept of a zoom amount for each tier.
-#     - Configure this with the tier definitions.
-#     - Set the camera zoom accordingly within level when switching tiers.
-#     - Have the zoom change animate.
-#   - Change how base-level case is handled.
-#     - Don't encode in config.
-#     - Auto-append when starting level.
-#     - Change tier ratio display values to show index + 1 as numerator.
-#   - Consolidate some logic between Level._start_new_level and
-#     Level._on_entered_new_tier.
+# - Create a concept of a zoom amount for each tier.
+#   - Update the bottom-of-screen-death-boundary.
 # 
 # - Show tier ratio sign at start of each tier.
-# 
-# - Fix bug where player can double-jump if second jump is very quickly after 
-#   first.
-# 
-# - Make wall-bounce give more extra vertical speed.
-# 
-# - Make new sound effects:
-#   - For button press, that is more subtle.
-#     - Still use the old one on start-game press though.
-#   - For game over (lost all lives), that is different than fall sound effect.
-#     - Dies irae?
-#   - Foot-snow-crunching sound effect when walking.
-#   - Hard-ice-tapping sound effect when walking on ice.
-#   - For move-sideways event triggering.
-#     - Will help inform player when switching directions.
-#   - For "move_left" / "move_right" just pressed.
-#   - For _on_last_tier_completed.
-#   - Multiplier value increased.
-#   - Multiplier value reset.
-#   - Test out adding a very subtle sound effect for each score-board tween
-#     number update.
-# 
-# - Create additional animations for various events:
-#   - Bouncing off wall?
-#     - Radiating circle pulse?
-#   - Landing-on/jumping-off snow?
-#     - Spray/circular-sector-outward-triangle-shape of snow dots?
-#   - Vibrate screen when falling?
-#     - Or just on gameover?
-#   - Do something special on game over.
-#   - Reaching next tier.
-#     - Confetti?
-#     - 
-#   - Snow-falling effect.
-#     - Have this appear on specific level+tier configs.
-#     - Have different parameters or types for this:
-#       - Number of flakes
-#       - Size of flakes
-#       - Speed of flakes
-#       - Direction of flakes
-#       - Amount of random course deviation for flakes
-#       - Can then emulate strong wind flurries with fast, sideways, straight
-#         trajectories, vs calm with fat flakes, slow, downward, and lots of
-#         deviation.
-#   - Also, animate the cooldown text with a single pulse of red, each time the
-#     multiplier value changes.
 # 
 # - Implement Level._on_final_tier_completed()
 #   - Trigger a new sound effect.
@@ -70,8 +15,10 @@ class_name Main
 #   - A message?
 #   - Animate tier ratio (e.g. 7/7).
 # 
-# - Consider refactoring into stuck zoom animation to instead just use the
-#   zoom_multiplier on LevelConfig for TIERS[0].
+# - Fix bug where player can double-jump if second jump is very quickly after 
+#   first.
+# 
+# - Make wall-bounce give more extra vertical speed.
 # 
 # - Pause screen
 #   - Restart level
@@ -156,7 +103,69 @@ class_name Main
 # 
 # - When resetting tier after a fall, only start scroll after first input.
 # 
-# - Change max-height indicators to be pixel images.
+# - Change max-height indicators to be pixel images?
+# 
+# 
+# 
+# - Create a couple new platform types:
+#   - They crumble away after a short delay after being landed on.
+#   - Create a version for both snow platforms and ice platforms (not for solid
+#     ground tiles).
+#   - This will require detecting all tiles in a given platform.
+#     - Should be easy though, given all my custom surface-parsing logic.
+#   - Will need to create crumble start, build, and fall-away animations.
+#   - Will need to dynamically update TileMap.
+#   - Update multiplier cooldown to be dynamic depending on the type of tile
+#     being walked on?
+#     - Want it to at least represent the time remaining until a platform would
+#       crumble.
+#     - This could just mean making all multiplier cooldowns match the
+#       crumble-tile duration.
+# 
+# - Make new sound effects:
+#   - For button press, that is more subtle.
+#     - Still use the old one on start-game press though.
+#   - For game over (lost all lives), that is different than fall sound effect.
+#     - Dies irae?
+#   - Foot-snow-crunching sound effect when walking.
+#   - Hard-ice-tapping sound effect when walking on ice.
+#   - For move-sideways event triggering.
+#     - Will help inform player when switching directions.
+#   - For "move_left" / "move_right" just pressed.
+#   - For _on_last_tier_completed.
+#   - Multiplier value increased.
+#   - Multiplier value reset.
+#   - Test out adding a very subtle sound effect for each score-board tween
+#     number update.
+#   - For landing on a crumble tile.
+#   - For a crumble tile about to collapse (maybe just a long sfx that lasts
+#     for the entire crumble tile duration).
+#   - For a crumble tile falling away.
+# 
+# - Create additional animations for various events:
+#   - Bouncing off wall?
+#     - Radiating circle pulse?
+#   - Landing-on/jumping-off snow?
+#     - Spray/circular-sector-outward-triangle-shape of snow dots?
+#   - Vibrate screen when falling?
+#     - Or just on gameover?
+#   - Do something special on game over.
+#   - Reaching next tier.
+#     - Confetti?
+#     - 
+#   - Snow-falling effect.
+#     - Have this appear on specific level+tier configs.
+#     - Have different parameters or types for this:
+#       - Number of flakes
+#       - Size of flakes
+#       - Speed of flakes
+#       - Direction of flakes
+#       - Amount of random course deviation for flakes
+#       - Can then emulate strong wind flurries with fast, sideways, straight
+#         trajectories, vs calm with fat flakes, slow, downward, and lots of
+#         deviation.
+#   - Also, animate the cooldown text with a single pulse of red, each time the
+#     multiplier value changes.
 # 
 # - Create a special tutorial level.
 #   - Pause the level at the start of each tier and show an explanatory
@@ -207,10 +216,9 @@ class_name Main
 #   - In the pause menu, allow the player to quit back to the main menu.
 #   - Auto-save progress through each tier to local storage, so the user can
 #     resume there on next load?
-# - Possible to add levels with lots of sideways movement and camera panning.
-#   Probably conditionally lock camera horizontal pan.
-#   - Theme-wise, we can eventually make the player escape the crevasse and
-#     start climbing up the mountain.
+# - Theme-wise, we can eventually make the player escape the crevasse and start
+#   climbing up the mountain.
+#   - Use tiers with lots of horizontal panning at this point.
 #   - We can show trees and mountain range in the background.
 #   - Idk if there's something clever we can do to make the inner-tubing
 #     continue to make sense at this point though... why would they care to do

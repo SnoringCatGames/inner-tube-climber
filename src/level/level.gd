@@ -19,6 +19,7 @@ const CAMERA_START_ZOOM_PRE_STUCK := 0.4
 const CAMERA_START_POSITION_PRE_STUCK := PLAYER_START_POSITION
 const CAMERA_START_POSITION_POST_STUCK := Vector2(0.0, -128.0)
 const CAMERA_PAN_TO_POST_STUCK_DURATION_SEC := 0.5
+const CAMERA_HORIZONTAL_LOCK_DISPLACMENT_TWEEN_DURATION_SEC := 0.3
 # TODO: Update this to instead be logarithmic.
 const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 3.0
 const NUMBER_OF_LEVELS_PER_MUSIC := 1
@@ -28,7 +29,7 @@ const DISPLAY_HEIGHT_INTERVAL := 32.0
 
 # This is how many tiers the player must pass through without falling before
 # hitting the max camera scroll speed and framerate speed.
-const MAX_SPEED_INDEX := 10
+const MAX_SPEED_INDEX := 9
 const SPEED_INDEX_DECREMENT_AMOUNT := 1
 const SPEED_INCREASE_EASING := "linear"
 
@@ -80,8 +81,14 @@ var score := 0.0
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
 var camera_position := -Vector2.INF
 var camera_speed := 0.0
+var camera_zoom := 1.0
+var camera_horizontally_locked := true
+var is_camera_post_stuck_state_tween_active := false
 var current_fall_height := -INF
 var is_game_playing := false
+
+var camera_horizontal_lock_displacement_tween: Tween
+var camera_horizontal_lock_tween_displacement := 0.0
 
 var tiers_count_since_falling := 0
 
@@ -121,6 +128,9 @@ func _enter_tree() -> void:
             origin_offset, \
             false)
     add_child(max_height_indicator)
+    
+    camera_horizontal_lock_displacement_tween = Tween.new()
+    add_child(camera_horizontal_lock_displacement_tween)
 
 func _ready() -> void:
     _set_camera()
@@ -239,7 +249,7 @@ func _process(delta_sec: float) -> void:
     
     # Update score displays.
     score_boards.set_tier_ratio( \
-            current_tier_index, \
+            current_tier_index + 1, \
             LevelConfig.LEVELS[level_id].tiers.size())
     score_boards.set_height(display_height)
     score_boards.set_score(score)
@@ -252,6 +262,18 @@ func _process(delta_sec: float) -> void:
             current_camera_height - player_max_distance_below_camera
     if player_current_height < current_fall_height:
         _fall()
+    
+    if player == null:
+        return
+    
+    if !is_camera_post_stuck_state_tween_active:
+        if camera_horizontally_locked:
+            camera_position.x = camera_horizontal_lock_tween_displacement
+        else:
+            camera_position.x = \
+                    player.position.x + \
+                    camera_horizontal_lock_tween_displacement
+        Global.camera_controller.offset.x = floor(camera_position.x)
 
 func _fall() -> void:
     falls_count += 1
@@ -336,7 +358,12 @@ func _set_camera_post_stuck_state(is_base_tier: bool) -> void:
                 CAMERA_PAN_TO_POST_STUCK_DURATION_SEC, \
                 Tween.TRANS_QUAD, \
                 Tween.EASE_IN_OUT)
+        tween.connect( \
+                "tween_completed", \
+                self, \
+                "_on_camera_post_stuck_state_completed")
         tween.start()
+        is_camera_post_stuck_state_tween_active = true
     else:
         _interpolate_camera_to_post_stuck_state(1.0)
 
@@ -349,9 +376,14 @@ func _interpolate_camera_to_post_stuck_state(progress: float) -> void:
     Global.camera_controller.offset = Utils.floor_vector(camera_position)
     
     var start_zoom := CAMERA_START_ZOOM_PRE_STUCK
-    var end_zoom := CameraController.DEFAULT_CAMERA_ZOOM
-    var current_zoom := start_zoom + (end_zoom - start_zoom) * progress
+    var end_zoom := camera_zoom
+    var current_zoom: float = lerp(start_zoom, end_zoom, progress)
     Global.camera_controller.zoom = current_zoom
+
+func _on_camera_post_stuck_state_completed( \
+        object: Object, \
+        key: NodePath) -> void:
+    is_camera_post_stuck_state_tween_active = false
 
 func _remove_stuck_animation() -> void:
     # Only the base tier has the stuck-tuber animation.
@@ -428,7 +460,7 @@ func destroy() -> void:
     
     camera_position = CAMERA_START_POSITION_PRE_STUCK
     Global.camera_controller.offset = Utils.floor_vector(camera_position)
-    Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
+    Global.camera_controller.animate_to_zoom(CAMERA_START_ZOOM_PRE_STUCK)
     
     if score_boards != null:
         Global.canvas_layers.hud_layer.remove_child(score_boards)
@@ -451,7 +483,7 @@ func destroy() -> void:
         max_height_on_current_height_indicator = null
 
 func _start_new_tier( \
-        tier_id := "0", \
+        tier_id := START_TIER_ID, \
         tier_position := Vector2.ZERO, \
         music_player_index := Audio.START_MUSIC_INDEX) -> void:
     Audio.current_music_player_index = music_player_index
@@ -464,16 +496,16 @@ func _start_new_tier( \
     
     var level_config: Dictionary = LevelConfig.LEVELS[level_id]
     
-    # FIXME: ----------------
-    assert(level_config.tiers.has(current_tier_id))
-    current_tier_index = \
-            level_config.tiers.find(current_tier_id) if \
-            tier_id != "0" else \
-            0
-    var next_tier_index: int = level_config.tiers.find(current_tier_id) + 1
+    if current_tier_id == "0":
+        current_tier_index = -1
+    else:
+        assert(level_config.tiers.has(current_tier_id))
+        current_tier_index = level_config.tiers.find(current_tier_id)
+    
+    var next_tier_index: int = current_tier_index + 1
     if next_tier_index == level_config.tiers.size():
         # Loop back around, and skip the first/base tier.
-        next_tier_index = 1
+        next_tier_index = 0
     var next_tier_id: String = level_config.tiers[next_tier_index]
     
     var current_tier_position := tier_position
@@ -539,6 +571,9 @@ func _start_new_tier( \
     
     camera_speed = 0.0
     Time.physics_framerate_multiplier = _get_min_framerate_multiplier()
+    _update_zoom(current_tier_id != "0")
+    _update_camera_horizontally_locked( \
+            current_tier_config.camera_horizontally_locked)
     
     if !Global.SHOWS_MOBILE_CONTROLS:
         # Render the basic input instructions sign.
@@ -565,20 +600,20 @@ func _on_entered_new_tier() -> void:
     
     var level_config: Dictionary = LevelConfig.LEVELS[level_id]
     
-    # FIXME: -------------
-    assert(level_config.tiers.has(current_tier_id))
     var was_final_tier_completed := false
-    current_tier_index = level_config.tiers.find(current_tier_id) + 1
+    current_tier_index += 1
     if current_tier_index == level_config.tiers.size():
         # Loop back around, and skip the first/base tier.
         was_final_tier_completed = true
-        current_tier_index = 1
+        current_tier_index = 0
     current_tier_id = level_config.tiers[current_tier_index]
     var next_tier_index := current_tier_index + 1
     if next_tier_index == level_config.tiers.size():
         # Loop back around, and skip the first/base tier.
-        next_tier_index = 1
+        next_tier_index = 0
     var next_tier_id: String = level_config.tiers[next_tier_index]
+    
+    var current_tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
     
     var next_tier_position: Vector2 = \
             LevelConfig.get_tier_top_position(current_tier)
@@ -613,6 +648,9 @@ func _on_entered_new_tier() -> void:
         Audio.cross_fade_music(Audio.current_music_player_index)
     
     _increment_speed()
+    _update_zoom()
+    _update_camera_horizontally_locked( \
+            current_tier_config.camera_horizontally_locked)
     
     Audio.new_tier_sfx_player.play()
     
@@ -720,6 +758,37 @@ func _update_speed() -> void:
                 camera_speed,
                 Time.physics_framerate_multiplier,
             ])
+
+func _update_zoom(updates_camera := true) -> void:
+    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
+    var tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
+    camera_zoom = \
+            CameraController.DEFAULT_CAMERA_ZOOM * \
+            level_config.zoom_multiplier * \
+            tier_config.zoom_multiplier
+    if updates_camera:
+        Global.camera_controller.animate_to_zoom(camera_zoom)
+
+func _update_camera_horizontally_locked(locked: bool) -> void:
+    if camera_horizontally_locked == locked:
+        return
+    
+    camera_horizontally_locked = locked
+    
+    var start_value := \
+            Global.camera_controller.offset.x if \
+            camera_horizontally_locked else \
+            -player.position.x
+    camera_horizontal_lock_displacement_tween.stop(self)
+    camera_horizontal_lock_displacement_tween.interpolate_property( \
+            self, \
+            "camera_horizontal_lock_tween_displacement", \
+            start_value, \
+            0.0, \
+            CAMERA_HORIZONTAL_LOCK_DISPLACMENT_TWEEN_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    camera_horizontal_lock_displacement_tween.start()
 
 func _update_score_for_height_change(height_delta_pixels: float) -> void:
     score += \

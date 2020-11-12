@@ -5,10 +5,19 @@ const DEFAULT_CAMERA_ZOOM := 1.0
 const ZOOM_STEP_RATIO := Vector2(0.05, 0.05)
 const PAN_STEP := 32.0
 
+const ZOOM_ANIMATION_DURATION_SEC := 0.3
+
 var _current_camera: Camera2D
 
 var offset: Vector2 setget _set_offset, _get_offset
 var zoom: float setget _set_zoom, _get_zoom
+
+var zoom_tween: Tween
+var tween_zoom: float
+
+func _enter_tree() -> void:
+    zoom_tween = Tween.new()
+    add_child(zoom_tween)
 
 func _process(delta_sec: float) -> void:
     if _current_camera != null:
@@ -67,3 +76,22 @@ func _get_zoom() -> float:
         return 1.0
     assert(_current_camera.zoom.x == _current_camera.zoom.y)
     return _current_camera.zoom.x
+
+func animate_to_zoom(zoom: float) -> void:
+    if _get_zoom() == zoom:
+        return
+    
+    var start_zoom := \
+            tween_zoom if \
+            zoom_tween.is_active() else \
+            _get_zoom()
+    zoom_tween.stop(self)
+    zoom_tween.interpolate_property( \
+            self, \
+            "zoom", \
+            start_zoom, \
+            zoom, \
+            ZOOM_ANIMATION_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    zoom_tween.start()

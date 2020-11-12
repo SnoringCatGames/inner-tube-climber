@@ -4,14 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Display speed to user as well.
-#   - Just call it speed 1, 2, 3, ...
-#   - Add another score board.
-#   - Animate this scoreboard text with a red pulse anytime it changes.
-# 
-# - Is there anything I should show with a falling text particle from the
-#   player when the value changes? Score, multiplier, speed, tier?
-# 
 # - Refactor level:
 #   - Create a concept of a zoom amount for each tier.
 #     - Configure this with the tier definitions.
@@ -125,8 +117,8 @@ class_name Main
 #   - Toggle whether framerate-multiplier/difficulty automatically track to the
 #     current climb speed.
 #   - Set how many camera-speed indices are decremented when falling.
-#   - Toggle whether score, height, lives, level tier completion ratio, and
-#     multiplier boards are shown.
+#   - Toggle whether score, height, lives, level tier completion ratio,
+#     multiplier, and scroll speed boards are shown.
 #   - Toggle whether max-height indicators are shown along sides of screen.
 # 
 # - Replace main menu button text with icons

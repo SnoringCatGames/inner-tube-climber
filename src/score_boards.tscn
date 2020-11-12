@@ -47,10 +47,18 @@ margin_right = 120.0
 margin_bottom = 99.0
 label = "Multiplier:"
 
-[node name="LivesBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
+[node name="SpeedBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 104.0
 margin_right = 120.0
 margin_bottom = 125.0
+label = "Speed:"
+
+[node name="LivesBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 130.0
+margin_right = 120.0
+margin_bottom = 151.0
 label = "Lives:"

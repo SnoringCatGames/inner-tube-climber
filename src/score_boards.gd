@@ -10,7 +10,8 @@ func _enter_tree() -> void:
 func set_tier_ratio( \
         tier_index: int, \
         tier_count: int) -> void:
-    $VBoxContainer/TierRatioBoard.value = "%s / %s" % [tier_index, tier_count]
+    $VBoxContainer/TierRatioBoard \
+            .set_value_with_color_pulse("%s / %s" % [tier_index, tier_count])
 
 func set_height(height: int) -> void:
     $VBoxContainer/HeightBoard.animate_to_number(height)
@@ -19,7 +20,10 @@ func set_score(score: int) -> void:
     $VBoxContainer/ScoreBoard.animate_to_number(score)
 
 func set_multiplier(multiplier: int) -> void:
-    $VBoxContainer/MultiplierBoard.value = "x%s" % multiplier
+    $VBoxContainer/MultiplierBoard.set_value_with_color_pulse("x%s" % multiplier)
+
+func set_speed(speed: int) -> void:
+    $VBoxContainer/SpeedBoard.set_value_with_color_pulse("%s" % speed)
 
 func set_lives(lives: int) -> void:
-    $VBoxContainer/LivesBoard.value = str(lives)
+    $VBoxContainer/LivesBoard.set_value_with_color_pulse(str(lives))

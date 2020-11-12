@@ -29,7 +29,7 @@ const DISPLAY_HEIGHT_INTERVAL := 32.0
 # This is how many tiers the player must pass through without falling before
 # hitting the max camera scroll speed and framerate speed.
 const MAX_SPEED_INDEX := 10
-const SPEED_INDEX_DECREMENT_AMOUNT := 2
+const SPEED_INDEX_DECREMENT_AMOUNT := 1
 const SPEED_INCREASE_EASING := "linear"
 
 const SCORE_PER_HEIGHT_PIXELS := 1.0 / DISPLAY_HEIGHT_INTERVAL
@@ -244,6 +244,7 @@ func _process(delta_sec: float) -> void:
     score_boards.set_height(display_height)
     score_boards.set_score(score)
     score_boards.set_multiplier(cooldown_indicator.multiplier)
+    score_boards.set_speed(speed_index + 1)
     score_boards.set_lives(lives_count)
     
     # Check for game over.

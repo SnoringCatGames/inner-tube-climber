@@ -20,6 +20,8 @@ const INPUT_VIBRATE_DURATION_SEC := 0.01
 
 const DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC := 0.1
 
+const IS_DEBUG_PANEL_SHOWN_BY_DEFAULT := false
+
 var is_giving_haptic_feedback := false
 
 var difficulty_mode := DifficultyMode.MODERATE
@@ -97,6 +99,7 @@ func register_main(main: Node) -> void:
     
     canvas_layers = CanvasLayers.new()
     main.add_child(canvas_layers)
+    canvas_layers.is_debug_panel_shown = IS_DEBUG_PANEL_SHOWN_BY_DEFAULT
 
 func vibrate() -> void:
     if is_giving_haptic_feedback:

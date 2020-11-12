@@ -32,12 +32,11 @@ const MAX_SPEED_INDEX := 10
 const SPEED_INDEX_DECREMENT_AMOUNT := 2
 const SPEED_INCREASE_EASING := "linear"
 
-const SCORE_PER_HEIGHT_PIXELS := 10.0 / 32.0
-const SCORE_MULTIPLIER_DELTA_FOR_EASY_DIFFICULTY := -0.25
-const SCORE_MULTIPLIER_DELTA_FOR_MODERATE_DIFFICULTY := 0.0
-const SCORE_MULTIPLIER_DELTA_FOR_HARD_DIFFICULTY := 0.25
-const SCORE_MULTIPLIER_DELTA_PER_LIFE := 0.05
-const SCORE_MULTIPLIER_DELTA_PER_TIER_SINCE_FALLING := 0.5
+const SCORE_PER_HEIGHT_PIXELS := 1.0 / DISPLAY_HEIGHT_INTERVAL
+const _BASE_SCORE_FOR_TIER := 2048.0 * SCORE_PER_HEIGHT_PIXELS * 0.25
+const SCORE_FOR_TIER_FOR_EASY_DIFFICULTY := _BASE_SCORE_FOR_TIER * 0.75
+const SCORE_FOR_TIER_FOR_MODERATE_DIFFICULTY := _BASE_SCORE_FOR_TIER * 1.0
+const SCORE_FOR_TIER_FOR_HARD_DIFFICULTY := _BASE_SCORE_FOR_TIER * 1.25
 
 var has_input_been_pressed := false
 
@@ -77,7 +76,6 @@ var display_height: int = 0
 var falls_count: int = 0
 var lives_count: int = DEFAULT_LIVES_COUNT
 var score := 0.0
-var score_multiplier := 1.0
 
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
 var camera_position := -Vector2.INF
@@ -160,7 +158,6 @@ func start( \
     is_game_playing = true
     falls_count = 0
     score = 0.0
-    score_multiplier = 1.0
     _start_new_tier( \
             tier_id, \
             Vector2.ZERO, \
@@ -191,14 +188,21 @@ func _physics_process(delta_sec: float) -> void:
             max(player_max_height_on_current_life, player_current_height)
     if player.surface_state.just_touched_floor:
         player_latest_platform_height = -player.surface_state.touch_position.y
+        var platform_height_delta := \
+                player_latest_platform_height - player_max_platform_height if \
+                player_latest_platform_height > \
+                        player_max_platform_height else \
+                0.0
         player_max_platform_height = \
                 max(player_max_platform_height, player_current_height)
         player_max_platform_height_on_current_life = max( \
                 player_max_platform_height_on_current_life, \
                 player_current_height)
-    display_height = floor(player_max_height / DISPLAY_HEIGHT_INTERVAL) as int
-    
-    _update_score(height_delta)
+        _update_score_for_height_change(platform_height_delta)
+        Global.debug_panel.add_message( \
+                "Platform height=%s" % player_latest_platform_height)
+    display_height = \
+            floor(player_max_platform_height / DISPLAY_HEIGHT_INTERVAL) as int
     
     cooldown_indicator.check_for_updates( \
             player_max_platform_height_on_current_life, \
@@ -239,7 +243,7 @@ func _process(delta_sec: float) -> void:
             LevelConfig.LEVELS[level_id].tiers.size())
     score_boards.set_height(display_height)
     score_boards.set_score(score)
-    score_boards.set_multiplier(score_multiplier)
+    score_boards.set_multiplier(cooldown_indicator.multiplier)
     score_boards.set_lives(lives_count)
     
     # Check for game over.
@@ -613,6 +617,8 @@ func _on_entered_new_tier() -> void:
     
     if was_final_tier_completed:
         _on_final_tier_completed()
+    
+    _update_score_for_tier_change()
 
 func _get_min_framerate_multiplier() -> float:
     match Global.difficulty_mode:
@@ -714,43 +720,24 @@ func _update_speed() -> void:
                 Time.physics_framerate_multiplier,
             ])
 
-func _update_score(height_delta_pixels: float) -> void:
-    _update_score_multiplier()
-    score += height_delta_pixels * SCORE_PER_HEIGHT_PIXELS * score_multiplier
+func _update_score_for_height_change(height_delta_pixels: float) -> void:
+    score += \
+            height_delta_pixels * \
+            SCORE_PER_HEIGHT_PIXELS * \
+            cooldown_indicator.multiplier
 
-func _update_score_multiplier() -> void:
-#    var score_multiplier_delta_for_tiers_count_since_falling := \
-#            0.5 + sqrt(tiers_count_since_falling)
-    var score_multiplier_delta_for_tiers_count_since_falling := \
-            tiers_count_since_falling * \
-            SCORE_MULTIPLIER_DELTA_PER_TIER_SINCE_FALLING
-    
-    var score_multiplier_delta_for_difficulty := 0.0
+func _update_score_for_tier_change() -> void:
+    var tier_score_for_difficulty := 0.0
     match Global.difficulty_mode:
         DifficultyMode.EASY:
-            score_multiplier_delta_for_difficulty = \
-                    SCORE_MULTIPLIER_DELTA_FOR_EASY_DIFFICULTY
+            tier_score_for_difficulty = SCORE_FOR_TIER_FOR_EASY_DIFFICULTY
         DifficultyMode.MODERATE:
-            score_multiplier_delta_for_difficulty = \
-                    SCORE_MULTIPLIER_DELTA_FOR_MODERATE_DIFFICULTY
+            tier_score_for_difficulty = SCORE_FOR_TIER_FOR_MODERATE_DIFFICULTY
         DifficultyMode.HARD:
-            score_multiplier_delta_for_difficulty = \
-                    SCORE_MULTIPLIER_DELTA_FOR_HARD_DIFFICULTY
+            tier_score_for_difficulty = SCORE_FOR_TIER_FOR_HARD_DIFFICULTY
         _:
             Utils.error()
-    
-    var score_multiplier_delta_for_lives_count := \
-            lives_count * SCORE_MULTIPLIER_DELTA_PER_LIFE
-    
-    var score_multiplier_for_time_on_current_life := \
-            cooldown_indicator.multiplier
-    
-    score_multiplier = \
-            (1.0 + \
-            score_multiplier_delta_for_tiers_count_since_falling + \
-            score_multiplier_delta_for_difficulty + \
-            score_multiplier_delta_for_lives_count) * \
-            score_multiplier_for_time_on_current_life
+    score += tier_score_for_difficulty * cooldown_indicator.multiplier
 
 func _on_final_tier_completed() -> void:
     Global.falls_count_since_reaching_level_end = 0

@@ -20,7 +20,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 120.0
 margin_bottom = 21.0
-label = "Current tier:"
+label = "Tier:"
 value = "0 / 0"
 
 [node name="HeightBoard" parent="VBoxContainer" instance=ExtResource( 4 )]

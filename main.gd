@@ -4,19 +4,15 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - 
-#   - Suggest switching to slower or faster tier after enough falls on a level,
-#     or enough levels without a fall.
-#   - Make difficulty selectable in Settings, and make auto suggestion for
-#     changing difficulty be toggleable in Settings too.
+# - Display speed to user as well.
+#   - Just call it speed 1, 2, 3, ...
+#   - Add another score board.
+#   - Animate this scoreboard text with a red pulse anytime it changes.
+# 
+# - Is there anything I should show with a falling text particle from the
+#   player when the value changes? Score, multiplier, speed, tier?
 # 
 # - Refactor level:
-#   /- Count the number of deaths within the current playthrough of the current
-#     tier.
-#   /- Count the number of tiers climbed without dying.
-#   - Add stubs for triggering popups suggesting changing difficulty.
-#   - Implement the popups for for suggesting changing difficulty.
-#     - Include two buttons in each: "Dismiss" and "Update difficulty".
 #   - Create a concept of a zoom amount for each tier.
 #     - Configure this with the tier definitions.
 #     - Set the camera zoom accordingly within level when switching tiers.
@@ -27,6 +23,8 @@ class_name Main
 #     - Change tier ratio display values to show index + 1 as numerator.
 #   - Consolidate some logic between Level._start_new_level and
 #     Level._on_entered_new_tier.
+# 
+# - Show tier ratio sign at start of each tier.
 # 
 # - Fix bug where player can double-jump if second jump is very quickly after 
 #   first.
@@ -46,6 +44,33 @@ class_name Main
 #   - For _on_last_tier_completed.
 #   - Multiplier value increased.
 #   - Multiplier value reset.
+#   - Test out adding a very subtle sound effect for each score-board tween
+#     number update.
+# 
+# - Create additional animations for various events:
+#   - Bouncing off wall?
+#     - Radiating circle pulse?
+#   - Landing-on/jumping-off snow?
+#     - Spray/circular-sector-outward-triangle-shape of snow dots?
+#   - Vibrate screen when falling?
+#     - Or just on gameover?
+#   - Do something special on game over.
+#   - Reaching next tier.
+#     - Confetti?
+#     - 
+#   - Snow-falling effect.
+#     - Have this appear on specific level+tier configs.
+#     - Have different parameters or types for this:
+#       - Number of flakes
+#       - Size of flakes
+#       - Speed of flakes
+#       - Direction of flakes
+#       - Amount of random course deviation for flakes
+#       - Can then emulate strong wind flurries with fast, sideways, straight
+#         trajectories, vs calm with fat flakes, slow, downward, and lots of
+#         deviation.
+#   - Also, animate the cooldown text with a single pulse of red, each time the
+#     multiplier value changes.
 # 
 # - Implement Level._on_final_tier_completed()
 #   - Trigger a new sound effect.
@@ -137,17 +162,7 @@ class_name Main
 #   - The problem is that collisions get weird with tier-gap-walled-to-open.
 #   - Will need to check many more alternate TileMaps in surface contact update.
 # 
-# - When resetting tier after a fall (or, actually, even just starting any
-#   non-zero tier), set initial camera pan to be lower down.
-#   - And maybe also only start scroll after first input.
-# 
-# - Change how speed-up works:
-#   - Configure a speed for each tier within the level tier-collection.
-#   - Then, also configure a level-loop speed-up multiplier, that is applied to
-#     each tier in the level on the next loop, and then again on the next, and
-#     so on.
-#   - Make sure this level-loop speed-up multiplier happens on a log scale, so
-#     that it doesn't become quickly impossible.
+# - When resetting tier after a fall, only start scroll after first input.
 # 
 # - Change max-height indicators to be pixel images.
 # 
@@ -162,8 +177,20 @@ class_name Main
 #   - Show a very transparent black screen behind the info-graphic overlay.
 #   - Info-graphics can also show player moving through a sequence with arrows.
 # 
+# - Add some logic to conditionally suggest changing difficulty (as a sticky
+#   setting) from the game-over screen, depending on recent performance.
+#   - Suggest switching to slower or faster tier after enough falls on a level,
+#     or enough levels without a fall.
+#   - Make difficulty selectable in Settings, and make auto suggestion for
+#     changing difficulty be toggleable in Settings too.
+# 
 # - In general, make all tiers a lot easier if you know the trick for how to
 #   approach the tier.
+# 
+# - Create a fun Christmasy level, with new tile art with Christmas light
+#   strands.
+#   - Make these actually act as light emitting sources.
+#   - Add a cover of a classic Christmas song.
 # 
 # - Change score to accumulate between deaths.
 #   - Maybe count current elevation separately.

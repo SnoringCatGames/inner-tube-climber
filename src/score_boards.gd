@@ -13,13 +13,13 @@ func set_tier_ratio( \
     $VBoxContainer/TierRatioBoard.value = "%s / %s" % [tier_index, tier_count]
 
 func set_height(height: int) -> void:
-    $VBoxContainer/HeightBoard.value = str(height)
+    $VBoxContainer/HeightBoard.animate_to_number(height)
 
-func set_score(score: float) -> void:
-    $VBoxContainer/ScoreBoard.value = str(int(score))
+func set_score(score: int) -> void:
+    $VBoxContainer/ScoreBoard.animate_to_number(score)
 
-func set_multiplier(multiplier: float) -> void:
-    $VBoxContainer/MultiplierBoard.value = "%3.1f" % multiplier
+func set_multiplier(multiplier: int) -> void:
+    $VBoxContainer/MultiplierBoard.value = "x%s" % multiplier
 
 func set_lives(lives: int) -> void:
     $VBoxContainer/LivesBoard.value = str(lives)

@@ -2,9 +2,10 @@ extends Node2D
 class_name Level
 
 const MOBILE_CONTROL_UI_RESOURCE_PATH := "res://src/mobile_control_ui.tscn"
-const SCORE_BOARDS_RESOURCE_PATH := "res://src/score_boards.tscn"
-
+const SCORE_BOARDS_RESOURCE_PATH := "res://src/overlays/score_boards.tscn"
 const PLAYER_RESOURCE_PATH := "res://src/player/tuber_player.tscn"
+const TIER_RATIO_SIGN_RESOURCE_PATH := \
+        "res://src/overlays/tier_ratio_sign.tscn"
 
 const START_TIER_ID := "0"
 const DEFAULT_LIVES_COUNT := 3
@@ -43,8 +44,8 @@ var has_input_been_pressed := false
 
 var speed_index := 0
 
-var camera_max_distance_below_player := INF
-var player_max_distance_below_camera := INF
+var camera_max_distance_below_player_with_default_zoom := INF
+var player_max_distance_below_camera_with_default_zoom := INF
 
 var mobile_control_ui: MobileControlUI
 var score_boards: ScoreBoards
@@ -64,6 +65,8 @@ var current_tier: Tier
 var next_tier: Tier
 var previous_tier_gap: TierGap
 var next_tier_gap: TierGap
+var current_tier_ratio_sign: TierRatioSign
+var next_tier_ratio_sign: TierRatioSign
 
 var player: TuberPlayer
 var player_current_height: float = 0.0
@@ -157,8 +160,9 @@ func _input(event: InputEvent) -> void:
 
 func _handle_display_resize() -> void:
     var game_area_size: Vector2 = Global.get_game_area_region().size
-    camera_max_distance_below_player = game_area_size.y / 4
-    player_max_distance_below_camera = game_area_size.y / 2 + CELL_SIZE.y / 2
+    camera_max_distance_below_player_with_default_zoom = game_area_size.y / 4
+    player_max_distance_below_camera_with_default_zoom = \
+            game_area_size.y / 2 - 4.0
 
 func start( \
         level_id: String, \
@@ -238,9 +242,12 @@ func _process(delta_sec: float) -> void:
     
     # Update camera pan, to never be too far below the player.
     if current_camera_height < \
-            player_current_height - camera_max_distance_below_player:
+            player_current_height - \
+            camera_max_distance_below_player_with_default_zoom * camera_zoom:
         var additional_offset := \
-                player_current_height - camera_max_distance_below_player - \
+                player_current_height - \
+                camera_max_distance_below_player_with_default_zoom * \
+                        camera_zoom - \
                 current_camera_height
         current_camera_height += additional_offset
         camera_position.y -= additional_offset
@@ -259,7 +266,8 @@ func _process(delta_sec: float) -> void:
     
     # Check for game over.
     current_fall_height = \
-            current_camera_height - player_max_distance_below_camera
+            current_camera_height - \
+            player_max_distance_below_camera_with_default_zoom * camera_zoom
     if player_current_height < current_fall_height:
         _fall()
     
@@ -508,6 +516,7 @@ func _start_new_tier( \
         next_tier_index = 0
     var next_tier_id: String = level_config.tiers[next_tier_index]
     
+    # Current tier.
     var current_tier_position := tier_position
     var current_tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
     current_tier = Utils.add_scene( \
@@ -521,6 +530,7 @@ func _start_new_tier( \
                     Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     current_tier.position = current_tier_position
     
+    # Next tier.
     var next_tier_position: Vector2 = \
             LevelConfig.get_tier_top_position(current_tier)
     var next_tier_config: Dictionary = LevelConfig.TIERS[next_tier_id]
@@ -534,6 +544,7 @@ func _start_new_tier( \
             Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     next_tier.position = next_tier_position
     
+    # Next tier gap.
     var next_tier_gap_scene_path: String = \
             LevelConfig.get_tier_gap_scene_path( \
                     current_tier.openness_type, \
@@ -544,6 +555,31 @@ func _start_new_tier( \
             true, \
             true)
     next_tier_gap.position = next_tier_position
+    
+    # Tier-ratio signs.
+    if current_tier_ratio_sign != null:
+        remove_child(current_tier_ratio_sign)
+    if current_tier_id != "0":
+        current_tier_ratio_sign = Utils.add_scene( \
+                self, \
+                TIER_RATIO_SIGN_RESOURCE_PATH, \
+                true, \
+                true)
+        current_tier_ratio_sign.position = \
+                current_tier_position - Vector2(0.0, CELL_SIZE.y)
+        current_tier_ratio_sign.text = \
+                "%s / %s" % [current_tier_index + 1, level_config.tiers.size()]
+    if next_tier_ratio_sign != null:
+        remove_child(next_tier_ratio_sign)
+    next_tier_ratio_sign = Utils.add_scene( \
+            self, \
+            TIER_RATIO_SIGN_RESOURCE_PATH, \
+            true, \
+            true)
+    next_tier_ratio_sign.position = \
+            next_tier_position - Vector2(0.0, CELL_SIZE.y)
+    next_tier_ratio_sign.text = \
+            "%s / %s" % [next_tier_index + 1, level_config.tiers.size()]
     
     if current_tier_id != "0":
         var previous_tier_scene_path: String = \
@@ -615,6 +651,7 @@ func _on_entered_new_tier() -> void:
     
     var current_tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
     
+    # Next tier.
     var next_tier_position: Vector2 = \
             LevelConfig.get_tier_top_position(current_tier)
     var next_tier_config: Dictionary = LevelConfig.TIERS[next_tier_id]
@@ -627,6 +664,7 @@ func _on_entered_new_tier() -> void:
             Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     next_tier.position = next_tier_position
     
+    # Next tier gap.
     var next_tier_gap_scene_path: String = \
             LevelConfig.get_tier_gap_scene_path( \
                     current_tier.openness_type, \
@@ -637,6 +675,19 @@ func _on_entered_new_tier() -> void:
             true, \
             true)
     next_tier_gap.position = next_tier_position
+    
+    # Update tier-ratio signs.
+    remove_child(current_tier_ratio_sign)
+    current_tier_ratio_sign = next_tier_ratio_sign
+    next_tier_ratio_sign = Utils.add_scene( \
+            self, \
+            TIER_RATIO_SIGN_RESOURCE_PATH, \
+            true, \
+            true)
+    next_tier_ratio_sign.position = \
+            next_tier_position - Vector2(0.0, CELL_SIZE.y)
+    next_tier_ratio_sign.text = \
+            "%s / %s" % [next_tier_index + 1, level_config.tiers.size()]
     
     # Maybe play new music.
     if (start_tier_id != "0" or \

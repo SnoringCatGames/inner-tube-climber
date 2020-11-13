@@ -4,11 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Create a concept of a zoom amount for each tier.
-#   - Update the bottom-of-screen-death-boundary.
-# 
-# - Show tier ratio sign at start of each tier.
-# 
 # - Implement Level._on_final_tier_completed()
 #   - Trigger a new sound effect.
 #   - Implement an animation effect? Confetti?
@@ -241,6 +236,8 @@ class_name Main
 # - Make a tier to emphasize fast scroll speed.
 #   - Lots of zig zagging on ground tiles (that can't be jumped through).
 #   - Maximum bouncing for speeeeeed!
+# - Make a tier to emphasize camera_horizontally_locked=false (and with zoom).
+# - Make a tier to emphasize crumbling platforms.
 # - Mobile control idea: touch either corner to move sideways, swipe slightly
 #   up on either to jump.
 # 

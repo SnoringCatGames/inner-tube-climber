@@ -133,8 +133,8 @@ const TIERS := {
     },
     "1": {
         scene_path = "res://src/level/tiers/tier_1.tscn",
-        camera_horizontally_locked = false,
-        zoom_multiplier = 0.8, # FIXME: -------------------- Reset back to DEFAULT_ZOOM_MULTIPLIER.
+        camera_horizontally_locked = true,
+        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,

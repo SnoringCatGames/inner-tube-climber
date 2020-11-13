@@ -1,8 +1,10 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://assets/images/score-board-long.png" type="Texture" id=1]
-[ext_resource path="res://src/score_board.gd" type="Script" id=2]
+[ext_resource path="res://assets/images/signs/score-board-long.png" type="Texture" id=1]
+[ext_resource path="res://src/overlays/score_board.gd" type="Script" id=2]
 [ext_resource path="res://assets/fonts/main_font_xs.tres" type="DynamicFont" id=3]
+
+
 
 [node name="ScoreBoard" type="Panel"]
 anchor_right = 1.0

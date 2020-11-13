@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/score-board-long.png-27df11468c4b5039afcbed56dcf6cc46.stex"
+path="res://.import/score-board-long.png-a7294588e25fbf7b8872857e6bacf5b6.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/score-board-long.png"
-dest_files=[ "res://.import/score-board-long.png-27df11468c4b5039afcbed56dcf6cc46.stex" ]
+source_file="res://assets/images/signs/score-board-long.png"
+dest_files=[ "res://.import/score-board-long.png-a7294588e25fbf7b8872857e6bacf5b6.stex" ]
 
 [params]
 

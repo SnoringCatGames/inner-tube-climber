@@ -6,6 +6,7 @@ const SCORE_BOARDS_RESOURCE_PATH := "res://src/overlays/score_boards.tscn"
 const PLAYER_RESOURCE_PATH := "res://src/player/tuber_player.tscn"
 const TIER_RATIO_SIGN_RESOURCE_PATH := \
         "res://src/overlays/tier_ratio_sign.tscn"
+const PAUSE_BUTTON_RESOURCE_PATH := "res://src/overlays/pause_button.tscn"
 
 const START_TIER_ID := "0"
 const DEFAULT_LIVES_COUNT := 3
@@ -134,6 +135,12 @@ func _enter_tree() -> void:
     
     camera_horizontal_lock_displacement_tween = Tween.new()
     add_child(camera_horizontal_lock_displacement_tween)
+    
+    Utils.add_scene( \
+            Global.canvas_layers.hud_layer, \
+            PAUSE_BUTTON_RESOURCE_PATH, \
+            true, \
+            true)
 
 func _ready() -> void:
     _set_camera()

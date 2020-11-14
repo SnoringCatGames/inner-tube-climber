@@ -4,17 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Implement Level._on_final_tier_completed()
-#   - Trigger a new sound effect.
-#   - Implement an animation effect? Confetti?
-#   - A message?
-#   - Animate tier ratio (e.g. 7/7).
-# 
-# - Fix bug where player can double-jump if second jump is very quickly after 
-#   first.
-# 
-# - Make wall-bounce give more extra vertical speed.
-# 
 # - Pause screen
 #   - Restart level
 #   - Exit to main menu.
@@ -89,6 +78,11 @@ class_name Main
 #   - Test how to get the nav bar to appear on android and whether mobile
 #     controls are ever likely to make it appear annoyingly by accident.
 # 
+# - Fix bug where player can double-jump if second jump is very quickly after 
+#   first.
+# 
+# - Make wall-bounce give more extra vertical speed.
+# 
 # - Update CanvasLayers to support some layers rendering within game area, and
 #   some within entire viewport.
 # 
@@ -148,6 +142,8 @@ class_name Main
 #   - Reaching next tier.
 #     - Confetti?
 #     - 
+#   - _on_final_tier_completed
+#     - A message?
 #   - Snow-falling effect.
 #     - Have this appear on specific level+tier configs.
 #     - Have different parameters or types for this:

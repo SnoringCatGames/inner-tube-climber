@@ -75,7 +75,9 @@ func set_screen_is_open( \
                 index > 0 else \
                 null
     
-    var is_paused := screen_type != ScreenType.GAME
+    var is_paused := \
+            next_screen != null and \
+            next_screen.type != ScreenType.GAME
     var is_first_screen := is_open and active_screen_stack.empty()
     
     if is_open:
@@ -151,3 +153,6 @@ func close_current_screen() -> void:
     set_screen_is_open( \
             active_screen_stack.back().type, \
             false)
+
+func get_active_screen_type() -> int:
+    return active_screen_stack.back().type

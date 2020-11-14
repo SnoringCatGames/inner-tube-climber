@@ -107,7 +107,7 @@ bg_color = Color( 0.0627451, 0.0705882, 0.0588235, 1 )
 [sub_resource type="StyleBoxFlat" id=11]
 bg_color = Color( 0.0627451, 0.0705882, 0.0588235, 1 )
 
-[sub_resource type="StyleBoxFlat" id=18]
+[sub_resource type="StyleBoxFlat" id=12]
 content_margin_left = 11.0
 content_margin_right = 11.0
 content_margin_top = 12.0
@@ -115,10 +115,10 @@ content_margin_bottom = 12.0
 bg_color = Color( 0.0627451, 0.0705882, 0.0588235, 1 )
 shadow_size = 3
 
-[sub_resource type="StyleBoxFlat" id=12]
+[sub_resource type="StyleBoxFlat" id=13]
 bg_color = Color( 0.0627451, 0.0705882, 0.0588235, 1 )
 
-[sub_resource type="StyleBoxFlat" id=13]
+[sub_resource type="StyleBoxFlat" id=14]
 bg_color = Color( 0.0941176, 0.34902, 0.34902, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
@@ -126,7 +126,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 3
 
-[sub_resource type="StyleBoxFlat" id=14]
+[sub_resource type="StyleBoxFlat" id=15]
 bg_color = Color( 0.376471, 0.819608, 0.819608, 1 )
 border_width_left = 1
 border_width_right = 1
@@ -137,7 +137,7 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 3
 
-[sub_resource type="StyleBoxFlat" id=15]
+[sub_resource type="StyleBoxFlat" id=16]
 bg_color = Color( 0.0745098, 0.541176, 0.541176, 1 )
 border_width_left = 2
 border_width_right = 2
@@ -148,7 +148,7 @@ corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 corner_detail = 1
 
-[sub_resource type="StyleBoxFlat" id=16]
+[sub_resource type="StyleBoxFlat" id=17]
 content_margin_left = 5.0
 content_margin_right = 5.0
 content_margin_top = 5.0
@@ -160,7 +160,7 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 corner_detail = 3
 
-[sub_resource type="StyleBoxFlat" id=17]
+[sub_resource type="StyleBoxFlat" id=18]
 bg_color = Color( 0.0627451, 0.0705882, 0.0588235, 1 )
 border_width_top = 20
 border_color = Color( 0.168627, 0.168627, 0.168627, 1 )
@@ -244,7 +244,7 @@ PopupMenu/icons/unchecked = null
 PopupMenu/styles/hover = null
 PopupMenu/styles/labeled_separator_left = null
 PopupMenu/styles/labeled_separator_right = null
-PopupMenu/styles/panel = SubResource( 18 )
+PopupMenu/styles/panel = SubResource( 12 )
 PopupMenu/styles/panel_disabled = null
 PopupMenu/styles/separator = null
 Tree/colors/custom_button_font_highlight = Color( 0.94, 0.94, 0.94, 1 )
@@ -270,7 +270,7 @@ Tree/icons/checked = null
 Tree/icons/select_arrow = null
 Tree/icons/unchecked = null
 Tree/icons/updown = null
-Tree/styles/bg = SubResource( 12 )
+Tree/styles/bg = SubResource( 13 )
 Tree/styles/bg_focus = null
 Tree/styles/button_pressed = null
 Tree/styles/cursor = null
@@ -287,10 +287,10 @@ VScrollBar/icons/decrement = null
 VScrollBar/icons/decrement_highlight = null
 VScrollBar/icons/increment = null
 VScrollBar/icons/increment_highlight = null
-VScrollBar/styles/grabber = SubResource( 13 )
-VScrollBar/styles/grabber_highlight = SubResource( 14 )
-VScrollBar/styles/grabber_pressed = SubResource( 15 )
-VScrollBar/styles/scroll = SubResource( 16 )
+VScrollBar/styles/grabber = SubResource( 14 )
+VScrollBar/styles/grabber_highlight = SubResource( 15 )
+VScrollBar/styles/grabber_pressed = SubResource( 16 )
+VScrollBar/styles/scroll = SubResource( 17 )
 VScrollBar/styles/scroll_focus = null
 WindowDialog/colors/title_color = Color( 1, 1, 1, 1 )
 WindowDialog/constants/close_h_ofs = 18
@@ -300,4 +300,4 @@ WindowDialog/constants/title_height = 20
 WindowDialog/fonts/title_font = null
 WindowDialog/icons/close = null
 WindowDialog/icons/close_highlight = null
-WindowDialog/styles/panel = SubResource( 17 )
+WindowDialog/styles/panel = SubResource( 18 )

@@ -38,6 +38,7 @@ func _create_menu_screen_layer() -> void:
 func _create_hud_layer() -> void:
     hud_layer = CanvasLayer.new()
     hud_layer.layer = 300
+    hud_layer.pause_mode = Node.PAUSE_MODE_STOP
     Global.add_overlay_to_current_scene(hud_layer)
     
     Global.debug_panel = Utils.add_scene( \
@@ -51,6 +52,7 @@ func _create_hud_layer() -> void:
 func _create_annotation_layer() -> void:
     annotation_layer = CanvasLayer.new()
     annotation_layer.layer = 200
+    annotation_layer.pause_mode = Node.PAUSE_MODE_STOP
     Global.add_overlay_to_current_scene(annotation_layer)
 
 func _set_is_debug_panel_shown(is_visible: bool) -> void:

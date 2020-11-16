@@ -23,6 +23,9 @@ var elapsed_play_time_actual_sec: float \
 var elapsed_play_time_modified_sec: float \
         setget ,_get_elapsed_play_time_modified_sec
 
+func _init() -> void:
+    pause_mode = Node.PAUSE_MODE_STOP
+
 func _ready() -> void:
     _elapsed_physics_play_time_sec = 0.0
     _elapsed_render_play_time_sec = 0.0

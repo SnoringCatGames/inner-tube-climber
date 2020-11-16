@@ -4,14 +4,24 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
+# - Split Time into sub classes:
+#   - One for elapsed play time.
+#   - One for elapsed actual time.
+#   - Also do this is surfacer.
+#     >>- Or, at least add `pause_mode = Node.PAUSE_MODE_STOP`.
+# 
+# - Add wood-grain texture to gesture buttons.
+# 
+# - Add ability to save/load scores and game state.
+#   - Definitely start by just saving to local device storage, wherever that is
+#     for each/all-generic device.
+#   - But then, look into how to save this state with cloud-based app gamer
+#     profiles in both Android and iOS.
+# 
 # - Pause screen
-#   - Restart level
-#   - Exit to main menu.
 #   - Skip to tier?
-#   - Show current height/time/falls and best height/time/falls.
-#   - Show level number/name.
-#   - Show current tier number within level (Tier 7/10)?
-#   - Explain score calcualtion.
+#   - Explain score calcualtion?
+#   - Show record score.
 # 
 # - Level-select screen
 #   - Show best heights and times for completed levels

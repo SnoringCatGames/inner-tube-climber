@@ -40,3 +40,9 @@ func destroy_level() -> void:
     $PanelContainer/ViewportContainer/Viewport.remove_child(level)
     level.queue_free()
     level = null
+
+func restart_level() -> void:
+    assert(level != null)
+    var level_id := level.level_id
+    destroy_level()
+    start_level(level_id)

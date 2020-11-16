@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/controls/key_value_row.gd" type="Script" id=1]
+[ext_resource path="res://assets/fonts/main_font_s.tres" type="DynamicFont" id=2]
+
+[node name="KeyValueRow" type="HBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Key" type="Label" parent="."]
+margin_right = 238.0
+margin_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 2 )
+
+[node name="Value" type="Label" parent="."]
+margin_left = 242.0
+margin_right = 480.0
+margin_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 2 )
+align = 2

@@ -56,6 +56,8 @@ var max_height_on_current_height_indicator: MaxHeightIndicator
 
 var level_id := ""
 
+var start_time := -INF
+
 var start_tier_id := START_TIER_ID
 var current_tier_id := START_TIER_ID
 
@@ -175,6 +177,7 @@ func start( \
         level_id: String, \
         tier_id := START_TIER_ID) -> void:
     self.level_id = level_id
+    self.start_time = Time.elapsed_play_time_actual_sec
     visible = true
     is_game_playing = true
     falls_count = 0

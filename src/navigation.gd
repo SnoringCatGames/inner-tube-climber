@@ -130,7 +130,14 @@ func set_screen_is_open( \
                 "tween_completed", \
                 self, \
                 "_on_screen_slide_completed", \
-                [previous_screen, next_screen, screen_slide_tween])
+                [ \
+                        previous_screen, \
+                        next_screen, \
+                        screen_slide_tween, \
+                ])
+    
+    if next_screen != null:
+        next_screen._on_activated()
 
 func _on_screen_slide_completed( \
         object: Object, \
@@ -144,6 +151,7 @@ func _on_screen_slide_completed( \
     if previous_screen != null:
         previous_screen.visible = false
         previous_screen.position = Vector2.ZERO
+        previous_screen._on_deactivated()
     if next_screen != null:
         next_screen.visible = true
         next_screen.position = Vector2.ZERO

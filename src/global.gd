@@ -5,8 +5,6 @@ signal display_resized
 const GROUP_NAME_TIER_TILE_MAPS := "tier_tilemaps"
 const GROUP_NAME_TIER_GAP_TILE_MAPS := "tier_gap_tilemaps"
 
-const SHOWS_MOBILE_CONTROLS := true
-const MOBILE_CONTROL_VERSION := 1
 const PLAYER_SIZE_MULTIPLIER := 1.5
 
 const ASPECT_RATIO_MAX := 1.0 / 1.0
@@ -20,11 +18,14 @@ const INPUT_VIBRATE_DURATION_SEC := 0.01
 
 const DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC := 0.1
 
-const IS_DEBUG_PANEL_SHOWN_BY_DEFAULT := false
-
-var is_giving_haptic_feedback := false
-
-var difficulty_mode := DifficultyMode.MODERATE
+# DifficultyMode
+var difficulty_mode: int
+var is_giving_haptic_feedback: bool
+var is_debug_panel_shown: bool setget \
+        _set_is_debug_panel_shown, _get_is_debug_panel_shown
+var are_mobile_controls_shown: bool
+var mobile_control_version: int
+var are_keyboard_controls_shown := false
 
 var canvas_layers: CanvasLayers
 var camera_controller: CameraController
@@ -38,7 +39,34 @@ var throttled_size_changed: FuncRef = Time.throttle( \
         DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC)
 
 func _init() -> void:
-    self.is_giving_haptic_feedback = Utils.get_is_android_device()
+    _load_state()
+
+func _load_state() -> void:
+    # FIXME: ------------------------------------------------
+    # - Add other settings both here (or in other files that own them) and in
+    #   SettingsScreen.
+    
+    difficulty_mode = SaveState.get_setting( \
+            SaveState.DIFFICULTY_KEY, \
+            DifficultyMode.MODERATE)
+    is_giving_haptic_feedback = SaveState.get_setting( \
+            SaveState.IS_GIVING_HAPTIC_FEEDBACK_KEY, \
+            Utils.get_is_android_device())
+    is_debug_panel_shown = SaveState.get_setting( \
+            SaveState.IS_DEBUG_PANEL_SHOWN_KEY, \
+            false)
+    are_mobile_controls_shown = SaveState.get_setting( \
+            SaveState.ARE_MOBILE_CONTROLS_SHOWN_KEY, \
+            true)
+    mobile_control_version = SaveState.get_setting( \
+            SaveState.MOBILE_CONTROL_VERSION_KEY, \
+            1)
+    Audio.is_music_enabled = SaveState.get_setting( \
+            SaveState.IS_MUSIC_ENABLED_KEY, \
+            true)
+    Audio.is_sound_effects_enabled = SaveState.get_setting( \
+            SaveState.IS_SOUND_EFFECTS_ENABLED_KEY, \
+            true)
 
 func _enter_tree() -> void:
     get_viewport().connect( \
@@ -99,7 +127,6 @@ func register_main(main: Node) -> void:
     
     canvas_layers = CanvasLayers.new()
     main.add_child(canvas_layers)
-    canvas_layers.is_debug_panel_shown = IS_DEBUG_PANEL_SHOWN_BY_DEFAULT
 
 func vibrate() -> void:
     if is_giving_haptic_feedback:
@@ -108,3 +135,11 @@ func vibrate() -> void:
 func give_button_press_feedback() -> void:
     vibrate()
     Audio.button_press_sfx_player.play()
+
+func _set_is_debug_panel_shown(is_visible: bool) -> void:
+    is_debug_panel_shown = is_visible
+    if debug_panel != null:
+        debug_panel.visible = is_visible
+
+func _get_is_debug_panel_shown() -> bool:
+    return is_debug_panel_shown

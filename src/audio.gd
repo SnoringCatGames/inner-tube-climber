@@ -21,7 +21,7 @@ const LAND_SFX_STREAM := preload("res://assets/sfx/tuber_land.wav")
 const BOUNCE_SFX_STREAM := preload("res://assets/sfx/tuber_bounce.wav")
 
 const MUSIC_CROSS_FADE_DURATION_SEC := 2.0
-const MUSIC_SILENT_VOLUME_DB := -80.0
+const SILENT_VOLUME_DB := -80.0
 
 const SFX_BUS_INDEX := 1
 const MUSIC_BUS_INDEX := 2
@@ -55,6 +55,9 @@ var pitch_shift_effect: AudioEffectPitchShift
 var previous_music_player: AudioStreamPlayer
 var current_music_player: AudioStreamPlayer
 
+var is_music_enabled := true
+var is_sound_effects_enabled := true
+
 func _init() -> void:
     _init_audio_players()
 
@@ -66,53 +69,46 @@ func _init_audio_players() -> void:
     AudioServer.add_bus_effect(MUSIC_BUS_INDEX, pitch_shift_effect)
     
     MUSIC_PLAYERS[0].stream = MUSIC_STREAM_0
-    MUSIC_PLAYERS[0].volume_db = -0.0
     MUSIC_PLAYERS[0].bus = AudioServer.get_bus_name(MUSIC_BUS_INDEX)
     add_child(MUSIC_PLAYERS[0])
     MUSIC_PLAYERS[1].stream = MUSIC_STREAM_1
-    MUSIC_PLAYERS[1].volume_db = -0.0
     MUSIC_PLAYERS[1].bus = AudioServer.get_bus_name(MUSIC_BUS_INDEX)
     add_child(MUSIC_PLAYERS[1])
     MUSIC_PLAYERS[2].stream = MUSIC_STREAM_2
-    MUSIC_PLAYERS[2].volume_db = -0.0
     MUSIC_PLAYERS[2].bus = AudioServer.get_bus_name(MUSIC_BUS_INDEX)
     add_child(MUSIC_PLAYERS[2])
     
     button_press_sfx_player = AudioStreamPlayer.new()
     button_press_sfx_player.stream = BUTTON_PRESS_SFX_STREAM
-    button_press_sfx_player.volume_db = -6.0
     button_press_sfx_player.bus = AudioServer.get_bus_name(SFX_BUS_INDEX)
     add_child(button_press_sfx_player)
     
     jump_sfx_player = AudioStreamPlayer.new()
     jump_sfx_player.stream = JUMP_SFX_STREAM
-    jump_sfx_player.volume_db = -6.0
     jump_sfx_player.bus = AudioServer.get_bus_name(SFX_BUS_INDEX)
     add_child(jump_sfx_player)
     
     land_sfx_player = AudioStreamPlayer.new()
     land_sfx_player.stream = LAND_SFX_STREAM
-    land_sfx_player.volume_db = -0.0
     land_sfx_player.bus = AudioServer.get_bus_name(SFX_BUS_INDEX)
     add_child(land_sfx_player)
     
     bounce_sfx_player = AudioStreamPlayer.new()
     bounce_sfx_player.stream = BOUNCE_SFX_STREAM
-    bounce_sfx_player.volume_db = -2.0
     bounce_sfx_player.bus = AudioServer.get_bus_name(SFX_BUS_INDEX)
     add_child(bounce_sfx_player)
     
     game_over_sfx_player = AudioStreamPlayer.new()
     game_over_sfx_player.stream = GAME_OVER_SFX_STREAM
-    game_over_sfx_player.volume_db = -6.0
     game_over_sfx_player.bus = AudioServer.get_bus_name(SFX_BUS_INDEX)
     add_child(game_over_sfx_player)
     
     new_tier_sfx_player = AudioStreamPlayer.new()
     new_tier_sfx_player.stream = NEW_TIER_SFX_STREAM
-    new_tier_sfx_player.volume_db = -6.0
     new_tier_sfx_player.bus = AudioServer.get_bus_name(SFX_BUS_INDEX)
     add_child(new_tier_sfx_player)
+    
+    _update_volume()
 
 func cross_fade_music(next_music_player_index: int) -> void:
     if fade_out_tween != null:
@@ -130,21 +126,26 @@ func cross_fade_music(next_music_player_index: int) -> void:
             current_music_player.playing:
         return
     
+    var loud_volume := \
+            0.0 if \
+            is_music_enabled else \
+            SILENT_VOLUME_DB
+    
     if previous_music_player != null and previous_music_player.playing:
         fade_out_tween = Tween.new()
         add_child(fade_out_tween)
         fade_out_tween.interpolate_property( \
                 previous_music_player, \
                 "volume_db", \
-                0.0, \
-                MUSIC_SILENT_VOLUME_DB, \
+                loud_volume, \
+                SILENT_VOLUME_DB, \
                 MUSIC_CROSS_FADE_DURATION_SEC, \
                 Tween.TRANS_QUAD, \
                 Tween.EASE_IN)
         fade_out_tween.start()
     
     set_playback_speed(current_playback_speed)
-    current_music_player.volume_db = MUSIC_SILENT_VOLUME_DB
+    current_music_player.volume_db = SILENT_VOLUME_DB
     current_music_player.play()
     
     fade_in_tween = Tween.new()
@@ -152,8 +153,8 @@ func cross_fade_music(next_music_player_index: int) -> void:
     fade_in_tween.interpolate_property( \
             current_music_player, \
             "volume_db", \
-            MUSIC_SILENT_VOLUME_DB, \
-            0.0, \
+            SILENT_VOLUME_DB, \
+            loud_volume, \
             MUSIC_CROSS_FADE_DURATION_SEC, \
             Tween.TRANS_QUAD, \
             Tween.EASE_OUT)
@@ -183,3 +184,36 @@ func set_playback_speed(playback_speed: float) -> void:
     current_playback_speed = playback_speed
     current_music_player.pitch_scale = playback_speed
     pitch_shift_effect.pitch_scale = 1.0 / playback_speed
+
+func set_music_enabled(enabled: bool) -> void:
+    is_music_enabled = enabled
+    _update_volume()
+
+func set_sound_effects_enabled(enabled: bool) -> void:
+    is_sound_effects_enabled = enabled
+    _update_volume()
+
+func _update_volume() -> void:
+    if is_music_enabled:
+        MUSIC_PLAYERS[0].volume_db = -0.0
+        MUSIC_PLAYERS[1].volume_db = -0.0
+        MUSIC_PLAYERS[2].volume_db = -0.0
+    else:
+        MUSIC_PLAYERS[0].volume_db = SILENT_VOLUME_DB
+        MUSIC_PLAYERS[1].volume_db = SILENT_VOLUME_DB
+        MUSIC_PLAYERS[2].volume_db = SILENT_VOLUME_DB
+    
+    if is_sound_effects_enabled:
+        button_press_sfx_player.volume_db = -6.0
+        jump_sfx_player.volume_db = -6.0
+        land_sfx_player.volume_db = -0.0
+        bounce_sfx_player.volume_db = -2.0
+        game_over_sfx_player.volume_db = -6.0
+        new_tier_sfx_player.volume_db = -6.0
+    else:
+        button_press_sfx_player.volume_db = SILENT_VOLUME_DB
+        jump_sfx_player.volume_db = SILENT_VOLUME_DB
+        land_sfx_player.volume_db = SILENT_VOLUME_DB
+        bounce_sfx_player.volume_db = SILENT_VOLUME_DB
+        game_over_sfx_player.volume_db = SILENT_VOLUME_DB
+        new_tier_sfx_player.volume_db = SILENT_VOLUME_DB

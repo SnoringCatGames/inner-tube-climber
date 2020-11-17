@@ -4,24 +4,30 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Split Time into sub classes:
-#   - One for elapsed play time.
-#   - One for elapsed actual time.
-#   - Also do this is surfacer.
-#     >>- Or, at least add `pause_mode = Node.PAUSE_MODE_STOP`.
+# - Test ability to save/load scores and game state on Android and iOS.
 # 
-# - Add wood-grain texture to gesture buttons.
+# - Split SettingsScreen into two sections?
+#   - One that can be updated during run time, and one that must be updated
+#     when a level isn't active.
+#   >>- Or maybe keep it simple, and don't allow access to settings while a
+#     level is active.
 # 
-# - Add ability to save/load scores and game state.
-#   - Definitely start by just saving to local device storage, wherever that is
-#     for each/all-generic device.
-#   - But then, look into how to save this state with cloud-based app gamer
-#     profiles in both Android and iOS.
-# 
-# - Pause screen
-#   - Skip to tier?
-#   - Explain score calcualtion?
-#   - Show record score.
+# - Settings menu
+#   - Change sensitivity of gestures.
+#     - Make it a slider.
+#     - Don't label with a unit, other than more/less sensitive.
+#     - Flat multiplier? Or quadratic?
+#   - The difficulty setting and/or Time.physics_framerate_multiplier.
+#   - Toggle debug panel visible.
+#   - Set starting lives count.
+#   - Set scroll-speed-up rate and max.
+#   - Toggle whether the auto-difficulty update suggestion popups appear.
+#   - Toggle whether framerate-multiplier/difficulty automatically track to the
+#     current climb speed.
+#   - Set how many camera-speed indices are decremented when falling.
+#   - Toggle whether score, height, lives, level tier completion ratio,
+#     multiplier, and scroll speed boards are shown.
+#   - Toggle whether max-height indicators are shown along sides of screen.
 # 
 # - Level-select screen
 #   - Show best heights and times for completed levels
@@ -38,29 +44,11 @@ class_name Main
 #       the level 3 total times (independent of fall-count rating).
 #   - 
 # 
-# - Settings menu
-#   - Toggle visibility of mobile control display pads.
-#   - Toggle which moblie control version is used.
-#   - Toggle haptic feedback (only on Android).
-#   - Toggle hard mode.
-#     - Or just remove hard mode entirely?
-#   - Change sensitivity of gestures.
-#     - Make it a slider.
-#     - Don't label with a unit, other than more/less sensitive.
-#     - Flat multiplier? Or quadratic?
-#   - Have settings persist to local storage.
-#   - Toggle sfx; toggle music.
-#   - The difficulty setting and/or Time.physics_framerate_multiplier.
-#   - Toggle debug panel visible.
-#   - Set starting lives count.
-#   - Set scroll-speed-up rate and max.
-#   - Toggle whether the auto-difficulty update suggestion popups appear.
-#   - Toggle whether framerate-multiplier/difficulty automatically track to the
-#     current climb speed.
-#   - Set how many camera-speed indices are decremented when falling.
-#   - Toggle whether score, height, lives, level tier completion ratio,
-#     multiplier, and scroll speed boards are shown.
-#   - Toggle whether max-height indicators are shown along sides of screen.
+# - Pause screen
+#   - Skip to tier?
+#   - Explain score calcualtion?
+#   - Show record score.
+#   - Show difficulty mode.
 # 
 # - Replace main menu button text with icons
 #   - Both somewhat pixelated
@@ -87,6 +75,8 @@ class_name Main
 #       can navigate to other screens or resume playing.
 #   - Test how to get the nav bar to appear on android and whether mobile
 #     controls are ever likely to make it appear annoyingly by accident.
+# 
+# - Add wood-grain texture to gesture buttons.
 # 
 # - Fix bug where player can double-jump if second jump is very quickly after 
 #   first.
@@ -308,6 +298,9 @@ class_name Main
 #   - Research legal/app-store requirements around this.
 # - Add internationalization.
 #   - Research what my options are for this.
+# 
+# - Figure out how to persist save game state to the cloud through Android and
+#   iOS APIs?
 # 
 ###############################################################################
 

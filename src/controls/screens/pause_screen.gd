@@ -32,16 +32,18 @@ func _update_stats() -> void:
     _add_row( \
             "Current score", \
             str(int(level.score)))
-    # FIXME: ----------------------
     _add_row( \
-            "Record score", \
-            "TODO")
+            "High score", \
+            str(SaveState.get_high_score_for_level(level.level_id)))
     _add_row( \
             "Multiplier", \
             str(level.cooldown_indicator.multiplier))
     _add_row( \
             "Speed", \
             str(level.speed_index + 1))
+    _add_row( \
+            "Difficulty", \
+            DifficultyMode.get_type_string(Global.difficulty_mode))
     _add_row( \
             "Lives", \
             str(level.lives_count))

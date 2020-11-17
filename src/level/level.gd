@@ -337,6 +337,9 @@ func _fall() -> void:
         $SignAllKeys.visible = false
         Audio.on_cross_fade_music_finished()
         _destroy_player()
+        SaveState.set_high_score_for_level( \
+                level_id, \
+                int(score))
         
         Audio.current_music_player.stop()
         Audio.game_over_sfx_player.connect( \
@@ -425,8 +428,8 @@ func _add_player(is_base_tier := false) -> void:
     
     _set_camera_post_stuck_state(is_base_tier)
     
-    if Global.SHOWS_MOBILE_CONTROLS:
-        mobile_control_ui = MobileControlUI.new(Global.MOBILE_CONTROL_VERSION)
+    if Global.are_mobile_controls_shown:
+        mobile_control_ui = MobileControlUI.new(Global.mobile_control_version)
         Global.canvas_layers.hud_layer.add_child(mobile_control_ui)
 
 func _destroy_player() -> void:
@@ -621,7 +624,7 @@ func _start_new_tier( \
     _update_camera_horizontally_locked( \
             current_tier_config.camera_horizontally_locked)
     
-    if !Global.SHOWS_MOBILE_CONTROLS:
+    if Global.are_keyboard_controls_shown:
         # Render the basic input instructions sign.
         $SignAllKeys.visible = true
         $SignAllKeys.position = INPUT_SIGN_POSITION

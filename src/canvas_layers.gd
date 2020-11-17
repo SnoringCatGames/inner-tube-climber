@@ -8,9 +8,6 @@ var menu_screen_layer: CanvasLayer
 var hud_layer: CanvasLayer
 var annotation_layer: CanvasLayer
 
-var is_debug_panel_shown := true setget \
-        _set_is_debug_panel_shown, _get_is_debug_panel_shown
-
 func _enter_tree() -> void:
     _create_menu_screen_layer()
     _create_hud_layer()
@@ -47,17 +44,10 @@ func _create_hud_layer() -> void:
             true, \
             true)
     Global.debug_panel.z_index = 1000
-    _set_is_debug_panel_shown(true)
+    Global.debug_panel.visible = Global.is_debug_panel_shown
 
 func _create_annotation_layer() -> void:
     annotation_layer = CanvasLayer.new()
     annotation_layer.layer = 200
     annotation_layer.pause_mode = Node.PAUSE_MODE_STOP
     Global.add_overlay_to_current_scene(annotation_layer)
-
-func _set_is_debug_panel_shown(is_visible: bool) -> void:
-    is_debug_panel_shown = is_visible
-    Global.debug_panel.visible = is_visible
-
-func _get_is_debug_panel_shown() -> bool:
-    return is_debug_panel_shown

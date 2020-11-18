@@ -28,6 +28,8 @@ func _enter_tree() -> void:
     add_child(mobile_control_display)
     add_child(mobile_control_input)
     add_child(mobile_control_gesture_annotator)
+    
+    mobile_control_display.visible = Global.are_mobile_controls_shown
 
 func destroy() -> void:
     if mobile_control_display != null:
@@ -39,3 +41,6 @@ func destroy() -> void:
     if mobile_control_gesture_annotator != null:
         remove_child(mobile_control_gesture_annotator)
         mobile_control_gesture_annotator.queue_free()
+
+func update_displays() -> void:
+    mobile_control_display.visible = Global.are_mobile_controls_shown

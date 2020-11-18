@@ -24,6 +24,14 @@ var is_giving_haptic_feedback: bool
 var is_debug_panel_shown: bool setget \
         _set_is_debug_panel_shown, _get_is_debug_panel_shown
 var are_mobile_controls_shown: bool
+var is_multiplier_cooldown_indicator_shown: bool
+var is_height_indicator_shown: bool
+var is_score_display_shown: bool
+var is_height_display_shown: bool
+var is_lives_display_shown: bool
+var is_tier_ratio_display_shown: bool
+var is_multiplier_display_shown: bool
+var is_speed_display_shown: bool
 var mobile_control_version: int
 var are_keyboard_controls_shown := false
 
@@ -42,25 +50,47 @@ func _init() -> void:
     _load_state()
 
 func _load_state() -> void:
-    # FIXME: ------------------------------------------------
-    # - Add other settings both here (or in other files that own them) and in
-    #   SettingsScreen.
-    
     difficulty_mode = SaveState.get_setting( \
             SaveState.DIFFICULTY_KEY, \
             DifficultyMode.MODERATE)
+    mobile_control_version = SaveState.get_setting( \
+            SaveState.MOBILE_CONTROL_VERSION_KEY, \
+            1)
     is_giving_haptic_feedback = SaveState.get_setting( \
             SaveState.IS_GIVING_HAPTIC_FEEDBACK_KEY, \
             Utils.get_is_android_device())
+    
     is_debug_panel_shown = SaveState.get_setting( \
             SaveState.IS_DEBUG_PANEL_SHOWN_KEY, \
             false)
     are_mobile_controls_shown = SaveState.get_setting( \
             SaveState.ARE_MOBILE_CONTROLS_SHOWN_KEY, \
             true)
-    mobile_control_version = SaveState.get_setting( \
-            SaveState.MOBILE_CONTROL_VERSION_KEY, \
-            1)
+    is_multiplier_cooldown_indicator_shown = SaveState.get_setting( \
+            SaveState.IS_MULTIPLIER_COOLDOWN_INDICATOR_SHOWN_KEY, \
+            true)
+    is_height_indicator_shown = SaveState.get_setting( \
+            SaveState.IS_HEIGHT_INDICATOR_SHOWN_KEY, \
+            true)
+    is_score_display_shown = SaveState.get_setting( \
+            SaveState.IS_SCORE_DISPLAY_SHOWN_KEY, \
+            true)
+    is_height_display_shown = SaveState.get_setting( \
+            SaveState.IS_HEIGHT_DISPLAY_SHOWN_KEY, \
+            false)
+    is_lives_display_shown = SaveState.get_setting( \
+            SaveState.IS_LIVES_DISPLAY_SHOWN_KEY, \
+            true)
+    is_tier_ratio_display_shown = SaveState.get_setting( \
+            SaveState.IS_TIER_RATIO_DISPLAY_SHOWN_KEY, \
+            false)
+    is_multiplier_display_shown = SaveState.get_setting( \
+            SaveState.IS_MULTIPLIER_DISPLAY_SHOWN_KEY, \
+            false)
+    is_speed_display_shown = SaveState.get_setting( \
+            SaveState.IS_SPEED_DISPLAY_SHOWN_KEY, \
+            false)
+    
     Audio.is_music_enabled = SaveState.get_setting( \
             SaveState.IS_MUSIC_ENABLED_KEY, \
             true)

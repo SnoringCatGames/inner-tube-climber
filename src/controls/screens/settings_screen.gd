@@ -9,35 +9,54 @@ const TYPE := ScreenType.SETTINGS
 var difficulty_option_button: OptionButton
 var haptic_feedback_checkbox: CheckBox
 var debug_panel_checkbox: CheckBox
-var mobile_control_display_checkbox: CheckBox
 var mobile_control_version_option_button: OptionButton
+var mobile_control_display_checkbox: CheckBox
+var multiplier_cooldown_indicator_checkbox: CheckBox
+var height_indicator_checkbox: CheckBox
+var score_display_checkbox: CheckBox
+var height_display_checkbox: CheckBox
+var lives_display_checkbox: CheckBox
+var tier_ratio_display_checkbox: CheckBox
+var muliplier_display_checkbox: CheckBox
+var speed_display_checkbox: CheckBox
 var music_checkbox: CheckBox
 var sound_effects_checkbox: CheckBox
 
 func _init().(TYPE) -> void:
     pass
 
-func _enter_tree() -> void:
+func _ready() -> void:
+    if Engine.is_editor_hint():
+        return
+    
     _initialize_references()
     _initialize_options()
     _initialize_selections()
     _initialize_sizes()
 
 func _initialize_references() -> void:
-    difficulty_option_button = \
-            $CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/VBoxContainer/Difficulty/OptionButton
-    haptic_feedback_checkbox = \
-            $CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/VBoxContainer/HapticFeedback/CheckBox
-    debug_panel_checkbox = \
-            $CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/VBoxContainer/DebugPanel/CheckBox
-    mobile_control_display_checkbox = \
-            $CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/VBoxContainer/MobileControlDisplay/CheckBox
+    var container: VBoxContainer = \
+            $CenteredInFullScreenPanel/CenterPanelOuter/CenterPanelInner/VBoxContainer/VBoxContainer/VBoxContainer
+    difficulty_option_button = container.get_node("Difficulty/OptionButton")
+    haptic_feedback_checkbox = container.get_node("HapticFeedback/CheckBox")
+    debug_panel_checkbox = container.get_node("DebugPanel/CheckBox")
     mobile_control_version_option_button = \
-            $CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/VBoxContainer/MobileControlVersion/OptionButton
-    music_checkbox = \
-            $CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/VBoxContainer/Music/CheckBox
-    sound_effects_checkbox = \
-            $CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/VBoxContainer/SoundEffects/CheckBox
+            container.get_node("MobileControlVersion/OptionButton")
+    mobile_control_display_checkbox = \
+            container.get_node("MobileControlDisplay/CheckBox")
+    multiplier_cooldown_indicator_checkbox = \
+            container.get_node("MultiplierCooldownIndicator/CheckBox")
+    height_indicator_checkbox = container.get_node("HeightIndicator/CheckBox")
+    score_display_checkbox = container.get_node("ScoreDisplay/CheckBox")
+    height_display_checkbox = container.get_node("HeightDisplay/CheckBox")
+    lives_display_checkbox = container.get_node("LivesDisplay/CheckBox")
+    tier_ratio_display_checkbox = \
+            container.get_node("TierRatioDisplay/CheckBox")
+    muliplier_display_checkbox = \
+            container.get_node("MultiplierDisplay/CheckBox")
+    speed_display_checkbox = container.get_node("SpeedDisplay/CheckBox")
+    music_checkbox = container.get_node("Music/CheckBox")
+    sound_effects_checkbox = container.get_node("SoundEffects/CheckBox")
 
 func _initialize_options() -> void:
     difficulty_option_button.clear()
@@ -69,12 +88,22 @@ func _initialize_selections() -> void:
     debug_panel_checkbox.pressed = Global.is_debug_panel_shown
     mobile_control_display_checkbox.pressed = Global.are_mobile_controls_shown
     
+    multiplier_cooldown_indicator_checkbox.pressed = \
+            Global.is_multiplier_cooldown_indicator_shown
+    height_indicator_checkbox.pressed = Global.is_height_indicator_shown
+    score_display_checkbox.pressed = Global.is_score_display_shown
+    height_display_checkbox.pressed = Global.is_height_display_shown
+    lives_display_checkbox.pressed = Global.is_lives_display_shown
+    tier_ratio_display_checkbox.pressed = Global.is_tier_ratio_display_shown
+    muliplier_display_checkbox.pressed = Global.is_multiplier_display_shown
+    speed_display_checkbox.pressed = Global.is_speed_display_shown
+    
     music_checkbox.pressed = Audio.is_music_enabled
     sound_effects_checkbox.pressed = Audio.is_sound_effects_enabled
 
 func _initialize_sizes() -> void:
     var container: VBoxContainer = \
-            $CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/VBoxContainer
+            $CenteredInFullScreenPanel/CenterPanelOuter/CenterPanelInner/VBoxContainer/VBoxContainer/VBoxContainer
     for child in container.get_children():
         var row: LabeledControlRow = child
         row.size_flags_horizontal = Control.SIZE_FILL
@@ -117,11 +146,70 @@ func _on_mobile_control_version_selected(index: int) -> void:
             Global.mobile_control_version)
     Global.give_button_press_feedback()
 
-func _on_CreditsButton_pressed() -> void:
+func _on_multiplier_cooldown_indicator_pressed() -> void:
+    Global.is_multiplier_cooldown_indicator_shown = \
+            multiplier_cooldown_indicator_checkbox.pressed
+    SaveState.set_setting( \
+            SaveState.IS_MULTIPLIER_COOLDOWN_INDICATOR_SHOWN_KEY, \
+            Global.is_multiplier_cooldown_indicator_shown)
+    _update_level_displays()
     Global.give_button_press_feedback()
-    Nav.set_screen_is_open( \
-            ScreenType.CREDITS, \
-            true)
+
+func _on_height_indicator_pressed() -> void:
+    Global.is_height_indicator_shown = height_indicator_checkbox.pressed
+    SaveState.set_setting( \
+            SaveState.IS_HEIGHT_INDICATOR_SHOWN_KEY, \
+            Global.is_height_indicator_shown)
+    _update_level_displays()
+    Global.give_button_press_feedback()
+
+func _on_score_display_pressed() -> void:
+    Global.is_score_display_shown = score_display_checkbox.pressed
+    SaveState.set_setting( \
+            SaveState.IS_SCORE_DISPLAY_SHOWN_KEY, \
+            Global.is_score_display_shown)
+    _update_level_displays()
+    Global.give_button_press_feedback()
+
+func _on_height_display_pressed() -> void:
+    Global.is_height_display_shown = height_display_checkbox.pressed
+    SaveState.set_setting( \
+            SaveState.IS_HEIGHT_DISPLAY_SHOWN_KEY, \
+            Global.is_height_display_shown)
+    _update_level_displays()
+    Global.give_button_press_feedback()
+
+func _on_lives_display_pressed() -> void:
+    Global.is_lives_display_shown = lives_display_checkbox.pressed
+    SaveState.set_setting( \
+            SaveState.IS_LIVES_DISPLAY_SHOWN_KEY, \
+            Global.is_lives_display_shown)
+    _update_level_displays()
+    Global.give_button_press_feedback()
+
+func _on_tier_ratio_display_pressed() -> void:
+    Global.is_tier_ratio_display_shown = tier_ratio_display_checkbox.pressed
+    SaveState.set_setting( \
+            SaveState.IS_TIER_RATIO_DISPLAY_SHOWN_KEY, \
+            Global.is_tier_ratio_display_shown)
+    _update_level_displays()
+    Global.give_button_press_feedback()
+
+func _on_multiplier_display_pressed() -> void:
+    Global.is_multiplier_display_shown = muliplier_display_checkbox.pressed
+    SaveState.set_setting( \
+            SaveState.IS_MULTIPLIER_DISPLAY_SHOWN_KEY, \
+            Global.is_multiplier_display_shown)
+    _update_level_displays()
+    Global.give_button_press_feedback()
+
+func _on_speed_display_pressed() -> void:
+    Global.is_speed_display_shown = speed_display_checkbox.pressed
+    SaveState.set_setting( \
+            SaveState.IS_SPEED_DISPLAY_SHOWN_KEY, \
+            Global.is_speed_display_shown)
+    _update_level_displays()
+    Global.give_button_press_feedback()
 
 func _on_music_pressed():
     Audio.set_music_enabled(music_checkbox.pressed)
@@ -142,3 +230,14 @@ func _on_mobile_control_version_pressed() -> void:
 
 func _on_difficulty_pressed() -> void:
     Global.give_button_press_feedback()
+
+func _on_CreditsButton_pressed() -> void:
+    Global.give_button_press_feedback()
+    Nav.set_screen_is_open( \
+            ScreenType.CREDITS, \
+            true)
+
+func _update_level_displays() -> void:
+    var level: Level = Nav.screens[ScreenType.GAME].level
+    if level != null:
+        level.update_displays()

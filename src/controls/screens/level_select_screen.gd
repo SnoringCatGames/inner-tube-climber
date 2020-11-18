@@ -15,7 +15,7 @@ func _init().(TYPE) -> void:
 
 func _ready() -> void:
     var selector := \
-            $CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/LevelSelector
+            $CenteredInFullScreenPanel/CenterPanelOuter/CenterPanelInner/VBoxContainer/VBoxContainer/LevelSelector
     
     for id in LevelConfig.LEVELS:
         var item := "%s%s" % [LEVEL_ITEM_PREFIX, id]

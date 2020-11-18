@@ -40,7 +40,7 @@ func _init_children() -> void:
         configuration_warning = \
                 "Must define a child node." if \
                 children.size() < 2 else \
-                "Must define only one child node"
+                "Must define only one child node."
         update_configuration_warning()
         return
     

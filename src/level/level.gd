@@ -113,6 +113,7 @@ func _enter_tree() -> void:
     
     cooldown_indicator = ScoreMultiplierCooldownIndicator.new()
     Global.canvas_layers.hud_layer.add_child(cooldown_indicator)
+    cooldown_indicator.visible = Global.is_multiplier_cooldown_indicator_shown
     
     var extra_radius := 2.0
     var extra_distance_from_cone_end_point_to_circle_center := \
@@ -126,6 +127,8 @@ func _enter_tree() -> void:
             0.0, \
             true)
     add_child(max_height_on_current_height_indicator)
+    max_height_on_current_height_indicator.visible = \
+            Global.is_height_indicator_shown
     
     max_height_indicator = MaxHeightIndicator.new( \
             Constants.INDICATOR_GREEN_COLOR, \
@@ -134,6 +137,7 @@ func _enter_tree() -> void:
             origin_offset, \
             false)
     add_child(max_height_indicator)
+    max_height_indicator.visible = Global.is_height_indicator_shown
     
     camera_horizontal_lock_displacement_tween = Tween.new()
     add_child(camera_horizontal_lock_displacement_tween)
@@ -428,9 +432,9 @@ func _add_player(is_base_tier := false) -> void:
     
     _set_camera_post_stuck_state(is_base_tier)
     
-    if Global.are_mobile_controls_shown:
-        mobile_control_ui = MobileControlUI.new(Global.mobile_control_version)
-        Global.canvas_layers.hud_layer.add_child(mobile_control_ui)
+    mobile_control_ui = MobileControlUI.new(Global.mobile_control_version)
+    Global.canvas_layers.hud_layer.add_child(mobile_control_ui)
+    mobile_control_ui.update_displays()
 
 func _destroy_player() -> void:
     if player != null:
@@ -624,12 +628,11 @@ func _start_new_tier( \
     _update_camera_horizontally_locked( \
             current_tier_config.camera_horizontally_locked)
     
-    if Global.are_keyboard_controls_shown:
-        # Render the basic input instructions sign.
-        $SignAllKeys.visible = true
-        $SignAllKeys.position = INPUT_SIGN_POSITION
-        if current_tier_id != "0":
-            $SignAllKeys.position.y -= CELL_SIZE.y
+    # Render the basic input instructions sign.
+    $SignAllKeys.visible = Global.are_keyboard_controls_shown
+    $SignAllKeys.position = INPUT_SIGN_POSITION
+    if current_tier_id != "0":
+        $SignAllKeys.position.y -= CELL_SIZE.y
 
 func _on_entered_new_tier() -> void:
     tier_count += 1
@@ -876,3 +879,13 @@ func _update_score_for_tier_change() -> void:
 func _on_final_tier_completed() -> void:
     Global.falls_count_since_reaching_level_end = 0
     # FIXME: ------------------
+
+func update_displays() -> void:
+    Global.debug_panel.visible = Global.is_debug_panel_shown
+    mobile_control_ui.update_displays()
+    $SignAllKeys.visible = Global.are_keyboard_controls_shown
+    cooldown_indicator.visible = Global.is_multiplier_cooldown_indicator_shown
+    max_height_on_current_height_indicator.visible = \
+            Global.is_height_indicator_shown
+    max_height_indicator.visible = Global.is_height_indicator_shown
+    score_boards.update_displays()

@@ -1,9 +1,6 @@
 extends Annotator
 class_name ScoreMultiplierCooldownIndicator
 
-const MAIN_FONT_NORMAL: Font = \
-        preload("res://assets/fonts/main_font_normal.tres")
-
 const COOLDOWN_DURATION_SEC := 4.0
 
 const CORNER_OFFSET := Vector2(72.0, 72.0)
@@ -145,7 +142,7 @@ func _get_multiplier() -> float:
 
 func _enter_tree() -> void:
     multiplier_label = Label.new()
-    multiplier_label.add_font_override("font", MAIN_FONT_NORMAL)
+    multiplier_label.add_font_override("font", Constants.MAIN_FONT_NORMAL)
     multiplier_label.add_color_override("font_color", TEXT_COLOR)
     multiplier_label.add_color_override( \
             "font_color_shadow", TEXT_OUTLINE_COLOR)
@@ -531,6 +528,7 @@ func _draw() -> void:
     multiplier_label.rect_scale = LABEL_SCALE * label_scale
     multiplier_label.rect_position = \
             shiver_center - \
-            MAIN_FONT_NORMAL.get_string_size(multiplier_text) / 2.0 - \
+            Constants.MAIN_FONT_NORMAL \
+                    .get_string_size(multiplier_text) / 2.0 - \
             LABEL_SCALE * label_scale * label_scale + \
             LABEL_OFFSET * label_scale * label_scale

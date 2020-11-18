@@ -19,7 +19,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CenterPanel" type="PanelContainer" parent="."]
+[node name="CenterPanelOuter" type="ScrollContainer" parent="."]
 margin_right = 480.0
 margin_bottom = 480.0
+
+[node name="CenterPanelInner" type="PanelContainer" parent="CenterPanelOuter"]
+margin_right = 480.0
+size_flags_horizontal = 3
 custom_styles/panel = SubResource( 2 )

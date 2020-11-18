@@ -14,7 +14,8 @@ func _on_activated() -> void:
 func _update_stats() -> void:
     var level := _get_level()
     
-    var stats_container := $CenteredInFullScreenPanel/VBoxContainer/Stats
+    var stats_container := \
+            $CenteredInFullScreenPanel/CenterPanelOuter/CenterPanelInner/VBoxContainer/Stats
     for row in stats_container.get_children():
         stats_container.remove_child(row)
         row.queue_free()
@@ -109,7 +110,7 @@ func _add_row( \
         key: String, \
         value: String) -> KeyValueRow:
     var row: KeyValueRow = Utils.add_scene( \
-            $CenteredInFullScreenPanel/VBoxContainer/Stats, \
+            $CenteredInFullScreenPanel/CenterPanelOuter/CenterPanelInner/VBoxContainer/Stats, \
             KEY_VALUE_ROW_SCENE_PATH, \
             true, \
             true)

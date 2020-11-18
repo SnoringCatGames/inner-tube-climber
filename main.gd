@@ -4,7 +4,11 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
+# >>- Fix scroll in Settings screen.
+#     - Should CenteredInFullScreenPanel always include a scroll vbox?
+# 
 # - Test ability to save/load scores and game state on Android and iOS.
+# - Test control with keyboard with new batteries .
 # 
 # - Split SettingsScreen into two sections?
 #   - One that can be updated during run time, and one that must be updated
@@ -12,22 +16,17 @@ class_name Main
 #   >>- Or maybe keep it simple, and don't allow access to settings while a
 #     level is active.
 # 
+# - Make starting lives count configurable per level.
+# 
 # - Settings menu
+#   - Toggle whether max-height indicators are shown along sides of screen.
+#   - Toggle whether score, height, lives, level tier completion ratio,
+#     multiplier, and scroll speed boards are shown.
+#   - Toggle whether the auto-difficulty update suggestion popups appear.
 #   - Change sensitivity of gestures.
 #     - Make it a slider.
 #     - Don't label with a unit, other than more/less sensitive.
 #     - Flat multiplier? Or quadratic?
-#   - The difficulty setting and/or Time.physics_framerate_multiplier.
-#   - Toggle debug panel visible.
-#   - Set starting lives count.
-#   - Set scroll-speed-up rate and max.
-#   - Toggle whether the auto-difficulty update suggestion popups appear.
-#   - Toggle whether framerate-multiplier/difficulty automatically track to the
-#     current climb speed.
-#   - Set how many camera-speed indices are decremented when falling.
-#   - Toggle whether score, height, lives, level tier completion ratio,
-#     multiplier, and scroll speed boards are shown.
-#   - Toggle whether max-height indicators are shown along sides of screen.
 # 
 # - Level-select screen
 #   - Show best heights and times for completed levels
@@ -95,6 +94,11 @@ class_name Main
 # - Change max-height indicators to be pixel images?
 # 
 # 
+# 
+# 
+# - Add lighting and shadow effects.
+#   - With Godot APIs.
+#   - Also add lighting effects to animations.
 # 
 # - Create a couple new platform types:
 #   - They crumble away after a short delay after being landed on.

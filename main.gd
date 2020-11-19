@@ -4,9 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# >>- Fix scroll in Settings screen.
-#     - Should CenteredInFullScreenPanel always include a scroll vbox?
-# 
 # - Test ability to save/load scores and game state on Android and iOS.
 # - Test control with keyboard with new batteries .
 # 

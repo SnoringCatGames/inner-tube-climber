@@ -15,7 +15,8 @@ func _update_stats() -> void:
     var level := _get_level()
     
     var stats_container := \
-            $CenteredInFullScreenPanel/CenterPanelOuter/CenterPanelInner/VBoxContainer/Stats
+            $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            VBoxContainer/Stats
     for row in stats_container.get_children():
         stats_container.remove_child(row)
         row.queue_free()
@@ -100,7 +101,7 @@ func _on_ResumeButton_pressed():
 
 func _on_RestartButton_pressed():
     Global.give_button_press_feedback()
-    _get_level().restart_level()
+    Nav.screens[ScreenType.GAME].restart_level()
     Nav.close_current_screen()
 
 func _get_level() -> Level:
@@ -110,7 +111,8 @@ func _add_row( \
         key: String, \
         value: String) -> KeyValueRow:
     var row: KeyValueRow = Utils.add_scene( \
-            $CenteredInFullScreenPanel/CenterPanelOuter/CenterPanelInner/VBoxContainer/Stats, \
+            $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+                    VBoxContainer/Stats, \
             KEY_VALUE_ROW_SCENE_PATH, \
             true, \
             true)

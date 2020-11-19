@@ -2,6 +2,9 @@ tool
 extends PanelContainer
 class_name FullScreenPanel
 
+func _init() -> void:
+    add_font_override("font", Constants.MAIN_FONT_NORMAL)
+
 func _enter_tree() -> void:
     if Engine.editor_hint:
         rect_size = Vector2(480, 480)

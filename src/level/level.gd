@@ -53,6 +53,7 @@ var score_boards: ScoreBoards
 var cooldown_indicator: ScoreMultiplierCooldownIndicator
 var max_height_indicator: MaxHeightIndicator
 var max_height_on_current_height_indicator: MaxHeightIndicator
+var pause_button: PauseButton
 
 var level_id := ""
 
@@ -142,7 +143,7 @@ func _enter_tree() -> void:
     camera_horizontal_lock_displacement_tween = Tween.new()
     add_child(camera_horizontal_lock_displacement_tween)
     
-    Utils.add_scene( \
+    pause_button = Utils.add_scene( \
             Global.canvas_layers.hud_layer, \
             PAUSE_BUTTON_RESOURCE_PATH, \
             true, \
@@ -339,6 +340,7 @@ func _fall() -> void:
         speed_index = 0
         score_boards.set_lives(0)
         $SignAllKeys.visible = false
+        pause_button.visible = false
         Audio.on_cross_fade_music_finished()
         _destroy_player()
         SaveState.set_high_score_for_level( \

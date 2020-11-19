@@ -2,12 +2,17 @@ tool
 extends PanelContainer
 class_name CenteredInFullScreenPanel
 
+export var stretches_horizontally := false \
+        setget _set_stretches_horizontally,_get_stretches_horizontally
+export var stretches_vertically := false \
+        setget _set_stretches_vertically,_get_stretches_vertically
+
 var configuration_warning := ""
 
 func _init() -> void:
     add_font_override("font", Constants.MAIN_FONT_NORMAL)
 
-func _enter_tree() -> void:
+func _ready() -> void:
     if Engine.editor_hint:
         rect_size = Vector2(480, 480)
     else:
@@ -16,34 +21,65 @@ func _enter_tree() -> void:
                 self, \
                 "_handle_display_resized")
         _handle_display_resized()
-
-func _ready() -> void:
+    
     var children := get_children()
-    if children.size() > 2:
+    if children.size() > 1:
         configuration_warning = "Must define only one child node."
         update_configuration_warning()
         return
-    if children.size() < 2:
+    if children.size() < 1:
         configuration_warning = "Must define a child node."
         update_configuration_warning()
         return
-    assert(children[0] == $CenterPanelOuter)
-    
-    if Engine.is_editor_hint():
-        return
-    
-    var projected_content: Control = children[1]
-    remove_child(projected_content)
-    $CenterPanelOuter/CenterPanelInner.add_child(projected_content)
 
 func _handle_display_resized() -> void:
-    rect_size = get_viewport().size
+    var viewport := get_viewport()
+    if viewport == null:
+        return
+    
+    var children := get_children()
+    if children.size() != 1:
+        return
+    var child: Control = children[0]
+    
+    rect_size = viewport.size
     
     var game_area_region: Rect2 = Global.get_game_area_region()
-    var viewport_size := get_viewport().size
-    $CenterPanelOuter.rect_position = \
-            (viewport_size - game_area_region.size) * 0.5
-    $CenterPanelOuter.rect_size = game_area_region.size
+    
+    child.rect_position = (viewport.size - game_area_region.size) * 0.5
+    child.rect_min_size = game_area_region.size
+    child.rect_size = game_area_region.size
+    
+    if stretches_horizontally:
+        child.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+        child.rect_position.x = 0.0
+        child.rect_min_size.x = 0.0
+        child.rect_size.x = 0.0
+    else:
+        child.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+    
+    if stretches_vertically:
+        child.size_flags_vertical = Control.SIZE_EXPAND_FILL
+        child.rect_position.y = 0.0
+        child.rect_position.y = 0.0
+        child.rect_min_size.y = 0.0
+        child.rect_size.y = 0.0
+    else:
+        child.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 func _get_configuration_warning() -> String:
     return configuration_warning
+
+func _set_stretches_horizontally(value: bool) -> void:
+    stretches_horizontally = value
+    _handle_display_resized()
+
+func _get_stretches_horizontally() -> bool:
+    return stretches_horizontally
+
+func _set_stretches_vertically(value: bool) -> void:
+    stretches_vertically = value
+    _handle_display_resized()
+
+func _get_stretches_vertically() -> bool:
+    return stretches_vertically

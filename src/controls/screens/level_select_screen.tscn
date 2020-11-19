@@ -1,64 +1,75 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/controls/screens/level_select_screen.gd" type="Script" id=1]
-[ext_resource path="res://src/controls/centered_in_full_screen_panel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/controls/full_screen_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/controls/nav_bar.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=4]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="CenteredInFullScreenPanel" parent="." instance=ExtResource( 2 )]
+[node name="FullScreenPanel" parent="." instance=ExtResource( 2 )]
 margin_right = 480.0
 margin_bottom = 480.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenteredInFullScreenPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel"]
 margin_right = 480.0
 margin_bottom = 480.0
 
-[node name="NavBar" parent="CenteredInFullScreenPanel/VBoxContainer" instance=ExtResource( 3 )]
+[node name="NavBar" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 480.0
 margin_bottom = 64.0
 text = "Select level"
 
-[node name="Spacer1" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
-margin_left = 240.0
+[node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_top = 68.0
+margin_right = 480.0
+margin_bottom = 154.0
+stretches_vertically = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel"]
+margin_right = 480.0
+margin_bottom = 86.0
+
+[node name="Spacer1" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/VBoxContainer"]
+margin_left = 240.0
 margin_right = 240.0
-margin_bottom = 225.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenteredInFullScreenPanel/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/VBoxContainer"]
 margin_left = 170.0
-margin_top = 229.0
+margin_top = 4.0
 margin_right = 310.0
-margin_bottom = 319.0
+margin_bottom = 82.0
 rect_min_size = Vector2( 140, 0 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 12
 
-[node name="StartGameButton" type="Button" parent="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer"]
+[node name="StartGameButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/VBoxContainer/VBoxContainer"]
 margin_right = 140.0
 margin_bottom = 39.0
 text = "Start game"
 
-[node name="LevelSelector" type="OptionButton" parent="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer"]
+[node name="LevelSelector" type="OptionButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/VBoxContainer/VBoxContainer"]
 margin_top = 51.0
 margin_right = 140.0
-margin_bottom = 90.0
+margin_bottom = 78.0
 text = "Select level"
 align = 1
 
-[node name="Spacer2" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
+[node name="Spacer2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/VBoxContainer"]
 margin_left = 240.0
-margin_top = 323.0
+margin_top = 86.0
 margin_right = 240.0
-margin_bottom = 480.0
+margin_bottom = 86.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
-[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/StartGameButton" to="." method="_on_StartGameButton_pressed"]
-[connection signal="item_selected" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/LevelSelector" to="." method="_on_LevelSelector_item_selected"]
-[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/LevelSelector" to="." method="_on_LevelSelector_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/VBoxContainer/VBoxContainer/StartGameButton" to="." method="_on_StartGameButton_pressed"]
+[connection signal="item_selected" from="FullScreenPanel/VBoxContainer/CenteredPanel/VBoxContainer/VBoxContainer/LevelSelector" to="." method="_on_LevelSelector_item_selected"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/VBoxContainer/VBoxContainer/LevelSelector" to="." method="_on_LevelSelector_pressed"]

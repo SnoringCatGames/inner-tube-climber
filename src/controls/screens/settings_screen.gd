@@ -6,6 +6,7 @@ const ROW_HEIGHT := 32.0
 
 const TYPE := ScreenType.SETTINGS
 
+var container: VBoxContainer
 var difficulty_option_button: OptionButton
 var haptic_feedback_checkbox: CheckBox
 var debug_panel_checkbox: CheckBox
@@ -25,38 +26,46 @@ var sound_effects_checkbox: CheckBox
 func _init().(TYPE) -> void:
     pass
 
-func _ready() -> void:
-    if Engine.is_editor_hint():
-        return
-    
+func _enter_tree() -> void:
     _initialize_references()
     _initialize_options()
     _initialize_selections()
     _initialize_sizes()
 
 func _initialize_references() -> void:
-    var container: VBoxContainer = \
-            $CenteredInFullScreenPanel/CenterPanelOuter/CenterPanelInner/VBoxContainer/VBoxContainer/VBoxContainer
-    difficulty_option_button = container.get_node("Difficulty/OptionButton")
-    haptic_feedback_checkbox = container.get_node("HapticFeedback/CheckBox")
-    debug_panel_checkbox = container.get_node("DebugPanel/CheckBox")
+    container = \
+            $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer
+    difficulty_option_button = \
+            container.get_node("Difficulty/OptionButton")
+    haptic_feedback_checkbox = \
+            container.get_node("HapticFeedback/CheckBox")
+    debug_panel_checkbox = \
+            container.get_node("DebugPanel/CheckBox")
     mobile_control_version_option_button = \
             container.get_node("MobileControlVersion/OptionButton")
     mobile_control_display_checkbox = \
             container.get_node("MobileControlDisplay/CheckBox")
     multiplier_cooldown_indicator_checkbox = \
             container.get_node("MultiplierCooldownIndicator/CheckBox")
-    height_indicator_checkbox = container.get_node("HeightIndicator/CheckBox")
-    score_display_checkbox = container.get_node("ScoreDisplay/CheckBox")
-    height_display_checkbox = container.get_node("HeightDisplay/CheckBox")
-    lives_display_checkbox = container.get_node("LivesDisplay/CheckBox")
+    height_indicator_checkbox = \
+            container.get_node("HeightIndicator/CheckBox")
+    score_display_checkbox = \
+            container.get_node("ScoreDisplay/CheckBox")
+    height_display_checkbox = \
+            container.get_node("HeightDisplay/CheckBox")
+    lives_display_checkbox = \
+            container.get_node("LivesDisplay/CheckBox")
     tier_ratio_display_checkbox = \
             container.get_node("TierRatioDisplay/CheckBox")
     muliplier_display_checkbox = \
             container.get_node("MultiplierDisplay/CheckBox")
-    speed_display_checkbox = container.get_node("SpeedDisplay/CheckBox")
-    music_checkbox = container.get_node("Music/CheckBox")
-    sound_effects_checkbox = container.get_node("SoundEffects/CheckBox")
+    speed_display_checkbox = \
+            container.get_node("SpeedDisplay/CheckBox")
+    music_checkbox = \
+            container.get_node("Music/CheckBox")
+    sound_effects_checkbox = \
+            container.get_node("SoundEffects/CheckBox")
 
 func _initialize_options() -> void:
     difficulty_option_button.clear()
@@ -102,8 +111,6 @@ func _initialize_selections() -> void:
     sound_effects_checkbox.pressed = Audio.is_sound_effects_enabled
 
 func _initialize_sizes() -> void:
-    var container: VBoxContainer = \
-            $CenteredInFullScreenPanel/CenterPanelOuter/CenterPanelInner/VBoxContainer/VBoxContainer/VBoxContainer
     for child in container.get_children():
         var row: LabeledControlRow = child
         row.size_flags_horizontal = Control.SIZE_FILL

@@ -80,6 +80,14 @@ static func get_children_by_type( \
                     recursive)
     return result
 
+static func get_child_by_type( \
+        parent: Node, \
+        type, \
+        recursive := false) -> Node:
+    var children := get_children_by_type(parent, type, recursive)
+    assert(children.size() == 1)
+    return children[0]
+
 static func get_which_wall_collided_for_body(body: KinematicBody2D) -> int:
     if body.is_on_wall():
         for i in range(body.get_slide_count()):

@@ -17,3 +17,9 @@ func _on_Settings_pressed():
     Nav.set_screen_is_open( \
             ScreenType.SETTINGS, \
             true)
+
+func _on_About_pressed():
+    Global.give_button_press_feedback()
+    Nav.set_screen_is_open( \
+            ScreenType.CREDITS, \
+            true)

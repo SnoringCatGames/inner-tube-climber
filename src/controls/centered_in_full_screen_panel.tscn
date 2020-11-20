@@ -9,6 +9,8 @@ bg_color = Color( 0.152941, 0.192157, 0.286275, 1 )
 [node name="CenteredInFullScreenPanel" type="PanelContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = 765.0
+margin_bottom = 363.0
 theme = ExtResource( 2 )
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )

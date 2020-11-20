@@ -37,12 +37,12 @@ func _handle_display_resized() -> void:
     if viewport == null:
         return
     
+    rect_size = viewport.size
+    
     var children := get_children()
     if children.size() != 1:
         return
     var child: Control = children[0]
-    
-    rect_size = viewport.size
     
     var game_area_region: Rect2 = Global.get_game_area_region()
     

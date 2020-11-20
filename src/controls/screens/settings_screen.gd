@@ -2,7 +2,10 @@ tool
 extends Screen
 class_name SettingsScreen
 
-const ROW_HEIGHT := 32.0
+const ROW_HEIGHT := 24.0
+
+const ENABLED_ALPHA := 1.0
+const DISABLED_ALPHA := 0.3
 
 const TYPE := ScreenType.SETTINGS
 
@@ -26,11 +29,15 @@ var sound_effects_checkbox: CheckBox
 func _init().(TYPE) -> void:
     pass
 
-func _enter_tree() -> void:
+func _ready() -> void:
     _initialize_references()
     _initialize_options()
     _initialize_selections()
+    _initialize_enablement()
     _initialize_sizes()
+
+func _on_activated() -> void:
+    _initialize_enablement()
 
 func _initialize_references() -> void:
     container = \
@@ -110,6 +117,50 @@ func _initialize_selections() -> void:
     music_checkbox.pressed = Audio.is_music_enabled
     sound_effects_checkbox.pressed = Audio.is_sound_effects_enabled
 
+func _initialize_enablement() -> void:
+    var difficulty_label := Utils.get_child_by_type( \
+            container.get_node("Difficulty"), \
+            Label)
+    var mobile_control_version_label := Utils.get_child_by_type( \
+            container.get_node("MobileControlVersion"), \
+            Label)
+    var haptic_feedback_label := Utils.get_child_by_type( \
+            container.get_node("HapticFeedback"), \
+            Label)
+    
+    if _get_level() != null:
+        difficulty_option_button.disabled = true
+        mobile_control_version_option_button.disabled = true
+        difficulty_label.modulate.a = DISABLED_ALPHA
+        mobile_control_version_label.modulate.a = DISABLED_ALPHA
+    else:
+        difficulty_option_button.disabled = false
+        mobile_control_version_option_button.disabled = false
+        difficulty_label.modulate.a = ENABLED_ALPHA
+        mobile_control_version_label.modulate.a = ENABLED_ALPHA
+    
+    if Utils.get_is_mobile_device():
+        haptic_feedback_checkbox.disabled = false
+        haptic_feedback_checkbox.modulate.a = ENABLED_ALPHA
+        haptic_feedback_label.modulate.a = ENABLED_ALPHA
+    else:
+        haptic_feedback_checkbox.disabled = true
+        haptic_feedback_checkbox.modulate.a = DISABLED_ALPHA
+        haptic_feedback_label.modulate.a = DISABLED_ALPHA
+    
+    debug_panel_checkbox.disabled = false
+    mobile_control_display_checkbox.disabled = false
+    multiplier_cooldown_indicator_checkbox.disabled = false
+    height_indicator_checkbox.disabled = false
+    score_display_checkbox.disabled = false
+    height_display_checkbox.disabled = false
+    lives_display_checkbox.disabled = false
+    tier_ratio_display_checkbox.disabled = false
+    muliplier_display_checkbox.disabled = false
+    speed_display_checkbox.disabled = false
+    music_checkbox.disabled = false
+    sound_effects_checkbox.disabled = false
+
 func _initialize_sizes() -> void:
     for child in container.get_children():
         var row: LabeledControlRow = child
@@ -121,6 +172,15 @@ func _on_difficulty_selected(index: int) -> void:
     var difficulty_str := difficulty_option_button.get_item_text(index)
     Global.difficulty_mode = DifficultyMode.get_string_type(difficulty_str)
     SaveState.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)
+    Global.give_button_press_feedback()
+
+func _on_mobile_control_version_selected(index: int) -> void:
+    var version_str := \
+            mobile_control_version_option_button.get_item_text(index)
+    Global.mobile_control_version = int(version_str)
+    SaveState.set_setting( \
+            SaveState.MOBILE_CONTROL_VERSION_KEY, \
+            Global.mobile_control_version)
     Global.give_button_press_feedback()
 
 func _on_haptic_feedback_pressed() -> void:
@@ -135,6 +195,7 @@ func _on_debug_panel_pressed() -> void:
     SaveState.set_setting( \
             SaveState.IS_DEBUG_PANEL_SHOWN_KEY, \
             Global.is_debug_panel_shown)
+    _update_level_displays()
     Global.give_button_press_feedback()
 
 func _on_mobile_control_display_pressed() -> void:
@@ -142,15 +203,7 @@ func _on_mobile_control_display_pressed() -> void:
     SaveState.set_setting( \
             SaveState.ARE_MOBILE_CONTROLS_SHOWN_KEY, \
             Global.are_mobile_controls_shown)
-    Global.give_button_press_feedback()
-
-func _on_mobile_control_version_selected(index: int) -> void:
-    var version_str := \
-            mobile_control_version_option_button.get_item_text(index)
-    Global.mobile_control_version = int(version_str)
-    SaveState.set_setting( \
-            SaveState.MOBILE_CONTROL_VERSION_KEY, \
-            Global.mobile_control_version)
+    _update_level_displays()
     Global.give_button_press_feedback()
 
 func _on_multiplier_cooldown_indicator_pressed() -> void:
@@ -245,6 +298,9 @@ func _on_CreditsButton_pressed() -> void:
             true)
 
 func _update_level_displays() -> void:
-    var level: Level = Nav.screens[ScreenType.GAME].level
+    var level := _get_level()
     if level != null:
         level.update_displays()
+
+func _get_level() -> Level:
+    return Nav.screens[ScreenType.GAME].level

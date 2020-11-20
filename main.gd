@@ -5,13 +5,6 @@ class_name Main
 ### MAIN TODO LIST: ###
 # 
 # - Test ability to save/load scores and game state on Android and iOS.
-# - Test control with keyboard with new batteries .
-# 
-# - Split SettingsScreen into two sections?
-#   - One that can be updated during run time, and one that must be updated
-#     when a level isn't active.
-#   >>- Or maybe keep it simple, and don't allow access to settings while a
-#     level is active.
 # 
 # - Make starting lives count configurable per level.
 # 

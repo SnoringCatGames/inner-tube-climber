@@ -1,27 +1,15 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
+[ext_resource path="res://assets/images/icons/gear-icon-normal.png" type="Texture" id=1]
 [ext_resource path="res://assets/images/logo.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/icons/gear-icon-active.png" type="Texture" id=3]
 [ext_resource path="res://src/controls/screens/main_menu_screen.gd" type="Script" id=4]
+[ext_resource path="res://assets/images/icons/gear-icon-hover.png" type="Texture" id=5]
 [ext_resource path="res://src/intro_animation/clipped_slope_animation.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/images/icons/about-icon-active.png" type="Texture" id=7]
 [ext_resource path="res://src/controls/centered_in_full_screen_panel.tscn" type="PackedScene" id=8]
-
-[sub_resource type="StyleBoxEmpty" id=1]
-content_margin_left = 16.0
-content_margin_right = 16.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxEmpty" id=2]
-content_margin_left = 16.0
-content_margin_right = 16.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxEmpty" id=3]
-content_margin_left = 16.0
-content_margin_right = 16.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
+[ext_resource path="res://assets/images/icons/about-icon-normal.png" type="Texture" id=9]
+[ext_resource path="res://assets/images/icons/about-icon-hover.png" type="Texture" id=10]
 
 [node name="MainMenuScreen" type="Node2D"]
 script = ExtResource( 4 )
@@ -44,15 +32,15 @@ __meta__ = {
 [node name="Spacer1" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
 margin_left = 70.0
 margin_right = 70.0
-margin_bottom = 48.0
+margin_bottom = 52.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
 [node name="Control1" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
 margin_left = 70.0
-margin_top = 52.0
+margin_top = 56.0
 margin_right = 70.0
-margin_bottom = 83.0
+margin_bottom = 87.0
 rect_min_size = Vector2( 0, 31 )
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -70,17 +58,17 @@ __meta__ = {
 
 [node name="Spacer2" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
 margin_left = 70.0
-margin_top = 87.0
+margin_top = 91.0
 margin_right = 70.0
-margin_bottom = 136.0
+margin_bottom = 144.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
 [node name="Control2" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
 margin_left = 70.0
-margin_top = 140.0
+margin_top = 148.0
 margin_right = 70.0
-margin_bottom = 260.0
+margin_bottom = 268.0
 rect_min_size = Vector2( 0, 120 )
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -95,9 +83,9 @@ size_flags_vertical = 3
 
 [node name="Spacer3" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
 margin_left = 70.0
-margin_top = 264.0
+margin_top = 272.0
 margin_right = 70.0
-margin_bottom = 313.0
+margin_bottom = 324.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -106,9 +94,9 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenteredInFullScreenPanel/VBoxContainer"]
-margin_top = 317.0
+margin_top = 328.0
 margin_right = 140.0
-margin_bottom = 427.0
+margin_bottom = 423.0
 rect_min_size = Vector2( 140, 0 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -134,21 +122,40 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Settings" type="Button" parent="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer"]
 margin_top = 63.0
 margin_right = 140.0
-margin_bottom = 110.0
-custom_styles/hover = SubResource( 1 )
-custom_styles/pressed = SubResource( 2 )
-custom_styles/normal = SubResource( 3 )
-text = "Settings"
+margin_bottom = 95.0
+
+[node name="SettingsButton" type="TextureButton" parent="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/HBoxContainer"]
+margin_right = 32.0
+margin_bottom = 32.0
+texture_normal = ExtResource( 1 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 5 )
+
+[node name="Control" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/HBoxContainer"]
+margin_left = 36.0
+margin_right = 104.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AboutButton" type="TextureButton" parent="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/HBoxContainer"]
+margin_left = 108.0
+margin_right = 140.0
+margin_bottom = 32.0
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 7 )
+texture_hover = ExtResource( 10 )
 
 [node name="Spacer4" type="Control" parent="CenteredInFullScreenPanel/VBoxContainer"]
 margin_left = 70.0
-margin_top = 431.0
+margin_top = 427.0
 margin_right = 70.0
 margin_bottom = 480.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
 [connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/StartGameButton" to="." method="_on_StartGameButton_pressed"]
-[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]
+[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/HBoxContainer/SettingsButton" to="." method="_on_Settings_pressed"]
+[connection signal="pressed" from="CenteredInFullScreenPanel/VBoxContainer/VBoxContainer/HBoxContainer/AboutButton" to="." method="_on_About_pressed"]

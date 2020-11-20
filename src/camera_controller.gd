@@ -68,7 +68,9 @@ func get_position() -> Vector2:
     return _current_camera.get_camera_screen_center()
 
 func _set_zoom(zoom: float) -> void:
-    assert(_current_camera != null)
+    if _current_camera == null:
+        return
+#    assert(_current_camera != null)
     _current_camera.zoom = Vector2(zoom, zoom)
 
 func _get_zoom() -> float:

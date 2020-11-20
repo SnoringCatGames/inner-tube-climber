@@ -363,6 +363,7 @@ func _on_game_over_sfx_finished() -> void:
     Nav.set_screen_is_open( \
             ScreenType.MAIN_MENU, \
             true)
+    Nav.screens[ScreenType.GAME].destroy_level()
 
 func _set_camera() -> void:
     var camera := Camera2D.new()

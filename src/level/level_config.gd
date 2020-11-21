@@ -110,6 +110,7 @@ const SLIPPERY_TILES := [
     "ice_platform_tile",
 ]
 
+const DEFAULT_LIVES_COUNT := 3
 const DEFAULT_ZOOM_MULTIPLIER := 1.0
 const DEFAULT_SCROLL_SPEED_MULTIPLIER := 1.0
 const DEFAULT_SCROLL_SPEED_MIN := 20.0
@@ -192,6 +193,7 @@ const TIERS := {
 const LEVELS := {
     "1": {
         tiers = ["1", "2", "3", "4", "5", "6", "7"],
+        lives_count = DEFAULT_LIVES_COUNT,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
@@ -199,6 +201,7 @@ const LEVELS := {
     },
     "2": {
         tiers = ["3", "5", "6"],
+        lives_count = DEFAULT_LIVES_COUNT,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,

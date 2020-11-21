@@ -9,7 +9,6 @@ const TIER_RATIO_SIGN_RESOURCE_PATH := \
 const PAUSE_BUTTON_RESOURCE_PATH := "res://src/overlays/pause_button.tscn"
 
 const START_TIER_ID := "0"
-const DEFAULT_LIVES_COUNT := 3
 
 const CELL_SIZE := Vector2(32.0, 32.0)
 const INPUT_SIGN_POSITION := Vector2(0.0, 10.0)
@@ -82,7 +81,7 @@ var player_max_platform_height_on_current_life: float = 0.0
 var tier_count: int = 0
 var display_height: int = 0
 var falls_count: int = 0
-var lives_count: int = DEFAULT_LIVES_COUNT
+var lives_count: int = LevelConfig.DEFAULT_LIVES_COUNT
 var score := 0.0
 
 var current_camera_height := -CAMERA_START_POSITION_POST_STUCK.y
@@ -185,6 +184,7 @@ func start( \
     self.start_time = Time.elapsed_play_time_actual_sec
     visible = true
     is_game_playing = true
+    lives_count = LevelConfig.LEVELS[level_id].lives_count
     falls_count = 0
     score = 0.0
     _start_new_tier( \
@@ -343,9 +343,12 @@ func _fall() -> void:
         pause_button.visible = false
         Audio.on_cross_fade_music_finished()
         _destroy_player()
+        var high_score := max( \
+                int(score), \
+                SaveState.get_high_score_for_level(level_id))
         SaveState.set_high_score_for_level( \
                 level_id, \
-                int(score))
+                high_score)
         
         Audio.current_music_player.stop()
         Audio.game_over_sfx_player.connect( \

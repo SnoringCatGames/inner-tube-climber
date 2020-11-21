@@ -16,7 +16,7 @@ func _update_stats() -> void:
     
     var stats_container := \
             $FullScreenPanel/VBoxContainer/CenteredPanel/ \
-            VBoxContainer/Stats
+            ScrollContainer/CenterContainer/VBoxContainer/Stats
     for row in stats_container.get_children():
         stats_container.remove_child(row)
         row.queue_free()
@@ -39,7 +39,7 @@ func _update_stats() -> void:
             str(SaveState.get_high_score_for_level(level.level_id)))
     _add_row( \
             "Multiplier", \
-            str(level.cooldown_indicator.multiplier))
+            "x%s" % level.cooldown_indicator.multiplier)
     _add_row( \
             "Speed", \
             str(level.speed_index + 1))
@@ -48,7 +48,10 @@ func _update_stats() -> void:
             DifficultyMode.get_type_string(Global.difficulty_mode))
     _add_row( \
             "Lives", \
-            str(level.lives_count))
+            "%s / %s" % [
+                    level.lives_count,
+                    level.lives_count + level.falls_count,
+            ])
     _add_row( \
             "Time", \
             _get_time_string_from_seconds( \
@@ -112,7 +115,7 @@ func _add_row( \
         value: String) -> KeyValueRow:
     var row: KeyValueRow = Utils.add_scene( \
             $FullScreenPanel/VBoxContainer/CenteredPanel/ \
-                    VBoxContainer/Stats, \
+                    ScrollContainer/CenterContainer/VBoxContainer/Stats, \
             KEY_VALUE_ROW_SCENE_PATH, \
             true, \
             true)

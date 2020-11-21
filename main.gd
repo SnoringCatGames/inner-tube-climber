@@ -6,18 +6,6 @@ class_name Main
 # 
 # - Test ability to save/load scores and game state on Android and iOS.
 # 
-# - Make starting lives count configurable per level.
-# 
-# - Settings menu
-#   - Toggle whether max-height indicators are shown along sides of screen.
-#   - Toggle whether score, height, lives, level tier completion ratio,
-#     multiplier, and scroll speed boards are shown.
-#   - Toggle whether the auto-difficulty update suggestion popups appear.
-#   - Change sensitivity of gestures.
-#     - Make it a slider.
-#     - Don't label with a unit, other than more/less sensitive.
-#     - Flat multiplier? Or quadratic?
-# 
 # - Level-select screen
 #   - Show best heights and times for completed levels
 #   - Lock future levels
@@ -32,19 +20,6 @@ class_name Main
 #     - Give another indicator to the rating if the user ever looped through
 #       the level 3 total times (independent of fall-count rating).
 #   - 
-# 
-# - Pause screen
-#   - Skip to tier?
-#   - Explain score calcualtion?
-#   - Show record score.
-#   - Show difficulty mode.
-# 
-# - Replace main menu button text with icons
-#   - Both somewhat pixelated
-#   - "Start game" -> tuber jumping
-#   - "Settings" -> gear
-#   - Also, try to replace text in other menus. In general, I want this to not
-#     use much text, so it can be accessible to international audiences.
 # 
 # - Refactor all panels:
 #   - Add support to handle Android back button.
@@ -231,6 +206,12 @@ class_name Main
 # - Mobile control idea: touch either corner to move sideways, swipe slightly
 #   up on either to jump.
 # 
+# - Fix/redo player art:
+#   - Make art at new x1.5 size, so we don't have scaling artifacts.
+#   - Add shading to the animation.
+#   - Fix inner-tube perspective.
+#   - ...
+# 
 # Long-term planning:
 # - Maybe have a set sequence of tiers per-day? Per week? Per month?
 #   - Randomly shuffle?
@@ -247,6 +228,17 @@ class_name Main
 #       - Or score?
 #     - Fastest ascent through one cycle of the level.
 #   - Show username, and their score/speed.
+# 
+# - Settings menu
+#   - Toggle whether the auto-difficulty update suggestion popups appear.
+#   - Change sensitivity of gestures.
+#     - Make it a slider.
+#     - Don't label with a unit, other than more/less sensitive.
+#     - Flat multiplier? Or quadratic?
+# 
+# - Explain score calculation?
+# 
+# --- Old TODOs from the jam: -------------------------------------
 # 
 # [30]- Add ability to unlock the bounce jump and the double jump.
 #   - Add a flag to tier configs that states whether that tier needs/unlocks
@@ -292,6 +284,7 @@ class_name Main
 #   - Research legal/app-store requirements around this.
 # - Add internationalization.
 #   - Research what my options are for this.
+#   - Replace any additional text with icons?
 # 
 # - Figure out how to persist save game state to the cloud through Android and
 #   iOS APIs?

@@ -2,14 +2,17 @@ extends Node
 
 const PHYSICS_TIME_STEP_SEC := 1 / 60.0
 
-var physics_framerate_multiplier := 0.8
+var _play_time: _PlayTime
+
+var physics_framerate_multiplier := 1.0 setget \
+        _set_physics_framerate_multiplier,_get_physics_framerate_multiplier
 
 # TODO: Verify that all render-frame _process calls in the scene tree happen
 #       without interleaving with any _physics_process calls from other nodes
 #       in the scene tree.
-var _elapsed_latest_play_time_sec: float
-var _elapsed_physics_play_time_sec: float
-var _elapsed_render_play_time_sec: float
+var _elapsed_latest_time_sec: float
+var _elapsed_physics_time_sec: float
+var _elapsed_render_time_sec: float
 
 # Dictionary<int, _Timeout>
 var _timeouts := {}
@@ -17,6 +20,11 @@ var _last_timeout_id := -1
 # Dictionary<FuncRef, _Throttler>
 var _throttled_callbacks := {}
 
+# Keeps track of the current total elapsed time that the app has been running.
+var elapsed_app_time_actual_sec: float \
+        setget ,_get_elapsed_app_time_actual_sec
+var elapsed_app_time_modified_sec: float \
+        setget ,_get_elapsed_app_time_modified_sec
 # Keeps track of the current total elapsed time of unpaused gameplay.
 var elapsed_play_time_actual_sec: float \
         setget ,_get_elapsed_play_time_actual_sec
@@ -24,23 +32,27 @@ var elapsed_play_time_modified_sec: float \
         setget ,_get_elapsed_play_time_modified_sec
 
 func _init() -> void:
-    pause_mode = Node.PAUSE_MODE_STOP
+    pause_mode = Node.PAUSE_MODE_PROCESS
+
+func _enter_tree() -> void:
+    _play_time = _PlayTime.new()
+    add_child(_play_time)
 
 func _ready() -> void:
-    _elapsed_physics_play_time_sec = 0.0
-    _elapsed_render_play_time_sec = 0.0
-    _elapsed_latest_play_time_sec = 0.0
+    _elapsed_physics_time_sec = 0.0
+    _elapsed_render_time_sec = 0.0
+    _elapsed_latest_time_sec = 0.0
 
 func _process(delta_sec: float) -> void:
-    _elapsed_render_play_time_sec += delta_sec
-    _elapsed_latest_play_time_sec = _elapsed_render_play_time_sec
+    _elapsed_render_time_sec += delta_sec
+    _elapsed_latest_time_sec = _elapsed_render_time_sec
     
     _handle_timeouts()
 
 func _handle_timeouts() -> void:
     var expired_timeout_id := -1
     for id in _timeouts:
-        if _elapsed_latest_play_time_sec >= _timeouts[id].time_sec:
+        if _elapsed_latest_time_sec >= _timeouts[id].time_sec:
             expired_timeout_id = id
             break
     
@@ -55,21 +67,34 @@ func _physics_process(delta_sec: float) -> void:
     assert(Geometry.are_floats_equal_with_epsilon( \
             delta_sec, \
             PHYSICS_TIME_STEP_SEC))
-    _elapsed_physics_play_time_sec += delta_sec
-    _elapsed_latest_play_time_sec = _elapsed_physics_play_time_sec
+    _elapsed_physics_time_sec += delta_sec
+    _elapsed_latest_time_sec = _elapsed_physics_time_sec
+
+func _set_physics_framerate_multiplier(value: float) -> void:
+    physics_framerate_multiplier = value
+    _play_time.physics_framerate_multiplier = value
+
+func _get_physics_framerate_multiplier() -> float:
+    return physics_framerate_multiplier
+
+func _get_elapsed_app_time_actual_sec() -> float:
+    return _elapsed_latest_time_sec
+
+func _get_elapsed_app_time_modified_sec() -> float:
+    return _elapsed_latest_time_sec * physics_framerate_multiplier
 
 func _get_elapsed_play_time_actual_sec() -> float:
-    return _elapsed_latest_play_time_sec
+    return _play_time.elapsed_time_actual_sec
 
 func _get_elapsed_play_time_modified_sec() -> float:
-    return _elapsed_latest_play_time_sec * physics_framerate_multiplier
+    return _play_time.elapsed_time_modified_sec
 
 func set_timeout( \
         callback: FuncRef, \
         delay_sec: float) -> int:
     var timeout := _Timeout.new( \
             callback, \
-            _elapsed_latest_play_time_sec + delay_sec)
+            _elapsed_latest_time_sec + delay_sec)
     _timeouts[timeout.id] = timeout
     return timeout.id
 
@@ -128,7 +153,7 @@ class _Throttler:
     func on_call() -> void:
         if !_is_callback_scheduled:
             var current_call_time_sec: float = \
-                    Time.elapsed_play_time_actual_sec
+                    Time.elapsed_app_time_actual_sec
             var next_call_time_sec := _last_call_time_sec + _interval_sec
             if current_call_time_sec > next_call_time_sec:
                 _trigger_callback()
@@ -143,6 +168,41 @@ class _Throttler:
         _is_callback_scheduled = false
     
     func _trigger_callback() -> void:
-        _last_call_time_sec = Time.elapsed_play_time_actual_sec
+        _last_call_time_sec = Time.elapsed_app_time_actual_sec
         _is_callback_scheduled = false
         _callback.call_func()
+
+# Keeps track of the current total elapsed time of _unpaused_ gameplay.
+class _PlayTime extends Node:
+    var physics_framerate_multiplier := 1.0
+    
+    var _elapsed_latest_time_sec: float
+    var _elapsed_physics_time_sec: float
+    var _elapsed_render_time_sec: float
+    
+    var elapsed_time_actual_sec: float \
+            setget ,_get_elapsed_time_actual_sec
+    var elapsed_time_modified_sec: float \
+            setget ,_get_elapsed_time_modified_sec
+    
+    func _init() -> void:
+        pause_mode = Node.PAUSE_MODE_STOP
+    
+    func _ready() -> void:
+        _elapsed_physics_time_sec = 0.0
+        _elapsed_render_time_sec = 0.0
+        _elapsed_latest_time_sec = 0.0
+    
+    func _process(delta_sec: float) -> void:
+        _elapsed_render_time_sec += delta_sec
+        _elapsed_latest_time_sec = _elapsed_render_time_sec
+    
+    func _physics_process(delta_sec: float) -> void:
+        _elapsed_physics_time_sec += delta_sec
+        _elapsed_latest_time_sec = _elapsed_physics_time_sec
+    
+    func _get_elapsed_time_actual_sec() -> float:
+        return _elapsed_latest_time_sec
+    
+    func _get_elapsed_time_modified_sec() -> float:
+        return _elapsed_latest_time_sec * physics_framerate_multiplier

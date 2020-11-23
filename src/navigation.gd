@@ -18,6 +18,15 @@ var screens := {}
 # Array<Screen>
 var active_screen_stack := []
 
+func _notification(notification: int) -> void:
+    if notification == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
+        # Handle the Android back button to navigate within the app instead of
+        # quitting the app.
+        if get_active_screen_type() == ScreenType.MAIN_MENU:
+            get_tree().quit()
+        else:
+            call_deferred("close_current_screen")
+
 func create_screens() -> void:
     screens[ScreenType.MAIN_MENU] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
@@ -159,7 +168,7 @@ func _on_screen_slide_completed( \
 func close_current_screen() -> void:
     assert(!active_screen_stack.empty())
     set_screen_is_open( \
-            active_screen_stack.back().type, \
+            get_active_screen_type(), \
             false)
 
 func get_active_screen_type() -> int:

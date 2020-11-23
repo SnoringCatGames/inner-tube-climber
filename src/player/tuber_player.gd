@@ -32,8 +32,8 @@ var FRICTION_COEFFICIENT := \
         0.02 if Global.mobile_control_version == 1 else 0.03
 var WALL_BOUNCE_MOVEMENT_DELAY_SEC := \
         0.7 if Global.mobile_control_version == 1 else 1.0
-const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.2
-const JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC := 0.15
+const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.1
+const JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC := 0.1
 
 var surface_state := PlayerSurfaceState.new()
 
@@ -48,7 +48,7 @@ var last_hit_wall_time := -INF
 var is_in_post_bounce_horizontal_acceleration_grace_period := false
 var was_last_jump_input_consumed := false
 var last_jump_input_time := 0.0
-var last_floor_fall_off_time := 0.0
+var last_floor_departure_time := 0.0
 
 func _enter_tree() -> void:
     $CollisionShape2D.shape.radius = \
@@ -56,10 +56,7 @@ func _enter_tree() -> void:
     $CollisionShape2D.shape.height = \
             CAPSULE_HEIGHT_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
 
-func _physics_process(delta_sec: float) -> void:
-    ._physics_process(delta_sec)
-    delta_sec *= Time.physics_framerate_multiplier
-    
+func _apply_movement() -> void:
     # We don't need to multiply velocity by delta because MoveAndSlide already
     # takes delta time into account.
     # TODO: Use the remaining pre-collision movement that move_and_slide
@@ -129,7 +126,7 @@ func _update_surface_state() -> void:
         last_hit_wall_time = Time.elapsed_play_time_modified_sec
     
     if surface_state.just_left_floor:
-        last_floor_fall_off_time = Time.elapsed_play_time_modified_sec
+        last_floor_departure_time = Time.elapsed_play_time_modified_sec
     
     is_in_post_bounce_horizontal_acceleration_grace_period = \
             has_hit_wall_since_pressing_move and \
@@ -301,7 +298,9 @@ func _process_actions(delta_sec: float) -> void:
                     JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC > \
                     Time.elapsed_play_time_modified_sec
     var is_jump_after_recent_fall_still_consumable := \
-            last_floor_fall_off_time > \
+            !surface_state.is_touching_a_surface and \
+            !surface_state.entered_air_by_jumping and \
+            last_floor_departure_time > \
             Time.elapsed_play_time_modified_sec - \
                     JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC
     

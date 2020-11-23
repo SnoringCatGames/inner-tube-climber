@@ -19,6 +19,11 @@ func _physics_process(delta_sec: float) -> void:
     _process_actions(delta_sec)
     _process_animation()
     _process_sfx()
+    
+    _apply_movement()
+
+func _apply_movement() -> void:
+    pass
 
 # Calculates basic surface-related state for the current frame.
 func _update_surface_state() -> void:

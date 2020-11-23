@@ -5,7 +5,7 @@ const DOWN := Vector2.DOWN
 const LEFT := Vector2.LEFT
 const RIGHT := Vector2.RIGHT
 const FLOOR_MAX_ANGLE := PI / 4.0
-const GRAVITY := 1600.0
+const GRAVITY := 3200.0
 const FLOAT_EPSILON := 0.00001
 # TODO: We might want to instead replace this with a ratio (like 1.1) of the
 #       KinematicBody2D.get_safe_margin value (defaults to 0.08, but we set it

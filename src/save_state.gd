@@ -50,7 +50,7 @@ func get_high_score_for_level(level_id: String) -> int:
     return config.get_value( \
             HIGH_SCORES_SECTION_KEY, \
             level_id, \
-            -INF) as int
+            0) as int
 
 func set_setting( \
         setting_key: String, \

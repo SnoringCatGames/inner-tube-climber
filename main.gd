@@ -4,41 +4,10 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Test ability to save/load scores and game state on Android and iOS.
+# >>>- If we just landed, and just applied jump, then the jump isn't actually
+#      getting applied.
 # 
-# - Level-select screen
-#   - Show best heights and times for completed levels
-#   - Lock future levels
-#     - The next level requires beating the previous level (with any rating)
-#     - Have a couple locked bonus levels that require beating all levels with
-#       A rating, or with A+ rating, to unlock.
-#   - Give a rating for the user's best time on each level.
-#     - A, B, C?
-#     - Or gold, silver, bronze
-#     - Give a plus/other-indicator to the rating if the user didn't die at all
-#       during their run.
-#     - Give another indicator to the rating if the user ever looped through
-#       the level 3 total times (independent of fall-count rating).
-#   - 
-# 
-# - Refactor all panels:
-#   - Add support to handle Android back button.
-#   - What about iOS? Create a new on-screen back button? Include that same
-#     back button for Android? Is it possible to tell the Android OS when to
-#     hide the nav buttons at the bottom of the screen?
-#   - Create the settings panel.
-#   - Update credits panel to mention Copyright Levi, all rights reserved.
-#   - Refactor UtilityPanel:
-#     - Remove old thing.
-#     - Use SettingsScreen instead.
-#     - Create a static, always present icon/button at the top-right of the
-#       screen.
-#       - Gear symbol?
-#       - Pause symbol?
-#     - This will pause the game and open _some_ screen, from which the user
-#       can navigate to other screens or resume playing.
-#   - Test how to get the nav bar to appear on android and whether mobile
-#     controls are ever likely to make it appear annoyingly by accident.
+# - Test ability to save/load scores and game state on iOS.
 # 
 # - Add wood-grain texture to gesture buttons.
 # 
@@ -56,7 +25,6 @@ class_name Main
 # 
 # - When resetting tier after a fall, only start scroll after first input.
 # 
-# - Change max-height indicators to be pixel images?
 # 
 # 
 # 
@@ -126,6 +94,8 @@ class_name Main
 #         deviation.
 #   - Also, animate the cooldown text with a single pulse of red, each time the
 #     multiplier value changes.
+# 
+# - Change max-height indicators to be pixel images?
 # 
 # - Create a special tutorial level.
 #   - Pause the level at the start of each tier and show an explanatory
@@ -237,6 +207,20 @@ class_name Main
 #     - Flat multiplier? Or quadratic?
 # 
 # - Explain score calculation?
+# 
+# - Level-select screen
+#   - Show best heights and times for completed levels
+#   - Lock future levels
+#     - The next level requires beating the previous level (with any rating)
+#     - Have a couple locked bonus levels that require beating all levels with
+#       A rating, or with A+ rating, to unlock.
+#   - Give a rating for the user's best time on each level.
+#     - A, B, C?
+#     - Or gold, silver, bronze
+#     - Give a plus/other-indicator to the rating if the user didn't die at all
+#       during their run.
+#     - Give another indicator to the rating if the user ever looped through
+#       the level 3 total times (independent of fall-count rating).
 # 
 # --- Old TODOs from the jam: -------------------------------------
 # 

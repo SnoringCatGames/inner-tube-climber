@@ -4,18 +4,16 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Test ability to save/load scores and game state on iOS.
-# 
-# - Add wood-grain texture to gesture buttons.
-# 
-# - Update CanvasLayers to support some layers rendering within game area, and
-#   some within entire viewport.
-# 
 # - Add-back ability to collide with tier gaps:
 #   - The problem is that collisions get weird with tier-gap-walled-to-open.
 #   - Will need to check many more alternate TileMaps in surface contact update.
 # 
-# - When resetting tier after a fall, only start scroll after first input.
+# - Update CanvasLayers to support some layers rendering within game area, and
+#   some within entire viewport.
+# 
+# - Add wood-grain texture to gesture buttons.
+# 
+# - Test ability to save/load scores and game state on iOS.
 # 
 # 
 # 

@@ -168,7 +168,6 @@ func _input(event: InputEvent) -> void:
             _add_player(true)
         
         if current_tier_id != "0":
-            speed_index = 0
             _update_speed()
 
 func _handle_display_resize() -> void:
@@ -322,6 +321,8 @@ func _fall() -> void:
                 current_tier_position, \
                 Audio.current_music_player_index)
         _decrement_speed()
+        camera_speed = 0.0
+        has_input_been_pressed = false
         _add_player(false)
         is_game_playing = true
         

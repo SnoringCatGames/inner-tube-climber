@@ -4,17 +4,9 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# >>>- If we just landed, and just applied jump, then the jump isn't actually
-#      getting applied.
-# 
 # - Test ability to save/load scores and game state on iOS.
 # 
 # - Add wood-grain texture to gesture buttons.
-# 
-# - Fix bug where player can double-jump if second jump is very quickly after 
-#   first.
-# 
-# - Make wall-bounce give more extra vertical speed.
 # 
 # - Update CanvasLayers to support some layers rendering within game area, and
 #   some within entire viewport.

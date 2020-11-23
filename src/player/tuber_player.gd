@@ -10,7 +10,8 @@ const RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER := 0.68
 const JUMP_BOOST := -600.0
 var WALL_BOUNCE_HORIZONTAL_BOOST := \
         -10.0 if Global.mobile_control_version == 1 else 10.0
-const WALL_BOUNCE_VERTICAL_BOOST := -200.0
+const WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER := 0.6
+const WALL_BOUNCE_VERTICAL_BOOST_OFFSET := -400.0
 const FLOOR_BOUNCE_BOOST := -800.0
 var IN_AIR_HORIZONTAL_ACCELERATION := \
         600.0 if Global.mobile_control_version == 1 else 500.0
@@ -290,7 +291,8 @@ func _process_actions(delta_sec: float) -> void:
         else:
             velocity.x = min(velocity.x, 0)
         
-        velocity.y += WALL_BOUNCE_VERTICAL_BOOST
+        velocity.y *= WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER
+        velocity.y += WALL_BOUNCE_VERTICAL_BOOST_OFFSET
     
     var is_previous_jump_input_still_consumable := \
             !was_last_jump_input_consumed and \

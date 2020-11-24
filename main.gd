@@ -4,12 +4,8 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Add-back ability to collide with tier gaps:
-#   - The problem is that collisions get weird with tier-gap-walled-to-open.
-#   - Will need to check many more alternate TileMaps in surface contact update.
-# 
-# - Update CanvasLayers to support some layers rendering within game area, and
-#   some within entire viewport.
+# - Make events in pause button or debug panel not be handled by mobile
+#   controls.
 # 
 # - Add wood-grain texture to gesture buttons.
 # 

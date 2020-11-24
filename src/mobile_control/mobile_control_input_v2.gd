@@ -26,7 +26,7 @@ var gesture_start_time_sec := INF
 var jump_pointer_current_position := Vector2.INF
 var move_sideways_pointer_current_position := Vector2.INF
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
     var type_and_position := _get_event_type_and_position(event)
     var event_type: int = type_and_position[0]
     var pointer_position: Vector2 = type_and_position[1]

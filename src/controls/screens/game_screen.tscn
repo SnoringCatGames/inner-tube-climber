@@ -11,6 +11,7 @@ script = ExtResource( 1 )
 [node name="PanelContainer" type="PanelContainer" parent="."]
 margin_right = 480.0
 margin_bottom = 480.0
+mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -20,6 +21,7 @@ __meta__ = {
 margin_right = 480.0
 margin_bottom = 480.0
 rect_clip_content = true
+mouse_filter = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 __meta__ = {

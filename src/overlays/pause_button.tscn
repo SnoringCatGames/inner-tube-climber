@@ -17,4 +17,5 @@ __meta__ = {
 }
 [connection signal="button_down" from="TextureButton" to="." method="_on_TextureButton_button_down"]
 [connection signal="button_up" from="TextureButton" to="." method="_on_TextureButton_button_up"]
+[connection signal="gui_input" from="TextureButton" to="." method="_on_TextureButton_gui_input"]
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]

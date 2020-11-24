@@ -40,3 +40,16 @@ func _pause() -> void:
     Nav.set_screen_is_open( \
             ScreenType.PAUSE, \
             true)
+
+func _on_TextureButton_gui_input(event: InputEvent) -> void:
+    var is_mouse_down: bool = \
+            event is InputEventMouseButton and \
+            event.pressed
+    var is_touch_down: bool = \
+            (event is InputEventScreenTouch and \
+                    event.pressed) or \
+            event is InputEventScreenDrag
+    
+    if (is_mouse_down or is_touch_down) and \
+            $TextureButton.get_rect().has_point(event.position):
+        $TextureButton.accept_event()

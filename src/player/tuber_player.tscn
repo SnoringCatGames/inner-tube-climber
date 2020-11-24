@@ -8,6 +8,8 @@ radius = 12.106
 height = 7.747
 
 [node name="TuberPlayer" type="KinematicBody2D"]
+collision_layer = 0
+collision_mask = 3
 script = ExtResource( 2 )
 
 [node name="TuberAnimator" parent="." instance=ExtResource( 1 )]

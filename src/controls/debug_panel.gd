@@ -82,3 +82,20 @@ func _log_device_settings() -> void:
                 Utils.get_safe_area_margin_left(),
                 Utils.get_safe_area_margin_right(),
             ])
+
+func _on_PanelContainer_gui_input(event: InputEvent) -> void:
+    var is_mouse_down: bool = \
+            event is InputEventMouseButton and \
+            event.pressed
+    var is_touch_down: bool = \
+            (event is InputEventScreenTouch and \
+                    event.pressed) or \
+            event is InputEventScreenDrag
+    var is_scroll: bool = \
+            event is InputEventMouseButton and \
+            (event.button_index == BUTTON_WHEEL_UP or \
+            event.button_index == BUTTON_WHEEL_DOWN)\
+    
+    if (is_mouse_down or is_touch_down or is_scroll) and \
+            $PanelContainer.has_point(event.position):
+        $PanelContainer.accept_event()

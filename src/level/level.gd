@@ -151,7 +151,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
     _set_camera()
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
     if !has_input_been_pressed and \
             (event.is_action_pressed("jump") or \
             event.is_action_pressed("move_left") or \
@@ -447,10 +447,12 @@ func _destroy_player() -> void:
     if player != null:
         player.queue_free()
         remove_child(player)
+        player = null
     if mobile_control_ui != null:
         mobile_control_ui.destroy()
         mobile_control_ui.queue_free()
         Global.canvas_layers.hud_layer.remove_child(mobile_control_ui)
+        mobile_control_ui = null
 
 func _destroy_tiers() -> void:
     if previous_tier != null:
@@ -640,6 +642,9 @@ func _start_new_tier( \
     $SignAllKeys.position = INPUT_SIGN_POSITION
     if current_tier_id != "0":
         $SignAllKeys.position.y -= CELL_SIZE.y
+    
+    if player != null:
+        player.on_new_tier()
 
 func _on_entered_new_tier() -> void:
     tier_count += 1
@@ -732,6 +737,9 @@ func _on_entered_new_tier() -> void:
         _on_final_tier_completed()
     
     _update_score_for_tier_change()
+    
+    if player != null:
+        player.on_new_tier()
 
 func _get_min_framerate_multiplier() -> float:
     match Global.difficulty_mode:

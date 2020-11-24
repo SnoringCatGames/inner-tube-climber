@@ -22,7 +22,7 @@ var is_move_right_pressed := false
 func _init() -> void:
     self.is_mobile_device = Utils.get_is_mobile_device()
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey:
         was_last_event_from_keyboard = true
     elif event is InputEventScreenTouch or \

@@ -38,6 +38,9 @@ const JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC := 0.1
 
 var surface_state := PlayerSurfaceState.new()
 
+# Array<TileMap>
+var tilemaps := []
+
 var just_triggered_jump := false
 var is_rising_from_jump := false
 var jump_count := 0
@@ -56,6 +59,15 @@ func _enter_tree() -> void:
             CAPSULE_RADIUS_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
     $CollisionShape2D.shape.height = \
             CAPSULE_HEIGHT_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
+    on_new_tier()
+
+func on_new_tier() -> void:
+    tilemaps = get_tree().get_nodes_in_group( \
+                    Global.GROUP_NAME_TIER_TILE_MAPS)
+    Utils.concat( \
+            tilemaps, \
+            get_tree().get_nodes_in_group( \
+                    Global.GROUP_NAME_TIER_GAP_TILE_MAPS))
 
 func _apply_movement() -> void:
     # We don't need to multiply velocity by delta because MoveAndSlide already
@@ -168,8 +180,9 @@ func _update_tile_map_contact() -> void:
                 false)
         if surface_state.collision_tile_map_coord_result.tile_map_coord == \
                 Vector2.INF:
-            for tile_map in get_tree().get_nodes_in_group( \
-                    Global.GROUP_NAME_TIER_TILE_MAPS):
+            for tile_map in tilemaps:
+                if tile_map == surface_state.touched_tile_map:
+                    continue
                 Geometry.get_collision_tile_map_coord( \
                         surface_state.collision_tile_map_coord_result, \
                         surface_state.touch_position, \

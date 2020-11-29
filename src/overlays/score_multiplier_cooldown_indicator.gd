@@ -55,12 +55,10 @@ const SHIVER_PARAMS := [
     },
 ]
 
-# FIXME: --------------------- Revert debug step heights.
 const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     {
         multiplier = 1,
-        step_height = 400.0,
-#        step_height = 1600.0,
+        step_height = 1600.0,
         heartbeat_pulse_bpm = 40.0,
         heartbeat_radius_ratio = 1.15,
         heartbeat_post_second_pulse_gap_ratio = 0.6,
@@ -70,8 +68,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     },
     {
         multiplier = 2,
-        step_height = 600.0,
-#        step_height = 3200.0,
+        step_height = 3200.0,
         heartbeat_pulse_bpm = 52.0,
         heartbeat_radius_ratio = 1.21,
         heartbeat_post_second_pulse_gap_ratio = 0.55,
@@ -81,8 +78,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     },
     {
         multiplier = 4,
-        step_height = 800.0,
-#        step_height = 6400.0,
+        step_height = 6400.0,
         heartbeat_pulse_bpm = 72.0,
         heartbeat_radius_ratio = 1.28,
         heartbeat_post_second_pulse_gap_ratio = 0.5,
@@ -92,8 +88,7 @@ const MULTIPLIER_VALUES_AND_STEP_DURATIONS: Array = [
     },
     {
         multiplier = 8,
-        step_height = 800.0,
-#        step_height = 12800.0,
+        step_height = 12800.0,
         heartbeat_pulse_bpm = 100.0,
         heartbeat_radius_ratio = 1.35,
         heartbeat_post_second_pulse_gap_ratio = 0.45,

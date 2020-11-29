@@ -23,6 +23,8 @@ const BOUNCE_SFX_STREAM := preload("res://assets/sfx/tuber_bounce.wav")
 const MUSIC_CROSS_FADE_DURATION_SEC := 2.0
 const SILENT_VOLUME_DB := -80.0
 
+const GLOBAL_AUDIO_VOLUME_OFFSET_DB := -20.0
+
 const SFX_BUS_INDEX := 1
 const MUSIC_BUS_INDEX := 2
 
@@ -127,7 +129,7 @@ func cross_fade_music(next_music_player_index: int) -> void:
         return
     
     var loud_volume := \
-            0.0 if \
+            -0.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
             is_music_enabled else \
             SILENT_VOLUME_DB
     
@@ -195,21 +197,21 @@ func set_sound_effects_enabled(enabled: bool) -> void:
 
 func _update_volume() -> void:
     if is_music_enabled:
-        MUSIC_PLAYERS[0].volume_db = -0.0
-        MUSIC_PLAYERS[1].volume_db = -0.0
-        MUSIC_PLAYERS[2].volume_db = -0.0
+        MUSIC_PLAYERS[0].volume_db = -0.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB
+        MUSIC_PLAYERS[1].volume_db = -0.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB
+        MUSIC_PLAYERS[2].volume_db = -0.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB
     else:
         MUSIC_PLAYERS[0].volume_db = SILENT_VOLUME_DB
         MUSIC_PLAYERS[1].volume_db = SILENT_VOLUME_DB
         MUSIC_PLAYERS[2].volume_db = SILENT_VOLUME_DB
     
     if is_sound_effects_enabled:
-        button_press_sfx_player.volume_db = -6.0
-        jump_sfx_player.volume_db = -6.0
-        land_sfx_player.volume_db = -0.0
-        bounce_sfx_player.volume_db = -2.0
-        game_over_sfx_player.volume_db = -6.0
-        new_tier_sfx_player.volume_db = -6.0
+        button_press_sfx_player.volume_db = -6.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB
+        jump_sfx_player.volume_db = -6.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB
+        land_sfx_player.volume_db = -0.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB
+        bounce_sfx_player.volume_db = -2.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB
+        game_over_sfx_player.volume_db = -6.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB
+        new_tier_sfx_player.volume_db = -6.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB
     else:
         button_press_sfx_player.volume_db = SILENT_VOLUME_DB
         jump_sfx_player.volume_db = SILENT_VOLUME_DB

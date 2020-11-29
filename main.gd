@@ -1,23 +1,64 @@
-extends Node
+extends Node2D
 class_name Main
 
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Make events in pause button or debug panel not be handled by mobile
-#   controls.
+# >>>- For some reason, the light on the background seems to effect the player
+#      sprite, regardless of the player sprite's mask??
+#      - z-index related? Revert all unnecessary z-index modifications...
 # 
-# - Add wood-grain texture to gesture buttons.
+# - Debug the current light implementation...
+#   - It seems like there _is_ something that causes light to extend over
+#     tilemap tiles at a varying depth?
+#   - How to control this more though?
+#   >>- It seems broken currently; opposite of how it should work; deeper light
+#       when further away...
+# 
+# - Set item cull mask with different values for "ground" vs "platform" tiles?
+# 
+# - Try creating a separate scene that extends TileMap and defines the tileset
+#   to use for itself, and then re-use this from all Tiers/TierGaps?
+#   - Could also then add tile_map_type and friction fields to the TileMap
+#     directly.
+#   - Might make it easier to also encode other stuff with the TileMaps?
+#     - Light occluders
+#     - Light emitters
+#     - ...
+#   - Make this have light_mask = 4
 # 
 # - Test ability to save/load scores and game state on iOS.
 # 
 # 
-# 
-# 
-# 
+# - Brainstorm ways to use lighting/shadow.
+#   - Light sources:
+#     - Certain blocks?
+#     - Player
+#     - The platform at the start of a new tier.
+#       - Either the whole platform, or just some special sprite (like a flag?
+#         or the tier-ratio sign?)
+#   - Light occluders:
+#     - Floor blocks: fully occlude
+#     - Platform blocks: partially occlude?
+#   - Make both "ambient light" and discrete light brightnesses configurable
+#     with a multiplier per tier and per level.
+#   - Google interesting lighting effects.
 # - Add lighting and shadow effects.
 #   - With Godot APIs.
 #   - Also add lighting effects to animations.
+# 
+# - Consider adding a super-fancy depth-based lighting in the style of Terraria?
+#   - Re-read shading docs:
+#     https://docs.godotengine.org/en/stable/tutorials/shading/index.html
+#   - Decide if there are any other places to use custom shader logic.
+#   - Watch this video and consider their techniques:
+#     https://www.youtube.com/watch?v=XgdAkqg7eKs
+# 
+# - Add particle systems?
+#   - https://docs.godotengine.org/en/stable/tutorials/2d/particle_systems_2d.html
+#   - Snow spray effect from feet when jumping, landing, walking.
+#   - Ice spray effect when bouncing on wall.
+#   - Snow falling effect.
 # 
 # - Create a couple new platform types:
 #   - They crumble away after a short delay after being landed on.
@@ -80,6 +121,8 @@ class_name Main
 #         deviation.
 #   - Also, animate the cooldown text with a single pulse of red, each time the
 #     multiplier value changes.
+# 
+# - Add wood-grain texture to gesture buttons.
 # 
 # - Change max-height indicators to be pixel images?
 # 

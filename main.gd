@@ -4,16 +4,8 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# >>>- For some reason, the light on the background seems to effect the player
-#      sprite, regardless of the player sprite's mask??
-#      - z-index related? Revert all unnecessary z-index modifications...
-# 
-# - Debug the current light implementation...
-#   - It seems like there _is_ something that causes light to extend over
-#     tilemap tiles at a varying depth?
-#   - How to control this more though?
-#   >>- It seems broken currently; opposite of how it should work; deeper light
-#       when further away...
+# - The problem was Viewport.usage!!!!
+# - Next: Research what Viewport "Shadow Atlas" is.
 # 
 # - Set item cull mask with different values for "ground" vs "platform" tiles?
 # 
@@ -59,6 +51,17 @@ class_name Main
 #   - Snow spray effect from feet when jumping, landing, walking.
 #   - Ice spray effect when bouncing on wall.
 #   - Snow falling effect.
+# 
+# - PROBLEM: Walk into wall, tap jump, tap repeatedly into wall, ascend
+#   infinitely.
+#   - POSSIBLE SOLUTIONS:
+#     - BAD: Make it so that wall-bounce vertical boost only ever happens once
+#       per jump (would break bouncing up tubes).
+#     - OK: Make it so that wall-bounce vertical boost can't happen on the same
+#       surface twice in a row in the same jump.
+#     - BETTER: Force a minimum horizontal speed when bouncing, which should
+#       prevent the player from being able to make it back to the same wall at
+#       a higher position than before.
 # 
 # - Create a couple new platform types:
 #   - They crumble away after a short delay after being landed on.

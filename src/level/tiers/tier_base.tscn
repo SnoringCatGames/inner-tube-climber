@@ -1,17 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/level/tiers/tier.gd" type="Script" id=1]
 [ext_resource path="res://src/intro_animation/tuber_stuck_animation.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/images/circle-gradient-modified-1024.png" type="Texture" id=3]
 [ext_resource path="res://src/level/tileset.tres" type="TileSet" id=5]
 
-[sub_resource type="CanvasItemMaterial" id=1]
-light_mode = 2
-
-[sub_resource type="OccluderPolygon2D" id=2]
-polygon = PoolVector2Array( -16, -16, 16, -16, 16, 16, -16, 16 )
-
-[node name="Node2D" type="Node2D"]
+[node name="TierBase" type="Node2D"]
 script = ExtResource( 1 )
 openness_type = 1
 
@@ -19,7 +12,6 @@ openness_type = 1
 "tier_tilemaps",
 ]]
 light_mask = 4
-material = SubResource( 1 )
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_mask = 0
@@ -29,41 +21,3 @@ tile_data = PoolIntArray( -393255, 0, 8, -393254, 0, 12, -393253, 0, 10, -393252
 
 [node name="TuberStuckAnimation" parent="." instance=ExtResource( 2 )]
 position = Vector2( 96, -16 )
-
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
-light_mask = 4
-position = Vector2( -80, -48 )
-occluder = SubResource( 2 )
-light_mask = 4
-
-[node name="BackgroundShadowsLight" type="Light2D" parent="."]
-visible = false
-position = Vector2( -128, -128 )
-texture = ExtResource( 3 )
-mode = 3
-range_layer_min = -100
-range_item_cull_mask = 8
-shadow_enabled = true
-shadow_filter = 3
-shadow_filter_smooth = 11.1
-shadow_item_cull_mask = 12
-
-[node name="TilesLight" type="Light2D" parent="."]
-visible = false
-position = Vector2( -128, -128 )
-texture = ExtResource( 3 )
-mode = 3
-range_layer_min = -100
-range_item_cull_mask = 4
-shadow_item_cull_mask = 0
-
-[node name="BackgroundShadowsLight2" type="Light2D" parent="."]
-position = Vector2( -128, -128 )
-texture = ExtResource( 3 )
-mode = 3
-range_layer_min = -100
-range_item_cull_mask = 12
-shadow_enabled = true
-shadow_filter = 3
-shadow_filter_smooth = 11.1
-shadow_item_cull_mask = 12

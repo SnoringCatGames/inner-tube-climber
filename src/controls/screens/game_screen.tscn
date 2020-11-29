@@ -32,4 +32,5 @@ __meta__ = {
 pause_mode = 1
 size = Vector2( 480, 480 )
 handle_input_locally = false
+usage = 0
 render_target_update_mode = 3

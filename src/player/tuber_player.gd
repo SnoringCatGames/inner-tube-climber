@@ -64,10 +64,6 @@ func _enter_tree() -> void:
 func on_new_tier() -> void:
     tilemaps = get_tree().get_nodes_in_group( \
                     Global.GROUP_NAME_TIER_TILE_MAPS)
-    Utils.concat( \
-            tilemaps, \
-            get_tree().get_nodes_in_group( \
-                    Global.GROUP_NAME_TIER_GAP_TILE_MAPS))
 
 func _apply_movement() -> void:
     # We don't need to multiply velocity by delta because MoveAndSlide already

@@ -8,10 +8,12 @@
 script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
+light_mask = 4
 texture = ExtResource( 1 )
 offset = Vector2( 0, 11 )
 
 [node name="Label" type="Label" parent="."]
+light_mask = 4
 margin_left = -24.0
 margin_top = 1.0
 margin_right = 24.0

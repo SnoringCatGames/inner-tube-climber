@@ -10,6 +10,7 @@ height = 7.747
 
 [node name="TuberPlayer" type="KinematicBody2D"]
 light_mask = 2
+z_index = 1
 collision_layer = 0
 collision_mask = 3
 script = ExtResource( 2 )
@@ -22,13 +23,15 @@ shape = SubResource( 1 )
 
 [node name="Light2D" type="Light2D" parent="."]
 light_mask = 2
-scale = Vector2( 0.7, 0.7 )
+position = Vector2( -0.297302, 0 )
+scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 3 )
+energy = 0.8
 range_layer_min = -100
 range_layer_max = 100
-range_item_cull_mask = 12
+range_item_cull_mask = -2147483636
 shadow_enabled = true
-shadow_gradient_length = 10.0
-shadow_filter = 3
-shadow_filter_smooth = 10.0
+shadow_gradient_length = 2.0
+shadow_filter = 1
+shadow_filter_smooth = 4.0
 shadow_item_cull_mask = 12

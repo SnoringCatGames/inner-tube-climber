@@ -12,6 +12,7 @@ script = ExtResource( 2 )
 
 [node name="SSign" type="Sprite" parent="."]
 visible = false
+light_mask = 4
 z_index = 1
 z_as_relative = false
 texture = ExtResource( 3 )
@@ -20,6 +21,7 @@ region_rect = Rect2( 33, 0, 29, 24 )
 
 [node name="WADSign" type="Sprite" parent="."]
 visible = false
+light_mask = 4
 z_index = 1
 texture = ExtResource( 3 )
 region_enabled = true
@@ -27,6 +29,7 @@ region_rect = Rect2( 65, 0, 29, 24 )
 
 [node name="WWSign" type="Sprite" parent="."]
 visible = false
+light_mask = 4
 z_index = 1
 texture = ExtResource( 3 )
 region_enabled = true
@@ -34,5 +37,6 @@ region_rect = Rect2( 97, 0, 29, 24 )
 
 [node name="SignAllKeys" type="Sprite" parent="."]
 visible = false
+light_mask = 4
 z_index = 1
 texture = ExtResource( 6 )

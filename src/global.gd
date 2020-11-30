@@ -3,7 +3,6 @@ extends Node
 signal display_resized
 
 const GROUP_NAME_TIER_TILE_MAPS := "tier_tilemaps"
-const GROUP_NAME_TIER_GAP_TILE_MAPS := "tier_gap_tilemaps"
 
 const PLAYER_SIZE_MULTIPLIER := 1.5
 

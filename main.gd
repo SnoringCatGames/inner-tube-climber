@@ -7,20 +7,7 @@ class_name Main
 # - The problem was Viewport.usage!!!!
 # - Next: Research what Viewport "Shadow Atlas" is.
 # 
-# - Set item cull mask with different values for "ground" vs "platform" tiles?
-# 
-# - Try creating a separate scene that extends TileMap and defines the tileset
-#   to use for itself, and then re-use this from all Tiers/TierGaps?
-#   - Could also then add tile_map_type and friction fields to the TileMap
-#     directly.
-#   - Might make it easier to also encode other stuff with the TileMaps?
-#     - Light occluders
-#     - Light emitters
-#     - ...
-#   - Make this have light_mask = 4
-# 
 # - Test ability to save/load scores and game state on iOS.
-# 
 # 
 # - Brainstorm ways to use lighting/shadow.
 #   - Light sources:

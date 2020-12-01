@@ -9,7 +9,7 @@ const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
 const RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER := 0.68
 const JUMP_BOOST := -600.0
 var WALL_BOUNCE_HORIZONTAL_BOOST := \
-        -10.0 if Global.mobile_control_version == 1 else 10.0
+        0.0 if Global.mobile_control_version == 1 else 20.0
 const WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER := 0.6
 const WALL_BOUNCE_VERTICAL_BOOST_OFFSET := -400.0
 const FLOOR_BOUNCE_BOOST := -800.0

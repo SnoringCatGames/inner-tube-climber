@@ -4,18 +4,12 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# >>>- Refactor lighting system to be subtractive from a dark gloom screen.
-#   - This has a couple benefits:
-#     - Makes it easier to configure some levels to be darker, and actually
-#       hide visibility of things that aren't within the light.
-#     - Fixes the issue with the light actually altering the carefully chosen
-#       art colors.
-#     - _Possibly_ also include an additional subtle light that adds the
-#       current pale effect.
-#   - Make both light brightnesses (size? opacity?) and gloom opacity (and
-#     color?) configurable with a multiplier per tier and per level.
+# - Refactor stuck animation to be a part of the player, rather than the level.
+# - Then, include the light and peep hole during the stuck animation and
+#   transition them to their larger and brighter state with the camera pan.
 # 
-# - Next: Research what Viewport "Shadow Atlas" is.
+# - Make PeepHoleScreen size and opacity configurable with a multiplier per
+#   tier and level.
 # 
 # - Test ability to save/load scores and game state on iOS.
 # 

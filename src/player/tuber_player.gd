@@ -1,8 +1,14 @@
+tool
 extends Player
 class_name TuberPlayer
 
 const CAPSULE_RADIUS_DEFAULT := 12.106
 const CAPSULE_HEIGHT_DEFAULT := 7.747
+const PLAYER_HALF_HEIGHT := CAPSULE_RADIUS_DEFAULT + CAPSULE_HEIGHT_DEFAULT
+const PLAYER_STUCK_ANIMATION_CENTER_OFFSET := Vector2(0.0, -16.0)
+var PLAYER_RELEASE_POSITION_OFFSET := Vector2( \
+        0.0, \
+        -PLAYER_HALF_HEIGHT - Constants.CELL_SIZE.y * 1.5)
 
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
@@ -36,6 +42,11 @@ var WALL_BOUNCE_MOVEMENT_DELAY_SEC := \
 const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.1
 const JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC := 0.1
 
+const LIGHT_IMAGE_SIZE := Vector2(1024.0, 1024.0)
+const PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO := 1.3
+
+export var is_stuck := true setget _set_is_stuck,_get_is_stuck
+
 var surface_state := PlayerSurfaceState.new()
 
 # Array<TileMap>
@@ -54,7 +65,7 @@ var was_last_jump_input_consumed := false
 var last_jump_input_time := 0.0
 var last_floor_departure_time := 0.0
 
-func _enter_tree() -> void:
+func _ready() -> void:
     $CollisionShape2D.shape.radius = \
             CAPSULE_RADIUS_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
     $CollisionShape2D.shape.height = \
@@ -66,6 +77,9 @@ func on_new_tier() -> void:
                     Global.GROUP_NAME_TIER_TILE_MAPS)
 
 func _apply_movement() -> void:
+    if is_stuck:
+        return
+    
     # We don't need to multiply velocity by delta because MoveAndSlide already
     # takes delta time into account.
     # TODO: Use the remaining pre-collision movement that move_and_slide
@@ -79,6 +93,9 @@ func _apply_movement() -> void:
 
 # Calculates basic surface-related state for the current frame.
 func _update_surface_state() -> void:
+    if is_stuck:
+        return
+    
     surface_state.collision_count = get_slide_count()
     
     var was_touching_floor := surface_state.is_touching_floor
@@ -260,8 +277,11 @@ func _update_tile_map_contact() -> void:
         surface_state.friction = INF
 
 # Calculate what actions occur during this frame.
-func _update_actions(delta_sec: float) -> void:
-    delta_sec *= Time.physics_framerate_multiplier
+func _update_actions(_delta_sec: float) -> void:
+    if is_stuck:
+        return
+    
+    _delta_sec *= Time.physics_framerate_multiplier
     
     if Input.is_action_pressed("move_right"):
         surface_state.horizontal_facing_sign = 1
@@ -284,6 +304,9 @@ func _update_actions(delta_sec: float) -> void:
     
 # Updates physics and player states in response to the current actions.
 func _process_actions(delta_sec: float) -> void:
+    if is_stuck:
+        return
+    
     delta_sec *= Time.physics_framerate_multiplier
     
     just_triggered_jump = false
@@ -427,6 +450,9 @@ func _process_actions(delta_sec: float) -> void:
 
 # Updates the animation state for the current frame.
 func _process_animation() -> void:
+    if is_stuck:
+        return
+    
     # Flip the horizontal direction of the animation according to which way the
     # player is facing.
     if surface_state.horizontal_facing_sign == 1:
@@ -449,6 +475,9 @@ func _process_animation() -> void:
 
 # Updates sounds for the current frame.
 func _process_sfx() -> void:
+    if is_stuck:
+        return
+    
     if just_triggered_jump:
         Audio.jump_sfx_player.play()
     
@@ -457,3 +486,26 @@ func _process_sfx() -> void:
     
     if surface_state.just_touched_wall:
         Audio.bounce_sfx_player.play()
+
+func _set_is_stuck(value: bool) -> void:
+    var was_stuck := is_stuck
+    is_stuck = value
+    if is_stuck != was_stuck:
+        if is_stuck:
+            $TuberAnimator.stuck()
+        else:
+            position += PLAYER_RELEASE_POSITION_OFFSET
+            $TuberAnimator.jump_fall()
+
+func _get_is_stuck() -> bool:
+    return is_stuck
+
+func update_peep_hole( \
+        peep_hole_size: Vector2, \
+        screen_opacity: float) -> void:
+    $PeepHoleScreen.peep_hole_size = peep_hole_size
+    $PeepHoleScreen.screen_opacity = screen_opacity
+    
+    $Light2D.scale = \
+            (peep_hole_size / LIGHT_IMAGE_SIZE) * \
+            PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO

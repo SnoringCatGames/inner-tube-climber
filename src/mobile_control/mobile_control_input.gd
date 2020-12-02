@@ -29,7 +29,7 @@ func _unhandled_input(event: InputEvent) -> void:
             event is InputEventMouseButton:
         was_last_event_from_keyboard = false
 
-func _physics_process(delta_sec: float) -> void:
+func _physics_process(_delta_sec: float) -> void:
     # NOTE: Regarding sequencing:
     # -   We need to continually emit move-sideways actions each frame,
     #     regardless of whether there was any new unhandled input for that

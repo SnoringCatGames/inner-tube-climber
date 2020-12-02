@@ -439,7 +439,6 @@ static func compute_arc_points(
     
     var points := PoolVector2Array()
     points.resize(vertex_count)
-    var vertex: Vector2
     
     for i in range(sector_count + 1):
         points[i] = Vector2(cos(theta), sin(theta)) * radius + center
@@ -511,7 +510,6 @@ static func draw_capsule_outline( \
     var vertices := PoolVector2Array()
     var vertex_count := (sector_count + 1) * 2 + 1
     vertices.resize(vertex_count)
-    var vertex: Vector2
     
     for i in range(sector_count + 1):
         vertices[i] = Vector2(cos(theta), sin(theta)) * radius + end_center

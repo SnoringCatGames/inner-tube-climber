@@ -14,7 +14,7 @@ func _enter_tree() -> void:
     _create_annotation_layer()
     _create_game_screen_layer()
 
-func _process(delta_sec: float) -> void:
+func _process(_delta_sec: float) -> void:
     # Transform the annotation layer to follow the camera.
     var camera: Camera2D = Global.camera_controller.get_current_camera()
     if camera != null:

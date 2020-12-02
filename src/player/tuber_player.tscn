@@ -6,8 +6,8 @@
 [ext_resource path="res://src/controls/peep_hole_screen.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CapsuleShape2D" id=1]
-radius = 12.106
-height = 7.747
+radius = 18.159
+height = 11.6205
 
 [node name="TuberPlayer" type="KinematicBody2D"]
 light_mask = 2

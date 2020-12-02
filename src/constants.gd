@@ -3,6 +3,8 @@ extends Node
 const MAIN_FONT_NORMAL: Font = \
         preload("res://assets/fonts/main_font_normal.tres")
 
+const CELL_SIZE := Vector2(32.0, 32.0)
+
 #586e9a
 var WALL_COLOR := Color.from_hsv(0.611, 0.43, 0.6, 1.0)
 #273149

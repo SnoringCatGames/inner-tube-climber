@@ -8,7 +8,7 @@ var mobile_control_input: MobileControlInput
 func _init(mobile_control_input: MobileControlInput) -> void:
     self.mobile_control_input = mobile_control_input
 
-func _process(delta_sec: float) -> void:
+func _process(_delta_sec: float) -> void:
     _sync_gesture_buffer()
 
 func _sync_gesture_buffer() -> void:

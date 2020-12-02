@@ -4,12 +4,12 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Refactor stuck animation to be a part of the player, rather than the level.
-# - Then, include the light and peep hole during the stuck animation and
-#   transition them to their larger and brighter state with the camera pan.
+# - Fix problem with new-tier event being triggered when player is actually
+#   still slightly under the platform.
+#   - Is it being triggered at bottom of TierTileMap, rather than one row up,
+#     at the level of the first platform?
 # 
-# - Make PeepHoleScreen size and opacity configurable with a multiplier per
-#   tier and level.
+# - Have windiness affect in-air player velocity!
 # 
 # - Test ability to save/load scores and game state on iOS.
 # 

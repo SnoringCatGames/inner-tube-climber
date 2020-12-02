@@ -2,11 +2,15 @@ tool
 extends Node2D
 class_name PeepHoleScreen
 
-const PEEP_HOLE_SIZE_DEFAULT := Vector2(256.0, 256.0)
+const PEEP_HOLE_IMAGE_SIZE := Vector2(256.0, 256.0)
 
-export var peep_hole_size := Vector2(256.0, 256.0) setget \
-    _set_peep_hole_size,_get_peep_hole_size
-export var screen_opacity := 1.0 setget _set_screen_opacity,_get_screen_opacity
+const PEEP_HOLE_SIZE_DEFAULT := PEEP_HOLE_IMAGE_SIZE
+const SCREEN_OPACITY_DEFAULT := 0.2
+
+export var peep_hole_size := PEEP_HOLE_SIZE_DEFAULT setget \
+        _set_peep_hole_size,_get_peep_hole_size
+export var screen_opacity := SCREEN_OPACITY_DEFAULT setget \
+        _set_screen_opacity,_get_screen_opacity
 
 var _is_ready := false
 
@@ -36,7 +40,7 @@ func _update_patches() -> void:
     $TopMiddle.scale = vertical_middle_patch_size
     $TopRight.scale = corner_patch_size
     $MiddleLeft.scale = horizontal_middle_patch_size
-    $Center.scale = peep_hole_size / PEEP_HOLE_SIZE_DEFAULT
+    $Center.scale = peep_hole_size / PEEP_HOLE_IMAGE_SIZE
     $MiddleRight.scale = horizontal_middle_patch_size
     $BottomLeft.scale = corner_patch_size
     $BottomMiddle.scale = vertical_middle_patch_size

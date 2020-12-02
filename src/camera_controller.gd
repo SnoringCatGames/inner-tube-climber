@@ -19,7 +19,7 @@ func _enter_tree() -> void:
     zoom_tween = Tween.new()
     add_child(zoom_tween)
 
-func _process(delta_sec: float) -> void:
+func _process(_delta_sec: float) -> void:
     if _current_camera != null:
         # Handle zooming.
         if Input.is_action_pressed("zoom_in"):

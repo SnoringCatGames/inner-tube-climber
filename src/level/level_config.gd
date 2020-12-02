@@ -115,6 +115,9 @@ const DEFAULT_ZOOM_MULTIPLIER := 1.0
 const DEFAULT_SCROLL_SPEED_MULTIPLIER := 1.0
 const DEFAULT_SCROLL_SPEED_MIN := 20.0
 const DEFAULT_SCROLL_SPEED_MAX := 160.0
+const DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER := 1.0
+const DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER := 1.0
+const DEFAULT_WINDINESS_MULTIPLIER := 1.0
 
 const FRAMERATE_MULTIPLIER_EASY_MIN := 0.7
 const FRAMERATE_MULTIPLIER_EASY_MAX := 1.0
@@ -131,6 +134,10 @@ const TIERS := {
         scroll_speed_multiplier = 0.0,
         scroll_speed_min = 0.0,
         scroll_speed_max = 0.0,
+        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
+        peep_hole_screen_opacity_multiplier = \
+                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "1": {
         scene_path = "res://src/level/tiers/tier_1.tscn",
@@ -139,6 +146,10 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
+        peep_hole_screen_opacity_multiplier = \
+                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "2": {
         scene_path = "res://src/level/tiers/tier_2.tscn",
@@ -147,6 +158,10 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
+        peep_hole_screen_opacity_multiplier = \
+                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "3": {
         scene_path = "res://src/level/tiers/tier_3.tscn",
@@ -155,6 +170,10 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
+        peep_hole_screen_opacity_multiplier = \
+                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "4": {
         scene_path = "res://src/level/tiers/tier_4.tscn",
@@ -163,6 +182,10 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
+        peep_hole_screen_opacity_multiplier = \
+                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "5": {
         scene_path = "res://src/level/tiers/tier_5.tscn",
@@ -171,6 +194,10 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
+        peep_hole_screen_opacity_multiplier = \
+                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "6": {
         scene_path = "res://src/level/tiers/tier_6.tscn",
@@ -179,6 +206,10 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
+        peep_hole_screen_opacity_multiplier = \
+                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "7": {
         scene_path = "res://src/level/tiers/tier_7.tscn",
@@ -187,6 +218,10 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
+        peep_hole_screen_opacity_multiplier = \
+                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
 }
 
@@ -198,6 +233,10 @@ const LEVELS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
+        peep_hole_screen_opacity_multiplier = \
+                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "2": {
         tiers = ["3", "5", "6"],
@@ -206,6 +245,10 @@ const LEVELS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
+        peep_hole_screen_opacity_multiplier = \
+                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
 }
 

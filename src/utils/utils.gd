@@ -74,10 +74,12 @@ static func get_children_by_type( \
         if child is type:
             result.push_back(child)
         if recursive:
-            get_children_by_type( \
-                    child, \
-                    type, \
-                    recursive)
+            concat( \
+                    result, \
+                    get_children_by_type( \
+                            child, \
+                            type, \
+                            recursive))
     return result
 
 static func get_child_by_type( \

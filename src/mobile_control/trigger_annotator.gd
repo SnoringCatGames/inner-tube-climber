@@ -41,7 +41,7 @@ func _init( \
     self.opacity_end = opacity_end
     self.easing = easing
 
-func _process(delta_sec: float) -> void:
+func _process(_delta_sec: float) -> void:
     if progress < 1.0:
         update()
         progress = (Time.elapsed_play_time_actual_sec - time_start_sec) / \
@@ -54,7 +54,7 @@ func _draw() -> void:
     var opacity: float = lerp( \
             opacity_start, \
             opacity_end, \
-            progress)
+            eased_progress)
     var color := Color.from_hsv( \
             base_color.h, \
             base_color.s, \
@@ -63,7 +63,7 @@ func _draw() -> void:
     var radius: float = lerp( \
             radius_start, \
             radius_end, \
-            progress)
+            eased_progress)
     
     if direction_angle != INF:
         DrawUtils.draw_triangle_with_one_arc_side( \

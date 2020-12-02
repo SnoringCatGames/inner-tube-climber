@@ -149,8 +149,8 @@ func set_screen_is_open( \
         next_screen._on_activated()
 
 func _on_screen_slide_completed( \
-        object: Object, \
-        key: NodePath, \
+        _object: Object, \
+        _key: NodePath, \
         previous_screen: Screen, \
         next_screen: Screen, \
         tween: Tween) -> void:

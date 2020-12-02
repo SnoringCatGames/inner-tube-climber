@@ -10,7 +10,7 @@ var gesture_annotator: GestureAnnotator
 func _init(mobile_control_input: MobileControlInput) -> void:
     self.mobile_control_input = mobile_control_input
 
-func _process(delta_sec: float) -> void:
+func _process(_delta_sec: float) -> void:
     if Input.is_action_just_pressed("jump") and \
             mobile_control_input.jump_pointer_current_position != Vector2.INF:
         var jump_trigger_annotator := TriggerAnnotator.new( \

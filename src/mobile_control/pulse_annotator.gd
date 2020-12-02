@@ -37,7 +37,7 @@ func _init( \
     self.opacity_start = opacity_start
     self.opacity_end = opacity_end
 
-func _process(delta_sec: float) -> void:
+func _process(_delta_sec: float) -> void:
     update()
     progress = sin(fmod( \
             (Time.elapsed_play_time_actual_sec - time_start_sec) / period_sec, \

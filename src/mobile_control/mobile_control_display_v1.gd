@@ -51,7 +51,7 @@ func _on_display_resized() -> void:
     jump_indicator.position = left_pad_position
     move_sideways_indicator.position = right_pad_position
 
-func _process(delta_sec: float) -> void:
+func _process(_delta_sec: float) -> void:
     jump_indicator.modulate.a = \
             OPACITY_PRESSED if \
             mobile_control_input.is_jump_pressed else \

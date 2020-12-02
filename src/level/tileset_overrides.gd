@@ -24,8 +24,6 @@ func _is_tile_bound( \
         ICE_WALL_TILE_ID:
             return neighbor_id == WALL_TILE_ID or \
                     neighbor_id == ICE_WALL_TILE_ID
-            return neighbor_id == WALL_TILE_ID or \
-                    neighbor_id == ICE_WALL_TILE_ID
         SNOW_PLATFORM_TILE_ID:
             return neighbor_id == SNOW_PLATFORM_TILE_ID or \
                     neighbor_id == WALL_TILE_ID or \

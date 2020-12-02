@@ -15,6 +15,9 @@ const FALL_PLAYBACK_RATE := 1.0
 const STAND_NAME := "Stand"
 const STAND_PLAYBACK_RATE := 1.0
 
+const STUCK_NAME := "Stuck"
+const STUCK_PLAYBACK_RATE := 1.0
+
 func _play_animation( \
         name: String, \
         playback_rate: float = 1) -> bool:
@@ -28,6 +31,7 @@ func _show_sprite(animation_name: String) -> void:
         $Stand,
         $Jump,
         $Fall,
+        $Stuck,
     ]
     for sprite in sprites:
         sprite.visible = false
@@ -42,6 +46,8 @@ func _show_sprite(animation_name: String) -> void:
             $Jump.visible = true
         FALL_NAME:
             $Fall.visible = true
+        STUCK_NAME:
+            $Stuck.visible = true
         _:
             Utils.error()
 
@@ -80,3 +86,8 @@ func stand() -> void:
     _play_animation( \
             STAND_NAME, \
             STAND_PLAYBACK_RATE)
+
+func stuck() -> void:
+    _play_animation( \
+            STUCK_NAME, \
+            STUCK_PLAYBACK_RATE)

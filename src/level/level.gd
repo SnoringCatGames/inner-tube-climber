@@ -10,23 +10,29 @@ const PAUSE_BUTTON_RESOURCE_PATH := "res://src/overlays/pause_button.tscn"
 
 const START_TIER_ID := "0"
 
-const CELL_SIZE := Vector2(32.0, 32.0)
 const INPUT_SIGN_POSITION := Vector2(0.0, 10.0)
 
-const PLAYER_START_POSITION := Vector2(96.0, -32.0)
 const PLAYER_START_VELOCITY := Vector2(0.0, -300.0)
-const PLAYER_HALF_HEIGHT := 19.853
-const CAMERA_START_ZOOM_PRE_STUCK := 0.4
-const CAMERA_START_POSITION_PRE_STUCK := PLAYER_START_POSITION
-const CAMERA_START_POSITION_POST_STUCK := Vector2(0.0, -128.0)
-const CAMERA_PAN_TO_POST_STUCK_DURATION_SEC := 0.5
-const CAMERA_HORIZONTAL_LOCK_DISPLACMENT_TWEEN_DURATION_SEC := 0.3
+
 # TODO: Update this to instead be logarithmic.
 const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 3.0
 const NUMBER_OF_LEVELS_PER_MUSIC := 1
 
 # How many pixels correspond to a single display-height unit. 
 const DISPLAY_HEIGHT_INTERVAL := 32.0
+
+const CAMERA_START_ZOOM_PRE_STUCK := 0.3
+const CAMERA_START_PLAYER_POSITION_OFFSET_PRE_STUCK := Vector2(0.0, -8.0)
+const CAMERA_START_POSITION_POST_STUCK := Vector2(0.0, -128.0)
+const CAMERA_PAN_TO_POST_STUCK_DURATION_SEC := 0.5
+const CAMERA_HORIZONTAL_LOCK_DISPLACMENT_TWEEN_DURATION_SEC := \
+        CameraController.ZOOM_ANIMATION_DURATION_SEC
+const PEEP_HOLE_SIZE_PRE_STUCK := Vector2(96.0, 96.0)
+const PEEP_HOLE_SIZE_POST_STUCK := PeepHoleScreen.PEEP_HOLE_SIZE_DEFAULT
+const PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK := 1.0
+const PEEP_HOLE_SCREEN_OPACITY_POST_STUCK := \
+        PeepHoleScreen.SCREEN_OPACITY_DEFAULT
+const DEFAULT_WINDINESS := 1.0
 
 # This is how many tiers the player must pass through without falling before
 # hitting the max camera scroll speed and framerate speed.
@@ -90,11 +96,20 @@ var camera_speed := 0.0
 var camera_zoom := 1.0
 var camera_horizontally_locked := true
 var is_camera_post_stuck_state_tween_active := false
+
+var windiness := DEFAULT_WINDINESS
+var peep_hole_size := PEEP_HOLE_SIZE_POST_STUCK
+var peep_hole_screen_opacity := PEEP_HOLE_SCREEN_OPACITY_POST_STUCK
+
 var current_fall_height := -INF
 var is_game_playing := false
 
 var camera_horizontal_lock_displacement_tween: Tween
 var camera_horizontal_lock_tween_displacement := 0.0
+
+var peep_hole_size_tween: Tween
+var peep_hole_screen_opacity_tween: Tween
+var windiness_tween: Tween
 
 var tiers_count_since_falling := 0
 
@@ -142,14 +157,24 @@ func _enter_tree() -> void:
     camera_horizontal_lock_displacement_tween = Tween.new()
     add_child(camera_horizontal_lock_displacement_tween)
     
+    peep_hole_size_tween = Tween.new()
+    add_child(peep_hole_size_tween)
+    
+    peep_hole_screen_opacity_tween = Tween.new()
+    add_child(peep_hole_screen_opacity_tween)
+    
+    windiness_tween = Tween.new()
+    add_child(windiness_tween)
+    
     pause_button = Utils.add_scene( \
             Global.canvas_layers.hud_layer, \
             PAUSE_BUTTON_RESOURCE_PATH, \
             true, \
             true)
-
-func _ready() -> void:
-    _set_camera()
+    
+    var camera := Camera2D.new()
+    add_child(camera)
+    Global.camera_controller.set_current_camera(camera)
 
 func _unhandled_input(event: InputEvent) -> void:
     if !has_input_been_pressed and \
@@ -163,9 +188,10 @@ func _unhandled_input(event: InputEvent) -> void:
         
         # Only instantiate the player once the user has pressed a movement
         # button.
-        if is_game_playing and player == null:
-            _remove_stuck_animation()
-            _add_player(true)
+        if is_game_playing and \
+                player != null and \
+                player.is_stuck:
+            _release_player()
         
         if current_tier_id != "0":
             _update_speed()
@@ -191,24 +217,19 @@ func start( \
             Vector2.ZERO, \
             Audio.START_MUSIC_INDEX)
     Audio.cross_fade_music(Audio.current_music_player_index)
-    if tier_id != "0":
-        _add_player(false)
     score_boards.visible = true
 
-func _physics_process(delta_sec: float) -> void:
-    delta_sec *= Time.physics_framerate_multiplier
+func _physics_process(_delta_sec: float) -> void:
+    _delta_sec *= Time.physics_framerate_multiplier
     
     if !is_game_playing or \
-            player == null:
+            player == null or \
+            player.is_stuck:
         return
     
     # Keep track of player height.
-    player_current_height = -player.position.y - PLAYER_HALF_HEIGHT
-    var height_delta := \
-            player_current_height - player_max_height if \
-            player_current_height > player_max_height else \
-            0.0
-    var next_tier_height := -next_tier.position.y + CELL_SIZE.y
+    player_current_height = -player.position.y - TuberPlayer.PLAYER_HALF_HEIGHT
+    var next_tier_height: float = -next_tier.position.y + Constants.CELL_SIZE.y
     if player_current_height > next_tier_height:
         _on_entered_new_tier()
     player_max_height = max(player_max_height, player_current_height)
@@ -285,7 +306,8 @@ func _process(delta_sec: float) -> void:
     if player_current_height < current_fall_height:
         _fall()
     
-    if player == null:
+    if player == null or \
+            player.is_stuck:
         return
     
     if !is_camera_post_stuck_state_tween_active:
@@ -323,12 +345,12 @@ func _fall() -> void:
         _decrement_speed()
         camera_speed = 0.0
         has_input_been_pressed = false
-        _add_player(false)
         is_game_playing = true
         
         # Match player and camera positions to the current tier height.
         player.position.y += current_tier_position.y
-        player_current_height = -player.position.y - PLAYER_HALF_HEIGHT
+        player_current_height = \
+                -player.position.y - TuberPlayer.PLAYER_HALF_HEIGHT
         player_max_height = max(player_max_height, player_current_height)
         player_max_height_on_current_life = \
                 max(player_max_height_on_current_life, player_current_height)
@@ -369,17 +391,19 @@ func _on_game_over_sfx_finished() -> void:
             true)
     Nav.screens[ScreenType.GAME].destroy_level()
 
-func _set_camera() -> void:
-    var camera := Camera2D.new()
-    add_child(camera)
+func _set_camera_start_position() -> void:
     # Register the current camera, so it's globally accessible.
-    Global.camera_controller.set_current_camera(camera)
-    camera_position = CAMERA_START_POSITION_PRE_STUCK
+    camera_position = \
+            player.position + CAMERA_START_PLAYER_POSITION_OFFSET_PRE_STUCK
     Global.camera_controller.offset = Utils.floor_vector(camera_position)
     Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
+    
+    player.update_peep_hole( \
+            PEEP_HOLE_SIZE_PRE_STUCK, \
+            PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK)
 
-func _set_camera_post_stuck_state(is_base_tier: bool) -> void:
-    if is_base_tier:
+func _set_camera_post_stuck_state(animates: bool) -> void:
+    if animates:
         var tween := Tween.new()
         add_child(tween)
         tween.interpolate_method( \
@@ -400,29 +424,38 @@ func _set_camera_post_stuck_state(is_base_tier: bool) -> void:
         _interpolate_camera_to_post_stuck_state(1.0)
 
 func _interpolate_camera_to_post_stuck_state(progress: float) -> void:
+    # Update camera pan.
     var start_offset := \
-            CAMERA_START_POSITION_PRE_STUCK - CAMERA_START_POSITION_POST_STUCK
+            player.position + CAMERA_START_PLAYER_POSITION_OFFSET_PRE_STUCK - \
+            CAMERA_START_POSITION_POST_STUCK
     var end_offset := Vector2.ZERO
-    var current_offset := start_offset.linear_interpolate(end_offset, progress)
+    var current_offset: Vector2 = lerp(start_offset, end_offset, progress)
     camera_position = Vector2(0.0, -current_camera_height) + current_offset
     Global.camera_controller.offset = Utils.floor_vector(camera_position)
     
+    # Update camera zoom.
     var start_zoom := CAMERA_START_ZOOM_PRE_STUCK
     var end_zoom := camera_zoom
     var current_zoom: float = lerp(start_zoom, end_zoom, progress)
     Global.camera_controller.zoom = current_zoom
+    
+    # Update peep hole screen (size and opacity).
+    var current_peep_hole_size: Vector2 = lerp( \
+            PEEP_HOLE_SIZE_PRE_STUCK, \
+            peep_hole_size, \
+            progress)
+    var current_screen_opacity: float = lerp( \
+            PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK, \
+            peep_hole_screen_opacity, \
+            progress)
+    player.update_peep_hole( \
+            current_peep_hole_size, \
+            current_screen_opacity)
 
 func _on_camera_post_stuck_state_completed( \
-        object: Object, \
-        key: NodePath) -> void:
+        _object: Object, \
+        _key: NodePath) -> void:
     is_camera_post_stuck_state_tween_active = false
-
-func _remove_stuck_animation() -> void:
-    # Only the base tier has the stuck-tuber animation.
-    if current_tier_id == "0":
-        var stuck_animation := current_tier.get_node("TuberStuckAnimation")
-        remove_child(stuck_animation)
-        stuck_animation.queue_free()
 
 func _add_player(is_base_tier := false) -> void:
     player = Utils.add_scene( \
@@ -430,18 +463,25 @@ func _add_player(is_base_tier := false) -> void:
             PLAYER_RESOURCE_PATH, \
             true, \
             true)
-    var position := \
-            Vector2(0.0, -PLAYER_HALF_HEIGHT - CELL_SIZE.y * 1.5) if \
-            !is_base_tier else \
-            PLAYER_START_POSITION
-    player.position = position
+    player.position = \
+            current_tier.get_player_spawn_position() + \
+            TuberPlayer.PLAYER_STUCK_ANIMATION_CENTER_OFFSET
     player.velocity = PLAYER_START_VELOCITY
+    player.is_stuck = is_base_tier
+    player.on_new_tier()
     
-    _set_camera_post_stuck_state(is_base_tier)
+    _set_camera_start_position()
+    if !is_base_tier:
+        _set_camera_post_stuck_state(false)
     
     mobile_control_ui = MobileControlUI.new(Global.mobile_control_version)
     Global.canvas_layers.hud_layer.add_child(mobile_control_ui)
     mobile_control_ui.update_displays()
+
+func _release_player() -> void:
+    assert(player.is_stuck)
+    player.is_stuck = false
+    _set_camera_post_stuck_state(true)
 
 func _destroy_player() -> void:
     if player != null:
@@ -492,7 +532,7 @@ func destroy() -> void:
     $SignAllKeys.visible = false
     Audio.on_cross_fade_music_finished()
     
-    camera_position = CAMERA_START_POSITION_PRE_STUCK
+    camera_position = CAMERA_START_POSITION_POST_STUCK
     Global.camera_controller.offset = Utils.floor_vector(camera_position)
     Global.camera_controller.animate_to_zoom(CAMERA_START_ZOOM_PRE_STUCK)
     
@@ -552,7 +592,8 @@ func _start_new_tier( \
             true)
     assert(current_tier.openness_type != OpennessType.UNKNOWN)
     assert(current_tier_id == "0" or \
-            LevelConfig.get_tier_size(current_tier).y / CELL_SIZE.y >= \
+            LevelConfig.get_tier_size(current_tier).y / \
+                    Constants.CELL_SIZE.y >= \
                     Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     current_tier.position = current_tier_position
     
@@ -566,7 +607,7 @@ func _start_new_tier( \
             true, \
             true)
     assert(next_tier.openness_type != OpennessType.UNKNOWN)
-    assert(LevelConfig.get_tier_size(next_tier).y / CELL_SIZE.y >= \
+    assert(LevelConfig.get_tier_size(next_tier).y / Constants.CELL_SIZE.y >= \
             Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     next_tier.position = next_tier_position
     
@@ -592,7 +633,7 @@ func _start_new_tier( \
                 true, \
                 true)
         current_tier_ratio_sign.position = \
-                current_tier_position - Vector2(0.0, CELL_SIZE.y)
+                current_tier_position - Vector2(0.0, Constants.CELL_SIZE.y)
         current_tier_ratio_sign.text = \
                 "%s / %s" % [current_tier_index + 1, level_config.tiers.size()]
     if next_tier_ratio_sign != null:
@@ -603,7 +644,7 @@ func _start_new_tier( \
             true, \
             true)
     next_tier_ratio_sign.position = \
-            next_tier_position - Vector2(0.0, CELL_SIZE.y)
+            next_tier_position - Vector2(0.0, Constants.CELL_SIZE.y)
     next_tier_ratio_sign.text = \
             "%s / %s" % [next_tier_index + 1, level_config.tiers.size()]
     
@@ -636,15 +677,16 @@ func _start_new_tier( \
     _update_zoom(current_tier_id != "0")
     _update_camera_horizontally_locked( \
             current_tier_config.camera_horizontally_locked)
+    _update_peep_hole_screen()
+    _update_windiness()
     
     # Render the basic input instructions sign.
     $SignAllKeys.visible = Global.are_keyboard_controls_shown
     $SignAllKeys.position = INPUT_SIGN_POSITION
     if current_tier_id != "0":
-        $SignAllKeys.position.y -= CELL_SIZE.y
+        $SignAllKeys.position.y -= Constants.CELL_SIZE.y
     
-    if player != null:
-        player.on_new_tier()
+    _add_player(tier_id == "0")
 
 func _on_entered_new_tier() -> void:
     tier_count += 1
@@ -688,7 +730,7 @@ func _on_entered_new_tier() -> void:
             next_tier_config.scene_path, \
             true, \
             true)
-    assert(LevelConfig.get_tier_size(next_tier).y / CELL_SIZE.y >= \
+    assert(LevelConfig.get_tier_size(next_tier).y / Constants.CELL_SIZE.y >= \
             Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
     next_tier.position = next_tier_position
     
@@ -713,7 +755,7 @@ func _on_entered_new_tier() -> void:
             true, \
             true)
     next_tier_ratio_sign.position = \
-            next_tier_position - Vector2(0.0, CELL_SIZE.y)
+            next_tier_position - Vector2(0.0, Constants.CELL_SIZE.y)
     next_tier_ratio_sign.text = \
             "%s / %s" % [next_tier_index + 1, level_config.tiers.size()]
     
@@ -730,6 +772,8 @@ func _on_entered_new_tier() -> void:
     _update_zoom()
     _update_camera_horizontally_locked( \
             current_tier_config.camera_horizontally_locked)
+    _update_peep_hole_screen()
+    _update_windiness()
     
     Audio.new_tier_sfx_player.play()
     
@@ -738,8 +782,7 @@ func _on_entered_new_tier() -> void:
     
     _update_score_for_tier_change()
     
-    if player != null:
-        player.on_new_tier()
+    player.on_new_tier()
 
 func _get_min_framerate_multiplier() -> float:
     match Global.difficulty_mode:
@@ -871,6 +914,84 @@ func _update_camera_horizontally_locked(locked: bool) -> void:
             Tween.TRANS_QUAD, \
             Tween.EASE_IN_OUT)
     camera_horizontal_lock_displacement_tween.start()
+
+func _update_peep_hole_screen() -> void:
+    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
+    var tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
+    
+    var previous_peep_hole_size := peep_hole_size
+    var next_peep_hole_size = \
+            PEEP_HOLE_SIZE_POST_STUCK * \
+            level_config.peep_hole_size_multiplier * \
+            tier_config.peep_hole_size_multiplier
+    next_peep_hole_size.x = max(next_peep_hole_size.x, 0.0)
+    next_peep_hole_size.y = max(next_peep_hole_size.y, 0.0)
+    
+    var previous_peep_hole_screen_opacity := peep_hole_screen_opacity
+    var next_peep_hole_screen_opacity: float = \
+            PEEP_HOLE_SCREEN_OPACITY_POST_STUCK * \
+            level_config.peep_hole_screen_opacity_multiplier * \
+            tier_config.peep_hole_screen_opacity_multiplier
+    next_peep_hole_screen_opacity = clamp( \
+            next_peep_hole_screen_opacity, \
+            0.0, \
+            1.0)
+    
+    peep_hole_size_tween.stop(self)
+    peep_hole_size_tween.interpolate_method( \
+            self, \
+            "_interpolate_peep_hole_size", \
+            previous_peep_hole_size, \
+            next_peep_hole_size, \
+            CameraController.ZOOM_ANIMATION_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    peep_hole_size_tween.start()
+    
+    peep_hole_screen_opacity_tween.stop(self)
+    peep_hole_screen_opacity_tween.interpolate_method( \
+            self, \
+            "_interpolate_peep_hole_screen_opacity", \
+            previous_peep_hole_screen_opacity, \
+            next_peep_hole_screen_opacity, \
+            CameraController.ZOOM_ANIMATION_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    peep_hole_screen_opacity_tween.start()
+
+func _interpolate_peep_hole_size(size: Vector2) -> void:
+    peep_hole_size = size
+    player.update_peep_hole( \
+            peep_hole_size, \
+            peep_hole_screen_opacity)
+
+func _interpolate_peep_hole_screen_opacity(opacity: float) -> void:
+    peep_hole_screen_opacity = opacity
+    player.update_peep_hole( \
+            peep_hole_size, \
+            peep_hole_screen_opacity)
+
+func _update_windiness() -> void:
+    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
+    var tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
+    var previous_windiness := windiness
+    var next_windiness: float = \
+            DEFAULT_WINDINESS * \
+            level_config.windiness_multiplier * \
+            tier_config.windiness_multiplier
+    
+    windiness_tween.stop(self)
+    windiness_tween.interpolate_property( \
+            self, \
+            "windiness", \
+            previous_windiness, \
+            next_windiness, \
+            CameraController.ZOOM_ANIMATION_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    windiness_tween.start()
+    
+    # FIXME: -------------------------------- Update snow and fires
 
 func _update_score_for_height_change(height_delta_pixels: float) -> void:
     score += \

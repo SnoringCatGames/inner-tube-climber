@@ -98,8 +98,8 @@ var camera_horizontally_locked := true
 var is_camera_post_stuck_state_tween_active := false
 
 var windiness := DEFAULT_WINDINESS
-var peep_hole_size := PEEP_HOLE_SIZE_POST_STUCK
-var peep_hole_screen_opacity := PEEP_HOLE_SCREEN_OPACITY_POST_STUCK
+var peep_hole_size := PEEP_HOLE_SIZE_PRE_STUCK
+var peep_hole_screen_opacity := PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK
 
 var current_fall_height := -INF
 var is_game_playing := false
@@ -228,9 +228,10 @@ func _physics_process(_delta_sec: float) -> void:
         return
     
     # Keep track of player height.
-    player_current_height = -player.position.y - TuberPlayer.PLAYER_HALF_HEIGHT
+    player_current_height = \
+            -player.position.y - player.get_player_half_height()
     var next_tier_height: float = -next_tier.position.y + Constants.CELL_SIZE.y
-    if player_current_height > next_tier_height:
+    if player_current_height > next_tier_height - 0.1:
         _on_entered_new_tier()
     player_max_height = max(player_max_height, player_current_height)
     player_max_height_on_current_life = \
@@ -350,7 +351,7 @@ func _fall() -> void:
         # Match player and camera positions to the current tier height.
         player.position.y += current_tier_position.y
         player_current_height = \
-                -player.position.y - TuberPlayer.PLAYER_HALF_HEIGHT
+                -player.position.y - player.get_player_half_height()
         player_max_height = max(player_max_height, player_current_height)
         player_max_height_on_current_life = \
                 max(player_max_height_on_current_life, player_current_height)
@@ -398,11 +399,16 @@ func _set_camera_start_position() -> void:
     Global.camera_controller.offset = Utils.floor_vector(camera_position)
     Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
     
+    peep_hole_size = PEEP_HOLE_SIZE_PRE_STUCK
+    peep_hole_screen_opacity = PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK
     player.update_peep_hole( \
-            PEEP_HOLE_SIZE_PRE_STUCK, \
-            PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK)
+            peep_hole_size, \
+            peep_hole_screen_opacity)
 
 func _set_camera_post_stuck_state(animates: bool) -> void:
+    peep_hole_size = PEEP_HOLE_SIZE_POST_STUCK
+    peep_hole_screen_opacity = PEEP_HOLE_SCREEN_OPACITY_POST_STUCK
+    
     if animates:
         var tween := Tween.new()
         add_child(tween)
@@ -442,11 +448,11 @@ func _interpolate_camera_to_post_stuck_state(progress: float) -> void:
     # Update peep hole screen (size and opacity).
     var current_peep_hole_size: Vector2 = lerp( \
             PEEP_HOLE_SIZE_PRE_STUCK, \
-            peep_hole_size, \
+            PEEP_HOLE_SIZE_POST_STUCK, \
             progress)
     var current_screen_opacity: float = lerp( \
             PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK, \
-            peep_hole_screen_opacity, \
+            PEEP_HOLE_SCREEN_OPACITY_POST_STUCK, \
             progress)
     player.update_peep_hole( \
             current_peep_hole_size, \
@@ -677,7 +683,7 @@ func _start_new_tier( \
     _update_zoom(current_tier_id != "0")
     _update_camera_horizontally_locked( \
             current_tier_config.camera_horizontally_locked)
-    _update_peep_hole_screen()
+    _update_peep_hole_screen(current_tier_id == "0")
     _update_windiness()
     
     # Render the basic input instructions sign.
@@ -747,7 +753,8 @@ func _on_entered_new_tier() -> void:
     next_tier_gap.position = next_tier_position
     
     # Update tier-ratio signs.
-    remove_child(current_tier_ratio_sign)
+    if current_tier_ratio_sign != null:
+        remove_child(current_tier_ratio_sign)
     current_tier_ratio_sign = next_tier_ratio_sign
     next_tier_ratio_sign = Utils.add_scene( \
             self, \
@@ -772,7 +779,7 @@ func _on_entered_new_tier() -> void:
     _update_zoom()
     _update_camera_horizontally_locked( \
             current_tier_config.camera_horizontally_locked)
-    _update_peep_hole_screen()
+    _update_peep_hole_screen(false)
     _update_windiness()
     
     Audio.new_tier_sfx_player.play()
@@ -915,23 +922,33 @@ func _update_camera_horizontally_locked(locked: bool) -> void:
             Tween.EASE_IN_OUT)
     camera_horizontal_lock_displacement_tween.start()
 
-func _update_peep_hole_screen() -> void:
+func _update_peep_hole_screen(is_base_tier: bool) -> void:
     var level_config: Dictionary = LevelConfig.LEVELS[level_id]
     var tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
     
-    var previous_peep_hole_size := peep_hole_size
-    var next_peep_hole_size = \
+    var previous_peep_hole_size: Vector2
+    var next_peep_hole_size: Vector2
+    var previous_peep_hole_screen_opacity: float
+    var next_peep_hole_screen_opacity: float
+    if is_base_tier:
+        previous_peep_hole_size = Vector2(1024.0, 1024.0)
+        next_peep_hole_size = PEEP_HOLE_SIZE_PRE_STUCK
+        previous_peep_hole_screen_opacity = 1.0
+        next_peep_hole_screen_opacity = PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK
+    else:
+        previous_peep_hole_size = peep_hole_size
+        next_peep_hole_size = \
             PEEP_HOLE_SIZE_POST_STUCK * \
             level_config.peep_hole_size_multiplier * \
             tier_config.peep_hole_size_multiplier
+        previous_peep_hole_screen_opacity = peep_hole_screen_opacity
+        next_peep_hole_screen_opacity = \
+                PEEP_HOLE_SCREEN_OPACITY_POST_STUCK * \
+                level_config.peep_hole_screen_opacity_multiplier * \
+                tier_config.peep_hole_screen_opacity_multiplier
+    
     next_peep_hole_size.x = max(next_peep_hole_size.x, 0.0)
     next_peep_hole_size.y = max(next_peep_hole_size.y, 0.0)
-    
-    var previous_peep_hole_screen_opacity := peep_hole_screen_opacity
-    var next_peep_hole_screen_opacity: float = \
-            PEEP_HOLE_SCREEN_OPACITY_POST_STUCK * \
-            level_config.peep_hole_screen_opacity_multiplier * \
-            tier_config.peep_hole_screen_opacity_multiplier
     next_peep_hole_screen_opacity = clamp( \
             next_peep_hole_screen_opacity, \
             0.0, \

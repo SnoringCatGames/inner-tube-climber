@@ -1,14 +1,11 @@
-tool
 extends Player
 class_name TuberPlayer
 
 const CAPSULE_RADIUS_DEFAULT := 12.106
 const CAPSULE_HEIGHT_DEFAULT := 7.747
-const PLAYER_HALF_HEIGHT := CAPSULE_RADIUS_DEFAULT + CAPSULE_HEIGHT_DEFAULT
+const PLAYER_HALF_HEIGHT_DEFAULT := \
+        CAPSULE_RADIUS_DEFAULT + CAPSULE_HEIGHT_DEFAULT
 const PLAYER_STUCK_ANIMATION_CENTER_OFFSET := Vector2(0.0, -16.0)
-var PLAYER_RELEASE_POSITION_OFFSET := Vector2( \
-        0.0, \
-        -PLAYER_HALF_HEIGHT - Constants.CELL_SIZE.y * 1.5)
 
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
@@ -45,7 +42,7 @@ const JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC := 0.1
 const LIGHT_IMAGE_SIZE := Vector2(1024.0, 1024.0)
 const PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO := 1.3
 
-export var is_stuck := true setget _set_is_stuck,_get_is_stuck
+var is_stuck := true setget _set_is_stuck,_get_is_stuck
 
 var surface_state := PlayerSurfaceState.new()
 
@@ -71,6 +68,9 @@ func _ready() -> void:
     $CollisionShape2D.shape.height = \
             CAPSULE_HEIGHT_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
     on_new_tier()
+
+func _process(_delta_sec: float) -> void:
+    $PeepHoleScreen.update_position(position)
 
 func on_new_tier() -> void:
     tilemaps = get_tree().get_nodes_in_group( \
@@ -494,7 +494,8 @@ func _set_is_stuck(value: bool) -> void:
         if is_stuck:
             $TuberAnimator.stuck()
         else:
-            position += PLAYER_RELEASE_POSITION_OFFSET
+            position.y += \
+                    -PLAYER_HALF_HEIGHT_DEFAULT - Constants.CELL_SIZE.y * 1.5
             $TuberAnimator.jump_fall()
 
 func _get_is_stuck() -> bool:
@@ -509,3 +510,6 @@ func update_peep_hole( \
     $Light2D.scale = \
             (peep_hole_size / LIGHT_IMAGE_SIZE) * \
             PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO
+
+func get_player_half_height() -> float:
+    return PLAYER_HALF_HEIGHT_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER

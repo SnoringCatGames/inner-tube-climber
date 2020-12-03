@@ -298,7 +298,9 @@ func stop_cooldown() -> void:
     Audio.set_playback_speed(1.0)
     update()
 
-func _on_next_step_ratio_tween_completed() -> void:
+func _on_next_step_ratio_tween_completed( \
+        _object: Object, \
+        _key: NodePath) -> void:
     is_next_step_ratio_tween_active = false
 
 func _draw() -> void:

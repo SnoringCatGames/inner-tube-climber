@@ -87,7 +87,9 @@ func check_for_updates(max_height: float) -> void:
         update()
         
 
-func _on_height_tween_completed() -> void:
+func _on_height_tween_completed( \
+        _object: Object, \
+        _key: NodePath) -> void:
     active_tween_count -= 1
 
 func _draw() -> void:

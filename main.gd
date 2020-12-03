@@ -4,14 +4,23 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Fix problem with new-tier event being triggered when player is actually
-#   still slightly under the platform.
-#   - Is it being triggered at bottom of TierTileMap, rather than one row up,
-#     at the level of the first platform?
+# >>>>>>- Try using new addon as a modulate with peep-hole.
+# 
+# >>>- Fog shader:
+#      - Adapt shader logic.
+#      - Add license info in shader file, and in licenses doc.
+#      - Use it to create a fog effect in the peep-hole screen.
+#      - Then, use it to create snow? Or google how to use noise to simulate
+#        snow fall...
 # 
 # - Have windiness affect in-air player velocity!
+#   - Probably need to refactor how the current air-drag effect happens.
+# 
+# - Google noise, fog, fluid, ... effects in Godot.
 # 
 # - Test ability to save/load scores and game state on iOS.
+# 
+# - Debug why _on_entered_new_tier is called slightly higher than it should be.
 # 
 # - Add handing candles/sconces around tier-ratio signs:
 #   - Create candle pixel art.
@@ -34,11 +43,14 @@ class_name Main
 # 
 # - Consider adding a super-fancy depth-based lighting in the style of
 #   Terraria?
+#   - "Block lighting"
 #   - Re-read shading docs:
 #     https://docs.godotengine.org/en/stable/tutorials/shading/index.html
 #   - Decide if there are any other places to use custom shader logic.
+#   - Use a separate thread.
 #   - Watch this video and consider their techniques:
-#     https://www.youtube.com/watch?v=XgdAkqg7eKs
+#     https://www.youtube.com/watch?v=NEHMJwt7oUI
+#     - Read comments for improvements?
 # 
 # - Add particle systems:
 #   - https://docs.godotengine.org/en/stable/tutorials/2d/particle_systems_2d.html

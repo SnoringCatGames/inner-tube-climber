@@ -69,9 +69,6 @@ func _ready() -> void:
             CAPSULE_HEIGHT_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
     on_new_tier()
 
-func _process(_delta_sec: float) -> void:
-    $PeepHoleScreen.update_position(position)
-
 func on_new_tier() -> void:
     tilemaps = get_tree().get_nodes_in_group( \
                     Global.GROUP_NAME_TIER_TILE_MAPS)
@@ -220,13 +217,11 @@ func _update_tile_map_contact() -> void:
                     surface_state.is_touching_floor = true
                     surface_state.is_grabbing_floor = true
                     surface_state.is_touching_ceiling = false
-                    surface_state.is_grabbing_ceiling = false
                     surface_state.just_touched_ceiling = false
                     surface_state.touched_side = SurfaceSide.FLOOR
                     surface_state.touched_surface_normal = Geometry.UP
                 SurfaceSide.CEILING:
                     surface_state.is_touching_ceiling = true
-                    surface_state.is_grabbing_ceiling = true
                     surface_state.is_touching_floor = false
                     surface_state.is_grabbing_floor = false
                     surface_state.just_touched_floor = false
@@ -238,7 +233,6 @@ func _update_tile_map_contact() -> void:
                             !surface_state.is_touching_ceiling
                     surface_state.is_touching_floor = \
                             !surface_state.is_touching_floor
-                    surface_state.is_grabbing_ceiling = false
                     surface_state.is_grabbing_floor = false
                     surface_state.just_touched_floor = false
                     surface_state.just_touched_ceiling = false
@@ -501,12 +495,7 @@ func _set_is_stuck(value: bool) -> void:
 func _get_is_stuck() -> bool:
     return is_stuck
 
-func update_peep_hole( \
-        peep_hole_size: Vector2, \
-        screen_opacity: float) -> void:
-    $PeepHoleScreen.peep_hole_size = peep_hole_size
-    $PeepHoleScreen.screen_opacity = screen_opacity
-    
+func update_light_size(peep_hole_size: Vector2) -> void:
     $Light2D.scale = \
             (peep_hole_size / LIGHT_IMAGE_SIZE) * \
             PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO

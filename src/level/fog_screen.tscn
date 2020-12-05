@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/images/black-pixel.png" type="Texture" id=1]
+[ext_resource path="res://src/level/fog_shader.tres" type="Shader" id=2]
+[ext_resource path="res://src/level/fog_screen.gd" type="Script" id=3]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 2 )
+shader_param/screen_color = Color( 0.741176, 0.788235, 0.941176, 1 )
+shader_param/opacity = 1.0
+shader_param/region_size = Vector3( 768, 512, 0 )
+shader_param/hole_position = Vector2( 384, 256 )
+shader_param/hole_radius = 128.0
+
+[node name="FogScreen" type="Sprite"]
+material = SubResource( 1 )
+position = Vector2( 768, 512 )
+scale = Vector2( 768, 512 )
+z_index = 1
+texture = ExtResource( 1 )
+script = ExtResource( 3 )

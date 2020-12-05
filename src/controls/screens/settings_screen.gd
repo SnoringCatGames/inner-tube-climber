@@ -128,7 +128,7 @@ func _initialize_enablement() -> void:
             container.get_node("HapticFeedback"), \
             Label)
     
-    if _get_level() != null:
+    if Global.level != null:
         difficulty_option_button.disabled = true
         mobile_control_version_option_button.disabled = true
         difficulty_label.modulate.a = DISABLED_ALPHA
@@ -298,9 +298,5 @@ func _on_CreditsButton_pressed() -> void:
             true)
 
 func _update_level_displays() -> void:
-    var level := _get_level()
-    if level != null:
-        level.update_displays()
-
-func _get_level() -> Level:
-    return Nav.screens[ScreenType.GAME].level
+    if Global.level != null:
+        Global.level.update_displays()

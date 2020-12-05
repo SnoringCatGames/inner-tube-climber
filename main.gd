@@ -4,14 +4,7 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# >>>>>>- Try using new addon as a modulate with peep-hole.
-# 
-# >>>- Fog shader:
-#      - Adapt shader logic.
-#      - Add license info in shader file, and in licenses doc.
-#      - Use it to create a fog effect in the peep-hole screen.
-#      - Then, use it to create snow? Or google how to use noise to simulate
-#        snow fall...
+# - Adapt shader to create snow. Google how to use noise to simulate snow fall.
 # 
 # - Have windiness affect in-air player velocity!
 #   - Probably need to refactor how the current air-drag effect happens.
@@ -21,6 +14,8 @@ class_name Main
 # - Test ability to save/load scores and game state on iOS.
 # 
 # - Debug why _on_entered_new_tier is called slightly higher than it should be.
+# 
+# - Fix audio not working at app/level start, sometimes.
 # 
 # - Add handing candles/sconces around tier-ratio signs:
 #   - Create candle pixel art.

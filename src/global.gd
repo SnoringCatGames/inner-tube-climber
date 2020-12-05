@@ -36,7 +36,7 @@ var are_keyboard_controls_shown := false
 
 var canvas_layers: CanvasLayers
 var camera_controller: CameraController
-
+var level: Level
 var debug_panel: DebugPanel
 
 var falls_count_since_reaching_level_end := 0

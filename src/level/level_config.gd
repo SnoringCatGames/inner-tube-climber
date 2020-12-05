@@ -116,7 +116,9 @@ const DEFAULT_SCROLL_SPEED_MULTIPLIER := 1.0
 const DEFAULT_SCROLL_SPEED_MIN := 20.0
 const DEFAULT_SCROLL_SPEED_MAX := 160.0
 const DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER := 1.0
-const DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER := 1.0
+const DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER := 1.0
+const DEFAULT_FOG_SCREEN_COLOR := Color.white
+const DEFAULT_FOG_SCREEN_COLOR_WEIGHT := 0.0
 const DEFAULT_WINDINESS_MULTIPLIER := 1.0
 
 const FRAMERATE_MULTIPLIER_EASY_MIN := 0.7
@@ -135,8 +137,10 @@ const TIERS := {
         scroll_speed_min = 0.0,
         scroll_speed_max = 0.0,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        peep_hole_screen_opacity_multiplier = \
-                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity_multiplier = \
+                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
+        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "1": {
@@ -147,8 +151,10 @@ const TIERS := {
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        peep_hole_screen_opacity_multiplier = \
-                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity_multiplier = \
+                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
+        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "2": {
@@ -159,8 +165,10 @@ const TIERS := {
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        peep_hole_screen_opacity_multiplier = \
-                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity_multiplier = \
+                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
+        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "3": {
@@ -171,8 +179,10 @@ const TIERS := {
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        peep_hole_screen_opacity_multiplier = \
-                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity_multiplier = \
+                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
+        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "4": {
@@ -183,8 +193,10 @@ const TIERS := {
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        peep_hole_screen_opacity_multiplier = \
-                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity_multiplier = \
+                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
+        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "5": {
@@ -195,8 +207,10 @@ const TIERS := {
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        peep_hole_screen_opacity_multiplier = \
-                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity_multiplier = \
+                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
+        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "6": {
@@ -207,8 +221,10 @@ const TIERS := {
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        peep_hole_screen_opacity_multiplier = \
-                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity_multiplier = \
+                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
+        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "7": {
@@ -219,8 +235,10 @@ const TIERS := {
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        peep_hole_screen_opacity_multiplier = \
-                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity_multiplier = \
+                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
+        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
 }
@@ -234,8 +252,10 @@ const LEVELS := {
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        peep_hole_screen_opacity_multiplier = \
-                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity_multiplier = \
+                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
+        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "2": {
@@ -246,8 +266,10 @@ const LEVELS := {
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        peep_hole_screen_opacity_multiplier = \
-                DEFAULT_PEEP_HOLE_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity_multiplier = \
+                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
+        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
 }

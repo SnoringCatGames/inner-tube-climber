@@ -7,6 +7,7 @@ const PLAYER_RESOURCE_PATH := "res://src/player/tuber_player.tscn"
 const TIER_RATIO_SIGN_RESOURCE_PATH := \
         "res://src/overlays/tier_ratio_sign.tscn"
 const PAUSE_BUTTON_RESOURCE_PATH := "res://src/overlays/pause_button.tscn"
+const FOG_SCREEN_RESOURCE_PATH := "res://src/level/fog_screen.tscn"
 
 const START_TIER_ID := "0"
 
@@ -28,10 +29,11 @@ const CAMERA_PAN_TO_POST_STUCK_DURATION_SEC := 0.5
 const CAMERA_HORIZONTAL_LOCK_DISPLACMENT_TWEEN_DURATION_SEC := \
         CameraController.ZOOM_ANIMATION_DURATION_SEC
 const PEEP_HOLE_SIZE_PRE_STUCK := Vector2(96.0, 96.0)
-const PEEP_HOLE_SIZE_POST_STUCK := PeepHoleScreen.PEEP_HOLE_SIZE_DEFAULT
-const PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK := 1.0
-const PEEP_HOLE_SCREEN_OPACITY_POST_STUCK := \
-        PeepHoleScreen.SCREEN_OPACITY_DEFAULT
+const PEEP_HOLE_SIZE_POST_STUCK := Vector2(256.0, 256.0)
+const FOG_SCREEN_OPACITY_PRE_STUCK := 1.0
+const FOG_SCREEN_OPACITY_POST_STUCK := 1.0
+const FOG_SCREEN_COLOR_PRE_STUCK := Color.white
+const FOG_SCREEN_COLOR_POST_STUCK := Color.white
 const DEFAULT_WINDINESS := 1.0
 
 # This is how many tiers the player must pass through without falling before
@@ -77,6 +79,8 @@ var next_tier_gap: TierGap
 var current_tier_ratio_sign: TierRatioSign
 var next_tier_ratio_sign: TierRatioSign
 
+var fog_screen: FogScreen
+
 var player: TuberPlayer
 var player_current_height: float = 0.0
 var player_max_height: float = 0.0
@@ -99,7 +103,8 @@ var is_camera_post_stuck_state_tween_active := false
 
 var windiness := DEFAULT_WINDINESS
 var peep_hole_size := PEEP_HOLE_SIZE_PRE_STUCK
-var peep_hole_screen_opacity := PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK
+var fog_screen_opacity := FOG_SCREEN_OPACITY_PRE_STUCK
+var fog_screen_color := FOG_SCREEN_COLOR_PRE_STUCK
 
 var current_fall_height := -INF
 var is_game_playing := false
@@ -108,12 +113,15 @@ var camera_horizontal_lock_displacement_tween: Tween
 var camera_horizontal_lock_tween_displacement := 0.0
 
 var peep_hole_size_tween: Tween
-var peep_hole_screen_opacity_tween: Tween
+var fog_screen_opacity_tween: Tween
+var fog_screen_color_tween: Tween
 var windiness_tween: Tween
 
 var tiers_count_since_falling := 0
 
 func _enter_tree() -> void:
+    Global.level = self
+    
     Global.connect( \
             "display_resized", \
             self, \
@@ -160,8 +168,11 @@ func _enter_tree() -> void:
     peep_hole_size_tween = Tween.new()
     add_child(peep_hole_size_tween)
     
-    peep_hole_screen_opacity_tween = Tween.new()
-    add_child(peep_hole_screen_opacity_tween)
+    fog_screen_opacity_tween = Tween.new()
+    add_child(fog_screen_opacity_tween)
+    
+    fog_screen_color_tween = Tween.new()
+    add_child(fog_screen_color_tween)
     
     windiness_tween = Tween.new()
     add_child(windiness_tween)
@@ -175,6 +186,12 @@ func _enter_tree() -> void:
     var camera := Camera2D.new()
     add_child(camera)
     Global.camera_controller.set_current_camera(camera)
+    
+    fog_screen = Utils.add_scene( \
+            Global.canvas_layers.game_screen_layer, \
+            FOG_SCREEN_RESOURCE_PATH, \
+            true, \
+            true)
 
 func _unhandled_input(event: InputEvent) -> void:
     if !has_input_been_pressed and \
@@ -319,6 +336,8 @@ func _process(delta_sec: float) -> void:
                     player.position.x + \
                     camera_horizontal_lock_tween_displacement
         Global.camera_controller.offset.x = floor(camera_position.x)
+    
+    fog_screen.player_position = player.position
 
 func _fall() -> void:
     falls_count += 1
@@ -400,14 +419,17 @@ func _set_camera_start_position() -> void:
     Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
     
     peep_hole_size = PEEP_HOLE_SIZE_PRE_STUCK
-    peep_hole_screen_opacity = PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK
-    player.update_peep_hole( \
+    fog_screen_opacity = FOG_SCREEN_OPACITY_PRE_STUCK
+    fog_screen_color = FOG_SCREEN_COLOR_PRE_STUCK
+    _update_fog_screen( \
             peep_hole_size, \
-            peep_hole_screen_opacity)
+            fog_screen_opacity, \
+            fog_screen_color)
 
 func _set_camera_post_stuck_state(animates: bool) -> void:
     peep_hole_size = PEEP_HOLE_SIZE_POST_STUCK
-    peep_hole_screen_opacity = PEEP_HOLE_SCREEN_OPACITY_POST_STUCK
+    fog_screen_opacity = FOG_SCREEN_OPACITY_POST_STUCK
+    fog_screen_color = FOG_SCREEN_COLOR_POST_STUCK
     
     if animates:
         var tween := Tween.new()
@@ -451,12 +473,17 @@ func _interpolate_camera_to_post_stuck_state(progress: float) -> void:
             PEEP_HOLE_SIZE_POST_STUCK, \
             progress)
     var current_screen_opacity: float = lerp( \
-            PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK, \
-            PEEP_HOLE_SCREEN_OPACITY_POST_STUCK, \
+            FOG_SCREEN_OPACITY_PRE_STUCK, \
+            FOG_SCREEN_OPACITY_POST_STUCK, \
             progress)
-    player.update_peep_hole( \
+    var current_screen_color: Color = lerp( \
+            FOG_SCREEN_COLOR_PRE_STUCK, \
+            FOG_SCREEN_COLOR_POST_STUCK, \
+            progress)
+    _update_fog_screen( \
             current_peep_hole_size, \
-            current_screen_opacity)
+            current_screen_opacity, \
+            current_screen_color)
 
 func _on_camera_post_stuck_state_completed( \
         _object: Object, \
@@ -518,6 +545,8 @@ func _destroy_tiers() -> void:
         remove_child(next_tier_gap)
 
 func destroy() -> void:
+    Global.level = null
+    
     current_tier_id = ""
     is_game_playing = false
     has_input_been_pressed = false
@@ -561,6 +590,16 @@ func destroy() -> void:
         remove_child(max_height_on_current_height_indicator)
         max_height_on_current_height_indicator.queue_free()
         max_height_on_current_height_indicator = null
+    
+    if pause_button != null:
+        remove_child(pause_button)
+        pause_button.queue_free()
+        pause_button = null
+    
+    if fog_screen != null:
+        remove_child(fog_screen)
+        fog_screen.queue_free()
+        fog_screen = null
 
 func _start_new_tier( \
         tier_id := START_TIER_ID, \
@@ -683,7 +722,7 @@ func _start_new_tier( \
     _update_zoom(current_tier_id != "0")
     _update_camera_horizontally_locked( \
             current_tier_config.camera_horizontally_locked)
-    _update_peep_hole_screen(current_tier_id == "0")
+    _update_fog_screen_for_current_tier(current_tier_id == "0")
     _update_windiness()
     
     # Render the basic input instructions sign.
@@ -779,7 +818,7 @@ func _on_entered_new_tier() -> void:
     _update_zoom()
     _update_camera_horizontally_locked( \
             current_tier_config.camera_horizontally_locked)
-    _update_peep_hole_screen(false)
+    _update_fog_screen_for_current_tier(false)
     _update_windiness()
     
     Audio.new_tier_sfx_player.play()
@@ -907,7 +946,7 @@ func _update_camera_horizontally_locked(locked: bool) -> void:
     
     camera_horizontally_locked = locked
     
-    var start_value := \
+    var start_value: float = \
             Global.camera_controller.offset.x if \
             camera_horizontally_locked else \
             -player.position.x
@@ -922,35 +961,71 @@ func _update_camera_horizontally_locked(locked: bool) -> void:
             Tween.EASE_IN_OUT)
     camera_horizontal_lock_displacement_tween.start()
 
-func _update_peep_hole_screen(is_base_tier: bool) -> void:
+func _update_fog_screen_for_current_tier(is_base_tier: bool) -> void:
     var level_config: Dictionary = LevelConfig.LEVELS[level_id]
     var tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
     
     var previous_peep_hole_size: Vector2
     var next_peep_hole_size: Vector2
-    var previous_peep_hole_screen_opacity: float
-    var next_peep_hole_screen_opacity: float
+    var previous_fog_screen_opacity: float
+    var next_fog_screen_opacity: float
+    var previous_fog_screen_color: Color
+    var next_fog_screen_color: Color
     if is_base_tier:
         previous_peep_hole_size = Vector2(1024.0, 1024.0)
         next_peep_hole_size = PEEP_HOLE_SIZE_PRE_STUCK
-        previous_peep_hole_screen_opacity = 1.0
-        next_peep_hole_screen_opacity = PEEP_HOLE_SCREEN_OPACITY_PRE_STUCK
+        previous_fog_screen_opacity = 1.0
+        next_fog_screen_opacity = FOG_SCREEN_OPACITY_PRE_STUCK
+        previous_fog_screen_color = FOG_SCREEN_COLOR_PRE_STUCK
+        next_fog_screen_color = FOG_SCREEN_COLOR_PRE_STUCK
     else:
         previous_peep_hole_size = peep_hole_size
         next_peep_hole_size = \
             PEEP_HOLE_SIZE_POST_STUCK * \
             level_config.peep_hole_size_multiplier * \
             tier_config.peep_hole_size_multiplier
-        previous_peep_hole_screen_opacity = peep_hole_screen_opacity
-        next_peep_hole_screen_opacity = \
-                PEEP_HOLE_SCREEN_OPACITY_POST_STUCK * \
-                level_config.peep_hole_screen_opacity_multiplier * \
-                tier_config.peep_hole_screen_opacity_multiplier
+        previous_fog_screen_opacity = fog_screen_opacity
+        next_fog_screen_opacity = \
+                FOG_SCREEN_OPACITY_POST_STUCK * \
+                level_config.fog_screen_opacity_multiplier * \
+                tier_config.fog_screen_opacity_multiplier
+        
+        previous_fog_screen_color = fog_screen_color
+        
+        var default_color_weight: float
+        var level_color_weight: float
+        var tier_color_weight: float
+        var level_tier_color_weight_sum: float = \
+                level_config.fog_screen_color_weight + \
+                tier_config.fog_screen_color_weight
+        if level_tier_color_weight_sum > 1.0:
+            default_color_weight = 0.0
+            level_color_weight = \
+                    level_config.fog_screen_color_weight / \
+                    level_tier_color_weight_sum
+            tier_color_weight = \
+                    tier_config.fog_screen_color_weight / \
+                    level_tier_color_weight_sum
+        else:
+            default_color_weight = 1.0 - level_tier_color_weight_sum
+        var h: float = \
+                FOG_SCREEN_COLOR_POST_STUCK.h * default_color_weight + \
+                level_config.fog_screen_color.h * level_color_weight + \
+                tier_config.fog_screen_color.h * tier_color_weight
+        var s: float = \
+                FOG_SCREEN_COLOR_POST_STUCK.s * default_color_weight + \
+                level_config.fog_screen_color.s * level_color_weight + \
+                tier_config.fog_screen_color.s * tier_color_weight
+        var v: float = \
+                FOG_SCREEN_COLOR_POST_STUCK.v * default_color_weight + \
+                level_config.fog_screen_color.v * level_color_weight + \
+                tier_config.fog_screen_color.v * tier_color_weight
+        next_fog_screen_color = Color.from_hsv(h, s, v, 1.0)
     
     next_peep_hole_size.x = max(next_peep_hole_size.x, 0.0)
     next_peep_hole_size.y = max(next_peep_hole_size.y, 0.0)
-    next_peep_hole_screen_opacity = clamp( \
-            next_peep_hole_screen_opacity, \
+    next_fog_screen_opacity = clamp( \
+            next_fog_screen_opacity, \
             0.0, \
             1.0)
     
@@ -965,28 +1040,58 @@ func _update_peep_hole_screen(is_base_tier: bool) -> void:
             Tween.EASE_IN_OUT)
     peep_hole_size_tween.start()
     
-    peep_hole_screen_opacity_tween.stop(self)
-    peep_hole_screen_opacity_tween.interpolate_method( \
+    fog_screen_opacity_tween.stop(self)
+    fog_screen_opacity_tween.interpolate_method( \
             self, \
-            "_interpolate_peep_hole_screen_opacity", \
-            previous_peep_hole_screen_opacity, \
-            next_peep_hole_screen_opacity, \
+            "_interpolate_fog_screen_opacity", \
+            previous_fog_screen_opacity, \
+            next_fog_screen_opacity, \
             CameraController.ZOOM_ANIMATION_DURATION_SEC, \
             Tween.TRANS_QUAD, \
             Tween.EASE_IN_OUT)
-    peep_hole_screen_opacity_tween.start()
+    fog_screen_opacity_tween.start()
+    
+    fog_screen_color_tween.stop(self)
+    fog_screen_color_tween.interpolate_method( \
+            self, \
+            "_interpolate_fog_screen_color", \
+            previous_fog_screen_color, \
+            next_fog_screen_color, \
+            CameraController.ZOOM_ANIMATION_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    fog_screen_color_tween.start()
 
 func _interpolate_peep_hole_size(size: Vector2) -> void:
     peep_hole_size = size
-    player.update_peep_hole( \
+    _update_fog_screen( \
             peep_hole_size, \
-            peep_hole_screen_opacity)
+            fog_screen_opacity, \
+            fog_screen_color)
 
-func _interpolate_peep_hole_screen_opacity(opacity: float) -> void:
-    peep_hole_screen_opacity = opacity
-    player.update_peep_hole( \
+func _interpolate_fog_screen_opacity(opacity: float) -> void:
+    fog_screen_opacity = opacity
+    _update_fog_screen( \
             peep_hole_size, \
-            peep_hole_screen_opacity)
+            fog_screen_opacity, \
+            fog_screen_color)
+
+func _interpolate_fog_screen_color(color: Color) -> void:
+    fog_screen_color = color
+    _update_fog_screen( \
+            peep_hole_size, \
+            fog_screen_opacity, \
+            fog_screen_color)
+
+func _update_fog_screen( \
+        hole_size: Vector2, \
+        screen_opacity: float, \
+        screen_color: Color) -> void:
+    var hole_radius := min(hole_size.x, hole_size.y) * 0.5
+    fog_screen.hole_radius = hole_radius
+    fog_screen.screen_opacity = screen_opacity
+    fog_screen.screen_color = screen_color
+    player.update_light_size(hole_size)
 
 func _update_windiness() -> void:
     var level_config: Dictionary = LevelConfig.LEVELS[level_id]

@@ -12,7 +12,7 @@ func _on_activated() -> void:
     _update_stats()
 
 func _update_stats() -> void:
-    var level := _get_level()
+    var level: Level = Global.level
     
     var stats_container := \
             $FullScreenPanel/VBoxContainer/CenteredPanel/ \
@@ -106,9 +106,6 @@ func _on_RestartButton_pressed():
     Global.give_button_press_feedback()
     Nav.screens[ScreenType.GAME].restart_level()
     Nav.close_current_screen()
-
-func _get_level() -> Level:
-    return Nav.screens[ScreenType.GAME].level
 
 func _add_row( \
         key: String, \

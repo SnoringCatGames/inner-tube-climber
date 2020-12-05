@@ -1,0 +1,389 @@
+[gd_resource type="VisualShader" load_steps=33 format=2]
+
+[ext_resource path="res://addons/shaderV/rgba/noise/fractal/simplex3d_fractal.gd" type="Script" id=1]
+[ext_resource path="res://addons/shaderV/rgba/generate_shapes/generateCircle.gd" type="Script" id=2]
+
+[sub_resource type="VisualShaderNodeColorConstant" id=1]
+constant = Color( 0, 0, 0, 1 )
+
+[sub_resource type="VisualShaderNodeVec3Constant" id=2]
+constant = Vector3( 0.5, 0.5, 0 )
+
+[sub_resource type="VisualShaderNodeInput" id=3]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeScalarConstant" id=4]
+constant = 0.8
+
+[sub_resource type="VisualShaderNodeScalarConstant" id=5]
+constant = 0.5
+
+[sub_resource type="VisualShaderNodeCustom" id=6]
+default_input_values = [ 1, 6, 2, Vector3( 2, 2, 0 ), 3, 2, 4, 0.8, 5, 0.5, 6, 0.6, 7, Vector3( 0.5, 0.5, 0 ), 8, 0 ]
+script = ExtResource( 1 )
+
+[sub_resource type="VisualShaderNodeScalarConstant" id=7]
+constant = 0.5
+
+[sub_resource type="VisualShaderNodeScalarConstant" id=8]
+constant = 2.0
+
+[sub_resource type="VisualShaderNodeScalarConstant" id=9]
+constant = 4.0
+
+[sub_resource type="VisualShaderNodeScalarOp" id=10]
+default_input_values = [ 0, 1.0, 1, 0.0 ]
+operator = 1
+
+[sub_resource type="VisualShaderNodeScalarClamp" id=11]
+
+[sub_resource type="VisualShaderNodeScalarUniform" id=12]
+uniform_name = "hole_radius"
+
+[sub_resource type="VisualShaderNodeScalarFunc" id=13]
+function = 19
+
+[sub_resource type="VisualShaderNodeVec3Uniform" id=14]
+uniform_name = "region_size"
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id=15]
+
+[sub_resource type="VisualShaderNodeScalarOp" id=16]
+operator = 6
+
+[sub_resource type="VisualShaderNodeScalarOp" id=17]
+default_input_values = [ 0, 0.0, 1, 0.2 ]
+operator = 2
+
+[sub_resource type="VisualShaderNodeScalarOp" id=18]
+operator = 3
+
+[sub_resource type="VisualShaderNodeScalarOp" id=19]
+default_input_values = [ 0, 0.0, 1, 10.0 ]
+operator = 2
+
+[sub_resource type="VisualShaderNodeColorUniform" id=20]
+uniform_name = "screen_color"
+
+[sub_resource type="VisualShaderNodeVectorOp" id=21]
+operator = 3
+
+[sub_resource type="VisualShaderNodeVec3Uniform" id=22]
+uniform_name = "hole_position"
+
+[sub_resource type="VisualShaderNodeVectorOp" id=23]
+operator = 3
+
+[sub_resource type="VisualShaderNodeVectorOp" id=24]
+default_input_values = [ 0, Vector3( 0, 0, 0 ), 1, Vector3( 3, 3, 0 ) ]
+operator = 2
+
+[sub_resource type="VisualShaderNodeInput" id=25]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeScalarUniform" id=26]
+uniform_name = "opacity"
+
+[sub_resource type="VisualShaderNodeScalarOp" id=27]
+operator = 2
+
+[sub_resource type="VisualShaderNodeVec3Constant" id=32]
+constant = Vector3( 4, 4, 0 )
+
+[sub_resource type="VisualShaderNodeCustom" id=29]
+default_input_values = [ 1, Vector3( 0.5, 0.5, 0 ), 2, Vector3( 1, 1, 0 ), 3, -0.5, 4, 0.5, 5, 1.0, 6, Vector3( 1, 1, 1 ), 7, 1.0 ]
+script = ExtResource( 2 )
+
+[sub_resource type="VisualShaderNodeInput" id=30]
+input_name = "uv"
+
+[resource]
+code = "shader_type canvas_item;
+uniform vec4 screen_color : hint_color;
+uniform float opacity;
+uniform vec3 region_size;
+uniform vec3 hole_position;
+uniform float hole_radius;
+
+
+// FractalSimplexNoise3D
+
+vec4 _permute_simplex3_n0ise_fractal(vec4 x) {
+	return ((x * 34.0) + 1.0) * x - floor(((x * 34.0) + 1.0) * x * (1.0 / 289.0)) * 289.0;
+}
+float simplex3dN0iseFractalFunc(vec3 v) { 
+	vec2 C = vec2(1.0/6.0, 1.0/3.0) ;
+	vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+	
+	vec3 i  = floor(v + dot(v, vec3(C.y)));
+	vec3 x0 = v - i + dot(i, vec3(C.x)) ;
+	
+	vec3 g = step(x0.yzx, x0.xyz);
+	vec3 l = 1.0 - g;
+	vec3 i1 = min( g.xyz, l.zxy );
+	vec3 i2 = max( g.xyz, l.zxy );
+	
+	vec3 x1 = x0 - i1 + vec3(C.x);
+	vec3 x2 = x0 - i2 + vec3(C.y);
+	vec3 x3 = x0 - D.yyy;
+	
+	i = i - floor(i * (1.0 / 289.0)) * 289.0;
+	vec4 p = _permute_simplex3_n0ise_fractal(_permute_simplex3_n0ise_fractal(_permute_simplex3_n0ise_fractal(
+	 		i.z + vec4(0.0, i1.z, i2.z, 1.0))
+		+   i.y + vec4(0.0, i1.y, i2.y, 1.0))
+		+   i.x + vec4(0.0, i1.x, i2.x, 1.0));
+	
+	float n_ = 0.142857142857;
+	vec3  ns = n_ * D.wyz - D.xzx;
+	
+	vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+	
+	vec4 x_ = floor(j * ns.z);
+	vec4 y_ = floor(j - 7.0 * x_ );
+	
+	vec4 x = x_ *ns.x + vec4(ns.y);
+	vec4 y = y_ *ns.x + vec4(ns.y);
+	vec4 h = 1.0 - abs(x) - abs(y);
+	
+	vec4 b0 = vec4( x.xy, y.xy );
+	vec4 b1 = vec4( x.zw, y.zw );
+	
+	vec4 s0 = floor(b0)*2.0 + 1.0;
+	vec4 s1 = floor(b1)*2.0 + 1.0;
+	vec4 sh = -step(h, vec4(0.0));
+	
+	vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+	vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+	
+	vec3 p0 = vec3(a0.xy,h.x);
+	vec3 p1 = vec3(a0.zw,h.y);
+	vec3 p2 = vec3(a1.xy,h.z);
+	vec3 p3 = vec3(a1.zw,h.w);
+	
+	vec4 norm = 2.79284291400159 - 0.85373472095314 * vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3));
+	p0 *= norm.x;
+	p1 *= norm.y;
+	p2 *= norm.z;
+	p3 *= norm.w;
+	
+	vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), vec4(0.0));
+	m = m * m;
+	return 22.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
+}
+float simplexNoise3DFBM(vec2 _uv_sn3fbm, int _oct_sn3fbm, vec2 _per_sn3fbm, float _lac_sn3fbm,
+		float _persist_sn3fbm, float _rot_sn3fbm, float _ampl_sn3fbm, vec2 _shift_sn3fbm, float _time_sn3fbm) {
+	float _v = 0.0;
+	float _a = _ampl_sn3fbm;
+	mat2 _r0t = mat2(vec2(cos(_rot_sn3fbm), sin(_rot_sn3fbm)), vec2(-sin(_rot_sn3fbm), cos(_rot_sn3fbm)));
+	for (int i = 0; i < _oct_sn3fbm; ++i) {
+		_v += _a * simplex3dN0iseFractalFunc(vec3(_uv_sn3fbm * _per_sn3fbm, _time_sn3fbm));
+		_uv_sn3fbm = _r0t * _uv_sn3fbm * _lac_sn3fbm + _shift_sn3fbm;
+		_a *= _persist_sn3fbm;
+	}
+	return (min(_v, 1.0) + 1.0) * 0.5;
+}
+
+// CircleShape
+
+vec4 generateCirc1eFunc(vec2 _uv_circ1e, vec2 _center_circ1e, vec2 _scale_factor_circ1e, float _innerRad_circ1e, float _outRad_circ1e, float _hard_circ1e) {
+    float _innerRadiusCheck0 = min(_innerRad_circ1e, _outRad_circ1e);
+    float _outerRadiusCheck0 = max(_innerRad_circ1e, _outRad_circ1e);
+    
+    float currentP0sitionC1rcle = length((_uv_circ1e - _center_circ1e) * _scale_factor_circ1e);
+    float maxIntencityCenterC1rcle = (_outerRadiusCheck0 + _innerRadiusCheck0) * 0.5;
+    float rd0 = _outerRadiusCheck0 - maxIntencityCenterC1rcle;
+    float circ1eDistributi0n = min(max(abs(currentP0sitionC1rcle - maxIntencityCenterC1rcle) / rd0, 0.0), 1.0);
+    vec4 _outputColor0 = vec4(1.0);
+    _outputColor0.a = 1.0 - pow(circ1eDistributi0n, _hard_circ1e);
+    return _outputColor0;
+}
+
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// ColorUniform:32
+	vec3 n_out32p0 = screen_color.rgb;
+	float n_out32p1 = screen_color.a;
+
+// ScalarUniform:40
+	float n_out40p0 = opacity;
+
+// Input:17
+	vec3 n_out17p0 = vec3(UV, 0.0);
+
+// VectorUniform:27
+	vec3 n_out27p0 = region_size;
+
+// VectorDecompose:28
+	float n_out28p0 = n_out27p0.x;
+	float n_out28p1 = n_out27p0.y;
+	float n_out28p2 = n_out27p0.z;
+
+// ScalarOp:29
+	float n_out29p0 = max(n_out28p0, n_out28p1);
+
+// VectorOp:33
+	vec3 n_out33p0 = n_out27p0 / vec3(n_out29p0);
+
+// VectorOp:37
+	vec3 n_out37p0 = n_out17p0 * n_out33p0;
+
+// Scalar:22
+	float n_out22p0 = 4.000000;
+
+// Vector:43
+	vec3 n_out43p0 = vec3(4.000000, 4.000000, 0.000000);
+
+// Scalar:21
+	float n_out21p0 = 2.000000;
+
+// Scalar:20
+	float n_out20p0 = 0.500000;
+
+// Scalar:19
+	float n_out19p0 = 0.500000;
+
+// Scalar:18
+	float n_out18p0 = 0.800000;
+
+// Vector:15
+	vec3 n_out15p0 = vec3(0.500000, 0.500000, 0.000000);
+
+// Input:4
+	float n_out4p0 = TIME;
+
+// ScalarOp:3
+	float n_in3p1 = 0.20000;
+	float n_out3p0 = n_out4p0 * n_in3p1;
+
+// FractalSimplexNoise3D:2
+	float n_out2p0;
+	{
+		n_out2p0 = simplexNoise3DFBM(n_out37p0.xy, int(n_out22p0), n_out43p0.xy, n_out21p0, n_out20p0, n_out19p0, n_out18p0, n_out15p0.xy, n_out3p0);
+	}
+
+// Input:6
+	vec3 n_out6p0 = vec3(UV, 0.0);
+
+// VectorUniform:35
+	vec3 n_out35p0 = hole_position;
+
+// VectorOp:36
+	vec3 n_out36p0 = n_out35p0 / n_out27p0;
+
+// ScalarUniform:25
+	float n_out25p0 = hole_radius;
+
+// ScalarOp:30
+	float n_out30p0 = n_out25p0 / n_out29p0;
+
+// ScalarFunc:26
+	float n_out26p0 = -(n_out30p0);
+
+// ScalarOp:31
+	float n_in31p1 = 10.00000;
+	float n_out31p0 = n_out30p0 * n_in31p1;
+
+// Color:10
+	vec3 n_out10p0 = vec3(0.000000, 0.000000, 0.000000);
+	float n_out10p1 = 1.000000;
+
+// CircleShape:5
+	vec3 n_out5p0;
+	float n_out5p1;
+	{
+		n_out5p0 = n_out10p0;
+		n_out5p1 = generateCirc1eFunc(n_out6p0.xy, n_out36p0.xy, n_out33p0.xy, n_out26p0, n_out30p0, n_out31p0).a * n_out10p1;
+	}
+
+// ScalarOp:23
+	float n_out23p0 = n_out2p0 - n_out5p1;
+
+// ScalarClamp:24
+	float n_in24p1 = 0.00000;
+	float n_in24p2 = 1.00000;
+	float n_out24p0 = clamp(n_out23p0, n_in24p1, n_in24p2);
+
+// ScalarOp:41
+	float n_out41p0 = n_out40p0 * n_out24p0;
+
+// Output:0
+	COLOR.rgb = n_out32p0;
+	COLOR.a = n_out41p0;
+
+}
+
+void light() {
+// Output:0
+
+}
+"
+graph_offset = Vector2( -1080.69, -1568.23 )
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2( 1360, -1820 )
+nodes/fragment/2/node = SubResource( 6 )
+nodes/fragment/2/position = Vector2( -460, -2220 )
+nodes/fragment/3/node = SubResource( 17 )
+nodes/fragment/3/position = Vector2( -700, -1580 )
+nodes/fragment/4/node = SubResource( 25 )
+nodes/fragment/4/position = Vector2( -1080, -1620 )
+nodes/fragment/5/node = SubResource( 29 )
+nodes/fragment/5/position = Vector2( -480, -900 )
+nodes/fragment/6/node = SubResource( 30 )
+nodes/fragment/6/position = Vector2( -1060, -1260 )
+nodes/fragment/10/node = SubResource( 1 )
+nodes/fragment/10/position = Vector2( -1040, -420 )
+nodes/fragment/15/node = SubResource( 2 )
+nodes/fragment/15/position = Vector2( -1420, -1780 )
+nodes/fragment/17/node = SubResource( 3 )
+nodes/fragment/17/position = Vector2( -1360, -2720 )
+nodes/fragment/18/node = SubResource( 4 )
+nodes/fragment/18/position = Vector2( -1120, -1900 )
+nodes/fragment/19/node = SubResource( 5 )
+nodes/fragment/19/position = Vector2( -1120, -2020 )
+nodes/fragment/20/node = SubResource( 7 )
+nodes/fragment/20/position = Vector2( -1120, -2140 )
+nodes/fragment/21/node = SubResource( 8 )
+nodes/fragment/21/position = Vector2( -1120, -2260 )
+nodes/fragment/22/node = SubResource( 9 )
+nodes/fragment/22/position = Vector2( -1120, -2540 )
+nodes/fragment/23/node = SubResource( 10 )
+nodes/fragment/23/position = Vector2( 140, -1440 )
+nodes/fragment/24/node = SubResource( 11 )
+nodes/fragment/24/position = Vector2( 520, -1380 )
+nodes/fragment/25/node = SubResource( 12 )
+nodes/fragment/25/position = Vector2( -3000, -1580 )
+nodes/fragment/26/node = SubResource( 13 )
+nodes/fragment/26/position = Vector2( -1140, -820 )
+nodes/fragment/27/node = SubResource( 14 )
+nodes/fragment/27/position = Vector2( -3000, -1440 )
+nodes/fragment/28/node = SubResource( 15 )
+nodes/fragment/28/position = Vector2( -2320, -580 )
+nodes/fragment/29/node = SubResource( 16 )
+nodes/fragment/29/position = Vector2( -1880, -520 )
+nodes/fragment/30/node = SubResource( 18 )
+nodes/fragment/30/position = Vector2( -1520, -760 )
+nodes/fragment/31/node = SubResource( 19 )
+nodes/fragment/31/position = Vector2( -1100, -640 )
+nodes/fragment/32/node = SubResource( 20 )
+nodes/fragment/32/position = Vector2( 560, -2520 )
+nodes/fragment/33/node = SubResource( 21 )
+nodes/fragment/33/position = Vector2( -1940, -1520 )
+nodes/fragment/35/node = SubResource( 22 )
+nodes/fragment/35/position = Vector2( -3000, -1300 )
+nodes/fragment/36/node = SubResource( 23 )
+nodes/fragment/36/position = Vector2( -1140, -1000 )
+nodes/fragment/37/node = SubResource( 24 )
+nodes/fragment/37/position = Vector2( -1140, -2680 )
+nodes/fragment/40/node = SubResource( 26 )
+nodes/fragment/40/position = Vector2( 560, -2280 )
+nodes/fragment/41/node = SubResource( 27 )
+nodes/fragment/41/position = Vector2( 900, -1320 )
+nodes/fragment/43/node = SubResource( 32 )
+nodes/fragment/43/position = Vector2( -1240, -2400 )
+nodes/fragment/connections = PoolIntArray( 3, 0, 2, 8, 4, 0, 3, 0, 6, 0, 5, 0, 10, 0, 5, 6, 10, 1, 5, 7, 15, 0, 2, 7, 18, 0, 2, 6, 19, 0, 2, 5, 20, 0, 2, 4, 21, 0, 2, 3, 22, 0, 2, 1, 27, 0, 28, 0, 28, 0, 29, 0, 28, 1, 29, 1, 30, 0, 26, 0, 30, 0, 5, 4, 29, 0, 30, 1, 25, 0, 30, 0, 30, 0, 31, 0, 31, 0, 5, 5, 32, 0, 0, 0, 26, 0, 5, 3, 35, 0, 36, 0, 27, 0, 36, 1, 36, 0, 5, 1, 3, 0, 2, 8, 4, 0, 3, 0, 6, 0, 5, 0, 10, 0, 5, 6, 10, 1, 5, 7, 15, 0, 2, 7, 18, 0, 2, 6, 19, 0, 2, 5, 20, 0, 2, 4, 21, 0, 2, 3, 22, 0, 2, 1, 27, 0, 28, 0, 28, 0, 29, 0, 28, 1, 29, 1, 30, 0, 26, 0, 30, 0, 5, 4, 29, 0, 30, 1, 25, 0, 30, 0, 30, 0, 31, 0, 31, 0, 5, 5, 32, 0, 0, 0, 26, 0, 5, 3, 35, 0, 36, 0, 27, 0, 36, 1, 36, 0, 5, 1, 5, 1, 23, 1, 2, 0, 23, 0, 23, 0, 24, 0, 40, 0, 41, 0, 24, 0, 41, 1, 41, 0, 0, 1, 33, 0, 5, 2, 27, 0, 33, 0, 29, 0, 33, 1, 43, 0, 2, 2, 37, 0, 2, 0, 33, 0, 37, 1, 17, 0, 37, 0 )

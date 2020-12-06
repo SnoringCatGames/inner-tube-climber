@@ -5,8 +5,8 @@
 [ext_resource path="res://assets/images/circle-gradient-modified-1024.png" type="Texture" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
-radius = 18.159
-height = 11.6205
+radius = 12.106
+height = 7.747
 
 [node name="TuberPlayer" type="KinematicBody2D"]
 light_mask = 2
@@ -16,7 +16,6 @@ collision_mask = 3
 script = ExtResource( 2 )
 
 [node name="Light2D" type="Light2D" parent="."]
-visible = false
 light_mask = 2
 position = Vector2( -0.297302, 0 )
 scale = Vector2( 0.35, 0.35 )

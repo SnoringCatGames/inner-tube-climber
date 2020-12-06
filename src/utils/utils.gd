@@ -340,3 +340,25 @@ func get_safe_area_margin_right() -> float:
 
 static func floor_vector(v: Vector2) -> Vector2:
     return Vector2(floor(v.x), floor(v.y))
+
+static func mix_colors( \
+        colors: Array, \
+        weights: Array) -> Color:
+    assert(colors.size() == weights.size())
+    
+    var weight_sum := 0.0
+    for weight in weights:
+        weight_sum += weight
+    
+    var h := 0.0
+    var s := 0.0
+    var v := 0.0
+    for i in range(colors.size()):
+        var color: Color = colors[i]
+        var weight: float = weights[i]
+        var normalized_weight := weight / weight_sum
+        h += color.h * normalized_weight
+        s += color.s * normalized_weight
+        v += color.v * normalized_weight
+    
+    return Color.from_hsv(h, s, v, 1.0)

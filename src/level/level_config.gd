@@ -117,8 +117,11 @@ const DEFAULT_SCROLL_SPEED_MIN := 20.0
 const DEFAULT_SCROLL_SPEED_MAX := 160.0
 const DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER := 1.0
 const DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER := 1.0
-const DEFAULT_FOG_SCREEN_COLOR := Color.white
-const DEFAULT_FOG_SCREEN_COLOR_WEIGHT := 0.0
+const DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER := 1.0
+const DEFAULT_FOG_SCREEN_PRIMARY_COLOR := Color("#ffffff")
+const DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT := 0.0
+const DEFAULT_FOG_SCREEN_SECONDARY_COLOR := Color("#ffffff")
+const DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT := 0.0
 const DEFAULT_WINDINESS_MULTIPLIER := 1.0
 
 const FRAMERATE_MULTIPLIER_EASY_MIN := 0.7
@@ -139,8 +142,14 @@ const TIERS := {
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
-        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
-        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
+        fog_screen_secondary_color_opacity_multiplier_multiplier = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
+        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
+        fog_screen_primary_color_weight = \
+                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
+        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
+        fog_screen_secondary_color_weight = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "1": {
@@ -153,8 +162,14 @@ const TIERS := {
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
-        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
-        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
+        fog_screen_secondary_color_opacity_multiplier_multiplier = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
+        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
+        fog_screen_primary_color_weight = \
+                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
+        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
+        fog_screen_secondary_color_weight = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "2": {
@@ -167,8 +182,14 @@ const TIERS := {
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
-        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
-        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
+        fog_screen_secondary_color_opacity_multiplier_multiplier = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
+        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
+        fog_screen_primary_color_weight = \
+                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
+        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
+        fog_screen_secondary_color_weight = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "3": {
@@ -181,8 +202,14 @@ const TIERS := {
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
-        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
-        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
+        fog_screen_secondary_color_opacity_multiplier_multiplier = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
+        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
+        fog_screen_primary_color_weight = \
+                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
+        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
+        fog_screen_secondary_color_weight = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "4": {
@@ -195,8 +222,14 @@ const TIERS := {
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
-        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
-        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
+        fog_screen_secondary_color_opacity_multiplier_multiplier = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
+        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
+        fog_screen_primary_color_weight = \
+                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
+        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
+        fog_screen_secondary_color_weight = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "5": {
@@ -209,8 +242,14 @@ const TIERS := {
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
-        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
-        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
+        fog_screen_secondary_color_opacity_multiplier_multiplier = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
+        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
+        fog_screen_primary_color_weight = \
+                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
+        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
+        fog_screen_secondary_color_weight = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "6": {
@@ -223,8 +262,14 @@ const TIERS := {
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
-        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
-        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
+        fog_screen_secondary_color_opacity_multiplier_multiplier = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
+        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
+        fog_screen_primary_color_weight = \
+                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
+        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
+        fog_screen_secondary_color_weight = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "7": {
@@ -237,8 +282,14 @@ const TIERS := {
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
-        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
-        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
+        fog_screen_secondary_color_opacity_multiplier_multiplier = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
+        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
+        fog_screen_primary_color_weight = \
+                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
+        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
+        fog_screen_secondary_color_weight = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
 }
@@ -254,8 +305,14 @@ const LEVELS := {
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
-        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
-        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
+        fog_screen_secondary_color_opacity_multiplier_multiplier = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
+        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
+        fog_screen_primary_color_weight = \
+                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
+        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
+        fog_screen_secondary_color_weight = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "2": {
@@ -268,8 +325,14 @@ const LEVELS := {
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
-        fog_screen_color = DEFAULT_FOG_SCREEN_COLOR,
-        fog_screen_color_weight = DEFAULT_FOG_SCREEN_COLOR_WEIGHT,
+        fog_screen_secondary_color_opacity_multiplier_multiplier = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
+        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
+        fog_screen_primary_color_weight = \
+                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
+        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
+        fog_screen_secondary_color_weight = \
+                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
 }

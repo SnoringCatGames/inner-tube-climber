@@ -18,6 +18,9 @@ const STAND_PLAYBACK_RATE := 1.0
 const STUCK_NAME := "Stuck"
 const STUCK_PLAYBACK_RATE := 1.0
 
+func _enter_tree() -> void:
+    face_right()
+
 func _play_animation( \
         name: String, \
         playback_rate: float = 1) -> bool:

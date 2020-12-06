@@ -8,8 +8,11 @@ var hole_radius := 0.0 setget _set_hole_radius
 var player_position := Vector2.ZERO setget _set_player_position
 var screen_size := Vector2.ZERO
 var screen_opacity := 0.0 setget _set_screen_opacity
-var screen_color := Color.from_hsv(0.628, 0.21, 0.94, 1.0) setget \
-        _set_screen_color
+var secondary_color_opacity_multiplier := 0.0 setget \
+        _set_secondary_color_opacity_multiplier
+
+var primary_color := Color("#ffffff") setget _set_primary_color
+var secondary_color := Color("#52c8ff") setget _set_secondary_color
 
 var canvas_transform := Transform2D.IDENTITY
 
@@ -23,6 +26,7 @@ func _ready() -> void:
         _set_player_position(_DEFAULT_IN_EDITOR_SIZE * 0.5)
         _set_hole_radius(_DEFAULT_IN_EDITOR_SIZE.y * 0.25)
         _set_screen_opacity(1.0)
+        _set_secondary_color_opacity_multiplier(1.0)
 
 func _update_fog_screen_size() -> void:
     var viewport_size := \
@@ -72,9 +76,23 @@ func _set_screen_opacity(value: float) -> void:
                 "opacity", \
                 screen_opacity)
 
-func _set_screen_color(value: Color) -> void:
-    if screen_color != value:
-        screen_color = value
+func _set_secondary_color_opacity_multiplier(value: float) -> void:
+    if secondary_color_opacity_multiplier != value:
+        secondary_color_opacity_multiplier = value
         material.set_shader_param( \
-                "screen_color", \
-                screen_color)
+                "secondary_color_opacity_multiplier", \
+                secondary_color_opacity_multiplier)
+
+func _set_primary_color(value: Color) -> void:
+    if primary_color != value:
+        primary_color = value
+        material.set_shader_param( \
+                "primary_color", \
+                primary_color)
+
+func _set_secondary_color(value: Color) -> void:
+    if secondary_color != value:
+        secondary_color = value
+        material.set_shader_param( \
+                "secondary_color", \
+                secondary_color)

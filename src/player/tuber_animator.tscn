@@ -93,6 +93,7 @@ light_mask = 2
 script = ExtResource( 5 )
 
 [node name="Stuck" type="Sprite" parent="."]
+position = Vector2( 0, 12 )
 texture = ExtResource( 6 )
 hframes = 8
 frame = 5

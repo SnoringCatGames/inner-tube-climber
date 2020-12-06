@@ -4,8 +4,8 @@ class_name TuberPlayer
 const CAPSULE_RADIUS_DEFAULT := 12.106
 const CAPSULE_HEIGHT_DEFAULT := 7.747
 const PLAYER_HALF_HEIGHT_DEFAULT := \
-        CAPSULE_RADIUS_DEFAULT + CAPSULE_HEIGHT_DEFAULT
-const PLAYER_STUCK_ANIMATION_CENTER_OFFSET := Vector2(0.0, -16.0)
+        CAPSULE_RADIUS_DEFAULT + CAPSULE_HEIGHT_DEFAULT * 0.5
+const PLAYER_STUCK_ANIMATION_CENTER_OFFSET := Vector2(0.0, -12.0)
 
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
@@ -488,8 +488,6 @@ func _set_is_stuck(value: bool) -> void:
         if is_stuck:
             $TuberAnimator.stuck()
         else:
-            position.y += \
-                    -PLAYER_HALF_HEIGHT_DEFAULT - Constants.CELL_SIZE.y * 1.5
             $TuberAnimator.jump_fall()
 
 func _get_is_stuck() -> bool:
@@ -502,3 +500,13 @@ func update_light_size(peep_hole_size: Vector2) -> void:
 
 func get_player_half_height() -> float:
     return PLAYER_HALF_HEIGHT_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
+
+func get_spawn_position_for_tier( \
+        tier: Tier, \
+        is_base_tier: bool) -> Vector2:
+    var spawn_position := tier.get_player_spawn_position()
+    spawn_position.y -= get_player_half_height()
+    spawn_position += \
+            PLAYER_STUCK_ANIMATION_CENTER_OFFSET * \
+            Global.PLAYER_SIZE_MULTIPLIER
+    return spawn_position

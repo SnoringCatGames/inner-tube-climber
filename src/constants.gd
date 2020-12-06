@@ -21,3 +21,5 @@ var JUMP_COLOR := Color.from_hsv(0.45, 1.0, 0.9, 1.0)
 var MOVE_LEFT_COLOR := Color.from_hsv(0.117, 1.0, 0.9, 1.0)
 var MOVE_RIGHT_COLOR := Color.from_hsv(0.783, 1.0, 0.9, 1.0)
 var UNKNOWN_COLOR := Color.from_hsv(0.0, 0.0, 0.8, 1.0)
+
+const TRANSITION_TO_POST_STUCK_DURATION_SEC := 0.5

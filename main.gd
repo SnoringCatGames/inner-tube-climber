@@ -4,6 +4,11 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
+# - Fix alignment of the two different max-height indicators.
+# 
+# >>>>>- Incorporate windiness into the fog screen?
+#        - Make windiness a vector?
+# 
 # - Adapt shader to create snow. Google how to use noise to simulate snow fall.
 # 
 # - Have windiness affect in-air player velocity!
@@ -12,8 +17,6 @@ class_name Main
 # - Google noise, fog, fluid, ... effects in Godot.
 # 
 # - Test ability to save/load scores and game state on iOS.
-# 
-# - Debug why _on_entered_new_tier is called slightly higher than it should be.
 # 
 # - Fix audio not working at app/level start, sometimes.
 # 

@@ -42,7 +42,7 @@ func _update_stats() -> void:
             "x%s" % level.cooldown_indicator.multiplier)
     _add_row( \
             "Speed", \
-            str(level.speed_index + 1))
+            str(level.get_node("CameraHandler").speed_index + 1))
     _add_row( \
             "Difficulty", \
             DifficultyMode.get_type_string(Global.difficulty_mode))

@@ -115,6 +115,7 @@ const DEFAULT_ZOOM_MULTIPLIER := 1.0
 const DEFAULT_SCROLL_SPEED_MULTIPLIER := 1.0
 const DEFAULT_SCROLL_SPEED_MIN := 20.0
 const DEFAULT_SCROLL_SPEED_MAX := 160.0
+const DEFAULT_LIGHT_ENERGY_MULTIPLIER := 1.0
 const DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER := 1.0
 const DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER := 1.0
 const DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER := 1.0
@@ -139,6 +140,7 @@ const TIERS := {
         scroll_speed_multiplier = 0.0,
         scroll_speed_min = 0.0,
         scroll_speed_max = 0.0,
+        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
@@ -159,6 +161,7 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
@@ -179,6 +182,7 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
@@ -199,6 +203,7 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
@@ -219,6 +224,7 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
@@ -239,6 +245,7 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
@@ -259,6 +266,7 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
@@ -279,6 +287,7 @@ const TIERS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
@@ -302,6 +311,7 @@ const LEVELS := {
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
@@ -316,12 +326,14 @@ const LEVELS := {
         windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
     },
     "2": {
-        tiers = ["3", "5", "6"],
+        tiers = ["6"],
+#        tiers = ["3", "5", "6"],
         lives_count = DEFAULT_LIVES_COUNT,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
         scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
+        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
         fog_screen_opacity_multiplier = \
                 DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,

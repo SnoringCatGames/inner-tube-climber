@@ -655,7 +655,9 @@ func _update_windiness() -> void:
     # FIXME: -------------------------------- Update snow and fires
 
 func _on_fog_screen_updated() -> void:
-    player.update_light_size($FogScreenHandler.peep_hole_size)
+    player.update_light( \
+            $FogScreenHandler.peep_hole_size, \
+            $FogScreenHandler.light_energy)
 
 func _update_score_for_height_change(height_delta_pixels: float) -> void:
     score += \

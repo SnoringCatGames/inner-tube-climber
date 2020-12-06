@@ -4,10 +4,18 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Fix alignment of the two different max-height indicators.
+# - Configure margin color on each tier.
+#   - Configure this on the actual tier scene, rather than in LevelConfig.
+# - Tween this value on tier change.
+# - Set this as dark on tiers with no walls.
+# - Add a new fade-out border along margins:
+#   - Use a repeated pixel image.
+#   - Use dithering.
 # 
 # >>>>>- Incorporate windiness into the fog screen?
 #        - Make windiness a vector?
+# 
+# - Use light_energy_multiplier from level and tier config.
 # 
 # - Adapt shader to create snow. Google how to use noise to simulate snow fall.
 # 

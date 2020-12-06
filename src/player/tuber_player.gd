@@ -493,10 +493,13 @@ func _set_is_stuck(value: bool) -> void:
 func _get_is_stuck() -> bool:
     return is_stuck
 
-func update_light_size(peep_hole_size: Vector2) -> void:
+func update_light( \
+        peep_hole_size: Vector2, \
+        light_energy: float) -> void:
     $Light2D.scale = \
             (peep_hole_size / LIGHT_IMAGE_SIZE) * \
             PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO
+    $Light2D.energy = light_energy
 
 func get_player_half_height() -> float:
     return PLAYER_HALF_HEIGHT_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER

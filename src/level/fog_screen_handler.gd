@@ -7,10 +7,12 @@ const FOG_SCREEN_RESOURCE_PATH := "res://src/level/fog_screen.tscn"
 
 const PEEP_HOLE_SIZE_PRE_STUCK := Vector2(400.0, 400.0)
 const PEEP_HOLE_SIZE_POST_STUCK := Vector2(360.0, 360.0)
+const LIGHT_ENERGY_PRE_STUCK := 0.0
+const LIGHT_ENERGY_POST_STUCK := 0.6
 const FOG_SCREEN_OPACITY_PRE_STUCK := 1.0
-const FOG_SCREEN_OPACITY_POST_STUCK := 1.0
-const FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_PRE_STUCK := 0.3
-const FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_POST_STUCK := 0.3
+const FOG_SCREEN_OPACITY_POST_STUCK := 0.05
+const FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_PRE_STUCK := 0.4
+const FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_POST_STUCK := 0.4
 const FOG_SCREEN_PRIMARY_COLOR_PRE_STUCK := Color("#ffffff")
 const FOG_SCREEN_PRIMARY_COLOR_POST_STUCK := Color("#ffffff")
 const FOG_SCREEN_SECONDARY_COLOR_PRE_STUCK := Color("#52c8ff")
@@ -23,12 +25,14 @@ const TRANSITION_DURATION_SEC := CameraController.ZOOM_ANIMATION_DURATION_SEC
 var fog_screen: FogScreen
 
 var peep_hole_size_tween: Tween
+var light_energy_tween: Tween
 var fog_screen_opacity_tween: Tween
 var fog_screen_secondary_color_opacity_multiplier_tween: Tween
 var fog_screen_primary_color_tween: Tween
 var fog_screen_secondary_color_tween: Tween
 
 var peep_hole_size := PEEP_HOLE_SIZE_PRE_STUCK
+var light_energy := LIGHT_ENERGY_PRE_STUCK
 var fog_screen_opacity := FOG_SCREEN_OPACITY_PRE_STUCK
 var fog_screen_secondary_color_opacity_multiplier := \
         FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_PRE_STUCK
@@ -38,6 +42,9 @@ var fog_screen_secondary_color := FOG_SCREEN_PRIMARY_COLOR_PRE_STUCK
 func _enter_tree() -> void:
     peep_hole_size_tween = Tween.new()
     add_child(peep_hole_size_tween)
+    
+    light_energy_tween = Tween.new()
+    add_child(light_energy_tween)
     
     fog_screen_opacity_tween = Tween.new()
     add_child(fog_screen_opacity_tween)
@@ -68,6 +75,7 @@ func sync_to_player_position(player_position: Vector2) -> void:
 
 func set_start_state() -> void:
     peep_hole_size = PEEP_HOLE_SIZE_PRE_STUCK
+    light_energy = LIGHT_ENERGY_PRE_STUCK
     fog_screen_opacity = FOG_SCREEN_OPACITY_PRE_STUCK
     fog_screen_secondary_color_opacity_multiplier = \
             FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_PRE_STUCK
@@ -75,6 +83,7 @@ func set_start_state() -> void:
     fog_screen_secondary_color = FOG_SCREEN_SECONDARY_COLOR_PRE_STUCK
     _update_fog_screen( \
             peep_hole_size, \
+            light_energy, \
             fog_screen_opacity, \
             fog_screen_secondary_color_opacity_multiplier, \
             fog_screen_primary_color, \
@@ -106,6 +115,10 @@ func _interpolate_to_post_stuck_state(progress: float) -> void:
             PEEP_HOLE_SIZE_PRE_STUCK, \
             PEEP_HOLE_SIZE_POST_STUCK, \
             progress)
+    var current_light_energy: float = lerp( \
+            LIGHT_ENERGY_PRE_STUCK, \
+            LIGHT_ENERGY_POST_STUCK, \
+            progress)
     var current_screen_opacity: float = lerp( \
             FOG_SCREEN_OPACITY_PRE_STUCK, \
             FOG_SCREEN_OPACITY_POST_STUCK, \
@@ -124,6 +137,7 @@ func _interpolate_to_post_stuck_state(progress: float) -> void:
             progress)
     _update_fog_screen( \
             current_peep_hole_size, \
+            current_light_energy, \
             current_screen_opacity, \
             current_screen_secondary_color_opacity_multiplier, \
             current_screen_primary_color, \
@@ -138,6 +152,8 @@ func update_for_current_tier( \
     
     var previous_peep_hole_size: Vector2
     var next_peep_hole_size: Vector2
+    var previous_light_energy: float
+    var next_light_energy: float
     var previous_fog_screen_opacity: float
     var next_fog_screen_opacity: float
     var previous_fog_screen_secondary_color_opacity_multiplier: float
@@ -149,6 +165,8 @@ func update_for_current_tier( \
     if is_base_tier:
         previous_peep_hole_size = Vector2(1024.0, 1024.0)
         next_peep_hole_size = PEEP_HOLE_SIZE_PRE_STUCK
+        previous_light_energy = 0.0
+        next_light_energy = LIGHT_ENERGY_PRE_STUCK
         previous_fog_screen_opacity = 0.0
         next_fog_screen_opacity = FOG_SCREEN_OPACITY_PRE_STUCK
         previous_fog_screen_secondary_color_opacity_multiplier = 0.0
@@ -165,6 +183,11 @@ func update_for_current_tier( \
             PEEP_HOLE_SIZE_POST_STUCK * \
             level_config.peep_hole_size_multiplier * \
             tier_config.peep_hole_size_multiplier
+        previous_light_energy = light_energy
+        next_light_energy = \
+                LIGHT_ENERGY_POST_STUCK * \
+                level_config.light_energy_multiplier * \
+                tier_config.light_energy_multiplier
         previous_fog_screen_opacity = fog_screen_opacity
         next_fog_screen_opacity = \
                 FOG_SCREEN_OPACITY_POST_STUCK * \
@@ -201,6 +224,10 @@ func update_for_current_tier( \
     
     next_peep_hole_size.x = max(next_peep_hole_size.x, 0.0)
     next_peep_hole_size.y = max(next_peep_hole_size.y, 0.0)
+    next_light_energy = clamp( \
+            next_light_energy, \
+            0.0, \
+            1.0)
     next_fog_screen_opacity = clamp( \
             next_fog_screen_opacity, \
             0.0, \
@@ -208,7 +235,9 @@ func update_for_current_tier( \
     next_fog_screen_secondary_color_opacity_multiplier = clamp( \
             next_fog_screen_secondary_color_opacity_multiplier, \
             0.0, \
-            1.0 / next_fog_screen_opacity)
+            1.0 / next_fog_screen_opacity if \
+                    next_fog_screen_opacity != 0 else \
+                    INF)
     
     peep_hole_size_tween.stop(self)
     peep_hole_size_tween.interpolate_method( \
@@ -220,6 +249,17 @@ func update_for_current_tier( \
             Tween.TRANS_QUAD, \
             Tween.EASE_IN_OUT)
     peep_hole_size_tween.start()
+    
+    light_energy_tween.stop(self)
+    light_energy_tween.interpolate_method( \
+            self, \
+            "_interpolate_light_energy", \
+            previous_light_energy, \
+            next_light_energy, \
+            TRANSITION_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    light_energy_tween.start()
     
     fog_screen_opacity_tween.stop(self)
     fog_screen_opacity_tween.interpolate_method( \
@@ -269,6 +309,17 @@ func _interpolate_peep_hole_size(size: Vector2) -> void:
     peep_hole_size = size
     _update_fog_screen( \
             peep_hole_size, \
+            light_energy, \
+            fog_screen_opacity, \
+            fog_screen_secondary_color_opacity_multiplier, \
+            fog_screen_primary_color, \
+            fog_screen_secondary_color)
+
+func _interpolate_light_energy(energy: float) -> void:
+    light_energy = energy
+    _update_fog_screen( \
+            peep_hole_size, \
+            light_energy, \
             fog_screen_opacity, \
             fog_screen_secondary_color_opacity_multiplier, \
             fog_screen_primary_color, \
@@ -278,6 +329,7 @@ func _interpolate_fog_screen_opacity(opacity: float) -> void:
     fog_screen_opacity = opacity
     _update_fog_screen( \
             peep_hole_size, \
+            light_energy, \
             fog_screen_opacity, \
             fog_screen_secondary_color_opacity_multiplier, \
             fog_screen_primary_color, \
@@ -288,6 +340,7 @@ func _interpolate_fog_screen_secondary_color_opacity_multiplier( \
     fog_screen_secondary_color_opacity_multiplier = opacity
     _update_fog_screen( \
             peep_hole_size, \
+            light_energy, \
             fog_screen_opacity, \
             fog_screen_secondary_color_opacity_multiplier, \
             fog_screen_primary_color, \
@@ -297,6 +350,7 @@ func _interpolate_fog_screen_primary_color(color: Color) -> void:
     fog_screen_primary_color = color
     _update_fog_screen( \
             peep_hole_size, \
+            light_energy, \
             fog_screen_opacity, \
             fog_screen_secondary_color_opacity_multiplier, \
             fog_screen_primary_color, \
@@ -306,6 +360,7 @@ func _interpolate_fog_screen_secondary_color(color: Color) -> void:
     fog_screen_secondary_color = color
     _update_fog_screen( \
             peep_hole_size, \
+            light_energy, \
             fog_screen_opacity, \
             fog_screen_secondary_color_opacity_multiplier, \
             fog_screen_primary_color, \
@@ -313,10 +368,12 @@ func _interpolate_fog_screen_secondary_color(color: Color) -> void:
 
 func _update_fog_screen( \
         hole_size: Vector2, \
+        light_energy: float, \
         screen_opacity: float, \
         screen_secondary_color_opacity_multiplier: float, \
         screen_primary_color: Color, \
         screen_secondary_color: Color) -> void:
+    self.light_energy = light_energy
     var hole_radius := min(hole_size.x, hole_size.y) * 0.5
     fog_screen.hole_radius = hole_radius
     fog_screen.screen_opacity = screen_opacity

@@ -117,13 +117,15 @@ const DEFAULT_SCROLL_SPEED_MIN := 20.0
 const DEFAULT_SCROLL_SPEED_MAX := 160.0
 const DEFAULT_LIGHT_ENERGY_MULTIPLIER := 1.0
 const DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER := 1.0
-const DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER := 1.0
+const DEFAULT_FOG_SCREEN_OPACITY := 0.0
+const DEFAULT_FOG_SCREEN_OPACITY_WEIGHT := 0.0
 const DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER := 1.0
 const DEFAULT_FOG_SCREEN_PRIMARY_COLOR := Color("#ffffff")
 const DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT := 0.0
 const DEFAULT_FOG_SCREEN_SECONDARY_COLOR := Color("#ffffff")
 const DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT := 0.0
-const DEFAULT_WINDINESS_MULTIPLIER := 1.0
+const DEFAULT_SNOW_DENSITY_MULTIPLIER := 1.0
+const DEFAULT_WINDINESS := Vector2.ZERO
 
 const FRAMERATE_MULTIPLIER_EASY_MIN := 0.7
 const FRAMERATE_MULTIPLIER_EASY_MAX := 1.0
@@ -142,8 +144,8 @@ const TIERS := {
         scroll_speed_max = 0.0,
         light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity_multiplier = \
-                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
+        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
         fog_screen_secondary_color_opacity_multiplier_multiplier = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
         fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
@@ -152,7 +154,8 @@ const TIERS := {
         fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
         fog_screen_secondary_color_weight = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
+        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
+        windiness = DEFAULT_WINDINESS,
     },
     "1": {
         scene_path = "res://src/level/tiers/tier_1.tscn",
@@ -163,8 +166,8 @@ const TIERS := {
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity_multiplier = \
-                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
+        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
         fog_screen_secondary_color_opacity_multiplier_multiplier = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
         fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
@@ -173,7 +176,8 @@ const TIERS := {
         fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
         fog_screen_secondary_color_weight = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
+        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
+        windiness = DEFAULT_WINDINESS,
     },
     "2": {
         scene_path = "res://src/level/tiers/tier_2.tscn",
@@ -184,8 +188,8 @@ const TIERS := {
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity_multiplier = \
-                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
+        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
         fog_screen_secondary_color_opacity_multiplier_multiplier = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
         fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
@@ -194,7 +198,8 @@ const TIERS := {
         fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
         fog_screen_secondary_color_weight = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
+        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
+        windiness = DEFAULT_WINDINESS,
     },
     "3": {
         scene_path = "res://src/level/tiers/tier_3.tscn",
@@ -205,8 +210,8 @@ const TIERS := {
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity_multiplier = \
-                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
+        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
         fog_screen_secondary_color_opacity_multiplier_multiplier = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
         fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
@@ -215,7 +220,8 @@ const TIERS := {
         fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
         fog_screen_secondary_color_weight = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
+        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
+        windiness = DEFAULT_WINDINESS,
     },
     "4": {
         scene_path = "res://src/level/tiers/tier_4.tscn",
@@ -226,8 +232,8 @@ const TIERS := {
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity_multiplier = \
-                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
+        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
         fog_screen_secondary_color_opacity_multiplier_multiplier = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
         fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
@@ -236,7 +242,8 @@ const TIERS := {
         fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
         fog_screen_secondary_color_weight = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
+        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
+        windiness = DEFAULT_WINDINESS,
     },
     "5": {
         scene_path = "res://src/level/tiers/tier_5.tscn",
@@ -247,8 +254,8 @@ const TIERS := {
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity_multiplier = \
-                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
+        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
         fog_screen_secondary_color_opacity_multiplier_multiplier = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
         fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
@@ -257,7 +264,8 @@ const TIERS := {
         fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
         fog_screen_secondary_color_weight = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
+        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
+        windiness = DEFAULT_WINDINESS,
     },
     "6": {
         scene_path = "res://src/level/tiers/tier_6.tscn",
@@ -268,8 +276,8 @@ const TIERS := {
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity_multiplier = \
-                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
+        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
         fog_screen_secondary_color_opacity_multiplier_multiplier = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
         fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
@@ -278,7 +286,8 @@ const TIERS := {
         fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
         fog_screen_secondary_color_weight = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
+        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
+        windiness = DEFAULT_WINDINESS,
     },
     "7": {
         scene_path = "res://src/level/tiers/tier_7.tscn",
@@ -289,8 +298,8 @@ const TIERS := {
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity_multiplier = \
-                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
+        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
         fog_screen_secondary_color_opacity_multiplier_multiplier = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
         fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
@@ -299,7 +308,8 @@ const TIERS := {
         fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
         fog_screen_secondary_color_weight = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
+        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
+        windiness = DEFAULT_WINDINESS,
     },
 }
 
@@ -313,8 +323,8 @@ const LEVELS := {
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity_multiplier = \
-                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
+        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
         fog_screen_secondary_color_opacity_multiplier_multiplier = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
         fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
@@ -323,11 +333,11 @@ const LEVELS := {
         fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
         fog_screen_secondary_color_weight = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
+        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
+        windiness = DEFAULT_WINDINESS,
     },
     "2": {
-        tiers = ["6"],
-#        tiers = ["3", "5", "6"],
+        tiers = ["6", "3"],
         lives_count = DEFAULT_LIVES_COUNT,
         zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
@@ -335,8 +345,8 @@ const LEVELS := {
         scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
         light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
         peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity_multiplier = \
-                DEFAULT_FOG_SCREEN_OPACITY_MULTIPLIER,
+        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
+        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
         fog_screen_secondary_color_opacity_multiplier_multiplier = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
         fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
@@ -345,7 +355,8 @@ const LEVELS := {
         fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
         fog_screen_secondary_color_weight = \
                 DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        windiness_multiplier = DEFAULT_WINDINESS_MULTIPLIER,
+        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
+        windiness = DEFAULT_WINDINESS,
     },
 }
 

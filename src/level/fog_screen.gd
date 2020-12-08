@@ -10,11 +10,11 @@ var screen_size := Vector2.ZERO
 var screen_opacity := 0.0 setget _set_screen_opacity
 var secondary_color_opacity_multiplier := 0.0 setget \
         _set_secondary_color_opacity_multiplier
-
 var primary_color := Color("#ffffff") setget _set_primary_color
 var secondary_color := Color("#52c8ff") setget _set_secondary_color
+var windiness := Vector2.ZERO setget _set_windiness
 
-var canvas_transform := Transform2D.IDENTITY
+var _canvas_transform := Transform2D.IDENTITY
 
 func _ready() -> void:
     Global.connect( \
@@ -27,6 +27,7 @@ func _ready() -> void:
         _set_hole_radius(_DEFAULT_IN_EDITOR_SIZE.y * 0.25)
         _set_screen_opacity(1.0)
         _set_secondary_color_opacity_multiplier(1.0)
+        _set_windiness(Vector2(0.5, 0.0))
 
 func _update_fog_screen_size() -> void:
     var viewport_size := \
@@ -48,14 +49,14 @@ func _set_player_position(value: Vector2) -> void:
     var next_canvas_transform: Transform2D = \
             Global.level.get_canvas_transform()
     if player_position != value or \
-            canvas_transform != next_canvas_transform:
+            _canvas_transform != next_canvas_transform:
         player_position = value
-        canvas_transform = next_canvas_transform
+        _canvas_transform = next_canvas_transform
         var viewport := get_viewport()
         var game_area_region: Rect2 = Global.get_game_area_region()
         var game_area_margin := (viewport.size - game_area_region.size) * 0.5
         var hole_position_in_viewport_space: Vector2 = \
-                canvas_transform * \
+                _canvas_transform * \
                 player_position + \
                 game_area_margin
         material.set_shader_param( \
@@ -96,3 +97,10 @@ func _set_secondary_color(value: Color) -> void:
         material.set_shader_param( \
                 "secondary_color", \
                 secondary_color)
+
+func _set_windiness(value: Vector2) -> void:
+    if windiness != value:
+        windiness = value
+        material.set_shader_param( \
+                "windiness", \
+                windiness)

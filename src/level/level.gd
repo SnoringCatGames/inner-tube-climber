@@ -19,8 +19,6 @@ const NUMBER_OF_LEVELS_PER_MUSIC := 1
 # How many pixels correspond to a single display-height unit. 
 const DISPLAY_HEIGHT_INTERVAL := 32.0
 
-const DEFAULT_WINDINESS := 1.0
-
 const SCORE_PER_HEIGHT_PIXELS := 1.0 / DISPLAY_HEIGHT_INTERVAL
 const _BASE_SCORE_FOR_TIER := 2048.0 * SCORE_PER_HEIGHT_PIXELS * 0.25
 const SCORE_FOR_TIER_FOR_EASY_DIFFICULTY := _BASE_SCORE_FOR_TIER * 0.75
@@ -35,7 +33,8 @@ var next_tier_gap: TierGap
 var current_tier_ratio_sign: TierRatioSign
 var next_tier_ratio_sign: TierRatioSign
 
-var windiness_tween: Tween
+var margin_left_color_tween: Tween
+var margin_right_color_tween: Tween
 
 var mobile_control_ui: MobileControlUI
 var score_boards: ScoreBoards
@@ -65,7 +64,6 @@ var display_height: int = 0
 var falls_count: int = 0
 var lives_count: int = LevelConfig.DEFAULT_LIVES_COUNT
 var score := 0.0
-var windiness := DEFAULT_WINDINESS
 
 func _enter_tree() -> void:
     Global.level = self
@@ -104,8 +102,11 @@ func _enter_tree() -> void:
     add_child(max_height_indicator)
     max_height_indicator.visible = Global.is_height_indicator_shown
     
-    windiness_tween = Tween.new()
-    add_child(windiness_tween)
+    margin_left_color_tween = Tween.new()
+    add_child(margin_left_color_tween)
+    
+    margin_right_color_tween = Tween.new()
+    add_child(margin_right_color_tween)
     
     pause_button = Utils.add_scene( \
             Global.canvas_layers.hud_layer, \
@@ -305,13 +306,15 @@ func _add_player(is_base_tier := false) -> void:
     player.is_stuck = is_base_tier
     player.on_new_tier()
     
-    $CameraHandler.set_start_position( \
+    $CameraHandler.set_start_state( \
             player.position, \
             _get_player_height())
     $FogScreenHandler.set_start_state()
+    $SnowScreenHandler.set_start_state()
     if !is_base_tier:
         $CameraHandler.set_post_stuck_state(false)
         $FogScreenHandler.set_post_stuck_state(false)
+        $SnowScreenHandler.set_post_stuck_state(false)
     
     mobile_control_ui = MobileControlUI.new(Global.mobile_control_version)
     Global.canvas_layers.hud_layer.add_child(mobile_control_ui)
@@ -322,6 +325,7 @@ func _release_player() -> void:
     player.is_stuck = false
     $CameraHandler.set_post_stuck_state(true)
     $FogScreenHandler.set_post_stuck_state(true)
+    $SnowScreenHandler.set_post_stuck_state(true)
 
 func _destroy_player() -> void:
     if player != null:
@@ -374,6 +378,7 @@ func destroy() -> void:
     
     $CameraHandler.destroy()
     $FogScreenHandler.destroy()
+    $SnowScreenHandler.destroy()
     
     if score_boards != null:
         Global.canvas_layers.hud_layer.remove_child(score_boards)
@@ -518,7 +523,10 @@ func _start_new_tier( \
     $FogScreenHandler.update_for_current_tier( \
             level_id, \
             current_tier_id)
-    _update_windiness()
+    $SnowScreenHandler.update_for_current_tier( \
+            level_id, \
+            current_tier_id)
+    _update_margin_color()
     
     # Render the basic input instructions sign.
     $SignAllKeys.visible = Global.are_keyboard_controls_shown
@@ -621,7 +629,10 @@ func _on_entered_new_tier() -> void:
     $FogScreenHandler.update_for_current_tier( \
             level_id, \
             current_tier_id)
-    _update_windiness()
+    $SnowScreenHandler.update_for_current_tier( \
+            level_id, \
+            current_tier_id)
+    _update_margin_color()
     
     Audio.new_tier_sfx_player.play()
     
@@ -632,32 +643,93 @@ func _on_entered_new_tier() -> void:
     
     player.on_new_tier()
 
-func _update_windiness() -> void:
-    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
-    var tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
-    var previous_windiness := windiness
-    var next_windiness: float = \
-            DEFAULT_WINDINESS * \
-            level_config.windiness_multiplier * \
-            tier_config.windiness_multiplier
+func _update_margin_color() -> void:
+    var previous_left_margin_color: Color
+    var previous_right_margin_color: Color
+    var previous := \
+            previous_tier if \
+            previous_tier != null else \
+            current_tier
+    match previous.openness_type:
+        OpennessType.WALLED:
+            previous_left_margin_color = Constants.WALL_COLOR
+            previous_right_margin_color = Constants.WALL_COLOR
+        OpennessType.WALLED_LEFT:
+            previous_left_margin_color = Constants.WALL_COLOR
+            previous_right_margin_color = Constants.BACKGROUND_DARKEST_COLOR
+        OpennessType.WALLED_RIGHT:
+            previous_left_margin_color = Constants.BACKGROUND_DARKEST_COLOR
+            previous_right_margin_color = Constants.WALL_COLOR
+        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN, \
+        OpennessType.OPEN_WITH_HORIZONTAL_PAN:
+            previous_left_margin_color = Constants.BACKGROUND_DARKEST_COLOR
+            previous_right_margin_color = Constants.BACKGROUND_DARKEST_COLOR
+        _:
+            Utils.error()
     
-    windiness_tween.stop(self)
-    windiness_tween.interpolate_property( \
+    var next_left_margin_color: Color
+    var next_right_margin_color: Color
+    match current_tier.openness_type:
+        OpennessType.WALLED:
+            next_left_margin_color = Constants.WALL_COLOR
+            next_right_margin_color = Constants.WALL_COLOR
+        OpennessType.WALLED_LEFT:
+            next_left_margin_color = Constants.WALL_COLOR
+            next_right_margin_color = Constants.BACKGROUND_DARKEST_COLORcurrent_tier
+        OpennessType.WALLED_RIGHT:
+            next_left_margin_color = Constants.BACKGROUND_DARKEST_COLOR
+            next_right_margin_color = Constants.WALL_COLOR
+        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN, \
+        OpennessType.OPEN_WITH_HORIZONTAL_PAN:
+            next_left_margin_color = Constants.BACKGROUND_DARKEST_COLOR
+            next_right_margin_color = Constants.BACKGROUND_DARKEST_COLOR
+        _:
+            Utils.error()
+    
+    margin_left_color_tween.stop(self)
+    margin_left_color_tween.interpolate_method( \
             self, \
-            "windiness", \
-            previous_windiness, \
-            next_windiness, \
+            "_interpolate_margin_left_color", \
+            previous_left_margin_color, \
+            next_left_margin_color, \
             CameraController.ZOOM_ANIMATION_DURATION_SEC, \
             Tween.TRANS_QUAD, \
             Tween.EASE_IN_OUT)
-    windiness_tween.start()
+    margin_left_color_tween.start()
     
-    # FIXME: -------------------------------- Update snow and fires
+    margin_right_color_tween.stop(self)
+    margin_right_color_tween.interpolate_method( \
+            self, \
+            "_interpolate_margin_right_color", \
+            previous_right_margin_color, \
+            next_right_margin_color, \
+            CameraController.ZOOM_ANIMATION_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    margin_right_color_tween.start()
+
+func _interpolate_margin_left_color(color: Color) -> void:
+    Nav.screens[ScreenType.GAME] \
+            .get_node("PanelContainer") \
+            .get("custom_styles/panel") \
+            .bg_color = color
+
+func _interpolate_margin_right_color(color: Color) -> void:
+    Nav.screens[ScreenType.GAME] \
+            .get_node("PanelContainer") \
+            .get("custom_styles/panel") \
+            .bg_color = color
 
 func _on_fog_screen_updated() -> void:
     player.update_light( \
             $FogScreenHandler.peep_hole_size, \
             $FogScreenHandler.light_energy)
+    
+    $SnowScreenHandler.update_windiness($FogScreenHandler.windiness)
+    
+    # FIXME: -------------------------------- Update for new windiness:
+    # - Fires
+    # - Player in-air-velocity push
 
 func _update_score_for_height_change(height_delta_pixels: float) -> void:
     score += \

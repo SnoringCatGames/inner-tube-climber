@@ -258,7 +258,7 @@ func _handle_display_resize() -> void:
     player_max_distance_below_camera_with_default_zoom = \
             game_area_size.y / 2 - 4.0
 
-func set_start_position( \
+func set_start_state( \
         player_position: Vector2, \
         player_height: float) -> void:
     self.player_position = player_position

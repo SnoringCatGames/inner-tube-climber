@@ -4,20 +4,12 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Configure margin color on each tier.
-#   - Configure this on the actual tier scene, rather than in LevelConfig.
-# - Tween this value on tier change.
-# - Set this as dark on tiers with no walls.
-# - Add a new fade-out border along margins:
-#   - Use a repeated pixel image.
-#   - Use dithering.
+# - Update more of the LevelConfig properties to use Utils.mix_numbers instead
+#   of being multipliers.
 # 
-# >>>>>- Incorporate windiness into the fog screen?
-#        - Make windiness a vector?
-# 
-# - Use light_energy_multiplier from level and tier config.
-# 
-# - Adapt shader to create snow. Google how to use noise to simulate snow fall.
+# >>>>>>- Fix bug with Level 2, jumping from tier_base platform up-left, bounce
+#         off wall, pass tier-6 platform, hit weird block at y=-288 (ceiling or
+#         leftwall side).
 # 
 # - Have windiness affect in-air player velocity!
 #   - Probably need to refactor how the current air-drag effect happens.
@@ -226,6 +218,10 @@ class_name Main
 #   - Add shading to the animation.
 #   - Fix inner-tube perspective.
 #   - ...
+# 
+# - Add a new fade-out border along margins:
+#   - Use a repeated pixel image.
+#   - Use dithering.
 # 
 # Long-term planning:
 # - Maybe have a set sequence of tiers per-day? Per week? Per month?

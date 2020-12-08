@@ -5,7 +5,7 @@ static func error( \
         should_assert := true):
     print("ERROR: %s" % message)
     if should_assert:
-        assert(false)
+         assert(false)
 
 static func warning(message := "An warning occurred"):
     print("WARNING: %s" % message)
@@ -341,10 +341,33 @@ func get_safe_area_margin_right() -> float:
 static func floor_vector(v: Vector2) -> Vector2:
     return Vector2(floor(v.x), floor(v.y))
 
+static func mix_numbers( \
+        numbers: Array, \
+        weights: Array) -> float:
+    assert(numbers.size() == weights.size())
+    var count := numbers.size()
+    
+    var weight_sum := 0.0
+    for weight in weights:
+        weight_sum += weight
+    
+    var weighted_average := 0.0
+    for i in range(count):
+        var number: float = numbers[i]
+        var weight: float = weights[i]
+        var normalized_weight := \
+                weight / weight_sum if \
+                weight_sum > 0.0 else \
+                float(count)
+        weighted_average += number * normalized_weight
+    
+    return weighted_average
+
 static func mix_colors( \
         colors: Array, \
         weights: Array) -> Color:
     assert(colors.size() == weights.size())
+    var count := colors.size()
     
     var weight_sum := 0.0
     for weight in weights:
@@ -353,10 +376,13 @@ static func mix_colors( \
     var h := 0.0
     var s := 0.0
     var v := 0.0
-    for i in range(colors.size()):
+    for i in range(count):
         var color: Color = colors[i]
         var weight: float = weights[i]
-        var normalized_weight := weight / weight_sum
+        var normalized_weight := \
+                weight / weight_sum if \
+                weight_sum > 0.0 else \
+                float(count)
         h += color.h * normalized_weight
         s += color.s * normalized_weight
         v += color.v * normalized_weight

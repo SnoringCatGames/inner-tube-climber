@@ -62,7 +62,7 @@ var player_max_platform_height_on_current_life: float = 0.0
 var tier_count: int = 0
 var display_height: int = 0
 var falls_count: int = 0
-var lives_count: int = LevelConfig.DEFAULT_LIVES_COUNT
+var lives_count: int
 var score := 0.0
 
 func _enter_tree() -> void:
@@ -146,7 +146,7 @@ func start( \
     self.level_id = level_id
     self.start_time = Time.elapsed_play_time_actual_sec
     visible = true
-    lives_count = LevelConfig.LEVELS[level_id].lives_count
+    lives_count = LevelConfig.get_level_config(level_id).lives_count
     falls_count = 0
     score = 0.0
     _start_new_tier( \
@@ -216,7 +216,7 @@ func _process(delta_sec: float) -> void:
     # Update score displays.
     score_boards.set_tier_ratio( \
             current_tier_index + 1, \
-            LevelConfig.LEVELS[level_id].tiers.size())
+            LevelConfig.get_level_config(level_id).tiers.size())
     score_boards.set_height(display_height)
     score_boards.set_score(score)
     score_boards.set_multiplier(cooldown_indicator.multiplier)
@@ -412,7 +412,7 @@ func _start_new_tier( \
     start_tier_id = tier_id
     current_tier_id = tier_id
     
-    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
+    var level_config: Dictionary = LevelConfig.get_level_config(level_id)
     
     if current_tier_id == "0":
         current_tier_index = -1
@@ -428,7 +428,8 @@ func _start_new_tier( \
     
     # Current tier.
     var current_tier_position := tier_position
-    var current_tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
+    var current_tier_config: Dictionary = \
+            LevelConfig.get_tier_config(current_tier_id)
     current_tier = Utils.add_scene( \
             self, \
             current_tier_config.scene_path, \
@@ -444,7 +445,8 @@ func _start_new_tier( \
     # Next tier.
     var next_tier_position: Vector2 = \
             LevelConfig.get_tier_top_position(current_tier)
-    var next_tier_config: Dictionary = LevelConfig.TIERS[next_tier_id]
+    var next_tier_config: Dictionary = \
+            LevelConfig.get_tier_config(next_tier_id)
     next_tier = Utils.add_scene( \
             self, \
             next_tier_config.scene_path, \
@@ -557,7 +559,7 @@ func _on_entered_new_tier() -> void:
     current_tier = next_tier
     previous_tier_gap = next_tier_gap
     
-    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
+    var level_config: Dictionary = LevelConfig.get_level_config(level_id)
     
     var was_final_tier_completed := false
     current_tier_index += 1
@@ -572,12 +574,14 @@ func _on_entered_new_tier() -> void:
         next_tier_index = 0
     var next_tier_id: String = level_config.tiers[next_tier_index]
     
-    var current_tier_config: Dictionary = LevelConfig.TIERS[current_tier_id]
+    var current_tier_config: Dictionary = \
+            LevelConfig.get_tier_config(current_tier_id)
     
     # Next tier.
     var next_tier_position: Vector2 = \
             LevelConfig.get_tier_top_position(current_tier)
-    var next_tier_config: Dictionary = LevelConfig.TIERS[next_tier_id]
+    var next_tier_config: Dictionary = \
+            LevelConfig.get_tier_config(next_tier_id)
     next_tier = Utils.add_scene( \
             self, \
             next_tier_config.scene_path, \

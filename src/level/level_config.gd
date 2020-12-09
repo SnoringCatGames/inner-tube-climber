@@ -110,23 +110,6 @@ const SLIPPERY_TILES := [
     "ice_platform_tile",
 ]
 
-const DEFAULT_LIVES_COUNT := 3
-const DEFAULT_ZOOM_MULTIPLIER := 1.0
-const DEFAULT_SCROLL_SPEED_MULTIPLIER := 1.0
-const DEFAULT_SCROLL_SPEED_MIN := 20.0
-const DEFAULT_SCROLL_SPEED_MAX := 160.0
-const DEFAULT_LIGHT_ENERGY_MULTIPLIER := 1.0
-const DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER := 1.0
-const DEFAULT_FOG_SCREEN_OPACITY := 0.0
-const DEFAULT_FOG_SCREEN_OPACITY_WEIGHT := 0.0
-const DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER := 1.0
-const DEFAULT_FOG_SCREEN_PRIMARY_COLOR := Color("#ffffff")
-const DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT := 0.0
-const DEFAULT_FOG_SCREEN_SECONDARY_COLOR := Color("#ffffff")
-const DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT := 0.0
-const DEFAULT_SNOW_DENSITY_MULTIPLIER := 1.0
-const DEFAULT_WINDINESS := Vector2.ZERO
-
 const FRAMERATE_MULTIPLIER_EASY_MIN := 0.7
 const FRAMERATE_MULTIPLIER_EASY_MAX := 1.0
 const FRAMERATE_MULTIPLIER_MODERATE_MIN := 1.25
@@ -134,235 +117,160 @@ const FRAMERATE_MULTIPLIER_MODERATE_MAX := 1.25
 const FRAMERATE_MULTIPLIER_HARD_MIN := 1.25
 const FRAMERATE_MULTIPLIER_HARD_MAX := 1.6
 
-const TIERS := {
+const _DEFAULT_TIER_VALUES := {
+    camera_horizontally_locked = true,
+    zoom_multiplier = 1.0,
+    scroll_speed_multiplier = 1.0,
+    scroll_speed_min = 20.0,
+    scroll_speed_max = 160.0,
+    light_energy = {value = 0.6, weight = 0.0},
+    peep_hole_size = {value = Vector2(360.0, 360.0), weight = 0.0},
+    fog_screen_opacity = {value = 0.0, weight = 0.0},
+    fog_screen_secondary_color_opacity_multiplier = {value = 0.4, weight = 0.0},
+    fog_screen_primary_color = {value = Color("#ffffff"), weight = 0.0},
+    fog_screen_secondary_color = {value = Color("#52c8ff"), weight = 0.0},
+    snow_density_multiplier = 1.0,
+    windiness = {value = Vector2.ZERO, weight = 0.0},
+}
+
+const _DEFAULT_LEVEL_VALUES := {
+    lives_count = 3,
+    zoom_multiplier = null,
+    scroll_speed_multiplier = null,
+    scroll_speed_min = null,
+    scroll_speed_max = null,
+    light_energy = null,
+    peep_hole_size = null,
+    fog_screen_opacity = null,
+    fog_screen_secondary_color_opacity_multiplier = null,
+    fog_screen_primary_color = null,
+    fog_screen_secondary_color = null,
+    snow_density_multiplier = null,
+    windiness = null,
+}
+
+const _TIERS := {
     "0": {
         scene_path = "res://src/level/tiers/tier_base.tscn",
-        camera_horizontally_locked = true,
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
         scroll_speed_multiplier = 0.0,
         scroll_speed_min = 0.0,
         scroll_speed_max = 0.0,
-        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
-        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
-        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
-        fog_screen_secondary_color_opacity_multiplier_multiplier = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
-        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
-        fog_screen_primary_color_weight = \
-                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
-        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
-        fog_screen_secondary_color_weight = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
-        windiness = DEFAULT_WINDINESS,
     },
     "1": {
         scene_path = "res://src/level/tiers/tier_1.tscn",
-        camera_horizontally_locked = true,
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
-        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
-        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
-        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
-        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
-        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
-        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
-        fog_screen_secondary_color_opacity_multiplier_multiplier = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
-        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
-        fog_screen_primary_color_weight = \
-                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
-        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
-        fog_screen_secondary_color_weight = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
-        windiness = DEFAULT_WINDINESS,
     },
     "2": {
         scene_path = "res://src/level/tiers/tier_2.tscn",
-        camera_horizontally_locked = true,
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
-        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
-        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
-        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
-        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
-        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
-        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
-        fog_screen_secondary_color_opacity_multiplier_multiplier = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
-        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
-        fog_screen_primary_color_weight = \
-                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
-        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
-        fog_screen_secondary_color_weight = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
-        windiness = DEFAULT_WINDINESS,
     },
     "3": {
         scene_path = "res://src/level/tiers/tier_3.tscn",
-        camera_horizontally_locked = true,
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
-        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
-        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
-        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
-        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
-        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
-        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
-        fog_screen_secondary_color_opacity_multiplier_multiplier = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
-        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
-        fog_screen_primary_color_weight = \
-                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
-        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
-        fog_screen_secondary_color_weight = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
-        windiness = DEFAULT_WINDINESS,
     },
     "4": {
         scene_path = "res://src/level/tiers/tier_4.tscn",
-        camera_horizontally_locked = true,
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
-        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
-        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
-        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
-        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
-        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
-        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
-        fog_screen_secondary_color_opacity_multiplier_multiplier = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
-        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
-        fog_screen_primary_color_weight = \
-                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
-        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
-        fog_screen_secondary_color_weight = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
-        windiness = DEFAULT_WINDINESS,
     },
     "5": {
         scene_path = "res://src/level/tiers/tier_5.tscn",
-        camera_horizontally_locked = true,
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
-        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
-        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
-        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
-        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
-        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
-        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
-        fog_screen_secondary_color_opacity_multiplier_multiplier = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
-        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
-        fog_screen_primary_color_weight = \
-                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
-        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
-        fog_screen_secondary_color_weight = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
-        windiness = DEFAULT_WINDINESS,
     },
     "6": {
         scene_path = "res://src/level/tiers/tier_6.tscn",
-        camera_horizontally_locked = true,
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
-        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
-        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
-        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
-        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
-        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
-        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
-        fog_screen_secondary_color_opacity_multiplier_multiplier = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
-        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
-        fog_screen_primary_color_weight = \
-                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
-        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
-        fog_screen_secondary_color_weight = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
-        windiness = DEFAULT_WINDINESS,
     },
     "7": {
         scene_path = "res://src/level/tiers/tier_7.tscn",
-        camera_horizontally_locked = true,
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
-        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
-        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
-        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
-        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
-        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
-        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
-        fog_screen_secondary_color_opacity_multiplier_multiplier = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
-        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
-        fog_screen_primary_color_weight = \
-                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
-        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
-        fog_screen_secondary_color_weight = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
-        windiness = DEFAULT_WINDINESS,
     },
 }
 
-const LEVELS := {
+const _LEVELS := {
     "1": {
         tiers = ["1", "2", "3", "4", "5", "6", "7"],
-        lives_count = DEFAULT_LIVES_COUNT,
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
-        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
-        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
-        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
-        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
-        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
-        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
-        fog_screen_secondary_color_opacity_multiplier_multiplier = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
-        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
-        fog_screen_primary_color_weight = \
-                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
-        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
-        fog_screen_secondary_color_weight = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
-        windiness = DEFAULT_WINDINESS,
     },
     "2": {
         tiers = ["6", "3"],
-        lives_count = DEFAULT_LIVES_COUNT,
-        zoom_multiplier = DEFAULT_ZOOM_MULTIPLIER,
-        scroll_speed_multiplier = DEFAULT_SCROLL_SPEED_MULTIPLIER,
-        scroll_speed_min = DEFAULT_SCROLL_SPEED_MIN,
-        scroll_speed_max = DEFAULT_SCROLL_SPEED_MAX,
-        light_energy_multiplier = DEFAULT_LIGHT_ENERGY_MULTIPLIER,
-        peep_hole_size_multiplier = DEFAULT_PEEP_HOLE_SIZE_MULTIPLIER,
-        fog_screen_opacity = DEFAULT_FOG_SCREEN_OPACITY,
-        fog_screen_opacity_weight = DEFAULT_FOG_SCREEN_OPACITY_WEIGHT,
-        fog_screen_secondary_color_opacity_multiplier_multiplier = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_MULTIPLIER,
-        fog_screen_primary_color = DEFAULT_FOG_SCREEN_PRIMARY_COLOR,
-        fog_screen_primary_color_weight = \
-                DEFAULT_FOG_SCREEN_PRIMARY_COLOR_WEIGHT,
-        fog_screen_secondary_color = DEFAULT_FOG_SCREEN_SECONDARY_COLOR,
-        fog_screen_secondary_color_weight = \
-                DEFAULT_FOG_SCREEN_SECONDARY_COLOR_WEIGHT,
-        snow_density_multiplier = DEFAULT_SNOW_DENSITY_MULTIPLIER,
-        windiness = DEFAULT_WINDINESS,
     },
 }
 
+const _inflated_tiers := {}
+const _inflated_levels := {}
+
+var BASE_TIER: Dictionary = get_tier_config("0")
+
 func _init() -> void:
-    for tier in TIERS.values():
+    for tier in _TIERS.values():
         load(tier.scene_path)
+
+static func get_tier_config(tier_id: String) -> Dictionary:
+    if _inflated_tiers.has(tier_id):
+        return _inflated_tiers[tier_id]
+    
+    assert(_TIERS.has(tier_id))
+    var tier_config: Dictionary = _TIERS[tier_id].duplicate()
+    assert(tier_config.has("scene_path"))
+    for key in _DEFAULT_TIER_VALUES.keys():
+        if !tier_config.has(key):
+            tier_config[key] = _DEFAULT_TIER_VALUES[key]
+    _inflated_tiers[tier_id] = tier_config
+    return tier_config
+
+static func get_level_config(level_id: String) -> Dictionary:
+    if _inflated_levels.has(level_id):
+        return _inflated_levels[level_id]
+    
+    assert(_LEVELS.has(level_id))
+    var level_config: Dictionary = _LEVELS[level_id].duplicate()
+    assert(level_config.has("tiers"))
+    for key in _DEFAULT_LEVEL_VALUES.keys():
+        if !level_config.has(key):
+            var value = _DEFAULT_LEVEL_VALUES[key]
+            if value == null:
+                value = _DEFAULT_TIER_VALUES[key]
+            level_config[key] = value
+    _inflated_levels[level_id] = level_config
+    return level_config
+
+static func get_value( \
+        level_id: String, \
+        tier_id: String, \
+        key: String):
+    var level_config: Dictionary = get_level_config(level_id)
+    var tier_config: Dictionary = get_tier_config(tier_id)
+    match key:
+        "camera_horizontally_locked":
+            return tier_config[key]
+        "lives_count":
+            return level_config[key]
+        "zoom_multiplier", \
+        "scroll_speed_multiplier", \
+        "snow_density_multiplier":
+            return level_config[key] * tier_config[key]
+        "light_energy", \
+        "peep_hole_size", \
+        "fog_screen_opacity", \
+        "fog_screen_secondary_color_opacity_multiplier", \
+        "windiness":
+            return Utils.mix([ \
+                    level_config[key].value,
+                    tier_config[key].value,
+                ], [\
+                    level_config[key].weight,
+                    tier_config[key].weight,
+                ])
+        "fog_screen_primary_color", \
+        "fog_screen_secondary_color":
+            return Utils.mix_colors([ \
+                    level_config[key].value,
+                    tier_config[key].value,
+                ], [\
+                    level_config[key].weight,
+                    tier_config[key].weight,
+                ])
+        "scroll_speed_min":
+            return max(tier_config[key], level_config[key])
+        "scroll_speed_max":
+            return min(tier_config[key], level_config[key])
+        _:
+            Utils.error()
+
+static func get_level_ids() -> Array:
+    return _LEVELS.keys()
 
 static func get_tier_size(tier: Tier) -> Vector2:
     return get_tier_bounding_box(tier).size

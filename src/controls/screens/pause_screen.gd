@@ -26,7 +26,7 @@ func _update_stats() -> void:
             level.level_id)
     var tier_ratio_label := "%s / %s" % [
         level.current_tier_index + 1, \
-        LevelConfig.LEVELS[level.level_id].tiers.size(),
+        LevelConfig.get_level_config(level.level_id).tiers.size(),
     ]
     _add_row( \
             "Tier", \
@@ -61,22 +61,20 @@ func _get_time_string_from_seconds(time_sec: float) -> String:
     var time_str := ""
     
     # Hours.
-    if time_sec >= 3600:
-        var hours := int(time_sec / 3600.0)
-        time_sec = fmod(time_sec, 3600.0)
-        time_str = "%s%d:" % [
-            time_str,
-            hours,
-        ]
+    var hours := int(time_sec / 3600.0)
+    time_sec = fmod(time_sec, 3600.0)
+    time_str = "%s%02d:" % [
+        time_str,
+        hours,
+    ]
     
     # Minutes.
-    if time_sec >= 60:
-        var minutes := int(time_sec / 60.0)
-        time_sec = fmod(time_sec, 60.0)
-        time_str = "%s%02d:" % [
-            time_str,
-            minutes,
-        ]
+    var minutes := int(time_sec / 60.0)
+    time_sec = fmod(time_sec, 60.0)
+    time_str = "%s%02d:" % [
+        time_str,
+        minutes,
+    ]
     
     # Seconds.
     time_str = "%s%02d" % [

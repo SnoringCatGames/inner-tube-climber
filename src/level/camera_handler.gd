@@ -107,7 +107,7 @@ func update_for_current_tier( \
         _increment_speed()
     _update_zoom(!is_base_tier)
     _update_camera_horizontally_locked( \
-            LevelConfig.TIERS[tier_id].camera_horizontally_locked)
+            LevelConfig.get_tier_config(tier_id).camera_horizontally_locked)
 
 func on_fall( \
         current_tier_position: Vector2, \
@@ -164,44 +164,28 @@ func update_speed() -> void:
             speed_index_progress, \
             SPEED_INCREASE_EASING)
     
-    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
-    var tier_config: Dictionary = LevelConfig.TIERS[tier_id]
+    var level_config: Dictionary = LevelConfig.get_level_config(level_id)
+    var tier_config: Dictionary = LevelConfig.get_tier_config(tier_id)
     
-    var level_camera_speed_min: float = \
-            level_config.scroll_speed_min if \
-            level_config.has("scroll_speed_min") else \
-            LevelConfig.DEFAULT_SCROLL_SPEED_MIN
-    var level_camera_speed_max: float = \
-            level_config.scroll_speed_max if \
-            level_config.has("scroll_speed_max") else \
-            LevelConfig.DEFAULT_SCROLL_SPEED_MAX
-    var level_camera_speed_multiplier: float = \
-            level_config.scroll_speed_multiplier if \
-            level_config.has("scroll_speed_multiplier") else \
-            LevelConfig.DEFAULT_SCROLL_SPEED_MULTIPLIER
-    var tier_camera_speed_min: float = \
-            tier_config.scroll_speed_min if \
-            tier_config.has("scroll_speed_min") else \
-            LevelConfig.DEFAULT_SCROLL_SPEED_MIN
-    var tier_camera_speed_max: float = \
-            tier_config.scroll_speed_max if \
-            tier_config.has("scroll_speed_max") else \
-            LevelConfig.DEFAULT_SCROLL_SPEED_MAX
-    var tier_camera_speed_multiplier: float = \
-            tier_config.scroll_speed_multiplier if \
-            tier_config.has("scroll_speed_multiplier") else \
-            LevelConfig.DEFAULT_SCROLL_SPEED_MULTIPLIER
-    
-    var camera_speed_min := max(level_camera_speed_min, tier_camera_speed_min)
-    var camera_speed_max := min(level_camera_speed_max, tier_camera_speed_max)
+    var camera_speed_multiplier: float = LevelConfig.get_value( \
+            level_id, \
+            tier_id, \
+            "scroll_speed_multiplier")
+    var scroll_speed_min: float = LevelConfig.get_value( \
+            level_id, \
+            tier_id, \
+            "scroll_speed_min")
+    var scroll_speed_max: float = LevelConfig.get_value( \
+            level_id, \
+            tier_id, \
+            "scroll_speed_max")
     
     camera_speed = lerp( \
-            camera_speed_min, \
-            camera_speed_max, \
+            scroll_speed_min / camera_speed_multiplier, \
+            scroll_speed_max / camera_speed_multiplier, \
             speed_index_progress)
-    camera_speed *= tier_camera_speed_multiplier
-    camera_speed *= level_camera_speed_multiplier
-    camera_speed = clamp(camera_speed, camera_speed_min, camera_speed_max)
+    camera_speed *= camera_speed_multiplier
+    camera_speed = clamp(camera_speed, scroll_speed_min, scroll_speed_max)
     
     var frame_rate_multiplier_min := _get_min_framerate_multiplier()
     var frame_rate_multiplier_max := _get_max_framerate_multiplier()
@@ -222,12 +206,9 @@ func update_speed() -> void:
             ])
 
 func _update_zoom(updates_camera := true) -> void:
-    var level_config: Dictionary = LevelConfig.LEVELS[level_id]
-    var tier_config: Dictionary = LevelConfig.TIERS[tier_id]
     camera_zoom = \
             CameraController.DEFAULT_CAMERA_ZOOM * \
-            level_config.zoom_multiplier * \
-            tier_config.zoom_multiplier
+            LevelConfig.get_value(level_id, tier_id, "zoom_multiplier")
     if updates_camera:
         Global.camera_controller.animate_to_zoom(camera_zoom)
 

@@ -341,25 +341,36 @@ func get_safe_area_margin_right() -> float:
 static func floor_vector(v: Vector2) -> Vector2:
     return Vector2(floor(v.x), floor(v.y))
 
-static func mix_numbers( \
-        numbers: Array, \
-        weights: Array) -> float:
-    assert(numbers.size() == weights.size())
-    var count := numbers.size()
+static func mix( \
+        values: Array, \
+        weights: Array):
+    assert(values.size() == weights.size())
+    assert(!values.empty())
+    
+    var count := values.size()
     
     var weight_sum := 0.0
     for weight in weights:
         weight_sum += weight
     
-    var weighted_average := 0.0
+    var weighted_average
+    if values[0] is float or values[0] is int:
+        weighted_average = 0.0
+    elif values[0] is Vector2:
+        weighted_average = Vector2.ZERO
+    elif values[0] is Vector3:
+        weighted_average = Vector3.ZERO
+    else:
+        error()
+    
     for i in range(count):
-        var number: float = numbers[i]
+        var value = values[i]
         var weight: float = weights[i]
         var normalized_weight := \
                 weight / weight_sum if \
                 weight_sum > 0.0 else \
-                float(count)
-        weighted_average += number * normalized_weight
+                1.0 / count
+        weighted_average += value * normalized_weight
     
     return weighted_average
 
@@ -367,6 +378,8 @@ static func mix_colors( \
         colors: Array, \
         weights: Array) -> Color:
     assert(colors.size() == weights.size())
+    assert(!colors.empty())
+    
     var count := colors.size()
     
     var weight_sum := 0.0
@@ -382,7 +395,7 @@ static func mix_colors( \
         var normalized_weight := \
                 weight / weight_sum if \
                 weight_sum > 0.0 else \
-                float(count)
+                1.0 / count
         h += color.h * normalized_weight
         s += color.s * normalized_weight
         v += color.v * normalized_weight

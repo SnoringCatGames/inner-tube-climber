@@ -18,7 +18,7 @@ func _ready() -> void:
             $FullScreenPanel/VBoxContainer/CenteredPanel/VBoxContainer/ \
             VBoxContainer/LevelSelector
     
-    for id in LevelConfig.LEVELS:
+    for id in LevelConfig.get_level_ids():
         var item := "%s%s" % [LEVEL_ITEM_PREFIX, id]
         level_items.push_back(item)
         selector.add_item(item)

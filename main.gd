@@ -4,15 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# >>>>- Two fixes:
-#        - Update _PRE_STUCK/_POST_TUCK fields to reference LevelConfig values.
-#        - Update more of the LevelConfig properties to use Utils.mix_numbers
-#          instead of being multipliers.
-# 
-# >>- Fix bug with Level 2, jumping from tier_base platform up-left, bounce
-#         off wall, pass tier-6 platform, hit weird block at y=-288 (ceiling or
-#         leftwall side).
-# 
 # - Have windiness affect in-air player velocity!
 #   - Probably need to refactor how the current air-drag effect happens.
 # 

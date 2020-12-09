@@ -64,9 +64,6 @@ func _handle_timeouts() -> void:
         call_deferred("_handle_timeouts")
 
 func _physics_process(delta_sec: float) -> void:
-    assert(Geometry.are_floats_equal_with_epsilon( \
-            delta_sec, \
-            PHYSICS_TIME_STEP_SEC))
     _elapsed_physics_time_sec += delta_sec
     _elapsed_latest_time_sec = _elapsed_physics_time_sec
 

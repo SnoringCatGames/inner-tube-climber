@@ -4,7 +4,7 @@
 [ext_resource path="res://src/level/tier_tile_map.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/level/player_spawn_position.tscn" type="PackedScene" id=3]
 
-[node name="Node2D" type="Node2D"]
+[node name="Tier6" type="Node2D"]
 script = ExtResource( 1 )
 openness_type = 4
 

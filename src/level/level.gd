@@ -167,7 +167,7 @@ func _physics_process(_delta_sec: float) -> void:
     # Keep track of player height.
     var next_tier_height: float = -next_tier.position.y + Constants.CELL_SIZE.y
     if _get_player_height() > next_tier_height - 0.1:
-        _on_entered_new_tier()
+        call_deferred("_on_entered_new_tier")
     player_max_height = max(player_max_height, _get_player_height())
     player_max_height_on_current_life = \
             max(player_max_height_on_current_life, _get_player_height())

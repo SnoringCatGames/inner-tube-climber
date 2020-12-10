@@ -4,8 +4,6 @@ signal display_resized
 
 const GROUP_NAME_TIER_TILE_MAPS := "tier_tilemaps"
 
-const PLAYER_SIZE_MULTIPLIER := 1.5
-
 const ASPECT_RATIO_MAX := 1.0 / 1.0
 const ASPECT_RATIO_MIN := 1.0 / 1.75
 const LEVEL_BASE_PLATFORM_WIDTH_CELL_COUNT := 12.0

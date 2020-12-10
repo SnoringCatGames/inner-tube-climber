@@ -1,11 +1,8 @@
 extends Player
 class_name TuberPlayer
 
-const CAPSULE_RADIUS_DEFAULT := 12.106
-const CAPSULE_HEIGHT_DEFAULT := 7.747
-const PLAYER_HALF_HEIGHT_DEFAULT := \
-        CAPSULE_RADIUS_DEFAULT + CAPSULE_HEIGHT_DEFAULT * 0.5
-const PLAYER_STUCK_ANIMATION_CENTER_OFFSET := Vector2(0.0, -12.0)
+const PLAYER_STUCK_ANIMATION_CENTER_OFFSET := \
+        Vector2(0.0, -12.0) * Constants.PLAYER_SIZE_MULTIPLIER
 
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
@@ -67,9 +64,9 @@ var windiness := Vector2.ZERO
 
 func _ready() -> void:
     $CollisionShape2D.shape.radius = \
-            CAPSULE_RADIUS_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
+            Constants.PLAYER_CAPSULE_RADIUS_DEFAULT
     $CollisionShape2D.shape.height = \
-            CAPSULE_HEIGHT_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
+            Constants.PLAYER_CAPSULE_HEIGHT_DEFAULT
     on_new_tier()
 
 func on_new_tier() -> void:
@@ -508,15 +505,10 @@ func update_light( \
             PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO
     $Light2D.energy = light_energy
 
-func get_player_half_height() -> float:
-    return PLAYER_HALF_HEIGHT_DEFAULT * Global.PLAYER_SIZE_MULTIPLIER
-
 func get_spawn_position_for_tier( \
         tier: Tier, \
         is_base_tier: bool) -> Vector2:
-    var spawn_position := tier.get_player_spawn_position()
-    spawn_position.y -= get_player_half_height()
-    spawn_position += \
-            PLAYER_STUCK_ANIMATION_CENTER_OFFSET * \
-            Global.PLAYER_SIZE_MULTIPLIER
+    var spawn_position := tier.get_spawn_position()
+    spawn_position.y -= Constants.PLAYER_HALF_HEIGHT_DEFAULT
+    spawn_position += PLAYER_STUCK_ANIMATION_CENTER_OFFSET
     return spawn_position

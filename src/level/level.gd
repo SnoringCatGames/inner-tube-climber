@@ -769,6 +769,6 @@ func update_displays() -> void:
     score_boards.update_displays()
 
 func _get_player_height() -> float:
-    return -player.position.y - player.get_player_half_height() if \
+    return -player.position.y - Constants.PLAYER_HALF_HEIGHT_DEFAULT if \
             player != null else \
             0.0

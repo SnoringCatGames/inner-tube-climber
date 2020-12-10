@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=2]
-
-[ext_resource path="res://src/level/player_spawn_position.gd" type="Script" id=1]
-
-[node name="PlayerSpawnPosition" type="Position2D" groups=[
-"player_spawn_positions",
-]]
-script = ExtResource( 1 )

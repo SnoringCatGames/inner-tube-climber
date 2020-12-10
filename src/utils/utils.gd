@@ -150,6 +150,7 @@ static func update_velocity_in_air( \
         horizontal_acceleration_sign: int, \
         in_air_horizontal_acceleration: float, \
         in_air_horizontal_deceleration: float, \
+        windiness: Vector2, \
         slow_rise_gravity_multiplier: float, \
         rise_double_jump_gravity_multiplier: float, \
         gravity_fast_fall: float) -> Vector2:
@@ -169,6 +170,13 @@ static func update_velocity_in_air( \
             delta_sec * \
             gravity_fast_fall * \
             gravity_multiplier
+    velocity.y += \
+            delta_sec * \
+            windiness.y
+    
+    velocity.x += \
+            delta_sec * \
+            windiness.x
     
     # Horizontal movement.
     if horizontal_acceleration_sign != 0.0:
@@ -201,18 +209,56 @@ static func update_velocity_in_air( \
     
     return velocity
 
+const WINDINESS_VELOCITY_THRESHOLD_MULTIPLIER := 0.1
+
 static func cap_velocity( \
         velocity: Vector2, \
         caps_min_horizontal_speed: bool, \
         min_horizontal_speed: float, \
         max_horizontal_speed: float, \
         min_vertical_speed: float, \
-        max_vertical_speed: float) -> Vector2:
+        max_vertical_speed: float, \
+        windiness: Vector2) -> Vector2:
+    var windiness_horizontal_velocity_threshold_offset := \
+            max_horizontal_speed * \
+            windiness.x * \
+            WINDINESS_VELOCITY_THRESHOLD_MULTIPLIER
+    var windiness_vertical_velocity_threshold_offset := \
+            max_vertical_speed * \
+            windiness.y * \
+            WINDINESS_VELOCITY_THRESHOLD_MULTIPLIER
+    
+    var min_horizontal_velocity: float
+    var max_horizontal_velocity: float
+    if windiness.x < 0:
+        min_horizontal_velocity = \
+                -max_horizontal_speed + \
+                windiness_horizontal_velocity_threshold_offset
+        max_horizontal_velocity = max_horizontal_speed
+    else:
+        min_horizontal_velocity = -max_horizontal_speed
+        max_horizontal_velocity = \
+                max_horizontal_speed + \
+                windiness_horizontal_velocity_threshold_offset
+    
+    var min_vertical_velocity: float
+    var max_vertical_velocity: float
+    if windiness.y < 0:
+        min_vertical_velocity = \
+                -max_vertical_speed + \
+                windiness_vertical_velocity_threshold_offset
+        max_vertical_velocity = max_vertical_speed
+    else:
+        min_vertical_velocity = -max_vertical_speed
+        max_vertical_velocity = \
+                max_vertical_speed + \
+                windiness_vertical_velocity_threshold_offset
+    
     # Cap horizontal speed at a max value.
     velocity.x = clamp( \
             velocity.x, \
-            -max_horizontal_speed, \
-            max_horizontal_speed)
+            min_horizontal_velocity, \
+            max_horizontal_velocity)
     
     # Kill horizontal speed below a min value.
     if caps_min_horizontal_speed and \
@@ -223,8 +269,8 @@ static func cap_velocity( \
     # Cap vertical speed at a max value.
     velocity.y = clamp( \
             velocity.y, \
-            -max_vertical_speed, \
-            max_vertical_speed)
+            min_vertical_velocity, \
+            max_vertical_velocity)
     
     # Kill vertical speed below a min value.
     if velocity.y > -min_vertical_speed and \

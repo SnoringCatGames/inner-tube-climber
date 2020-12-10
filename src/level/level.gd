@@ -730,10 +730,10 @@ func _on_fog_screen_updated() -> void:
             $FogScreenHandler.light_energy)
     
     $SnowScreenHandler.update_windiness($FogScreenHandler.windiness)
+    player.windiness = $FogScreenHandler.windiness
     
     # FIXME: -------------------------------- Update for new windiness:
     # - Fires
-    # - Player in-air-velocity push
 
 func _update_score_for_height_change(height_delta_pixels: float) -> void:
     score += \

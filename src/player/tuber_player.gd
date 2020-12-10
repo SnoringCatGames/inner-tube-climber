@@ -10,6 +10,7 @@ const PLAYER_STUCK_ANIMATION_CENTER_OFFSET := Vector2(0.0, -12.0)
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
 const RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER := 0.68
+const WINDINESS_MULTIPLIER := 80.0
 const JUMP_BOOST := -600.0
 var WALL_BOUNCE_HORIZONTAL_BOOST := \
         0.0 if Global.mobile_control_version == 1 else 20.0
@@ -61,6 +62,8 @@ var is_in_post_bounce_horizontal_acceleration_grace_period := false
 var was_last_jump_input_consumed := false
 var last_jump_input_time := 0.0
 var last_floor_departure_time := 0.0
+
+var windiness := Vector2.ZERO
 
 func _ready() -> void:
     $CollisionShape2D.shape.radius = \
@@ -332,6 +335,8 @@ func _process_actions(delta_sec: float) -> void:
             Time.elapsed_play_time_modified_sec - \
                     JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC
     
+    var modified_windiness := windiness * WINDINESS_MULTIPLIER
+    
     if surface_state.is_touching_floor:
         assert(surface_state.friction >= 0.0 and \
                 surface_state.friction <= 1.0)
@@ -380,8 +385,8 @@ func _process_actions(delta_sec: float) -> void:
                 friction_offset = clamp(friction_offset, 0, abs(velocity.x))
                 velocity.x += -sign(velocity.x) * friction_offset
     else: # Is in the air.
-        # If the player falls off a wall or ledge, then that's considered the first
-        # jump.
+        # If the player falls off a wall or ledge, then that's considered the
+        # first jump.
         jump_count = max(jump_count, 1)
         var is_first_jump: bool = jump_count == 1
         
@@ -404,6 +409,7 @@ func _process_actions(delta_sec: float) -> void:
                 surface_state.horizontal_acceleration_sign, \
                 IN_AIR_HORIZONTAL_ACCELERATION, \
                 horizontal_deceleration, \
+                modified_windiness, \
                 SLOW_RISE_GRAVITY_MULTIPLIER, \
                 RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER, \
                 GRAVITY_FAST_FALL)
@@ -440,7 +446,8 @@ func _process_actions(delta_sec: float) -> void:
             MIN_HORIZONTAL_SPEED, \
             max_horizontal_speed, \
             MIN_VERTICAL_SPEED, \
-            MAX_VERTICAL_SPEED)
+            MAX_VERTICAL_SPEED, \
+            modified_windiness)
 
 # Updates the animation state for the current frame.
 func _process_animation() -> void:

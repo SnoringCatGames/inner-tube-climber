@@ -4,10 +4,36 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Have windiness affect in-air player velocity!
-#   - Probably need to refactor how the current air-drag effect happens.
+# - Add support for vertical windiness effects:
+#   - Update snowscreen to move particle nodes to sides or bottom, if the
+#     corresponding direction is dominant.
 # 
-# - Google noise, fog, fluid, ... effects in Godot.
+# - Fix bug again with particles bounding rect not being big enough to continue
+#   rendering when sideways wind is too strong.
+# 
+# ----
+# 
+# - Update tower and level logic to support tier start/end positions not being
+#   at 0,1 tile position.
+# - Also support not having a set tier opening width?
+#   - :/ That would require making tiergap logic dynamic...
+# - Play with zoom and wider tier opening.
+#   - But maybe keep same start/end width opening for now.
+# - Create a new sub class for representing where the level start and end
+#   platforms are.
+#   - Shows three positions: left, right, spawn poison.
+#   - But use standard width.
+# 
+# ----
+# 
+# - Try pixelating fog (easy, just floor UV input).
+# 
+# - Add ability to gradually transition tier config values over the final X
+#   pixels of the tier, before we reach the next tier.
+# 
+# - Have level config affect _POST_STUCK values (not just tier config).
+# 
+# ----
 # 
 # - Test ability to save/load scores and game state on iOS.
 # 
@@ -47,7 +73,6 @@ class_name Main
 #   - https://docs.godotengine.org/en/stable/tutorials/2d/particle_systems_2d.html
 #   - Snow spray effect from feet when jumping, landing, walking.
 #   - Ice spray effect when bouncing on wall.
-#   - Snow falling effect.
 # 
 # - PROBLEM: Walk into wall, tap jump, tap repeatedly into wall, ascend
 #   infinitely.
@@ -195,14 +220,26 @@ class_name Main
 # - Make the wall-bounce-vertical-boost more consistent/predictable; don't want
 #   it to be better to bounce near bottom of jump instead of top.
 # - Add a delay after falling before restarting.
-# - Make a tier te emphasize the slipperiness of ice (mostly snow, but fail on
-#   ice  near the top, must jump to bounce off wall).
-# - Make a tier to emphasize dynamic jump height.
-# - Make a tier to emphasize fast scroll speed.
-#   - Lots of zig zagging on ground tiles (that can't be jumped through).
-#   - Maximum bouncing for speeeeeed!
-# - Make a tier to emphasize camera_horizontally_locked=false (and with zoom).
-# - Make a tier to emphasize crumbling platforms.
+# - Make new tiers:
+#   - Emphasize the slipperiness of ice (mostly snow, but fail on ice near the
+#     top, must jump to bounce off wall).
+#   - Emphasize dynamic jump height.
+#   - Emphasize fast scroll speed.
+#     - Lots of zig zagging on ground tiles (that can't be jumped through).
+#     - Maximum bouncing for speeeeeed!
+#   - Emphasize camera_horizontally_locked=false (and with zoom).
+#   - Emphasize crumbling platforms.
+#   - Emphasize the increased jump height from wall bounce.
+#   - Emphasize windiness decreasing and increasing horizontal jump distance.
+#   - Emphasize windiness decreasing and increasing vertical jump distance.
+#   - Emphasize thick fog hiding the tier / level.
+#   - Emphasize thick snow hiding the tier / level.
+#   - Showcase all the different LevelConfig properties:
+#     - Fog colors (super dark; sunset tinted).
+#     - Fog opacity (super thick; high and low contrast between primary and
+#       secondary opacities).
+#     - Light energy.
+#     - Snow density.
 # - Mobile control idea: touch either corner to move sideways, swipe slightly
 #   up on either to jump.
 # 

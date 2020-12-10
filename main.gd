@@ -4,13 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Add support for vertical windiness effects:
-#   - Update snowscreen to move particle nodes to sides or bottom, if the
-#     corresponding direction is dominant.
-# 
-# - Fix bug again with particles bounding rect not being big enough to continue
-#   rendering when sideways wind is too strong.
-# 
 # ----
 # 
 # - Update tower and level logic to support tier start/end positions not being
@@ -26,7 +19,11 @@ class_name Main
 # 
 # ----
 # 
-# - Try pixelating fog (easy, just floor UV input).
+# - Fix jerky transition of snow fall.
+#   - Maybe transition with two different copies of the particles?
+#   - Is it possible to stop new emissions of the old particles, but keep the
+#     pre-existing instances?
+#   - Then, I could just start the new particles, without any preprocess.
 # 
 # - Add ability to gradually transition tier config values over the final X
 #   pixels of the tier, before we reach the next tier.

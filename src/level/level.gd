@@ -30,8 +30,6 @@ var current_tier: Tier
 var next_tier: Tier
 var previous_tier_gap: TierGap
 var next_tier_gap: TierGap
-var current_tier_ratio_sign: TierRatioSign
-var next_tier_ratio_sign: TierRatioSign
 
 var margin_left_color_tween: Tween
 var margin_right_color_tween: Tween
@@ -301,7 +299,6 @@ func _add_player(is_base_tier := false) -> void:
     player.position = player.get_spawn_position_for_tier( \
             current_tier, \
             is_base_tier)
-    player.position.y += current_tier.position.y
     player.velocity = PLAYER_START_VELOCITY
     player.is_stuck = is_base_tier
     player.on_new_tier()
@@ -427,7 +424,6 @@ func _start_new_tier( \
     var next_tier_id: String = level_config.tiers[next_tier_index]
     
     # Current tier.
-    var current_tier_position := tier_position
     var current_tier_config: Dictionary = \
             LevelConfig.get_tier_config(current_tier_id)
     current_tier = Utils.add_scene( \
@@ -435,16 +431,12 @@ func _start_new_tier( \
             current_tier_config.scene_path, \
             true, \
             true)
-    assert(current_tier.openness_type != OpennessType.UNKNOWN)
-    assert(current_tier_id == "0" or \
-            LevelConfig.get_tier_size(current_tier).y / \
-                    Constants.CELL_SIZE.y >= \
-                    Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
-    current_tier.position = current_tier_position
+    current_tier.setup( \
+            tier_position, \
+            current_tier_index, \
+            level_config.tiers.size())
     
     # Next tier.
-    var next_tier_position: Vector2 = \
-            LevelConfig.get_tier_top_position(current_tier)
     var next_tier_config: Dictionary = \
             LevelConfig.get_tier_config(next_tier_id)
     next_tier = Utils.add_scene( \
@@ -452,10 +444,10 @@ func _start_new_tier( \
             next_tier_config.scene_path, \
             true, \
             true)
-    assert(next_tier.openness_type != OpennessType.UNKNOWN)
-    assert(LevelConfig.get_tier_size(next_tier).y / Constants.CELL_SIZE.y >= \
-            Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
-    next_tier.position = next_tier_position
+    next_tier.setup( \
+            current_tier, \
+            next_tier_index, \
+            level_config.tiers.size())
     
     # Next tier gap.
     var next_tier_gap_scene_path: String = \
@@ -467,56 +459,62 @@ func _start_new_tier( \
             next_tier_gap_scene_path, \
             true, \
             true)
-    next_tier_gap.position = next_tier_position
-    
-    # Tier-ratio signs.
-    if current_tier_ratio_sign != null:
-        remove_child(current_tier_ratio_sign)
-    if current_tier_id != "0":
-        current_tier_ratio_sign = Utils.add_scene( \
-                self, \
-                TIER_RATIO_SIGN_RESOURCE_PATH, \
-                true, \
-                true)
-        current_tier_ratio_sign.position = \
-                current_tier_position - Vector2(0.0, Constants.CELL_SIZE.y)
-        current_tier_ratio_sign.text = \
-                "%s / %s" % [current_tier_index + 1, level_config.tiers.size()]
-    if next_tier_ratio_sign != null:
-        remove_child(next_tier_ratio_sign)
-    next_tier_ratio_sign = Utils.add_scene( \
-            self, \
-            TIER_RATIO_SIGN_RESOURCE_PATH, \
-            true, \
-            true)
-    next_tier_ratio_sign.position = \
-            next_tier_position - Vector2(0.0, Constants.CELL_SIZE.y)
-    next_tier_ratio_sign.text = \
-            "%s / %s" % [next_tier_index + 1, level_config.tiers.size()]
+    next_tier_gap.sync_position_to_previous_tier(current_tier)
     
     if current_tier_id != "0":
-        var previous_tier_scene_path: String = \
-                LevelConfig.TIER_BLANK_SCENE_PATH
+        var previous_tier_scene_path: String
+        var previous_tier_index := current_tier_index - 1
+        if previous_tier_index < 0:
+            previous_tier_index = level_config.tiers.size() - 1
+            previous_tier_scene_path = \
+                    LevelConfig.TIER_EMPTY_WALLED_SCENE_PATH
+        else:
+            var previous_tier_id: String = \
+                    level_config.tiers[previous_tier_index]
+            var previous_tier_config: Dictionary = \
+                    LevelConfig.get_tier_config(previous_tier_id)
+            previous_tier = Utils.add_scene( \
+                    self, \
+                    previous_tier_config.scene_path, \
+                    false, \
+                    false)
+            match previous_tier.openness_type:
+                OpennessType.OPEN_WITH_HORIZONTAL_PAN, \
+                OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN:
+                    previous_tier_scene_path = \
+                            LevelConfig.TIER_EMPTY_OPEN_SCENE_PATH
+                OpennessType.WALLED:
+                    previous_tier_scene_path = \
+                            LevelConfig.TIER_EMPTY_WALLED_SCENE_PATH
+                OpennessType.WALLED_LEFT:
+                    previous_tier_scene_path = \
+                            LevelConfig.TIER_EMPTY_WALLED_LEFT_SCENE_PATH
+                OpennessType.WALLED_RIGHT:
+                    previous_tier_scene_path = \
+                            LevelConfig.TIER_EMPTY_WALLED_RIGHT_SCENE_PATH
+                _:
+                    Utils.error()
+        previous_tier.queue_free()
         previous_tier = Utils.add_scene( \
                 self, \
                 previous_tier_scene_path, \
                 true, \
                 true)
         var previous_tier_position: Vector2 = \
-                current_tier_position - \
-                LevelConfig.get_tier_top_position(previous_tier)
-        previous_tier.position = previous_tier_position
+                current_tier.position + \
+                Vector2(0.0, previous_tier.size.y)
+        previous_tier.setup(previous_tier_position)
         
         var previous_tier_gap_scene_path: String = \
                 LevelConfig.get_tier_gap_scene_path( \
-                        OpennessType.WALLED, \
+                        previous_tier.openness_type, \
                         current_tier.openness_type)
         previous_tier_gap = Utils.add_scene( \
                 self, \
                 previous_tier_gap_scene_path, \
                 true, \
                 true)
-        previous_tier_gap.position = current_tier_position
+        previous_tier_gap.sync_position_to_previous_tier(previous_tier)
     
     $CameraHandler.update_for_current_tier( \
             level_id, \
@@ -547,7 +545,7 @@ func _on_entered_new_tier() -> void:
     tier_count += 1
     tiers_count_since_falling += 1
     
-    # Destory the old previous tier.
+    # Destroy the previous tier.
     if previous_tier != null:
         remove_child(previous_tier)
         previous_tier.queue_free()
@@ -578,8 +576,6 @@ func _on_entered_new_tier() -> void:
             LevelConfig.get_tier_config(current_tier_id)
     
     # Next tier.
-    var next_tier_position: Vector2 = \
-            LevelConfig.get_tier_top_position(current_tier)
     var next_tier_config: Dictionary = \
             LevelConfig.get_tier_config(next_tier_id)
     next_tier = Utils.add_scene( \
@@ -587,9 +583,10 @@ func _on_entered_new_tier() -> void:
             next_tier_config.scene_path, \
             true, \
             true)
-    assert(LevelConfig.get_tier_size(next_tier).y / Constants.CELL_SIZE.y >= \
-            Global.LEVEL_MIN_HEIGHT_CELL_COUNT)
-    next_tier.position = next_tier_position
+    next_tier.setup( \
+            current_tier, \
+            next_tier_index, \
+            level_config.tiers.size())
     
     # Next tier gap.
     var next_tier_gap_scene_path: String = \
@@ -601,21 +598,7 @@ func _on_entered_new_tier() -> void:
             next_tier_gap_scene_path, \
             true, \
             true)
-    next_tier_gap.position = next_tier_position
-    
-    # Update tier-ratio signs.
-    if current_tier_ratio_sign != null:
-        remove_child(current_tier_ratio_sign)
-    current_tier_ratio_sign = next_tier_ratio_sign
-    next_tier_ratio_sign = Utils.add_scene( \
-            self, \
-            TIER_RATIO_SIGN_RESOURCE_PATH, \
-            true, \
-            true)
-    next_tier_ratio_sign.position = \
-            next_tier_position - Vector2(0.0, Constants.CELL_SIZE.y)
-    next_tier_ratio_sign.text = \
-            "%s / %s" % [next_tier_index + 1, level_config.tiers.size()]
+    next_tier_gap.sync_position_to_previous_tier(current_tier)
     
     # Maybe play new music.
     if (start_tier_id != "0" or \

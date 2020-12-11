@@ -7,7 +7,8 @@ const SURFACE_DEPTH := _CELL_SIZE.y
 const SURFACE_DEPTH_DIVISIONS_COUNT := 16
 const SURFACE_ALPHA_END_RATIO := 0.1
 
-export var width: float = _CELL_SIZE.x * 12 setget _set_width
+# TODO: Consider exporting this, and making it configurable?
+var width: float = _CELL_SIZE.x * 12 setget _set_width
 
 var surface_color: Color
 

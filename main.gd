@@ -6,19 +6,6 @@ class_name Main
 # 
 # ----
 # 
-# - Update tower and level logic to support tier start/end positions not being
-#   at 0,1 tile position.
-# - Also support not having a set tier opening width?
-#   - :/ That would require making tiergap logic dynamic...
-# - Play with zoom and wider tier opening.
-#   - But maybe keep same start/end width opening for now.
-# - Create a new sub class for representing where the level start and end
-#   platforms are.
-#   - Shows three positions: left, right, spawn poison.
-#   - But use standard width.
-# 
-# ----
-# 
 # - Fix jerky transition of snow fall.
 #   - Maybe transition with two different copies of the particles?
 #   - Is it possible to stop new emissions of the old particles, but keep the

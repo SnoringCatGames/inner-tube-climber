@@ -2,19 +2,6 @@ extends Node
 
 signal display_resized
 
-const GROUP_NAME_TIER_TILE_MAPS := "tier_tilemaps"
-
-const ASPECT_RATIO_MAX := 1.0 / 1.0
-const ASPECT_RATIO_MIN := 1.0 / 1.75
-const LEVEL_BASE_PLATFORM_WIDTH_CELL_COUNT := 12.0
-const LEVEL_VISIBLE_WIDTH_CELL_COUNT := 15.0
-const LEVEL_MIN_HEIGHT_CELL_COUNT := \
-        LEVEL_VISIBLE_WIDTH_CELL_COUNT / ASPECT_RATIO_MIN
-
-const INPUT_VIBRATE_DURATION_SEC := 0.01
-
-const DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC := 0.1
-
 # DifficultyMode
 var difficulty_mode: int
 var is_giving_haptic_feedback: bool
@@ -41,7 +28,7 @@ var falls_count_since_reaching_level_end := 0
 
 var throttled_size_changed: FuncRef = Time.throttle( \
         funcref(self, "_on_throttled_size_changed"), \
-        DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC)
+        Constants.DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC)
 
 func _init() -> void:
     _load_state()
@@ -125,18 +112,18 @@ func get_game_area_region() -> Rect2:
     var game_area_position := Vector2.INF
     var game_area_size := Vector2.INF
     
-    if aspect_ratio < Global.ASPECT_RATIO_MIN:
+    if aspect_ratio < Constants.ASPECT_RATIO_MIN:
         # Show vertical margin around game area.
         game_area_size = Vector2( \
                 viewport_size.x, \
-                viewport_size.x / Global.ASPECT_RATIO_MIN)
+                viewport_size.x / Constants.ASPECT_RATIO_MIN)
         game_area_position = Vector2( \
                 0.0, \
                 (viewport_size.y - game_area_size.y) * 0.5)
-    elif aspect_ratio > Global.ASPECT_RATIO_MAX:
+    elif aspect_ratio > Constants.ASPECT_RATIO_MAX:
         # Show horizontal margin around game area.
         game_area_size = Vector2( \
-                viewport_size.y * Global.ASPECT_RATIO_MAX, \
+                viewport_size.y * Constants.ASPECT_RATIO_MAX, \
                 viewport_size.y)
         game_area_position = Vector2( \
                 (viewport_size.x - game_area_size.x) * 0.5, \
@@ -157,7 +144,7 @@ func register_main(main: Node) -> void:
 
 func vibrate() -> void:
     if is_giving_haptic_feedback:
-        Input.vibrate_handheld(INPUT_VIBRATE_DURATION_SEC * 1000)
+        Input.vibrate_handheld(Constants.INPUT_VIBRATE_DURATION_SEC * 1000)
 
 func give_button_press_feedback() -> void:
     vibrate()

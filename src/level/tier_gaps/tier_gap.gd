@@ -17,3 +17,8 @@ func _ready() -> void:
 
 func _get_configuration_warning() -> String:
     return configuration_warning
+
+func sync_position_to_previous_tier(previous_tier: Tier) -> void:
+    self.position = \
+            previous_tier.tier_end_position + \
+            Vector2(0.0, Constants.CELL_SIZE.y)

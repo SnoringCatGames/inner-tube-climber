@@ -4,7 +4,8 @@
 [ext_resource path="res://src/level/level.gd" type="Script" id=2]
 [ext_resource path="res://assets/images/signs/signs.png" type="Texture" id=3]
 [ext_resource path="res://src/level/tiers/tier_base.tscn" type="PackedScene" id=4]
-[ext_resource path="res://src/level/tiers/tier_blank.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/level/tiers/tier_empty_walled.tscn" type="PackedScene" id=5]
+
 
 
 [node name="Node2D" type="Node2D"]

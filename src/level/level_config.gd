@@ -1,6 +1,13 @@
 extends Node
 
-const TIER_BLANK_SCENE_PATH := "res://src/level/tiers/tier_blank.tscn"
+const TIER_EMPTY_OPEN_SCENE_PATH := \
+        "res://src/level/tiers/tier_empty_open.tscn"
+const TIER_EMPTY_WALLED_SCENE_PATH := \
+        "res://src/level/tiers/tier_empty_walled.tscn"
+const TIER_EMPTY_WALLED_LEFT_SCENE_PATH := \
+        "res://src/level/tiers/tier_empty_walled_left.tscn"
+const TIER_EMPTY_WALLED_RIGHT_SCENE_PATH := \
+        "res://src/level/tiers/tier_empty_walled_right.tscn"
 
 const TIER_GAP_OPEN_TO_OPEN_SCENE_PATH := \
         "res://src/level/tier_gaps/tier_gap_open_to_open.tscn"
@@ -271,25 +278,6 @@ static func get_value( \
 
 static func get_level_ids() -> Array:
     return _LEVELS.keys()
-
-static func get_tier_size(tier: Tier) -> Vector2:
-    return get_tier_bounding_box(tier).size
-
-static func get_tier_top_position(tier: Tier) -> Vector2:
-    var bounding_box := get_tier_bounding_box(tier)
-    return Vector2(0.0, bounding_box.position.y)
-
-static func get_tier_bounding_box(tier: Tier) -> Rect2:
-    var tile_maps := Utils.get_children_by_type( \
-            tier, \
-            TileMap)
-    var bounding_box: Rect2 = \
-            Geometry.get_tile_map_bounds_in_world_coordinates(tile_maps[0])
-    for tile_map in tile_maps:
-        bounding_box = bounding_box.merge( \
-                Geometry.get_tile_map_bounds_in_world_coordinates(tile_map))
-    bounding_box.position += tier.position
-    return bounding_box
 
 static func get_tier_gap_scene_path( \
         from_openness_type: int,  \

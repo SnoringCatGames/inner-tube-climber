@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/level/tiers/tier.gd" type="Script" id=1]
+[ext_resource path="res://src/level/tier_tile_map.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/level/tier_start.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/level/tier_end.tscn" type="PackedScene" id=4]
+
+[node name="TierBlank" type="Node2D"]
+script = ExtResource( 1 )
+openness_type = 4
+
+[node name="TierTileMap" parent="." instance=ExtResource( 2 )]
+tile_data = PoolIntArray( -4128807, 0, 196608, -4194266, 0, 196608, -39, 0, 196608, -7, 0, 196608, -6, 2, 196610, -5, 2, 196610, -4, 2, 196610, -3, 2, 196610, -2, 2, 196610, -1, 2, 196610, -65536, 2, 196610, -65535, 2, 196610, -65534, 2, 196610, -65533, 2, 196610, -65532, 2, 196610, -65531, 2, 196610, -65530, 0, 196608, -65498, 0, 196608 )
+
+[node name="TierStart" parent="." instance=ExtResource( 3 )]
+position = Vector2( 0, -32 )
+spawn_position_x = 0.0
+
+[node name="TierEnd" parent="." instance=ExtResource( 4 )]
+position = Vector2( 0, -2080 )

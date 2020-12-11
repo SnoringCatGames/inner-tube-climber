@@ -1,7 +1,7 @@
 extends Player
 class_name TuberPlayer
 
-const PLAYER_STUCK_ANIMATION_CENTER_OFFSET := \
+var PLAYER_STUCK_ANIMATION_CENTER_OFFSET := \
         Vector2(0.0, -12.0) * Constants.PLAYER_SIZE_MULTIPLIER
 
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
@@ -71,7 +71,7 @@ func _ready() -> void:
 
 func on_new_tier() -> void:
     tilemaps = get_tree().get_nodes_in_group( \
-                    Global.GROUP_NAME_TIER_TILE_MAPS)
+                    Constants.GROUP_NAME_TIER_TILE_MAPS)
 
 func _apply_movement() -> void:
     if is_stuck:
@@ -508,7 +508,7 @@ func update_light( \
 func get_spawn_position_for_tier( \
         tier: Tier, \
         is_base_tier: bool) -> Vector2:
-    var spawn_position := tier.get_spawn_position()
+    var spawn_position := tier.spawn_position
     spawn_position.y -= Constants.PLAYER_HALF_HEIGHT_DEFAULT
     spawn_position += PLAYER_STUCK_ANIMATION_CENTER_OFFSET
     return spawn_position

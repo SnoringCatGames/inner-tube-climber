@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/level/tiers/tier.gd" type="Script" id=1]
 [ext_resource path="res://src/level/tier_tile_map.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/level/tier_start.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/level/tier_end.tscn" type="PackedScene" id=4]
 
 [node name="Tier5" type="Node2D"]
 script = ExtResource( 1 )
@@ -13,3 +14,7 @@ tile_data = PoolIntArray( -5570599, 0, 8, -5570598, 0, 10, -5570597, 0, 12, -557
 
 [node name="TierStart" parent="." instance=ExtResource( 3 )]
 position = Vector2( 0, -32 )
+spawn_position_x = 0.0
+
+[node name="TierEnd" parent="." instance=ExtResource( 4 )]
+position = Vector2( 0, -2784 )

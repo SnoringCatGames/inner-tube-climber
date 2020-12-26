@@ -112,7 +112,9 @@ func _init_audio_players() -> void:
     
     _update_volume()
 
-func cross_fade_music(next_music_player_index: int) -> void:
+func cross_fade_music( \
+        next_music_player_index: int, \
+        transitions_immediately := false) -> void:
     if fade_out_tween != null:
         on_cross_fade_music_finished()
     if previous_music_player != null and previous_music_player.playing:
@@ -133,6 +135,11 @@ func cross_fade_music(next_music_player_index: int) -> void:
             is_music_enabled else \
             SILENT_VOLUME_DB
     
+    var transition_duration_sec := \
+            0.01 if \
+            transitions_immediately else \
+            MUSIC_CROSS_FADE_DURATION_SEC
+    
     if previous_music_player != null and previous_music_player.playing:
         fade_out_tween = Tween.new()
         add_child(fade_out_tween)
@@ -141,7 +148,7 @@ func cross_fade_music(next_music_player_index: int) -> void:
                 "volume_db", \
                 loud_volume, \
                 SILENT_VOLUME_DB, \
-                MUSIC_CROSS_FADE_DURATION_SEC, \
+                transition_duration_sec, \
                 Tween.TRANS_QUAD, \
                 Tween.EASE_IN)
         fade_out_tween.start()
@@ -157,7 +164,7 @@ func cross_fade_music(next_music_player_index: int) -> void:
             "volume_db", \
             SILENT_VOLUME_DB, \
             loud_volume, \
-            MUSIC_CROSS_FADE_DURATION_SEC, \
+            transition_duration_sec, \
             Tween.TRANS_QUAD, \
             Tween.EASE_OUT)
     fade_in_tween.start()
@@ -174,10 +181,18 @@ func on_cross_fade_music_finished( \
         remove_child(fade_out_tween)
         fade_out_tween.queue_free()
         fade_out_tween = null
+        if previous_music_player != null:
+            previous_music_player.volume_db = SILENT_VOLUME_DB
     if fade_in_tween != null:
         remove_child(fade_in_tween)
         fade_in_tween.queue_free()
         fade_in_tween = null
+        if current_music_player != null:
+            var loud_volume := \
+                    -0.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
+                    is_music_enabled else \
+                    SILENT_VOLUME_DB
+            current_music_player.volume_db = loud_volume
     if previous_music_player != null and \
             previous_music_player != current_music_player:
         previous_music_player.stop()

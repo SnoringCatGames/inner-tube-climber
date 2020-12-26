@@ -9,28 +9,39 @@ var SNOW_DENSITY_MULTIPLIER_POST_STUCK: float = \
 
 const TRANSITION_DURATION_SEC := CameraController.ZOOM_ANIMATION_DURATION_SEC
 
-var snow_screen: SnowScreen
+var active_snow_screen: SnowScreen
+var inactive_snow_screen: SnowScreen
 var snow_density_multiplier_tween: Tween
 var snow_density_multiplier := SNOW_DENSITY_MULTIPLIER_POST_STUCK
+var is_stuck := true
 
 func _enter_tree() -> void:
     snow_density_multiplier_tween = Tween.new()
     add_child(snow_density_multiplier_tween)
     
-    snow_screen = Utils.add_scene( \
+    active_snow_screen = Utils.add_scene( \
+            Global.canvas_layers.game_screen_layer, \
+            SNOW_SCREEN_RESOURCE_PATH, \
+            true, \
+            true)
+    inactive_snow_screen = Utils.add_scene( \
             Global.canvas_layers.game_screen_layer, \
             SNOW_SCREEN_RESOURCE_PATH, \
             true, \
             true)
 
 func destroy() -> void:
-    if snow_screen != null:
-        remove_child(snow_screen)
-        snow_screen.queue_free()
-        snow_screen = null
+    if active_snow_screen != null:
+        remove_child(active_snow_screen)
+        active_snow_screen.queue_free()
+        active_snow_screen = null
+    if inactive_snow_screen != null:
+        remove_child(inactive_snow_screen)
+        inactive_snow_screen.queue_free()
+        inactive_snow_screen = null
 
 func update_windiness(windiness: Vector2) -> void:
-    snow_screen.windiness = windiness
+    active_snow_screen.windiness = windiness
 
 func set_start_state() -> void:
     _interpolate_snow_density_multiplier(SNOW_DENSITY_MULTIPLIER_PRE_STUCK)
@@ -53,6 +64,8 @@ func set_post_stuck_state(animates: bool) -> void:
     else:
         _interpolate_snow_density_multiplier( \
                 SNOW_DENSITY_MULTIPLIER_POST_STUCK)
+    
+    is_stuck = false
 
 func update_for_current_tier( \
         level_id: String, \
@@ -73,6 +86,13 @@ func update_for_current_tier( \
                 tier_id, \
                 "snow_density_multiplier")
     
+    var previous_active_snow_screen := active_snow_screen
+    active_snow_screen = inactive_snow_screen
+    inactive_snow_screen = previous_active_snow_screen
+    
+    active_snow_screen.is_active = true
+    inactive_snow_screen.is_active = false
+    
     # TODO: Revisit this if there ever is a need to tween this.
 #    snow_density_multiplier_tween.stop(self)
 #    snow_density_multiplier_tween.interpolate_method( \
@@ -85,7 +105,9 @@ func update_for_current_tier( \
 #            Tween.EASE_IN_OUT)
 #    snow_density_multiplier_tween.start()
     _interpolate_snow_density_multiplier(next_snow_density_multiplier)
+    
+    active_snow_screen.update_preprocess(is_stuck)
 
 func _interpolate_snow_density_multiplier(value: float) -> void:
     snow_density_multiplier = value
-    snow_screen.snow_density_multiplier = snow_density_multiplier
+    active_snow_screen.snow_density_multiplier = snow_density_multiplier

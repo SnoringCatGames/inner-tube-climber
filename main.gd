@@ -4,25 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# ----
-# 
-# - Fix jerky transition of snow fall.
-#   - Maybe transition with two different copies of the particles?
-#   - Is it possible to stop new emissions of the old particles, but keep the
-#     pre-existing instances?
-#   - Then, I could just start the new particles, without any preprocess.
-# 
-# - Add ability to gradually transition tier config values over the final X
-#   pixels of the tier, before we reach the next tier.
-# 
-# - Have level config affect _POST_STUCK values (not just tier config).
-# 
-# ----
-# 
-# - Test ability to save/load scores and game state on iOS.
-# 
-# - Fix audio not working at app/level start, sometimes.
-# 
 # - Add handing candles/sconces around tier-ratio signs:
 #   - Create candle pixel art.
 #   - Use a particle system to render the flame.
@@ -135,6 +116,9 @@ class_name Main
 # - Add wood-grain texture to gesture buttons.
 # 
 # - Change max-height indicators to be pixel images?
+# 
+# - Test on iOS:
+#   - Ability to save/load scores and game state.
 # 
 # - Create a special tutorial level.
 #   - Pause the level at the start of each tier and show an explanatory
@@ -277,6 +261,11 @@ class_name Main
 #     - Give another indicator to the rating if the user ever looped through
 #       the level 3 total times (independent of fall-count rating).
 # 
+# - Add ability to gradually transition tier config values over the final X
+#   pixels of the tier, before we reach the next tier.
+# 
+# - Have level config affect _POST_STUCK values (not just tier config).
+# 
 # --- Old TODOs from the jam: -------------------------------------
 # 
 # [30]- Add ability to unlock the bounce jump and the double jump.
@@ -340,4 +329,6 @@ func _ready() -> void:
             ScreenType.MAIN_MENU, \
             true)
     # Start playing the default music for the menu screen.
-    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
+    Audio.cross_fade_music( \
+            Audio.MAIN_MENU_MUSIC_PLAYER_INDEX, \
+            true)

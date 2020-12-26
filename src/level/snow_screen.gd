@@ -13,6 +13,7 @@ const _DEFAULT_IN_EDITOR_SIZE := Vector2(480.0, 480.0)
 
 var windiness := Vector2.ZERO setget _set_windiness
 var snow_density_multiplier := 1.0 setget _set_snow_density_multiplier
+var is_active := false setget _set_is_active
 
 var _viewport_size := Vector2.ZERO
 
@@ -41,6 +42,11 @@ func _set_snow_density_multiplier(value: float) -> void:
     if snow_density_multiplier != value:
         snow_density_multiplier = value
         _update_shader_args()
+
+func _set_is_active(value: bool) -> void:
+    is_active = value
+    for particles_node in [$SnowFlakes1, $SnowFlakes2]:
+        particles_node.emitting = is_active
 
 func _update_shader_args() -> void:
     var velocity := \
@@ -124,8 +130,14 @@ func _update_shader_args() -> void:
     for particles_node in [$SnowFlakes1, $SnowFlakes2]:
         particles_node.amount = particle_count
         particles_node.lifetime = particle_duration
-        particles_node.preprocess = particle_duration
         particles_node.visibility_rect = particle_region
         particles_node.process_material.emission_box_extents = emission_extents
         particles_node.process_material.direction = direction
         particles_node.process_material.initial_velocity = shader_speed_value
+
+func update_preprocess(preprocesses: bool) -> void:
+    for particles_node in [$SnowFlakes1, $SnowFlakes2]:
+        particles_node.preprocess = \
+                particles_node.lifetime if \
+                preprocesses else \
+                0.0

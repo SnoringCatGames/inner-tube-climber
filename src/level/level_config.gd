@@ -165,6 +165,11 @@ const _TIERS := {
     },
     "1": {
         scene_path = "res://src/level/tiers/tier_1.tscn",
+        # FIXME: --------------------------------- REMOVE
+        peep_hole_size = {value = Vector2(200.0, 200.0), weight = 0.0},
+        fog_screen_opacity = {value = 0.3, weight = 0.0},
+        snow_density_multiplier = 4.0,
+        windiness = {value = Vector2(2.0, -2.0), weight = 1.0},
     },
     "2": {
         scene_path = "res://src/level/tiers/tier_2.tscn",

@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/level/torch.gd" type="Script" id=1]
+[ext_resource path="res://src/level/torch_flame.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/images/circle-gradient-modified-1024.png" type="Texture" id=3]
+
+[node name="Torch" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="TorchFlame" parent="." instance=ExtResource( 2 )]
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Light2D" type="Light2D" parent="."]
+light_mask = 4
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 3 )
+color = Color( 1, 0.713726, 0.309804, 1 )
+energy = 0.8
+range_layer_min = -100
+range_layer_max = 100
+range_item_cull_mask = 14
+shadow_enabled = true
+shadow_gradient_length = 2.0
+shadow_filter = 1
+shadow_filter_smooth = 4.0
+shadow_item_cull_mask = 30

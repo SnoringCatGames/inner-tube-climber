@@ -4,7 +4,9 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Add handing candles/sconces around tier-ratio signs:
+# >>>>- Add and hook-up torches.
+# 
+# - Add hanging candles/sconces around tier-ratio signs:
 #   - Create candle pixel art.
 #   - Use a particle system to render the flame.
 #   - Have the flame emit light.

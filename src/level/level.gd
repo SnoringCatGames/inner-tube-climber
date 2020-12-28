@@ -714,6 +714,8 @@ func _on_fog_screen_updated() -> void:
     
     $SnowScreenHandler.update_windiness($FogScreenHandler.windiness)
     player.windiness = $FogScreenHandler.windiness
+    current_tier.windiness = $FogScreenHandler.windiness
+    next_tier.windiness = $FogScreenHandler.windiness
     
     # FIXME: -------------------------------- Update for new windiness:
     # - Fires

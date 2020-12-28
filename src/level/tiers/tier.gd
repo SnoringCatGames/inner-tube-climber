@@ -22,6 +22,7 @@ var tier_start_position: Vector2 setget ,_get_tier_start_position
 var tier_end_position: Vector2 setget ,_get_tier_end_position
 var spawn_position: Vector2 setget ,_get_spawn_position
 var size: Vector2 setget ,_get_size
+var windiness: Vector2 setget _set_windiness
 
 var configuration_warning := ""
 
@@ -107,6 +108,10 @@ func _get_configuration_warning() -> String:
 
 func _get_size() -> Vector2:
     return _get_bounding_box().size
+
+func _set_windiness(value: Vector2) -> void:
+    if tier_ratio_sign != null:
+        tier_ratio_sign.windiness = value
 
 func _get_top_position() -> Vector2:
     var bounding_box := _get_bounding_box()

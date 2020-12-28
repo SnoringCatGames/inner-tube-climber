@@ -14,6 +14,8 @@ func _ready() -> void:
     elif tile_maps.size() < 1:
         configuration_warning = "Must define a child TierTileMap."
         update_configuration_warning()
+    
+    z_index = 2
 
 func _get_configuration_warning() -> String:
     return configuration_warning

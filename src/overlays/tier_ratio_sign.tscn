@@ -32,4 +32,4 @@ __meta__ = {
 position = Vector2( 40, 0 )
 
 [node name="RightTorch" parent="." instance=ExtResource( 4 )]
-position = Vector2( -40, 1 )
+position = Vector2( -40, 0 )

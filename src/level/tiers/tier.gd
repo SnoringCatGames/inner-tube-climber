@@ -67,6 +67,8 @@ func _ready() -> void:
     tier_end = Utils.get_child_by_type( \
             self, \
             TierEnd)
+    
+    z_index = 1
 
 func setup( \
         position_or_previous_tier, \

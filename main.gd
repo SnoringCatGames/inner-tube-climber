@@ -4,7 +4,9 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# >>>>- Add and hook-up torches.
+# - Try converting the torch ParticlesMaterials to ShaderMaterials, and then
+#   adding a pixelation step to them.
+# - Add a sparks particle node.
 # 
 # - Add hanging candles/sconces around tier-ratio signs:
 #   - Create candle pixel art.

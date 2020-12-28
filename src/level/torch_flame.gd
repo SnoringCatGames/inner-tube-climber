@@ -9,11 +9,6 @@ const SMOKE_TO_OUTER_FLAME_SPEED_RATIO := 1.0
 
 var windiness := Vector2.ZERO setget _set_windiness
 
-# FIXME: -------------------------------
-# - Add torch light emission node.
-# - Make Player a light occluder for torch light.
-# - Add a sparks particle node.
-
 func _set_windiness(value: Vector2) -> void:
     if windiness != value:
         windiness = value

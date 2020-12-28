@@ -9,6 +9,7 @@ const WINDINESS_MULTIPLIER := Vector2(0.6, 0.3)
 const MAX_OUTER_FLAME_SPEED_PIXELS_PER_SEC := 140.0
 const INITIAL_VELOCITY_DEFAULT_PIXELS_PER_SEC := Vector2(0.0, -106.99)
 const INNER_FLAME_TO_OUTER_FLAME_SPEED_RATIO := 0.655
+const SPARKS_TO_OUTER_FLAME_SPEED_RATIO := 0.5
 const SMOKE_TO_OUTER_FLAME_SPEED_RATIO := 1.0
 
 var windiness := Vector2.ZERO setget _set_windiness
@@ -54,6 +55,9 @@ func _update_shader_args() -> void:
     var inner_flame_shader_speed_value := \
             outer_flame_shader_speed_value * \
             INNER_FLAME_TO_OUTER_FLAME_SPEED_RATIO
+    var sparks_shader_speed_value := \
+            outer_flame_shader_speed_value * \
+            SPARKS_TO_OUTER_FLAME_SPEED_RATIO
     var smoke_shader_speed_value := \
             outer_flame_shader_speed_value * \
             SMOKE_TO_OUTER_FLAME_SPEED_RATIO
@@ -70,3 +74,7 @@ func _update_shader_args() -> void:
             .process_material.direction = direction
     $ViewportContainer/Viewport/Offset/InnerFlame \
             .process_material.initial_velocity = inner_flame_shader_speed_value
+    $ViewportContainer/Viewport/Offset/Sparks \
+            .process_material.direction = direction
+    $ViewportContainer/Viewport/Offset/Sparks \
+            .process_material.initial_velocity = sparks_shader_speed_value

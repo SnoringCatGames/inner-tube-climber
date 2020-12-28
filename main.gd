@@ -4,10 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Make torch flames smaller when wind is stronger.
-# - Add a sparks particle node.
-# - Add a sprite for the torch handle or hanging sconce thing.
-# 
 # - Consider adding a super-fancy depth-based lighting in the style of
 #   Terraria?
 #   - "Block lighting"

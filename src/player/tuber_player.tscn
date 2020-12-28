@@ -13,6 +13,7 @@ polygon = PoolVector2Array( 11.9829, -0.944721, 11.9829, 4.97863, 2.22186, 11.02
 
 [node name="TuberPlayer" type="KinematicBody2D"]
 light_mask = 2
+z_index = 2
 collision_layer = 0
 collision_mask = 3
 script = ExtResource( 2 )

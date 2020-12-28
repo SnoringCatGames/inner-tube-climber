@@ -1,6 +1,10 @@
+tool
 extends Node2D
 class_name TorchFlame
 
+const VIEWPORT_SIZE := Vector2(720.0, 400.0)
+const PIXEL_SIZE := 4.0
+const OFFSET := Vector2(VIEWPORT_SIZE.x / 2.0, 360.0)
 const WINDINESS_MULTIPLIER := Vector2(0.6, 0.3)
 const MAX_OUTER_FLAME_SPEED_PIXELS_PER_SEC := 140.0
 const INITIAL_VELOCITY_DEFAULT_PIXELS_PER_SEC := Vector2(0.0, -106.99)
@@ -8,6 +12,18 @@ const INNER_FLAME_TO_OUTER_FLAME_SPEED_RATIO := 0.655
 const SMOKE_TO_OUTER_FLAME_SPEED_RATIO := 1.0
 
 var windiness := Vector2.ZERO setget _set_windiness
+
+func _ready() -> void:
+    $ViewportContainer.rect_size = VIEWPORT_SIZE
+    $ViewportContainer.rect_position = -OFFSET
+    $ViewportContainer/Viewport/Offset.position = OFFSET
+    $ViewportContainer/Viewport/Offset.position.x -= PIXEL_SIZE / 2.0
+    $ViewportContainer.material.set_shader_param( \
+            "viewport_size", \
+            VIEWPORT_SIZE)
+    $ViewportContainer.material.set_shader_param( \
+            "pixel_size", \
+            PIXEL_SIZE)
 
 func _set_windiness(value: Vector2) -> void:
     if windiness != value:
@@ -42,12 +58,15 @@ func _update_shader_args() -> void:
             outer_flame_shader_speed_value * \
             SMOKE_TO_OUTER_FLAME_SPEED_RATIO
     
-    $Smoke.process_material.direction = direction
-    $Smoke.process_material.initial_velocity = \
-            smoke_shader_speed_value
-    $OuterFlame.process_material.direction = direction
-    $OuterFlame.process_material.initial_velocity = \
-            outer_flame_shader_speed_value
-    $InnerFlame.process_material.direction = direction
-    $InnerFlame.process_material.initial_velocity = \
-            inner_flame_shader_speed_value
+    $ViewportContainer/Viewport/Offset/Smoke \
+            .process_material.direction = direction
+    $ViewportContainer/Viewport/Offset/Smoke \
+            .process_material.initial_velocity = smoke_shader_speed_value
+    $ViewportContainer/Viewport/Offset/OuterFlame \
+            .process_material.direction = direction
+    $ViewportContainer/Viewport/Offset/OuterFlame \
+            .process_material.initial_velocity = outer_flame_shader_speed_value
+    $ViewportContainer/Viewport/Offset/InnerFlame \
+            .process_material.direction = direction
+    $ViewportContainer/Viewport/Offset/InnerFlame \
+            .process_material.initial_velocity = inner_flame_shader_speed_value

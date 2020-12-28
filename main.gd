@@ -4,28 +4,9 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Try converting the torch ParticlesMaterials to ShaderMaterials, and then
-#   adding a pixelation step to them.
+# - Make torch flames smaller when wind is stronger.
 # - Add a sparks particle node.
-# 
-# - Add hanging candles/sconces around tier-ratio signs:
-#   - Create candle pixel art.
-#   - Use a particle system to render the flame.
-#   - Have the flame emit light.
-#     - Orangish colored.
-#     - Have this light also render on the player (unlike the light emitting
-#       from the player).
-#   - Use a separate particle system for occasional random sparks falling
-#     downward from candle.
-#   - Configure a concept of windiness in each level, and have this affect the
-#     direction of the flame and sparks.
-#     - windiness_multiplier
-#     - Configure as a simple float on each tier and level; sign indicates
-#       direction.
-#     - Also have this affect snow fall that will be implemented later.
-# 
-# - Consider adding a noise system for swirly fog effects in the gloom screen.
-#   - Then use a related fluidy noise system for swirling snow fall?
+# - Add a sprite for the torch handle or hanging sconce thing.
 # 
 # - Consider adding a super-fancy depth-based lighting in the style of
 #   Terraria?
@@ -39,9 +20,11 @@ class_name Main
 #     - Read comments for improvements?
 # 
 # - Add particle systems:
-#   - https://docs.godotengine.org/en/stable/tutorials/2d/particle_systems_2d.html
-#   - Snow spray effect from feet when jumping, landing, walking.
-#   - Ice spray effect when bouncing on wall.
+#   - No:
+#     - https://docs.godotengine.org/en/stable/tutorials/2d/particle_systems_2d.html
+#     - Snow spray effect from feet when jumping, landing, walking.
+#     - Ice spray effect when bouncing on wall.
+#   >>> Instead, create pre-baked sprite sheets using Pixel FX Designer.
 # 
 # - PROBLEM: Walk into wall, tap jump, tap repeatedly into wall, ascend
 #   infinitely.

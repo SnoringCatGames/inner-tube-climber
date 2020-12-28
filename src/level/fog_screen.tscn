@@ -11,7 +11,7 @@ shader_param/secondary_color = Color( 0.321569, 0.784314, 1, 1 )
 shader_param/opacity = 1.0
 shader_param/secondary_color_opacity_multiplier = 1.0
 shader_param/region_size = Vector2( 768, 512 )
-shader_param/windiness = Vector3( 0.5, 0, 0 )
+shader_param/windiness = Vector2( 0.5, 0 )
 shader_param/hole_position = Vector2( 384, 256 )
 shader_param/hole_radius = 128.0
 

@@ -4,6 +4,7 @@ class_name Player
 var velocity := Vector2.ZERO
 
 var animator: PlayerAnimator
+var surface_state := PlayerSurfaceState.new()
 
 func _ready() -> void:
     var animators: Array = Utils.get_children_by_type( \

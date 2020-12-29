@@ -42,7 +42,7 @@ const PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO := 1.3
 
 var is_stuck := true setget _set_is_stuck,_get_is_stuck
 
-var surface_state := PlayerSurfaceState.new()
+var effects_animator: EffectsAnimator
 
 # Array<TileMap>
 var tilemaps := []
@@ -63,6 +63,8 @@ var last_floor_departure_time := 0.0
 var windiness := Vector2.ZERO
 
 func _ready() -> void:
+    effects_animator = EffectsAnimator.new(self, Global.level)
+    
     $CollisionShape2D.shape.radius = \
             Constants.PLAYER_CAPSULE_RADIUS_DEFAULT
     $CollisionShape2D.shape.height = \
@@ -470,6 +472,10 @@ func _process_animation() -> void:
             animator.jump_rise()
         else:
             animator.jump_fall()
+    
+    if surface_state.just_left_floor and \
+            surface_state.entered_air_by_jumping:
+        effects_animator.play(EffectAnimation.JUMP)
 
 # Updates sounds for the current frame.
 func _process_sfx() -> void:
@@ -490,9 +496,9 @@ func _set_is_stuck(value: bool) -> void:
     is_stuck = value
     if is_stuck != was_stuck:
         if is_stuck:
-            $TuberAnimator.stuck()
+            animator.stuck()
         else:
-            $TuberAnimator.jump_fall()
+            animator.jump_fall()
 
 func _get_is_stuck() -> bool:
     return is_stuck

@@ -114,10 +114,12 @@ class _Timeout:
 
 func throttle( \
         callback: FuncRef, \
-        interval_sec: float) -> FuncRef:
+        interval_sec: float, \
+        invokes_at_end := true) -> FuncRef:
     var throttler := _Throttler.new( \
             callback, \
-            interval_sec)
+            interval_sec, \
+            invokes_at_end)
     var throttled_callback := funcref( \
             throttler, \
             "on_call")
@@ -134,18 +136,21 @@ func erase_throttle(throttled_callback: FuncRef) -> bool:
 class _Throttler:
     var _callback: FuncRef
     var _interval_sec: float
+    var _invokes_at_end: bool
     
     var _trigger_callback_callback := funcref(self, "_trigger_callback")
     var _last_timeout_id := -1
     
-    var _last_call_time_sec := -1.0
+    var _last_call_time_sec := -INF
     var _is_callback_scheduled := false
     
     func _init( \
             callback: FuncRef, \
-            interval_sec: float) -> void:
+            interval_sec: float, \
+            invokes_at_end: bool) -> void:
         self._callback = callback
         self._interval_sec = interval_sec
+        self._invokes_at_end = invokes_at_end
     
     func on_call() -> void:
         if !_is_callback_scheduled:
@@ -154,7 +159,7 @@ class _Throttler:
             var next_call_time_sec := _last_call_time_sec + _interval_sec
             if current_call_time_sec > next_call_time_sec:
                 _trigger_callback()
-            else:
+            elif _invokes_at_end:
                 _last_timeout_id = Time.set_timeout( \
                         _trigger_callback_callback, \
                         next_call_time_sec - current_call_time_sec)

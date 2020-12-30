@@ -18,6 +18,8 @@ const STAND_PLAYBACK_RATE := 1.0
 const STUCK_NAME := "Stuck"
 const STUCK_PLAYBACK_RATE := 1.0
 
+var scale_multiplier := Vector2.ONE
+
 func _enter_tree() -> void:
     face_right()
 
@@ -55,20 +57,25 @@ func _show_sprite(animation_name: String) -> void:
             Utils.error()
 
 func face_left() -> void:
-    var scale := \
-            PlayerAnimator.FLIPPED_HORIZONTAL_SCALE if \
+    var scale_x_sign := \
+            -1 if \
             FACES_RIGHT_BY_DEFAULT else \
-            PlayerAnimator.UNFLIPPED_HORIZONTAL_SCALE
-    scale *= Constants.PLAYER_SIZE_MULTIPLIER
-    set_scale(scale)
+            1
+    _update_scale(scale_x_sign)
 
 func face_right() -> void:
-    var scale := \
-            PlayerAnimator.UNFLIPPED_HORIZONTAL_SCALE if \
+    var scale_x_sign := \
+            1 if \
             FACES_RIGHT_BY_DEFAULT else \
-            PlayerAnimator.FLIPPED_HORIZONTAL_SCALE
+            -1
+    _update_scale(scale_x_sign)
+
+func _update_scale(scale_x_sign: int) -> void:
+    var scale := Vector2(scale_x_sign, 1.0)
     scale *= Constants.PLAYER_SIZE_MULTIPLIER
-    set_scale(scale)
+    scale.x *= scale_multiplier.x
+    scale.y *= scale_multiplier.y
+    self.scale = scale
 
 func run() -> void:
     _play_animation( \

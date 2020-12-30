@@ -326,6 +326,7 @@ func _release_player() -> void:
 
 func _destroy_player() -> void:
     if player != null:
+        player.destroy()
         player.queue_free()
         remove_child(player)
         player = null

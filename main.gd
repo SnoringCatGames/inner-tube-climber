@@ -4,28 +4,6 @@ class_name Main
 ###############################################################################
 ### MAIN TODO LIST: ###
 # 
-# - Add particle systems:
-#   - No:
-#     - https://docs.godotengine.org/en/stable/tutorials/2d/particle_systems_2d.html
-#     - Snow spray effect from feet when jumping, landing, walking.
-#     - Ice spray effect when bouncing on wall.
-#   - Rather than using Particle2Ds, create pre-baked sprite sheets using
-#     Pixel FX Designer.
-#   - Jump
-#     - Moving slightly sideways away from direction player's facing.
-#   - Land
-#     - Sideways outward, from bottom, ~floating upward and dispersing slowing~
-#   - Walk
-#     - Sideways slightly (away from direction of walk)
-#   - Bounce off wall
-#     - Vertically outward, floating away from wall ~and dispersing slowly~
-#   - Definitely use gravity for each of these effects, since they are
-#     immitating ice/snow kicked up and then falling back.
-# 
-# - Add vertical stretch and squash just after leaving ground and hitting ground.
-#   - Implement this as a simple scale.
-#   - Don't create new animation sprites.
-# 
 # - PROBLEM: Walk into wall, tap jump, tap repeatedly into wall, ascend
 #   infinitely.
 #   - POSSIBLE SOLUTIONS:

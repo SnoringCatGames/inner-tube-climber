@@ -40,9 +40,24 @@ const JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC := 0.1
 const LIGHT_IMAGE_SIZE := Vector2(1024.0, 1024.0)
 const PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO := 1.3
 
-var is_stuck := true setget _set_is_stuck,_get_is_stuck
+const PLAY_WALK_EFFECT_THROTTLE_INTERVAL_SEC := 0.15
 
-var effects_animator: EffectsAnimator
+const STRETCH_DURATION_SEC := 0.2
+const SQUASH_DURATION_SEC := 0.2
+
+const STRETCH_SCALE_MULTIPLIER := Vector2(0.4, 1.5)
+const SQUASH_SCALE_MULTIPLIER := Vector2(1.7, 0.5)
+
+var STRETCH_DISPLACEMENT := Vector2( \
+        0.0, \
+        Constants.PLAYER_HALF_HEIGHT_DEFAULT * \
+                (STRETCH_SCALE_MULTIPLIER.y - 1.0))
+var SQUASH_DISPLACEMENT := Vector2( \
+        0.0, \
+        Constants.PLAYER_HALF_HEIGHT_DEFAULT * \
+                (1.0 - SQUASH_SCALE_MULTIPLIER.y))
+
+var is_stuck := true setget _set_is_stuck,_get_is_stuck
 
 # Array<TileMap>
 var tilemaps := []
@@ -62,7 +77,22 @@ var last_floor_departure_time := 0.0
 
 var windiness := Vector2.ZERO
 
+var effects_animator: EffectsAnimator
+
+var stretch_tween: Tween
+var squash_tween: Tween
+
+var throttled_play_walk_effect: FuncRef = Time.throttle( \
+        funcref(self, "_play_walk_effect"), \
+        PLAY_WALK_EFFECT_THROTTLE_INTERVAL_SEC, \
+        false)
+
 func _ready() -> void:
+    stretch_tween = Tween.new()
+    add_child(stretch_tween)
+    squash_tween = Tween.new()
+    add_child(squash_tween)
+    
     effects_animator = EffectsAnimator.new(self, Global.level)
     
     $CollisionShape2D.shape.radius = \
@@ -70,6 +100,9 @@ func _ready() -> void:
     $CollisionShape2D.shape.height = \
             Constants.PLAYER_CAPSULE_HEIGHT_DEFAULT
     on_new_tier()
+
+func destroy() -> void:
+    effects_animator.destroy()
 
 func on_new_tier() -> void:
     tilemaps = get_tree().get_nodes_in_group( \
@@ -453,6 +486,11 @@ func _process_animation() -> void:
     if is_stuck:
         return
     
+    _update_player_animation()
+    _update_squash_and_stretch()
+    _update_effects_animations()
+
+func _update_player_animation() -> void:
     # Flip the horizontal direction of the animation according to which way the
     # player is facing.
     if surface_state.horizontal_facing_sign == 1:
@@ -475,7 +513,100 @@ func _process_animation() -> void:
     
     if surface_state.just_left_floor and \
             surface_state.entered_air_by_jumping:
-        effects_animator.play(EffectAnimation.JUMP)
+        if abs(velocity.x) > 1:
+            effects_animator.play( \
+                    EffectAnimation.JUMP_SIDEWAYS, \
+                    surface_state.horizontal_facing_sign)
+        else:
+            effects_animator.play(EffectAnimation.JUMP_VERTICAL)
+
+func _update_squash_and_stretch() -> void:
+    # FIXME: ---------------------
+    
+    
+    
+    if surface_state.just_left_floor and surface_state.entered_air_by_jumping:
+        # Stretch.
+        var stretch_duration_sec := \
+                STRETCH_DURATION_SEC * Time.physics_framerate_multiplier
+        var duration_a := stretch_duration_sec * 0.25
+        var duration_b := stretch_duration_sec - duration_a
+        stretch_tween.interpolate_property( \
+                $TuberAnimator, \
+                "scale_multiplier", \
+                Vector2.ONE, \
+                STRETCH_SCALE_MULTIPLIER, \
+                duration_a, \
+                Tween.TRANS_QUART, \
+                Tween.EASE_OUT)
+        stretch_tween.interpolate_property( \
+                $TuberAnimator, \
+                "position", \
+                Vector2.ZERO, \
+                STRETCH_DISPLACEMENT, \
+                duration_a, \
+                Tween.TRANS_QUART, \
+                Tween.EASE_OUT)
+        stretch_tween.interpolate_property( \
+                $TuberAnimator, \
+                "scale_multiplier", \
+                STRETCH_SCALE_MULTIPLIER, \
+                Vector2.ONE, \
+                duration_b, \
+                Tween.TRANS_QUAD, \
+                Tween.EASE_OUT, \
+                duration_a)
+        stretch_tween.interpolate_property( \
+                $TuberAnimator, \
+                "position", \
+                STRETCH_DISPLACEMENT, \
+                Vector2.ZERO, \
+                duration_b, \
+                Tween.TRANS_QUAD, \
+                Tween.EASE_OUT, \
+                duration_a)
+        stretch_tween.start()
+    
+    if surface_state.just_left_air and surface_state.is_touching_floor:
+        # Squash.
+        var squash_duration_sec := \
+                SQUASH_DURATION_SEC * Time.physics_framerate_multiplier
+        squash_tween.interpolate_property( \
+                $TuberAnimator, \
+                "scale_multiplier", \
+                SQUASH_SCALE_MULTIPLIER, \
+                Vector2.ONE, \
+                squash_duration_sec, \
+                Tween.TRANS_QUART, \
+                Tween.EASE_OUT)
+        squash_tween.interpolate_property( \
+                $TuberAnimator, \
+                "position", \
+                SQUASH_DISPLACEMENT, \
+                Vector2.ZERO, \
+                squash_duration_sec, \
+                Tween.TRANS_QUART, \
+                Tween.EASE_OUT)
+        squash_tween.start()
+
+func _update_effects_animations() -> void:
+    if surface_state.just_touched_floor:
+        effects_animator.play(EffectAnimation.LAND)
+    
+    if surface_state.just_touched_wall and !surface_state.is_touching_floor:
+        effects_animator.play( \
+                EffectAnimation.WALL_BOUNCE, \
+                -1 if surface_state.is_touching_left_wall else 1)
+    
+    if surface_state.just_touched_ceiling:
+        effects_animator.play(EffectAnimation.CEILING_HIT)
+    
+    if surface_state.is_touching_floor and velocity.x != 0.0:
+        throttled_play_walk_effect.call_func()
+
+func _play_walk_effect() -> void:
+    if surface_state.is_touching_floor:
+        effects_animator.play(EffectAnimation.WALK)
 
 # Updates sounds for the current frame.
 func _process_sfx() -> void:

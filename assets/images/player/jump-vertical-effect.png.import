@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/jump-effect.png-72d9175e70082ada0079451c5db5ef32.stex"
+path="res://.import/jump-vertical-effect.png-f02a0cedab72175d2b42f08d1330192f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/player/jump-effect.png"
-dest_files=[ "res://.import/jump-effect.png-72d9175e70082ada0079451c5db5ef32.stex" ]
+source_file="res://assets/images/player/jump-vertical-effect.png"
+dest_files=[ "res://.import/jump-vertical-effect.png-f02a0cedab72175d2b42f08d1330192f.stex" ]
 
 [params]
 

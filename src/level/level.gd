@@ -631,7 +631,7 @@ func _on_entered_new_tier() -> void:
     
     if was_final_tier_completed:
         Audio.play_sound(Sound.TIER_COMPLETE_FINAL)
-        _on_final_tier_completed()
+        Global.falls_count_since_reaching_level_end = 0
     else:
         Audio.play_sound(Sound.TIER_COMPLETE)
     
@@ -725,9 +725,6 @@ func _on_fog_screen_updated() -> void:
     player.windiness = $FogScreenHandler.windiness
     current_tier.windiness = $FogScreenHandler.windiness
     next_tier.windiness = $FogScreenHandler.windiness
-    
-    # FIXME: -------------------------------- Update for new windiness:
-    # - Fires
 
 func _update_score_for_height_change(height_delta_pixels: float) -> void:
     score += \
@@ -747,10 +744,6 @@ func _update_score_for_tier_change() -> void:
         _:
             Utils.error()
     score += tier_score_for_difficulty * cooldown_indicator.multiplier
-
-func _on_final_tier_completed() -> void:
-    Global.falls_count_since_reaching_level_end = 0
-    # FIXME: ------------------
 
 func update_displays() -> void:
     Global.debug_panel.visible = Global.is_debug_panel_shown

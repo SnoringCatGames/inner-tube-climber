@@ -66,7 +66,6 @@ var tilemaps := []
 var just_triggered_jump := false
 var is_rising_from_jump := false
 var jump_count := 0
-# FIXME: Add double jumps after reaching a certain tier.
 var max_jump_count := 1
 
 var has_hit_wall_since_pressing_move := false
@@ -527,10 +526,6 @@ func _update_player_animation() -> void:
             effects_animator.play(EffectAnimation.JUMP_VERTICAL)
 
 func _update_squash_and_stretch() -> void:
-    # FIXME: ---------------------
-    
-    
-    
     if surface_state.just_left_floor and surface_state.entered_air_by_jumping:
         # Stretch.
         var stretch_duration_sec := \

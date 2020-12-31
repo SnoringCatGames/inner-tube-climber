@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/tuber_land.wav-3ef5e911c04d8d9b006f21ad05de00ea.sample"
+path="res://.import/jump_input.wav-103fd2b15545fe15e88dfff03b663d5b.sample"
 
 [deps]
 
-source_file="res://assets/sfx/tuber_land.wav"
-dest_files=[ "res://.import/tuber_land.wav-3ef5e911c04d8d9b006f21ad05de00ea.sample" ]
+source_file="res://assets/sounds/jump_input.wav"
+dest_files=[ "res://.import/jump_input.wav-103fd2b15545fe15e88dfff03b663d5b.sample" ]
 
 [params]
 

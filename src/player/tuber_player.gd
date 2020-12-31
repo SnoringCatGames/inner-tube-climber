@@ -41,6 +41,7 @@ const LIGHT_IMAGE_SIZE := Vector2(1024.0, 1024.0)
 const PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO := 1.3
 
 const PLAY_WALK_EFFECT_THROTTLE_INTERVAL_SEC := 0.15
+const PLAY_WALK_SOUND_THROTTLE_INTERVAL_SEC := 0.25
 
 const STRETCH_DURATION_SEC := 0.2
 const SQUASH_DURATION_SEC := 0.2
@@ -85,6 +86,11 @@ var squash_tween: Tween
 var throttled_play_walk_effect: FuncRef = Time.throttle( \
         funcref(self, "_play_walk_effect"), \
         PLAY_WALK_EFFECT_THROTTLE_INTERVAL_SEC, \
+        false)
+
+var throttled_play_walk_sound: FuncRef = Time.throttle( \
+        funcref(self, "_play_walk_sound"), \
+        PLAY_WALK_SOUND_THROTTLE_INTERVAL_SEC, \
         false)
 
 func _ready() -> void:
@@ -609,18 +615,36 @@ func _play_walk_effect() -> void:
         effects_animator.play(EffectAnimation.WALK)
 
 # Updates sounds for the current frame.
-func _process_sfx() -> void:
+func _process_sounds() -> void:
     if is_stuck:
         return
     
     if just_triggered_jump:
-        Audio.jump_sfx_player.play()
+        Audio.play_sound(Sound.JUMP)
     
-    if surface_state.just_touched_floor or surface_state.just_touched_ceiling:
-        Audio.land_sfx_player.play()
+    if surface_state.just_touched_floor or \
+            surface_state.just_touched_ceiling:
+        Audio.play_sound(Sound.LAND)
     
     if surface_state.just_touched_wall:
-        Audio.bounce_sfx_player.play()
+        Audio.play_sound(Sound.BOUNCE)
+    
+    if Input.is_action_just_pressed("jump"):
+        Audio.play_sound(Sound.JUMP_INPUT)
+    
+    if Input.is_action_just_pressed("move_left") or \
+            Input.is_action_just_pressed("move_right"):
+        Audio.play_sound(Sound.SIDEWAYS_INPUT)
+    
+    if surface_state.is_touching_floor and velocity.x != 0.0:
+        throttled_play_walk_sound.call_func()
+
+func _play_walk_sound() -> void:
+    if surface_state.is_touching_floor:
+        var sound: int = LevelConfig.get_walk_sound_for_tile( \
+                surface_state.touched_tile_map.tile_set, \
+                surface_state.touched_tile_map_cell)
+        Audio.play_sound(sound)
 
 func _set_is_stuck(value: bool) -> void:
     var was_stuck := is_stuck

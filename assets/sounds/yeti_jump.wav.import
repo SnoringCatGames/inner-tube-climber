@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/tuber_jump.wav-1e8aff85a6586285e1dc11c820ce733b.sample"
+path="res://.import/yeti_jump.wav-503e45d6ba113e0c696218122164580d.sample"
 
 [deps]
 
-source_file="res://assets/sfx/tuber_jump.wav"
-dest_files=[ "res://.import/tuber_jump.wav-1e8aff85a6586285e1dc11c820ce733b.sample" ]
+source_file="res://assets/sounds/yeti_jump.wav"
+dest_files=[ "res://.import/yeti_jump.wav-503e45d6ba113e0c696218122164580d.sample" ]
 
 [params]
 

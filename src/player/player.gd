@@ -19,7 +19,7 @@ func _physics_process(delta_sec: float) -> void:
     
     _process_actions(delta_sec)
     _process_animation()
-    _process_sfx()
+    _process_sounds()
     
     _apply_movement()
 
@@ -47,7 +47,7 @@ func _process_animation() -> void:
     pass
 
 # Updates sounds for the current frame.
-func _process_sfx() -> void:
+func _process_sounds() -> void:
     pass
 
 static func get_surface_collision( \

@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/menu_select.wav-72ca7618f79bfc2ed2cd3ef4af0187ad.sample"
+path="res://.import/score.wav-5c31e74f056eb56ad0e1f9e0e0ad3ac3.sample"
 
 [deps]
 
-source_file="res://assets/sfx/menu_select.wav"
-dest_files=[ "res://.import/menu_select.wav-72ca7618f79bfc2ed2cd3ef4af0187ad.sample" ]
+source_file="res://assets/sounds/score.wav"
+dest_files=[ "res://.import/score.wav-5c31e74f056eb56ad0e1f9e0e0ad3ac3.sample" ]
 
 [params]
 

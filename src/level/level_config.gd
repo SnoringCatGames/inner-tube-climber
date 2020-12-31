@@ -290,9 +290,21 @@ static func get_tier_gap_scene_path( \
     return LevelConfig.OPENNESS_TO_TIER_GAP_SCENE_PATH \
             [from_openness_type][to_openness_type]
 
+static func get_is_tile_slippery( \
+        tile_set: TileSet, \
+        tile_id: int) -> bool:
+    return SLIPPERY_TILES.has(tile_set.tile_get_name(tile_id))
+
 static func get_friction_for_tile( \
         tile_set: TileSet, \
         tile_id: int) -> float:
     return SLIPPERY_FRICTION_MULTIPLIER if \
-            SLIPPERY_TILES.has(tile_set.tile_get_name(tile_id)) else \
+            get_is_tile_slippery(tile_set, tile_id) else \
             NON_SLIPPERY_FRICTION_MULTIPLIER
+
+static func get_walk_sound_for_tile( \
+        tile_set: TileSet, \
+        tile_id: int) -> int:
+    return Sound.WALK_ICE if \
+            get_is_tile_slippery(tile_set, tile_id) else \
+            Sound.WALK_SNOW

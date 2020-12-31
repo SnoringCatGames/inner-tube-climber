@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/tier_complete.wav-900c7048b3e83c1cb01ab7106230859e.sample"
+
+[deps]
+
+source_file="res://assets/sounds/tier_complete.wav"
+dest_files=[ "res://.import/tier_complete.wav-900c7048b3e83c1cb01ab7106230859e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

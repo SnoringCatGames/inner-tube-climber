@@ -3,6 +3,37 @@ class_name Main
 
 ###############################################################################
 ### MAIN TODO LIST: ###
+#
+# - Add a more interesting game-over sound effect?
+# 
+# - Make snow and ice particle effect animations more directional, away from
+#   the direction of motion.
+# 
+# - Make the camera-bottom fall boundary more forgiving.
+# 
+# - Fix issue with music not always resetting correctly on game over and going
+#   back to the main menu.
+#   - Ahhh, happening when hitting Exit within pause menu.
+# 
+# - Create additional animations for various events:
+#   - Vibrate screen when falling?
+#     - Or just on gameover?
+#   - Do something special on game over.
+#   - Reaching next tier.
+#     - Confetti?
+#     - 
+#   - _on_final_tier_completed
+#     - A message?
+#   - Also, animate the cooldown text with a single pulse of red, each time the
+#     multiplier value changes.
+#   - Add lighting effects to animations.
+# 
+# - Add wood-grain texture to gesture buttons.
+# 
+# - Change max-height indicators to be pixel images?
+#   - Test this; if they still sometimes misalign when they should be at the
+#     same height, then create a third, combined image to show when they are at
+#     the same height.
 # 
 # - PROBLEM: Walk into wall, tap jump, tap repeatedly into wall, ascend
 #   infinitely.
@@ -14,73 +45,6 @@ class_name Main
 #     - BETTER: Force a minimum horizontal speed when bouncing, which should
 #       prevent the player from being able to make it back to the same wall at
 #       a higher position than before.
-# 
-# - Create a couple new platform types:
-#   - They crumble away after a short delay after being landed on.
-#   - Create a version for both snow platforms and ice platforms (not for solid
-#     ground tiles).
-#   - This will require detecting all tiles in a given platform.
-#     - Should be easy though, given all my custom surface-parsing logic.
-#   - Will need to create crumble start, build, and fall-away animations.
-#   - Will need to dynamically update TileMap.
-#   - Update multiplier cooldown to be dynamic depending on the type of tile
-#     being walked on?
-#     - Want it to at least represent the time remaining until a platform would
-#       crumble.
-#     - This could just mean making all multiplier cooldowns match the
-#       crumble-tile duration.
-# 
-# - Make new sound effects:
-#   - For button press, that is more subtle.
-#     - Still use the old one on start-game press though.
-#   - For game over (lost all lives), that is different than fall sound effect.
-#     - Dies irae?
-#   - Foot-snow-crunching sound effect when walking.
-#   - Hard-ice-tapping sound effect when walking on ice.
-#   - For move-sideways event triggering.
-#     - Will help inform player when switching directions.
-#   - For "move_left" / "move_right" just pressed.
-#   - For _on_last_tier_completed.
-#   - Multiplier value increased.
-#   - Multiplier value reset.
-#   - Test out adding a very subtle sound effect for each score-board tween
-#     number update.
-#   - For landing on a crumble tile.
-#   - For a crumble tile about to collapse (maybe just a long sfx that lasts
-#     for the entire crumble tile duration).
-#   - For a crumble tile falling away.
-# 
-# - Create additional animations for various events:
-#   - Bouncing off wall?
-#     - Radiating circle pulse?
-#   - Landing-on/jumping-off snow?
-#     - Spray/circular-sector-outward-triangle-shape of snow dots?
-#   - Vibrate screen when falling?
-#     - Or just on gameover?
-#   - Do something special on game over.
-#   - Reaching next tier.
-#     - Confetti?
-#     - 
-#   - _on_final_tier_completed
-#     - A message?
-#   - Snow-falling effect.
-#     - Have this appear on specific level+tier configs.
-#     - Have different parameters or types for this:
-#       - Number of flakes
-#       - Size of flakes
-#       - Speed of flakes
-#       - Direction of flakes
-#       - Amount of random course deviation for flakes
-#       - Can then emulate strong wind flurries with fast, sideways, straight
-#         trajectories, vs calm with fat flakes, slow, downward, and lots of
-#         deviation.
-#   - Also, animate the cooldown text with a single pulse of red, each time the
-#     multiplier value changes.
-#   - Add lighting effects to animations.
-# 
-# - Add wood-grain texture to gesture buttons.
-# 
-# - Change max-height indicators to be pixel images?
 # 
 # - Test on iOS:
 #   - Ability to save/load scores and game state.
@@ -173,8 +137,6 @@ class_name Main
 #       secondary opacities).
 #     - Light energy.
 #     - Snow density.
-# - Mobile control idea: touch either corner to move sideways, swipe slightly
-#   up on either to jump.
 # 
 # - Fix/redo player art:
 #   - Make art at new x1.5 size, so we don't have scaling artifacts.
@@ -230,6 +192,25 @@ class_name Main
 #   pixels of the tier, before we reach the next tier.
 # 
 # - Have level config affect _POST_STUCK values (not just tier config).
+# 
+# - Create crumbling-block platform types:
+#   - They crumble away after a short delay after being landed on.
+#   - Create a version for both snow platforms and ice platforms (not for solid
+#     ground tiles).
+#   - This will require detecting all tiles in a given platform.
+#     - Should be easy though, given all my custom surface-parsing logic.
+#   - Will need to create crumble start, build, and fall-away animations.
+#   - Will need to dynamically update TileMap.
+#   - Update multiplier cooldown to be dynamic depending on the type of tile
+#     being walked on?
+#     - Want it to at least represent the time remaining until a platform would
+#       crumble.
+#     - This could just mean making all multiplier cooldowns match the
+#       crumble-tile duration.
+#   - Show a special little burst particle animation and sound effect just
+#     before the tile falles, to help warn the player.
+#   - Also, a sound effect for landing on crumbly block, and for when the block
+#     falls away.
 # 
 # --- Old TODOs from the jam: -------------------------------------
 # 

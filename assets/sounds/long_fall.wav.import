@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/yeti_land.wav-6168c35f467e29957a1d4384ce877bad.sample"
+path="res://.import/long_fall.wav-09722f5ed9cbc93ee4c9861206180207.sample"
 
 [deps]
 
-source_file="res://assets/sfx/yeti_land.wav"
-dest_files=[ "res://.import/yeti_land.wav-6168c35f467e29957a1d4384ce877bad.sample" ]
+source_file="res://assets/sounds/long_fall.wav"
+dest_files=[ "res://.import/long_fall.wav-09722f5ed9cbc93ee4c9861206180207.sample" ]
 
 [params]
 

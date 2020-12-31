@@ -37,7 +37,7 @@ func _on_LevelSelector_item_selected(index: int) -> void:
     selected_level_id = level_id
 
 func _on_StartGameButton_pressed():
-    Global.give_button_press_feedback()
+    Global.give_button_press_feedback(true)
     Nav.set_screen_is_open( \
             ScreenType.GAME, \
             true)

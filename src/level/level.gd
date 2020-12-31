@@ -235,7 +235,7 @@ func _fall() -> void:
     Global.falls_count_since_reaching_level_end += 1
     cooldown_indicator.stop_cooldown()
     
-    Audio.game_over_sfx_player.play()
+    Audio.play_sound(Sound.FALL)
     
     if lives_count > 0:
         var current_tier_position := current_tier.position
@@ -272,19 +272,26 @@ func _fall() -> void:
                 level_id, \
                 high_score)
         
-        Audio.current_music_player.stop()
-        Audio.game_over_sfx_player.connect( \
+        Sound.MANIFEST[Sound.FALL].player.connect( \
                 "finished", \
                 self, \
-                "_on_game_over_sfx_finished")
+                "_on_last_fall_sound_finished")
 
-func _on_game_over_sfx_finished() -> void:
-    destroy()
-    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
-    Audio.game_over_sfx_player.disconnect( \
+func _on_last_fall_sound_finished() -> void:
+    Audio.current_music_player.stop()
+    Sound.MANIFEST[Sound.GAME_OVER].player.connect( \
             "finished", \
             self, \
-            "_on_game_over_sfx_finished")
+            "_on_game_over_sound_finished")
+    Audio.play_sound(Sound.GAME_OVER)
+
+func _on_game_over_sound_finished() -> void:
+    destroy()
+    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
+    Sound.MANIFEST[Sound.GAME_OVER].player.disconnect( \
+            "finished", \
+            self, \
+            "_on_game_over_sound_finished")
     Nav.set_screen_is_open( \
             ScreenType.MAIN_MENU, \
             true)
@@ -622,10 +629,11 @@ func _on_entered_new_tier() -> void:
             current_tier_id)
     _update_margin_color()
     
-    Audio.new_tier_sfx_player.play()
-    
     if was_final_tier_completed:
+        Audio.play_sound(Sound.TIER_COMPLETE_FINAL)
         _on_final_tier_completed()
+    else:
+        Audio.play_sound(Sound.TIER_COMPLETE)
     
     _update_score_for_tier_change()
     

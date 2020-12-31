@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/tuber_jump.wav-501a7c9ec7f12c7a18e5891ddcc37add.sample"
+
+[deps]
+
+source_file="res://assets/sounds/tuber_jump.wav"
+dest_files=[ "res://.import/tuber_jump.wav-501a7c9ec7f12c7a18e5891ddcc37add.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

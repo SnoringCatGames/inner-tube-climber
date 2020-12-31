@@ -192,6 +192,12 @@ func check_for_updates( \
             step_start_height != -INF and \
             max_platform_height - step_start_height > step_height
     
+    if has_step_duration_passed:
+        Audio.play_sound(Sound.MULTIPLIER_INCREASE)
+    
+    if has_cooldown_expired and is_multiplier_active:
+        Audio.play_sound(Sound.MULTIPLIER_DECREASE)
+    
     if has_max_platform_height_increased:
         if !is_multiplier_active:
             step_start_actual_time_sec = Time.elapsed_play_time_actual_sec

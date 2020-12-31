@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/new_tier.wav-b1a0857ab3eb00fb29b42988c1a30754.sample"
+path="res://.import/blip.wav-f04b54a539fcc90f6efead7606dd13d2.sample"
 
 [deps]
 
-source_file="res://assets/sfx/new_tier.wav"
-dest_files=[ "res://.import/new_tier.wav-b1a0857ab3eb00fb29b42988c1a30754.sample" ]
+source_file="res://assets/sounds/blip.wav"
+dest_files=[ "res://.import/blip.wav-f04b54a539fcc90f6efead7606dd13d2.sample" ]
 
 [params]
 

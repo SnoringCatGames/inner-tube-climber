@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/yeti_yell.wav-dd68a7acc80e2d47f6ba5629b87b1bd8.sample"
+path="res://.import/yeti_land.wav-59aa58a42e9b3cc9721c2457b93a4d9f.sample"
 
 [deps]
 
-source_file="res://assets/sfx/yeti_yell.wav"
-dest_files=[ "res://.import/yeti_yell.wav-dd68a7acc80e2d47f6ba5629b87b1bd8.sample" ]
+source_file="res://assets/sounds/yeti_land.wav"
+dest_files=[ "res://.import/yeti_land.wav-59aa58a42e9b3cc9721c2457b93a4d9f.sample" ]
 
 [params]
 

@@ -146,9 +146,12 @@ func vibrate() -> void:
     if is_giving_haptic_feedback:
         Input.vibrate_handheld(Constants.INPUT_VIBRATE_DURATION_SEC * 1000)
 
-func give_button_press_feedback() -> void:
+func give_button_press_feedback(is_fancy := false) -> void:
     vibrate()
-    Audio.button_press_sfx_player.play()
+    if is_fancy:
+        Audio.play_sound(Sound.MENU_SELECT_FANCY)
+    else:
+        Audio.play_sound(Sound.MENU_SELECT)
 
 func _set_is_debug_panel_shown(is_visible: bool) -> void:
     is_debug_panel_shown = is_visible

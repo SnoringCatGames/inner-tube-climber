@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/long_fall.wav-8be6cc205ce8e2a97a16c4d328f6ab67.sample"
+path="res://.import/new_tier.wav-1a2cfa3411b105699407cfb85307b487.sample"
 
 [deps]
 
-source_file="res://assets/sfx/long_fall.wav"
-dest_files=[ "res://.import/long_fall.wav-8be6cc205ce8e2a97a16c4d328f6ab67.sample" ]
+source_file="res://assets/sounds/new_tier.wav"
+dest_files=[ "res://.import/new_tier.wav-1a2cfa3411b105699407cfb85307b487.sample" ]
 
 [params]
 

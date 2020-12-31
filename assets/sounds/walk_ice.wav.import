@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/walk_ice.wav-d80b537dd9caf4f08e25882189cd0acc.sample"
+
+[deps]
+
+source_file="res://assets/sounds/walk_ice.wav"
+dest_files=[ "res://.import/walk_ice.wav-d80b537dd9caf4f08e25882189cd0acc.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

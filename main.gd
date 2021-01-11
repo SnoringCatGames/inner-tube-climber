@@ -14,3 +14,10 @@ func _ready() -> void:
     Audio.cross_fade_music( \
             Audio.MAIN_MENU_MUSIC_PLAYER_INDEX, \
             true)
+    
+    # FIXME: --------------------------
+    Database.authenticate()
+
+func _process(_delta_sec: float) -> void:
+    if Input.is_action_just_pressed("screenshot"):
+        Utils.take_screenshot()

@@ -49,6 +49,18 @@ static func concat( \
     for i in range(other_size):
         result[old_result_size + i] = other[i]
 
+static func join( \
+        array, \
+        delimiter := ",") -> String:
+    assert(array is Array or array is PoolStringArray)
+    var count: int = array.size()
+    var result := ""
+    for index in range(array.size() - 1):
+        result += array[index] + delimiter
+    if count > 0:
+        result += array[count - 1]
+    return result
+
 static func array_to_set(array: Array) -> Dictionary:
     var set := {}
     for element in array:
@@ -319,6 +331,9 @@ static func get_is_ios_device() -> bool:
 static func get_is_browser() -> bool:
     return OS.get_name() == "HTML5"
 
+static func get_is_windows_device() -> bool:
+    return OS.get_name() == "Windows"
+
 static func get_is_mac_device() -> bool:
     return OS.get_name() == "OSX"
 
@@ -447,3 +462,25 @@ static func mix_colors( \
         v += color.v * normalized_weight
     
     return Color.from_hsv(h, s, v, 1.0)
+
+static func get_datetime_string() -> String:
+    var datetime := OS.get_datetime()
+    return "%s-%s-%s-%s-%s-%s" % [
+        datetime.year,
+        datetime.month,
+        datetime.day,
+        datetime.hour,
+        datetime.minute,
+        datetime.second,
+    ]
+
+func take_screenshot() -> void:
+    var directory = Directory.new()
+    if !directory.dir_exists("user://screenshots"):
+        directory.open("user://")
+        directory.make_dir("screenshots")
+    
+    var image := get_viewport().get_texture().get_data()
+    image.flip_y()
+    var path := "user://screenshots/screenshot-%s.png" % get_datetime_string()
+    image.save_png(path)

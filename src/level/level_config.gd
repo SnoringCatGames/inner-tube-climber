@@ -162,6 +162,7 @@ const _TIERS := {
         scroll_speed_multiplier = 0.0,
         scroll_speed_min = 0.0,
         scroll_speed_max = 0.0,
+        version = "0.1.0",
     },
     "1": {
         scene_path = "res://src/level/tiers/tier_1.tscn",
@@ -170,33 +171,42 @@ const _TIERS := {
         fog_screen_opacity = {value = 0.3, weight = 0.0},
         snow_density_multiplier = 4.0,
         windiness = {value = Vector2(2.0, -2.0), weight = 1.0},
+        version = "0.1.0",
     },
     "2": {
         scene_path = "res://src/level/tiers/tier_2.tscn",
+        version = "0.1.0",
     },
     "3": {
         scene_path = "res://src/level/tiers/tier_3.tscn",
+        version = "0.1.0",
     },
     "4": {
         scene_path = "res://src/level/tiers/tier_4.tscn",
+        version = "0.1.0",
     },
     "5": {
         scene_path = "res://src/level/tiers/tier_5.tscn",
+        version = "0.1.0",
     },
     "6": {
         scene_path = "res://src/level/tiers/tier_6.tscn",
+        version = "0.1.0",
     },
     "7": {
         scene_path = "res://src/level/tiers/tier_7.tscn",
+        version = "0.1.0",
     },
 }
 
 const _LEVELS := {
     "1": {
         tiers = ["1", "2", "3", "4", "5", "6", "7"],
+        version = "0.1.0",
     },
     "2": {
         tiers = ["6", "3"],
+        version = "0.1.0",
     },
 }
 

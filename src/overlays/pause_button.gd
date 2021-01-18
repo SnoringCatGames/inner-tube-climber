@@ -37,9 +37,7 @@ func _on_TextureButton_button_up():
     modulate.a = OPACITY_UNPRESSED
 
 func _pause() -> void:
-    Nav.set_screen_is_open( \
-            ScreenType.PAUSE, \
-            true)
+    Nav.open(ScreenType.PAUSE)
 
 func _on_TextureButton_gui_input(event: InputEvent) -> void:
     var is_mouse_down: bool = \

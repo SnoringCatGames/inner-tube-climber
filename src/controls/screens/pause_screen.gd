@@ -55,7 +55,7 @@ func _update_stats() -> void:
     _add_row( \
             "Time", \
             _get_time_string_from_seconds( \
-                    Time.elapsed_play_time_actual_sec - level.start_time))
+                    Time.elapsed_play_time_actual_sec - level.level_start_time))
 
 func _get_time_string_from_seconds(time_sec: float) -> String:
     var time_str := ""
@@ -86,15 +86,11 @@ func _get_time_string_from_seconds(time_sec: float) -> String:
 
 func _on_SettingsButton_pressed():
     Global.give_button_press_feedback()
-    Nav.set_screen_is_open( \
-            ScreenType.SETTINGS, \
-            true)
+    Nav.open(ScreenType.SETTINGS)
 
 func _on_ExitLevelButton_pressed():
     Global.give_button_press_feedback()
-    Nav.set_screen_is_open( \
-            ScreenType.MAIN_MENU, \
-            true)
+    Nav.open(ScreenType.MAIN_MENU)
 
 func _on_ResumeButton_pressed():
     Global.give_button_press_feedback()

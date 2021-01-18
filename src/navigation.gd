@@ -12,20 +12,40 @@ const LEVEL_SELECT_SCREEN_PATH := \
         "res://src/controls/screens/level_select_screen.tscn"
 
 const SCREEN_SLIDE_DURATION_SEC := 0.3
+const SESSION_END_TIMEOUT_SEC := 2.0
 
 # Dictionary<ScreenType, Screen>
 var screens := {}
 # Array<Screen>
 var active_screen_stack := []
 
+func _ready() -> void:
+    get_tree().set_auto_accept_quit(false)
+    Analytics.connect( \
+            "session_end", \
+            self, \
+            "_on_session_end")
+    Analytics.start_session()
+
 func _notification(notification: int) -> void:
     if notification == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
         # Handle the Android back button to navigate within the app instead of
         # quitting the app.
         if get_active_screen_type() == ScreenType.MAIN_MENU:
-            get_tree().quit()
+            Analytics.end_session()
+            Time.set_timeout( \
+                    funcref(self, "_on_session_end"), \
+                    SESSION_END_TIMEOUT_SEC)
         else:
             call_deferred("close_current_screen")
+    elif notification == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+        Analytics.end_session()
+        Time.set_timeout( \
+                funcref(self, "_on_session_end"), \
+                SESSION_END_TIMEOUT_SEC)
+
+func _on_session_end() -> void:
+    get_tree().quit()
 
 func create_screens() -> void:
     screens[ScreenType.MAIN_MENU] = Utils.add_scene( \
@@ -64,7 +84,19 @@ func create_screens() -> void:
             true, \
             false)
 
-func set_screen_is_open( \
+func open(screen_type: int) -> void:
+    _set_screen_is_open(screen_type, true)
+
+func close_current_screen() -> void:
+    assert(!active_screen_stack.empty())
+    _set_screen_is_open( \
+            get_active_screen_type(), \
+            false)
+
+func get_active_screen_type() -> int:
+    return active_screen_stack.back().type
+
+func _set_screen_is_open( \
         screen_type: int, \
         is_open: bool) -> void:
     var next_screen: Screen
@@ -147,6 +179,9 @@ func set_screen_is_open( \
     
     if next_screen != null:
         next_screen._on_activated()
+    
+    if next_screen != null:
+        Analytics.screen(ScreenType.get_type_string(next_screen.type))
 
 func _on_screen_slide_completed( \
         _object: Object, \
@@ -164,12 +199,3 @@ func _on_screen_slide_completed( \
     if next_screen != null:
         next_screen.visible = true
         next_screen.position = Vector2.ZERO
-
-func close_current_screen() -> void:
-    assert(!active_screen_stack.empty())
-    set_screen_is_open( \
-            get_active_screen_type(), \
-            false)
-
-func get_active_screen_type() -> int:
-    return active_screen_stack.back().type

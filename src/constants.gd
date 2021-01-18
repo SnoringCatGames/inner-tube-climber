@@ -1,5 +1,13 @@
 extends Node
 
+const GOOGLE_ANALYTICS_ID := "UA-186405125-1"
+
+const APP_NAME := "Inner-Tube Climber"
+const APP_ID := "dev.levi.inner_tube_climber"
+const APP_VERSION := "0.1.0"
+
+const SCORE_VERSION := "0.1.0"
+
 const MAIN_FONT_NORMAL: Font = \
         preload("res://assets/fonts/main_font_normal.tres")
 

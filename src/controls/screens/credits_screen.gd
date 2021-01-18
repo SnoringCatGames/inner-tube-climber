@@ -10,9 +10,7 @@ func _init().(TYPE) -> void:
 
 func _on_third_party_licenses_button_pressed():
     Global.give_button_press_feedback()
-    Nav.set_screen_is_open( \
-            ScreenType.THIRD_PARTY_LICENSES, \
-            true)
+    Nav.open(ScreenType.THIRD_PARTY_LICENSES)
 
 func _on_levi_link_pressed():
     Global.give_button_press_feedback()

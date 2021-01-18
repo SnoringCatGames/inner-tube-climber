@@ -10,10 +10,9 @@ _Don't make this repo public! It contains app-secret data._
 -   [DefleMask](https://deflemask.com/) was used to create the music.
 -   [Trello](https://trello.com/b/GvuTgtRC/ludum-dare-47) was used for brainstorming and planning.
 -   [ShaderV](https://github.com/arkology/ShaderV) was used for the custom noise-based fog shader.
--   [NativeLib](https://github.com/DrMoriarty/nativelib) was used to inter-operate with native libraries for Android and iOS.
 -   [Pixel FX Designer](https://codemanu.itch.io/particle-fx-designer) was used for a couple collision particle effects.
--   [Facebook Login for Gaming](https://developers.facebook.com/docs/games/gaming-services/login/).
--   [Firebase](https://firebase.google.com/).
+-   [Crypto UUID v4](https://github.com/Yukitty/godot-addon-crypto_uuid_v4).
+-   [Google Analytics](https://analytics.google.com).
 
 ## Licenses
 

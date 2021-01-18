@@ -48,7 +48,8 @@ var current_tier_index := -1
 var has_input_been_pressed := false
 var is_game_playing := false
 var tiers_count_since_falling := 0
-var start_time := -INF
+var level_start_time := -INF
+var tier_start_time := -INF
 
 var player: TuberPlayer
 var player_height: float setget ,_get_player_height
@@ -142,7 +143,7 @@ func start( \
         level_id: String, \
         tier_id := START_TIER_ID) -> void:
     self.level_id = level_id
-    self.start_time = Time.elapsed_play_time_actual_sec
+    self.level_start_time = Time.elapsed_play_time_actual_sec
     visible = true
     lives_count = LevelConfig.get_level_config(level_id).lives_count
     falls_count = 0
@@ -153,6 +154,11 @@ func start( \
             Audio.START_MUSIC_INDEX)
     Audio.cross_fade_music(Audio.current_music_player_index)
     score_boards.visible = true
+    
+    Analytics.event( \
+            "level", \
+            "start", \
+            level_id + "v" + LevelConfig._LEVELS[level_id].version)
 
 func _physics_process(_delta_sec: float) -> void:
     _delta_sec *= Time.physics_framerate_multiplier
@@ -237,6 +243,13 @@ func _fall() -> void:
     
     Audio.play_sound(Sound.FALL)
     
+    Analytics.event( \
+            "level", \
+            "fall", \
+            current_tier_id + "v" + \
+                    LevelConfig._TIERS[current_tier_id].version, \
+            Time.elapsed_play_time_actual_sec - tier_start_time)
+    
     if lives_count > 0:
         var current_tier_position := current_tier.position
         
@@ -276,6 +289,12 @@ func _fall() -> void:
                 "finished", \
                 self, \
                 "_on_last_fall_sound_finished")
+        
+        Analytics.event( \
+                "score", \
+                "v" + Constants.SCORE_VERSION, \
+                level_id + "v" + LevelConfig._LEVELS[level_id].version, \
+                int(score))
 
 func _on_last_fall_sound_finished() -> void:
     Audio.current_music_player.stop()
@@ -292,9 +311,7 @@ func _on_game_over_sound_finished() -> void:
             "finished", \
             self, \
             "_on_game_over_sound_finished")
-    Nav.set_screen_is_open( \
-            ScreenType.MAIN_MENU, \
-            true)
+    Nav.open(ScreenType.MAIN_MENU)
     Nav.screens[ScreenType.GAME].destroy_level()
 
 func _add_player(is_base_tier := false) -> void:
@@ -414,6 +431,7 @@ func _start_new_tier( \
         tier_id := START_TIER_ID, \
         tier_position := Vector2.ZERO, \
         music_player_index := Audio.START_MUSIC_INDEX) -> void:
+    tier_start_time = Time.elapsed_play_time_actual_sec
     start_tier_id = tier_id
     current_tier_id = tier_id
     
@@ -550,6 +568,14 @@ func _start_new_tier( \
     is_game_playing = true
 
 func _on_entered_new_tier() -> void:
+    Analytics.event( \
+            "tier", \
+            "end", \
+            current_tier_id + "v" + \
+                    LevelConfig._TIERS[current_tier_id].version, \
+            Time.elapsed_play_time_actual_sec - tier_start_time)
+    
+    tier_start_time = Time.elapsed_play_time_actual_sec
     tier_count += 1
     tiers_count_since_falling += 1
     

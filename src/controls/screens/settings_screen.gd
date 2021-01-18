@@ -293,9 +293,7 @@ func _on_difficulty_pressed() -> void:
 
 func _on_CreditsButton_pressed() -> void:
     Global.give_button_press_feedback()
-    Nav.set_screen_is_open( \
-            ScreenType.CREDITS, \
-            true)
+    Nav.open(ScreenType.CREDITS)
 
 func _update_level_displays() -> void:
     if Global.level != null:

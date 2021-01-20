@@ -21,41 +21,36 @@ func _update_stats() -> void:
         stats_container.remove_child(row)
         row.queue_free()
     
-    _add_row( \
-            "Level", \
-            level.level_id)
-    var tier_ratio_label := "%s / %s" % [
-        level.current_tier_index + 1, \
-        LevelConfig.get_level_config(level.level_id).tiers.size(),
-    ]
-    _add_row( \
-            "Tier", \
-            tier_ratio_label)
-    _add_row( \
-            "Current score", \
-            str(int(level.score)))
-    _add_row( \
-            "High score", \
-            str(SaveState.get_high_score_for_level(level.level_id)))
-    _add_row( \
-            "Multiplier", \
-            "x%s" % level.cooldown_indicator.multiplier)
-    _add_row( \
-            "Speed", \
-            str(level.get_node("CameraHandler").speed_index + 1))
-    _add_row( \
-            "Difficulty", \
-            DifficultyMode.get_type_string(Global.difficulty_mode))
-    _add_row( \
-            "Lives", \
+    var row_data := [
+        ["Level", level.level_id],
+        ["Tier", \
+            "%s / %s" % [
+                level.current_tier_index + 1, \
+                LevelConfig.get_level_config(level.level_id).tiers.size(),
+            ]],
+        ["Current score", str(int(level.score))],
+        ["High score", \
+            str(SaveState.get_high_score_for_level(level.level_id))],
+        ["Multiplier", \
+            "x%s" % level.cooldown_indicator.multiplier],
+        ["Speed", \
+            str(level.get_node("CameraHandler").speed_index + 1)],
+        ["Difficulty", \
+            DifficultyMode.get_type_string(Global.difficulty_mode)],
+        ["Lives", \
             "%s / %s" % [
                     level.lives_count,
                     level.lives_count + level.falls_count,
-            ])
-    _add_row( \
-            "Time", \
+            ]],
+        ["Time", \
             _get_time_string_from_seconds( \
-                    Time.elapsed_play_time_actual_sec - level.level_start_time))
+                    Time.elapsed_play_time_actual_sec - \
+                    level.level_start_time)],
+    ]
+    var is_odd := true
+    for data in row_data:
+        _add_row(data[0], data[1], is_odd)
+        is_odd = !is_odd
 
 func _get_time_string_from_seconds(time_sec: float) -> String:
     var time_str := ""
@@ -84,10 +79,6 @@ func _get_time_string_from_seconds(time_sec: float) -> String:
     
     return time_str
 
-func _on_SettingsButton_pressed():
-    Global.give_button_press_feedback()
-    Nav.open(ScreenType.SETTINGS)
-
 func _on_ExitLevelButton_pressed():
     Global.give_button_press_feedback()
     Nav.open(ScreenType.MAIN_MENU)
@@ -103,7 +94,8 @@ func _on_RestartButton_pressed():
 
 func _add_row( \
         key: String, \
-        value: String) -> KeyValueRow:
+        value: String, \
+        is_odd_row: bool) -> KeyValueRow:
     var row: KeyValueRow = Utils.add_scene( \
             $FullScreenPanel/VBoxContainer/CenteredPanel/ \
                     ScrollContainer/CenterContainer/VBoxContainer/Stats, \
@@ -112,4 +104,5 @@ func _add_row( \
             true)
     row.key = key
     row.value = value
+    row.is_odd_row = is_odd_row
     return row

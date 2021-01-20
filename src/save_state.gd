@@ -5,6 +5,7 @@ const HIGH_SCORES_SECTION_KEY := "high_scores"
 const SETTINGS_SECTION_KEY := "settings"
 
 const CLIENT_ID_KEY := "cliend_id"
+const AGREED_TO_TERMS_KEY := "agreed_to_terms"
 const DIFFICULTY_KEY := "difficulty"
 const IS_GIVING_HAPTIC_FEEDBACK_KEY := "is_giving_haptic_feedback"
 const IS_DEBUG_PANEL_SHOWN_KEY := "is_debug_panel_shown"

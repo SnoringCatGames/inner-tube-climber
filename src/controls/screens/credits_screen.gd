@@ -2,8 +2,6 @@ extends Screen
 class_name CreditsScreen
 
 const TYPE := ScreenType.CREDITS
-const LEVI_URL := "https://levi.dev"
-const GODOT_URL := "https://godotengine.org"
 
 func _init().(TYPE) -> void:
     pass
@@ -14,8 +12,20 @@ func _on_third_party_licenses_button_pressed():
 
 func _on_levi_link_pressed():
     Global.give_button_press_feedback()
-    OS.shell_open(LEVI_URL)
+    OS.shell_open(Constants.LEVI_URL)
 
 func _on_godot_link_pressed():
     Global.give_button_press_feedback()
-    OS.shell_open(GODOT_URL)
+    OS.shell_open(Constants.GODOT_URL)
+
+func _on_PrivacyPolicyLink_pressed():
+    Global.give_button_press_feedback()
+    OS.shell_open(Constants.PRIVACY_POLICY_URL)
+
+func _on_TermsAndConditionsLink_pressed():
+    Global.give_button_press_feedback()
+    OS.shell_open(Constants.TERMS_AND_CONDITIONS_URL)
+
+func _on_SupportLink_pressed():
+    Global.give_button_press_feedback()
+    OS.shell_open(Constants.SUPPORT_EMAIL)

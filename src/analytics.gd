@@ -171,6 +171,11 @@ func _trigger_collect( \
     var body := payload
     var entry := _AnalyticsEntry.new(payload)
     
+    if !Global.agreed_to_terms:
+        # User hasn't agreed to data collection. Try again later.
+        _retry_queue.push_back(entry)
+        return
+    
     var request := HTTPRequest.new()
     request.use_threads = true
     request.connect( \

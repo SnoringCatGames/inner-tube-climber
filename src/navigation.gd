@@ -10,6 +10,12 @@ const THIRD_PARTY_LICENSES_SCREEN_PATH := \
 const CREDITS_SCREEN_PATH := "res://src/controls/screens/credits_screen.tscn"
 const LEVEL_SELECT_SCREEN_PATH := \
         "res://src/controls/screens/level_select_screen.tscn"
+const DATA_AGREEMENT_SCREEN_PATH := \
+        "res://src/controls/screens/data_agreement_screen.tscn"
+const RATE_APP_SCREEN_PATH := \
+        "res://src/controls/screens/rate_app_screen.tscn"
+const GAME_OVER_SCREEN_PATH := \
+        "res://src/controls/screens/game_over_screen.tscn"
 
 const SCREEN_SLIDE_DURATION_SEC := 0.3
 const SESSION_END_TIMEOUT_SEC := 2.0
@@ -81,6 +87,21 @@ func create_screens() -> void:
     screens[ScreenType.LEVEL_SELECT] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             LEVEL_SELECT_SCREEN_PATH, \
+            true, \
+            false)
+    screens[ScreenType.DATA_AGREEMENT] = Utils.add_scene( \
+            Global.canvas_layers.menu_screen_layer, \
+            DATA_AGREEMENT_SCREEN_PATH, \
+            true, \
+            false)
+    screens[ScreenType.RATE_APP] = Utils.add_scene( \
+            Global.canvas_layers.menu_screen_layer, \
+            RATE_APP_SCREEN_PATH, \
+            true, \
+            false)
+    screens[ScreenType.GAME_OVER] = Utils.add_scene( \
+            Global.canvas_layers.menu_screen_layer, \
+            GAME_OVER_SCREEN_PATH, \
             true, \
             false)
 

@@ -5,8 +5,16 @@ const GOOGLE_ANALYTICS_ID := "UA-186405125-1"
 const APP_NAME := "Inner-Tube Climber"
 const APP_ID := "dev.levi.inner_tube_climber"
 const APP_VERSION := "0.1.0"
-
 const SCORE_VERSION := "0.1.0"
+
+const LEVI_URL := "https://levi.dev"
+const GODOT_URL := "https://godotengine.org"
+const TERMS_AND_CONDITIONS_URL := "https://docs.google.com/document/d/1g1W4F2nJqJsIPKOwRGlFJi4IGj5q1ae7upYOTnVtfyI/preview"
+const PRIVACY_POLICY_URL := "https://docs.google.com/document/d/1kH48Xn62wFnZuy8wFmrsr4lKJ-k3wU-MnqFpYdhwBCc/preview"
+# FIXME:
+const ANDROID_APP_STORE_URL := "http://"
+const IOS_APP_STORE_URL := "https://"
+const SUPPORT_EMAIL := "support@levi.dev"
 
 const MAIN_FONT_NORMAL: Font = \
         preload("res://assets/fonts/main_font_normal.tres")
@@ -38,7 +46,11 @@ var WALL_COLOR := Color.from_hsv(0.611, 0.43, 0.6, 1.0)
 #273149
 var BACKGROUND_DARKEST_COLOR := Color.from_hsv(0.617, 0.47, 0.29, 1.0)
 #146363
-var BUTTON_COLOR := Color.from_hsv(0.5, 0.8, 0.39, 1.0) 
+var BUTTON_COLOR := Color.from_hsv(0.5, 0.8, 0.39, 1.0)
+#273149
+var SCREEN_BACKGROUND_COLOR := Color.from_hsv(0.617, 0.47, 0.29, 1.0)
+var KEY_VALUE_EVEN_ROW_COLOR := Color.from_hsv( \
+        SCREEN_BACKGROUND_COLOR.h, 0.1, 0.9, 0.05)
 
 var INDICATOR_GREEN_COLOR := Color.from_hsv(0.569, 0.78, 0.68, 1.0)
 var INDICATOR_BLUE_COLOR := Color.from_hsv(0.472, 0.40, 0.77, 1.0)

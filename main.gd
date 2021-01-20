@@ -7,7 +7,10 @@ func _enter_tree() -> void:
     Nav.create_screens()
 
 func _ready() -> void:
-    Nav.open(ScreenType.MAIN_MENU)
+    if Global.agreed_to_terms:
+        Nav.open(ScreenType.MAIN_MENU)
+    else:
+        Nav.open(ScreenType.DATA_AGREEMENT)
     # Start playing the default music for the menu screen.
     Audio.cross_fade_music( \
             Audio.MAIN_MENU_MUSIC_PLAYER_INDEX, \

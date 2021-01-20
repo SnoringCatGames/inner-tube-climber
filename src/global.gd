@@ -2,6 +2,7 @@ extends Node
 
 signal display_resized
 
+var agreed_to_terms: bool
 # DifficultyMode
 var difficulty_mode: int
 var is_giving_haptic_feedback: bool
@@ -34,6 +35,10 @@ func _init() -> void:
     _load_state()
 
 func _load_state() -> void:
+    agreed_to_terms = SaveState.get_setting( \
+            SaveState.AGREED_TO_TERMS_KEY, \
+            false)
+    
     difficulty_mode = SaveState.get_setting( \
             SaveState.DIFFICULTY_KEY, \
             DifficultyMode.MODERATE)
@@ -80,6 +85,12 @@ func _load_state() -> void:
             true)
     Audio.is_sound_effects_enabled = SaveState.get_setting( \
             SaveState.IS_SOUND_EFFECTS_ENABLED_KEY, \
+            true)
+
+func set_agreed_to_terms() -> void:
+    agreed_to_terms = true
+    SaveState.set_setting( \
+            SaveState.AGREED_TO_TERMS_KEY, \
             true)
 
 func _enter_tree() -> void:

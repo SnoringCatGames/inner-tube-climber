@@ -1,0 +1,164 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/controls/full_screen_panel.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/controls/screens/rate_app_screen.gd" type="Script" id=4]
+[ext_resource path="res://assets/fonts/main_font_xl.tres" type="DynamicFont" id=11]
+[ext_resource path="res://src/controls/nav_bar.tscn" type="PackedScene" id=12]
+
+[node name="RateAppScreen" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="FullScreenPanel" parent="." instance=ExtResource( 3 )]
+margin_right = 480.0
+margin_bottom = 480.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel"]
+margin_right = 480.0
+margin_bottom = 612.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 8.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NavBar" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 12 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 480.0
+margin_bottom = 128.0
+text = "Please rate me!"
+
+[node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 132.0
+margin_right = 480.0
+margin_bottom = 612.0
+stretches_vertically = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel"]
+margin_right = 480.0
+margin_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
+margin_right = 480.0
+margin_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
+margin_left = 80.0
+margin_top = 29.0
+margin_right = 400.0
+margin_bottom = 451.0
+rect_min_size = Vector2( 280, 0 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
+margin_right = 320.0
+margin_bottom = 146.0
+rect_min_size = Vector2( 0, 80 )
+
+[node name="Label2" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer"]
+margin_right = 320.0
+margin_bottom = 59.0
+text = "I need your rating to help my app succeed!"
+align = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacer" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer"]
+margin_left = 160.0
+margin_top = 63.0
+margin_right = 160.0
+margin_bottom = 83.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="Label3" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer"]
+margin_top = 87.0
+margin_right = 320.0
+margin_bottom = 146.0
+text = "You can also give me feedback at support@levi.dev."
+align = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
+margin_left = 160.0
+margin_top = 150.0
+margin_right = 160.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 0, 30 )
+size_flags_horizontal = 4
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
+margin_top = 184.0
+margin_right = 320.0
+margin_bottom = 388.0
+
+[node name="RateAppButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+margin_right = 320.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 320, 100 )
+size_flags_horizontal = 4
+custom_fonts/font = ExtResource( 11 )
+text = "Rate app!"
+
+[node name="Spacer" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+margin_left = 160.0
+margin_top = 104.0
+margin_right = 160.0
+margin_bottom = 104.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="SendEmailButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+margin_left = 60.0
+margin_top = 108.0
+margin_right = 260.0
+margin_bottom = 152.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 4
+text = "Send email!"
+
+[node name="Spacer2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+margin_left = 160.0
+margin_top = 156.0
+margin_right = 160.0
+margin_bottom = 156.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="KeepPlayingButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+margin_left = 60.0
+margin_top = 160.0
+margin_right = 260.0
+margin_bottom = 204.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 4
+text = "Just keep playing!"
+
+[node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
+margin_left = 160.0
+margin_top = 392.0
+margin_right = 160.0
+margin_bottom = 422.0
+rect_min_size = Vector2( 0, 30 )
+size_flags_horizontal = 4
+size_flags_vertical = 3
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/RateAppButton" to="." method="_on_RateAppButton_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/SendEmailButton" to="." method="_on_SendEmailButton_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/KeepPlayingButton" to="." method="_on_KeepPlayingButton_pressed"]

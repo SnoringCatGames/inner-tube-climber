@@ -3,12 +3,12 @@
 [ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/images/logo.png" type="Texture" id=2]
 [ext_resource path="res://src/controls/full_screen_panel.tscn" type="PackedScene" id=3]
-[ext_resource path="res://src/controls/screens/main_menu_screen.gd" type="Script" id=4]
-[ext_resource path="res://src/intro_animation/slope_animation_control.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/controls/screens/game_over_screen.gd" type="Script" id=4]
+[ext_resource path="res://src/intro_animation/stuck_animation_control.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/fonts/main_font_xl.tres" type="DynamicFont" id=11]
 [ext_resource path="res://src/controls/nav_bar.tscn" type="PackedScene" id=12]
 
-[node name="MainMenuScreen" type="Node2D"]
+[node name="GameOverScreen" type="Node2D"]
 script = ExtResource( 4 )
 
 [node name="FullScreenPanel" parent="." instance=ExtResource( 3 )]
@@ -99,7 +99,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 size_flags_stretch_ratio = 3.0
 
-[node name="SlopeAnimationControl" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2" instance=ExtResource( 6 )]
+[node name="StuckAnimationControl" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2" instance=ExtResource( 5 )]
 margin_top = 120.0
 margin_bottom = 120.0
 rect_scale = Vector2( 4, 4 )

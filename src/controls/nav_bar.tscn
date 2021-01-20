@@ -1,10 +1,17 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://src/controls/nav_bar.gd" type="Script" id=1]
 [ext_resource path="res://assets/images/icons/left_caret_hover.png" type="Texture" id=2]
 [ext_resource path="res://assets/images/icons/left_caret_normal.png" type="Texture" id=3]
 [ext_resource path="res://assets/images/icons/left_caret_active.png" type="Texture" id=4]
-[ext_resource path="res://assets/fonts/main_font_normal.tres" type="DynamicFont" id=5]
+[ext_resource path="res://assets/fonts/main_font_xl.tres" type="DynamicFont" id=5]
+[ext_resource path="res://assets/images/icons/gear-icon-normal-large.png" type="Texture" id=6]
+[ext_resource path="res://assets/images/icons/gear-icon-hover-large.png" type="Texture" id=7]
+[ext_resource path="res://assets/images/icons/gear-icon-active-large.png" type="Texture" id=8]
+[ext_resource path="res://assets/images/icons/about-icon-normal-large.png" type="Texture" id=9]
+[ext_resource path="res://assets/images/icons/about-icon-hover-large.png" type="Texture" id=10]
+[ext_resource path="res://assets/images/icons/about-icon-active-large.png" type="Texture" id=11]
+[ext_resource path="res://assets/images/logo.png" type="Texture" id=12]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -22,8 +29,8 @@ __meta__ = {
 }
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-margin_right = 64.0
-margin_bottom = 64.0
+margin_right = 128.0
+margin_bottom = 128.0
 size_flags_horizontal = 3
 custom_constants/margin_right = 0
 custom_constants/margin_top = 0
@@ -31,9 +38,9 @@ custom_constants/margin_left = 0
 custom_constants/margin_bottom = 0
 
 [node name="BackButton" type="TextureButton" parent="MarginContainer"]
-margin_right = 64.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+margin_right = 128.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
 texture_normal = ExtResource( 3 )
@@ -42,13 +49,87 @@ texture_hover = ExtResource( 2 )
 expand = true
 stretch_mode = 3
 
+[node name="AboutButton" type="TextureButton" parent="MarginContainer"]
+visible = false
+margin_right = 128.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 11 )
+texture_hover = ExtResource( 10 )
+expand = true
+stretch_mode = 3
+
 [node name="Header" type="Label" parent="MarginContainer"]
-margin_top = 20.0
-margin_right = 64.0
-margin_bottom = 43.0
+margin_right = 128.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 0, 128 )
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 5 )
 align = 1
 valign = 1
 clip_text = true
+
+[node name="LogoControl" type="CenterContainer" parent="MarginContainer"]
+visible = false
+margin_right = 128.0
+margin_bottom = 128.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="MarginContainer/LogoControl"]
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 64.0
+margin_bottom = 64.0
+
+[node name="Logo" type="TextureRect" parent="MarginContainer/LogoControl/Control"]
+margin_left = -181.0
+margin_top = -16.0
+margin_right = 61.0
+margin_bottom = 5.0
+rect_scale = Vector2( 1.5, 1.5 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 12 )
+stretch_mode = 3
+
+[node name="GameOverControl" type="CenterContainer" parent="MarginContainer"]
+visible = false
+margin_right = 128.0
+margin_bottom = 128.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="MarginContainer/GameOverControl"]
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 64.0
+margin_bottom = 64.0
+
+[node name="GameOver" type="TextureRect" parent="MarginContainer/GameOverControl/Control"]
+margin_left = -121.0
+margin_top = -11.0
+margin_right = 121.0
+margin_bottom = 10.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 12 )
+
+[node name="SettingsButton" type="TextureButton" parent="MarginContainer"]
+visible = false
+margin_right = 128.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture_normal = ExtResource( 6 )
+texture_pressed = ExtResource( 8 )
+texture_hover = ExtResource( 7 )
+expand = true
+stretch_mode = 3
 [connection signal="pressed" from="MarginContainer/BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="pressed" from="MarginContainer/AboutButton" to="." method="_on_AboutButton_pressed"]
+[connection signal="pressed" from="MarginContainer/SettingsButton" to="." method="_on_SettingsButton_pressed"]

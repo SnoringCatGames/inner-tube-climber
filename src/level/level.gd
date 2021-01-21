@@ -285,6 +285,8 @@ func _fall() -> void:
                 level_id, \
                 high_score)
         
+        _set_game_over_state()
+        
         Sound.MANIFEST[Sound.FALL].player.connect( \
                 "finished", \
                 self, \
@@ -296,22 +298,38 @@ func _fall() -> void:
                 level_id + "v" + LevelConfig._LEVELS[level_id].version, \
                 int(score))
 
+func _set_game_over_state() -> void:
+    var game_over_screen: GameOverScreen = Nav.screens[ScreenType.GAME_OVER]
+    game_over_screen.level_id = level_id
+    game_over_screen.score = str(int(score))
+    game_over_screen.high_score = \
+            str(SaveState.get_high_score_for_level(level_id))
+    game_over_screen.tier_ratio = get_tier_ratio()
+    game_over_screen.difficulty = \
+            DifficultyMode.get_type_string(Global.difficulty_mode)
+    game_over_screen.time = Utils.get_time_string_from_seconds( \
+            Time.elapsed_play_time_actual_sec - \
+            level_start_time)
+
 func _on_last_fall_sound_finished() -> void:
-    Audio.current_music_player.stop()
+    Sound.MANIFEST[Sound.FALL].player.disconnect( \
+            "finished", \
+            self, \
+            "_on_last_fall_sound_finished")
     Sound.MANIFEST[Sound.GAME_OVER].player.connect( \
             "finished", \
             self, \
             "_on_game_over_sound_finished")
+    Audio.current_music_player.stop()
     Audio.play_sound(Sound.GAME_OVER)
 
 func _on_game_over_sound_finished() -> void:
-    destroy()
     Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
     Sound.MANIFEST[Sound.GAME_OVER].player.disconnect( \
             "finished", \
             self, \
             "_on_game_over_sound_finished")
-    Nav.open(ScreenType.MAIN_MENU)
+    Nav.open(ScreenType.GAME_OVER)
     Nav.screens[ScreenType.GAME].destroy_level()
 
 func _add_player(is_base_tier := false) -> void:
@@ -785,3 +803,9 @@ func _get_player_height() -> float:
     return -player.position.y - Constants.PLAYER_HALF_HEIGHT_DEFAULT if \
             player != null else \
             0.0
+
+func get_tier_ratio() -> String:
+    return "%s / %s" % [
+        current_tier_index + 1, \
+        LevelConfig.get_level_config(level_id).tiers.size(),
+    ]

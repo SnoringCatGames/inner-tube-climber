@@ -1,7 +1,15 @@
+tool
 extends Screen
 class_name GameOverScreen
 
 const TYPE := ScreenType.GAME_OVER
+
+var level_id: String
+var score: String
+var high_score: String
+var tier_ratio: String 
+var difficulty: String 
+var time: String
 
 func _init().(TYPE) -> void:
     pass
@@ -12,12 +20,53 @@ func _ready() -> void:
             self, \
             "_handle_display_resized")
     _handle_display_resized()
+    _update_stats()
+
+func _on_activated() -> void:
+    _update_stats()
+
+func _update_stats() -> void:
+    var control_list := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            ScrollContainer/CenterContainer/VBoxContainer/LabeledControlList
+    
+    control_list.items = [
+        {
+            label = "Level:",
+            type = LabeledControlItemType.TEXT,
+            text = level_id,
+        },
+        {
+            label = "Score:",
+            type = LabeledControlItemType.TEXT,
+            text = score,
+        },
+        {
+            label = "High score:",
+            type = LabeledControlItemType.TEXT,
+            text = high_score,
+        },
+        {
+            label = "Tier:",
+            type = LabeledControlItemType.TEXT,
+            text = tier_ratio,
+        },
+        {
+            label = "Difficulty:",
+            type = LabeledControlItemType.TEXT,
+            text = difficulty,
+        },
+        {
+            label = "Time:",
+            type = LabeledControlItemType.TEXT,
+            text = time,
+        },
+    ]
 
 func _handle_display_resized() -> void:
     var viewport_size := get_viewport().size
-    var is_wide_enough_to_put_title_in_nav_bar := viewport_size.x > 600
-    $FullScreenPanel/VBoxContainer/NavBar.shows_logo = \
-            is_wide_enough_to_put_title_in_nav_bar
+#    var is_wide_enough_to_put_title_in_nav_bar := viewport_size.x > 600
+#    $FullScreenPanel/VBoxContainer/NavBar.shows_logo = \
+#            is_wide_enough_to_put_title_in_nav_bar
 #    $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/LogoControl.visible = \
 #            !is_wide_enough_to_put_title_in_nav_bar
 #    $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Spacer2.visible = \
@@ -50,5 +99,4 @@ func _on_HomeButton_pressed():
 func _on_RetryButton_pressed():
     Global.give_button_press_feedback(true)
     Nav.open(ScreenType.GAME)
-    # FIXME
-#    Nav.screens[ScreenType.GAME].start_level(level_id)
+    Nav.screens[ScreenType.GAME].start_level(level_id)

@@ -474,6 +474,33 @@ static func get_datetime_string() -> String:
         datetime.second,
     ]
 
+static func get_time_string_from_seconds(time_sec: float) -> String:
+    var time_str := ""
+    
+    # Hours.
+    var hours := int(time_sec / 3600.0)
+    time_sec = fmod(time_sec, 3600.0)
+    time_str = "%s%02d:" % [
+        time_str,
+        hours,
+    ]
+    
+    # Minutes.
+    var minutes := int(time_sec / 60.0)
+    time_sec = fmod(time_sec, 60.0)
+    time_str = "%s%02d:" % [
+        time_str,
+        minutes,
+    ]
+    
+    # Seconds.
+    time_str = "%s%02d" % [
+        time_str,
+        time_sec,
+    ]
+    
+    return time_str
+
 func take_screenshot() -> void:
     var directory := Directory.new()
     if !directory.dir_exists("user://screenshots"):

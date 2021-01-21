@@ -7,39 +7,39 @@ const TYPE := ScreenType.PAUSE
 # Array<Dictionary>
 var list_items := [
     {
-        label = "Level",
+        label = "Level:",
         type = LabeledControlItemType.TEXT,
     },
     {
-        label = "Tier",
+        label = "Tier:",
         type = LabeledControlItemType.TEXT,
     },
     {
-        label = "Current score",
+        label = "Current score:",
         type = LabeledControlItemType.TEXT,
     },
     {
-        label = "High score",
+        label = "High score:",
         type = LabeledControlItemType.TEXT,
     },
     {
-        label = "Multiplier",
+        label = "Multiplier:",
         type = LabeledControlItemType.TEXT,
     },
     {
-        label = "Speed",
+        label = "Speed:",
         type = LabeledControlItemType.TEXT,
     },
     {
-        label = "Difficulty",
+        label = "Difficulty:",
         type = LabeledControlItemType.TEXT,
     },
     {
-        label = "Lives",
+        label = "Lives:",
         type = LabeledControlItemType.TEXT,
     },
     {
-        label = "Time",
+        label = "Time:",
         type = LabeledControlItemType.TEXT,
     },
 ]
@@ -60,59 +60,28 @@ func _on_activated() -> void:
 func _update_stats() -> void:
     var level: Level = Global.level
     
-    _control_list.find_item("Level").text = level.level_id
-    _control_list.find_item("Tier").text = \
-        "%s / %s" % [
-            level.current_tier_index + 1, \
-            LevelConfig.get_level_config(level.level_id).tiers.size(),
-        ]
-    _control_list.find_item("Current score").text = str(int(level.score))
-    _control_list.find_item("High score").text = \
+    _control_list.find_item("Level:").text = level.level_id
+    _control_list.find_item("Tier:").text = level.get_tier_ratio()
+    _control_list.find_item("Current score:").text = str(int(level.score))
+    _control_list.find_item("High score:").text = \
         str(SaveState.get_high_score_for_level(level.level_id))
-    _control_list.find_item("Multiplier").text = \
+    _control_list.find_item("Multiplier:").text = \
         "x%s" % level.cooldown_indicator.multiplier
-    _control_list.find_item("Speed").text = \
-        str(level.get_node("CameraHandler").speed_index + 1)
-    _control_list.find_item("Difficulty").text = \
+    _control_list.find_item("Speed:").text = \
+        str(level.get_node("CameraHandler:").speed_index + 1)
+    _control_list.find_item("Difficulty:").text = \
         DifficultyMode.get_type_string(Global.difficulty_mode)
-    _control_list.find_item("Lives").text = \
+    _control_list.find_item("Lives:").text = \
         "%s / %s" % [
                 level.lives_count,
                 level.lives_count + level.falls_count,
         ]
-    _control_list.find_item("Time").text = \
-        _get_time_string_from_seconds( \
+    _control_list.find_item("Time:").text = \
+        Utils.get_time_string_from_seconds( \
                 Time.elapsed_play_time_actual_sec - \
                 level.level_start_time)
     
     _control_list.items = list_items
-
-func _get_time_string_from_seconds(time_sec: float) -> String:
-    var time_str := ""
-    
-    # Hours.
-    var hours := int(time_sec / 3600.0)
-    time_sec = fmod(time_sec, 3600.0)
-    time_str = "%s%02d:" % [
-        time_str,
-        hours,
-    ]
-    
-    # Minutes.
-    var minutes := int(time_sec / 60.0)
-    time_sec = fmod(time_sec, 60.0)
-    time_str = "%s%02d:" % [
-        time_str,
-        minutes,
-    ]
-    
-    # Seconds.
-    time_str = "%s%02d" % [
-        time_str,
-        time_sec,
-    ]
-    
-    return time_str
 
 func _on_ExitLevelButton_pressed():
     Global.give_button_press_feedback()

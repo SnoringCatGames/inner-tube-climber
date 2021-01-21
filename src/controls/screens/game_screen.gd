@@ -2,11 +2,15 @@ extends Screen
 class_name GameScreen
 
 const TYPE := ScreenType.GAME
+const INCLUDES_STANDARD_HIERARCHY := false
 const STARTING_LEVEL_RESOURCE_PATH := "res://src/level/level.tscn"
 
 var level: Level
 
-func _init().(TYPE) -> void:
+func _init().( \
+        TYPE, \
+        INCLUDES_STANDARD_HIERARCHY \
+        ) -> void:
     pass
 
 func _enter_tree() -> void:

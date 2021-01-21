@@ -3,6 +3,9 @@ extends Screen
 class_name SettingsScreen
 
 const TYPE := ScreenType.SETTINGS
+const INCLUDES_STANDARD_HIERARCHY := true
+const INCLUDES_NAV_BAR := true
+const INCLUDES_CENTER_CONTAINER := true
 
 # Array<Dictionary>
 var list_items := [
@@ -79,7 +82,12 @@ var list_items := [
 
 var _control_list: LabeledControlList
 
-func _init().(TYPE) -> void:
+func _init().( \
+        TYPE, \
+        INCLUDES_STANDARD_HIERARCHY, \
+        INCLUDES_NAV_BAR, \
+        INCLUDES_CENTER_CONTAINER \
+        ) -> void:
     pass
 
 func _ready() -> void:
@@ -92,6 +100,7 @@ func _ready() -> void:
     _control_list.items = list_items
 
 func _on_activated() -> void:
+    ._on_activated()
     _initialize_selections()
     _initialize_enablement()
     _control_list.items = list_items

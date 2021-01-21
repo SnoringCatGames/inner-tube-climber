@@ -207,6 +207,11 @@ func _set_screen_is_open( \
     
     if next_screen != null:
         next_screen._on_activated()
+        # If opening a new screen, auto-scroll to the top. Otherwise, if
+        # navigating back to a previous screen, maintain the scroll position,
+        # so the user can remember where they were.
+        if is_open:
+            next_screen._scroll_to_top()
     
     if next_screen != null:
         Analytics.screen(ScreenType.get_type_string(next_screen.type))

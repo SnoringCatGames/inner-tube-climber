@@ -324,7 +324,6 @@ func _on_last_fall_sound_finished() -> void:
     Audio.play_sound(Sound.GAME_OVER)
 
 func _on_game_over_sound_finished() -> void:
-    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
     Sound.MANIFEST[Sound.GAME_OVER].player.disconnect( \
             "finished", \
             self, \

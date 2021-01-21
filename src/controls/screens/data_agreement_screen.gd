@@ -2,8 +2,16 @@ extends Screen
 class_name DataAgreementScreen
 
 const TYPE := ScreenType.DATA_AGREEMENT
+const INCLUDES_STANDARD_HIERARCHY := true
+const INCLUDES_NAV_BAR := true
+const INCLUDES_CENTER_CONTAINER := true
 
-func _init().(TYPE) -> void:
+func _init().( \
+        TYPE, \
+        INCLUDES_STANDARD_HIERARCHY, \
+        INCLUDES_NAV_BAR, \
+        INCLUDES_CENTER_CONTAINER \
+        ) -> void:
     pass
 
 func _on_PrivacyPolicyLink_pressed():

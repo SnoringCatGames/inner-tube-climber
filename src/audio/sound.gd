@@ -41,9 +41,9 @@ var MANIFEST := {
         volume_db = -6.0,
     },
     JUMP_INPUT: {
-        stream = preload("res://assets/sounds/blip.wav"),
+        stream = preload("res://assets/sounds/input_indicator.wav"),
         text = "JUMP_INPUT",
-        volume_db = -8.0,
+        volume_db = 3.0,
     },
     LAND: {
         stream = preload("res://assets/sounds/tuber_land.wav"),
@@ -76,9 +76,9 @@ var MANIFEST := {
         volume_db = -10.0,
     },
     SIDEWAYS_INPUT: {
-        stream = preload("res://assets/sounds/blip.wav"),
+        stream = preload("res://assets/sounds/input_indicator.wav"),
         text = "SIDEWAYS_INPUT",
-        volume_db = -8.0,
+        volume_db = 3.0,
     },
     TIER_COMPLETE: {
         stream = preload("res://assets/sounds/tier_complete.wav"),

@@ -40,7 +40,8 @@ func _process(_delta_sec: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
     # Mouse wheel events are never considered pressed by Godot--rather they are
     # only ever considered to have just happened.
-    if event is InputEventMouseButton:
+    if event is InputEventMouseButton and \
+            _current_camera != null:
         if event.button_index == BUTTON_WHEEL_UP:
             _current_camera.zoom -= _current_camera.zoom * ZOOM_STEP_RATIO
         if event.button_index == BUTTON_WHEEL_DOWN:

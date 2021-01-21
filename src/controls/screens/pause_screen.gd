@@ -3,6 +3,9 @@ extends Screen
 class_name PauseScreen
 
 const TYPE := ScreenType.PAUSE
+const INCLUDES_STANDARD_HIERARCHY := true
+const INCLUDES_NAV_BAR := true
+const INCLUDES_CENTER_CONTAINER := true
 
 # Array<Dictionary>
 var list_items := [
@@ -46,7 +49,12 @@ var list_items := [
 
 var _control_list: LabeledControlList
 
-func _init().(TYPE) -> void:
+func _init().( \
+        TYPE, \
+        INCLUDES_STANDARD_HIERARCHY, \
+        INCLUDES_NAV_BAR, \
+        INCLUDES_CENTER_CONTAINER \
+        ) -> void:
     pass
 
 func _ready() -> void:
@@ -55,6 +63,7 @@ func _ready() -> void:
     _control_list.items = list_items
 
 func _on_activated() -> void:
+    ._on_activated()
     _update_stats()
 
 func _update_stats() -> void:
@@ -85,6 +94,7 @@ func _update_stats() -> void:
 
 func _on_ExitLevelButton_pressed():
     Global.give_button_press_feedback()
+    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
     Nav.open(ScreenType.MAIN_MENU)
 
 func _on_ResumeButton_pressed():

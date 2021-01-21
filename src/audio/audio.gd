@@ -6,6 +6,7 @@ const SILENT_VOLUME_DB := -80.0
 const GLOBAL_AUDIO_VOLUME_OFFSET_DB := -20.0
 
 const MAIN_MENU_MUSIC_PLAYER_INDEX := 2
+const GAME_OVER_MUSIC_PLAYER_INDEX := 0
 
 const START_MUSIC_INDEX := 0
 
@@ -147,5 +148,5 @@ func _update_volume() -> void:
     for config in Sound.MANIFEST.values():
         config.player.volume_db = \
                 config.volume_db + GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
-                is_music_enabled else \
+                is_sound_effects_enabled else \
                 SILENT_VOLUME_DB

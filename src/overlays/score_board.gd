@@ -44,7 +44,8 @@ func _process(delta_sec: float) -> void:
     
     if tween_number != previous_tween_number:
         _set_value(str(tween_number))
-        Audio.play_sound(Sound.SCORE_UPDATE)
+        if visible:
+            Audio.play_sound(Sound.SCORE_UPDATE)
     
     previous_tween_number = tween_number
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://assets/fonts/main_font_normal.tres" type="DynamicFont" id=2]
+[ext_resource path="res://assets/fonts/main_font_s.tres" type="DynamicFont" id=1]
 [ext_resource path="res://src/overlays/tier_ratio_sign.gd" type="Script" id=3]
 [ext_resource path="res://src/level/torch.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/images/signs/tier-ratio-sign.png" type="Texture" id=5]
@@ -19,8 +19,8 @@ margin_left = -24.0
 margin_top = -38.0
 margin_right = 24.0
 margin_bottom = -15.0
-rect_min_size = Vector2( 48, 21 )
-custom_fonts/font = ExtResource( 2 )
+rect_min_size = Vector2( 48, 23 )
+custom_fonts/font = ExtResource( 1 )
 text = "0 / 0"
 align = 1
 valign = 1

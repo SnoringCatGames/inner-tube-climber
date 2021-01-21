@@ -2,6 +2,9 @@ extends Screen
 class_name LevelSelectScreen
 
 const TYPE := ScreenType.LEVEL_SELECT
+const INCLUDES_STANDARD_HIERARCHY := true
+const INCLUDES_NAV_BAR := true
+const INCLUDES_CENTER_CONTAINER := true
 const DEFAULT_SELECTED_LEVEL_ID := "1"
 
 const LEVEL_ITEM_PREFIX := "Level "
@@ -10,7 +13,12 @@ var selected_level_id := DEFAULT_SELECTED_LEVEL_ID
 # Array<String>
 var level_items := []
 
-func _init().(TYPE) -> void:
+func _init().( \
+        TYPE, \
+        INCLUDES_STANDARD_HIERARCHY, \
+        INCLUDES_NAV_BAR, \
+        INCLUDES_CENTER_CONTAINER \
+        ) -> void:
     pass
 
 func _ready() -> void:

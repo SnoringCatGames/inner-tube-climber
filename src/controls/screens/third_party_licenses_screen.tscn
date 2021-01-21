@@ -21,21 +21,21 @@ margin_bottom = 480.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel"]
 margin_right = 480.0
-margin_bottom = 548.0
+margin_bottom = 612.0
 
 [node name="NavBar" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 480.0
-margin_bottom = 64.0
+margin_bottom = 128.0
 text = "Third-party licenses"
 
 [node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 68.0
+margin_top = 132.0
 margin_right = 480.0
-margin_bottom = 548.0
+margin_bottom = 612.0
 stretches_horizontally = false
 stretches_vertically = true
 
@@ -48,12 +48,12 @@ scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
 margin_right = 470.0
-margin_bottom = 6361.0
+margin_bottom = 12293.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/VBoxContainer"]
 margin_right = 470.0
-margin_bottom = 6361.0
+margin_bottom = 12293.0
 rect_min_size = Vector2( 282, 294 )
 custom_styles/normal = SubResource( 1 )
 custom_fonts/font = ExtResource( 2 )

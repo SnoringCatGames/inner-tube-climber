@@ -18,47 +18,47 @@ __meta__ = {
 [node name="TierRatioBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 120.0
-margin_bottom = 21.0
+margin_right = 180.0
+margin_bottom = 42.0
 label = "Tier:"
 value = "0 / 0"
 
 [node name="HeightBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 26.0
-margin_right = 120.0
-margin_bottom = 47.0
+margin_top = 47.0
+margin_right = 180.0
+margin_bottom = 89.0
 label = "Height:"
 
 [node name="ScoreBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 52.0
-margin_right = 120.0
-margin_bottom = 73.0
+margin_top = 94.0
+margin_right = 180.0
+margin_bottom = 136.0
 label = "Score:"
 
 [node name="MultiplierBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 78.0
-margin_right = 120.0
-margin_bottom = 99.0
+margin_top = 141.0
+margin_right = 180.0
+margin_bottom = 183.0
 label = "Multiplier:"
 
 [node name="SpeedBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 104.0
-margin_right = 120.0
-margin_bottom = 125.0
+margin_top = 188.0
+margin_right = 180.0
+margin_bottom = 230.0
 label = "Speed:"
 
 [node name="LivesBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 130.0
-margin_right = 120.0
-margin_bottom = 151.0
+margin_top = 235.0
+margin_right = 180.0
+margin_bottom = 277.0
 label = "Lives:"

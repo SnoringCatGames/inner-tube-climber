@@ -1,7 +1,7 @@
 extends Node2D
 class_name ScoreBoards
 
-const CORNER_OFFSET := Vector2(10.0, 10.0)
+const CORNER_OFFSET := Vector2(14.0, 14.0)
 
 func _enter_tree() -> void:
     position.y = max(CORNER_OFFSET.y, Utils.get_safe_area_margin_top())

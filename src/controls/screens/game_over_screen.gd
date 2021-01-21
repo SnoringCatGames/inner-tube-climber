@@ -39,3 +39,16 @@ func _handle_display_resized() -> void:
         $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2/StuckAnimationControl \
                 .rect_position.y = 60
 
+func _on_SelectLevelButton_pressed():
+    Global.give_button_press_feedback()
+    Nav.open(ScreenType.LEVEL_SELECT)
+
+func _on_HomeButton_pressed():
+    Global.give_button_press_feedback()
+    Nav.open(ScreenType.MAIN_MENU)
+
+func _on_RetryButton_pressed():
+    Global.give_button_press_feedback(true)
+    Nav.open(ScreenType.GAME)
+    # FIXME
+#    Nav.screens[ScreenType.GAME].start_level(level_id)

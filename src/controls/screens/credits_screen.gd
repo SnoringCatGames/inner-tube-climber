@@ -28,4 +28,10 @@ func _on_TermsAndConditionsLink_pressed():
 
 func _on_SupportLink_pressed():
     Global.give_button_press_feedback()
-    OS.shell_open(Constants.SUPPORT_EMAIL)
+    var subject := \
+            "?subject=Inner-Tube Climber question or feedback"
+    OS.shell_open(Constants.SUPPORT_EMAIL_MAILTO + subject)
+
+func _on_DataDeletionButton_pressed():
+    Global.give_button_press_feedback()
+    Nav.open(ScreenType.CONFIRM_DATA_DELETION)

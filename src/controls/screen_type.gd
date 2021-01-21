@@ -12,6 +12,7 @@ enum {
     DATA_AGREEMENT,
     RATE_APP,
     GAME_OVER,
+    CONFIRM_DATA_DELETION,
 }
 
 static func get_type_string(type: int) -> String:
@@ -38,6 +39,8 @@ static func get_type_string(type: int) -> String:
             return "RATE_APP"
         GAME_OVER:
             return "GAME_OVER"
+        CONFIRM_DATA_DELETION:
+            return "CONFIRM_DATA_DELETION"
         _:
             Utils.error("Invalid ScreenType: %s" % type)
             return "???"

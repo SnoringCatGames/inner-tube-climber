@@ -17,7 +17,7 @@ const GOOGLE_ANALYTICS_COLLECT_URL := GOOGLE_ANALYTICS_DOMAIN + "/collect"
 const GOOGLE_ANALYTICS_BATCH_URL := GOOGLE_ANALYTICS_DOMAIN + "/batch"
 const HEADERS := []
 
-var _client_id: String
+var client_id: String
 var _has_session_started := false
 var _last_ping_time_sec := -INF
 # Array<_AnalyticsEntry>
@@ -99,7 +99,7 @@ func _ping( \
             is_session_end)
 
 func _enter_tree() -> void:
-    _client_id = _get_client_id()
+    client_id = _get_client_id()
 
 func _get_client_id() -> String:
     var id = SaveState.get_setting(SaveState.CLIENT_ID_KEY)
@@ -146,7 +146,7 @@ func _get_payload( \
         "&z=%s"
     ) % [
         Constants.GOOGLE_ANALYTICS_ID,
-        _client_id,
+        client_id,
         hit_type,
         details,
         viewport_size_str,

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://src/controls/nav_bar.gd" type="Script" id=1]
 [ext_resource path="res://assets/images/icons/left_caret_hover.png" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://assets/images/icons/about-icon-hover-large.png" type="Texture" id=10]
 [ext_resource path="res://assets/images/icons/about-icon-active-large.png" type="Texture" id=11]
 [ext_resource path="res://assets/images/logo.png" type="Texture" id=12]
+[ext_resource path="res://assets/images/game-over.png" type="Texture" id=13]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -86,15 +87,17 @@ margin_right = 64.0
 margin_bottom = 64.0
 
 [node name="Logo" type="TextureRect" parent="MarginContainer/LogoControl/Control"]
-margin_left = -181.0
-margin_top = -16.0
-margin_right = 61.0
-margin_bottom = 5.0
-rect_scale = Vector2( 1.5, 1.5 )
+margin_left = -206.0
+margin_top = -17.0
+margin_right = 207.0
+margin_bottom = 17.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 texture = ExtResource( 12 )
 stretch_mode = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="GameOverControl" type="CenterContainer" parent="MarginContainer"]
 visible = false
@@ -110,13 +113,16 @@ margin_right = 64.0
 margin_bottom = 64.0
 
 [node name="GameOver" type="TextureRect" parent="MarginContainer/GameOverControl/Control"]
-margin_left = -121.0
-margin_top = -11.0
-margin_right = 121.0
-margin_bottom = 10.0
+margin_left = -173.0
+margin_top = -22.0
+margin_right = 174.0
+margin_bottom = 22.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture = ExtResource( 12 )
+texture = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SettingsButton" type="TextureButton" parent="MarginContainer"]
 visible = false

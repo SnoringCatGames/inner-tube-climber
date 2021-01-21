@@ -1,155 +1,31 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://assets/images/player/tuber-sliding.png" type="Texture" id=1]
-[ext_resource path="res://assets/images/intro_animations/block.png" type="Texture" id=2]
-[ext_resource path="res://assets/images/intro_animations/slope.png" type="Texture" id=3]
-[ext_resource path="res://assets/images/intro_animations/slope-texture.png" type="Texture" id=4]
+[ext_resource path="res://assets/images/intro_animations/tuber-stuck.png" type="Texture" id=1]
 
 [sub_resource type="Animation" id=1]
-resource_name = "Slide"
-length = 1.2
+resource_name = "Stuck"
+length = 0.8
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("SlopeTexture1:offset")
+tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.4, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( -72, -36 ), Vector2( -72, 1000 ), Vector2( 72, 36 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("SlopeTexture2:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.4, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( 72, 36 ), Vector2( -72, -36 ), Vector2( -72, 1000 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("SlopeTexture3:offset")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 0.4, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( -72, 1000 ), Vector2( 72, 36 ), Vector2( -72, -36 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("SlopeTexture4:offset")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0.2, 0.6, 1 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( -72, -36 ), Vector2( -72, 1000 ), Vector2( 72, 36 ) ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("SlopeTexture5:offset")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0.2, 0.6, 1 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( 72, 36 ), Vector2( -72, -36 ), Vector2( -72, 1000 ) ]
-}
-tracks/5/type = "value"
-tracks/5/path = NodePath("SlopeTexture6:offset")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"times": PoolRealArray( 0.2, 0.6, 1 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( -72, 1000 ), Vector2( 72, 36 ), Vector2( -72, -36 ) ]
-}
-tracks/6/type = "bezier"
-tracks/6/path = NodePath("TuberSliding:offset:x")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/keys = {
-"points": PoolRealArray(  ),
-"times": PoolRealArray(  )
-}
-tracks/7/type = "bezier"
-tracks/7/path = NodePath("TuberSliding:offset:y")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/keys = {
-"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0, -0.853571, -2, -0.073246, 0.000568628, 0.0884112, -0.00364399, 0, 0, -0.832508, 0.0773769, 0.00116605, -0.00214344, -0.0540866, -0.00101662, 0, -0.725491, -1.00673, -0.0510166, 0.00526428, 0.0520534, 0, 0, 0, -0.690104, 0.25, 0, 0, -0.25, 0, 0, -0.82328, -3, -0.0562806, -0.000433207, 0.0652336, 0.00158095, 0.00659204, 0, -0.864814, 0.0726916, 0.00873554 ),
-"times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1, 1.1, 1.20212 )
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
 }
 
-[node name="SlopeAnimation" type="Node2D"]
+[node name="StuckAnimation" type="Node2D"]
 
-[node name="Block" type="Sprite" parent="."]
-position = Vector2( 48, 54 )
-texture = ExtResource( 2 )
-
-[node name="Block2" type="Sprite" parent="."]
-position = Vector2( -48, 54 )
-texture = ExtResource( 2 )
-
-[node name="Block3" type="Sprite" parent="."]
-position = Vector2( -48, 6 )
-texture = ExtResource( 2 )
-
-[node name="Block4" type="Sprite" parent="."]
-position = Vector2( 3.8147e-06, 54 )
-texture = ExtResource( 2 )
-
-[node name="Slope" type="Sprite" parent="."]
-texture = ExtResource( 3 )
-
-[node name="SlopeTexture1" type="Sprite" parent="."]
-texture = ExtResource( 4 )
-offset = Vector2( 59.4349, 29.7175 )
-
-[node name="SlopeTexture2" type="Sprite" parent="."]
-texture = ExtResource( 4 )
-offset = Vector2( -59.4349, 915.884 )
-
-[node name="SlopeTexture3" type="Sprite" parent="."]
-texture = ExtResource( 4 )
-offset = Vector2( -72, 54.3986 )
-
-[node name="SlopeTexture4" type="Sprite" parent="."]
-texture = ExtResource( 4 )
-offset = Vector2( 12.5651, 433.884 )
-
-[node name="SlopeTexture5" type="Sprite" parent="."]
-texture = ExtResource( 4 )
-offset = Vector2( -72, 572.399 )
-
-[node name="SlopeTexture6" type="Sprite" parent="."]
-texture = ExtResource( 4 )
-offset = Vector2( -12.5651, -6.28253 )
-
-[node name="TuberSliding" type="Sprite" parent="."]
+[node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
+hframes = 8
+frame = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "Slide"
-anims/Slide = SubResource( 1 )
+autoplay = "Stuck"
+anims/Stuck = SubResource( 1 )

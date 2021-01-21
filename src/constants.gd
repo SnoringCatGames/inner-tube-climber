@@ -14,7 +14,7 @@ const PRIVACY_POLICY_URL := "https://docs.google.com/document/d/1kH48Xn62wFnZuy8
 # FIXME:
 const ANDROID_APP_STORE_URL := "http://"
 const IOS_APP_STORE_URL := "https://"
-const SUPPORT_EMAIL := "support@levi.dev"
+const SUPPORT_EMAIL_MAILTO := "mailto:support@levi.dev"
 
 const MAIN_FONT_NORMAL: Font = \
         preload("res://assets/fonts/main_font_normal.tres")

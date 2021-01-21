@@ -475,12 +475,49 @@ static func get_datetime_string() -> String:
     ]
 
 func take_screenshot() -> void:
-    var directory = Directory.new()
+    var directory := Directory.new()
     if !directory.dir_exists("user://screenshots"):
-        directory.open("user://")
+        var status := directory.open("user://")
+        if status != OK:
+            Utils.error()
+            return
         directory.make_dir("screenshots")
     
     var image := get_viewport().get_texture().get_data()
     image.flip_y()
     var path := "user://screenshots/screenshot-%s.png" % get_datetime_string()
-    image.save_png(path)
+    var status := image.save_png(path)
+    if status != OK:
+        Utils.error()
+
+func clear_directory( \
+        path: String, \
+        also_deletes_directory := false) -> void:
+    # Open directory.
+    var directory := Directory.new()
+    var status := directory.open(path)
+    if status != OK:
+        Utils.error()
+        return
+    
+    # Delete children.
+    directory.list_dir_begin(true)
+    var file_name := directory.get_next()
+    while file_name != "":
+        if directory.current_is_dir():
+            var child_path := \
+                    path + file_name if \
+                    path.ends_with("/") else \
+                    path + "/" + file_name
+            clear_directory(child_path, true)
+        else:
+            status = directory.remove(file_name)
+            if status != OK:
+                Utils.error("Failed to delete file", false)
+        file_name = directory.get_next()
+    
+    # Delete directory.
+    if also_deletes_directory:
+        status = directory.remove(path)
+        if status != OK:
+            Utils.error("Failed to delete directory", false)

@@ -1,27 +1,10 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/controls/screens/settings_screen.gd" type="Script" id=1]
 [ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/controls/nav_bar.tscn" type="PackedScene" id=3]
-[ext_resource path="res://src/controls/labeled_control_row.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/controls/full_screen_panel.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/controls/labeled_control_list.tscn" type="PackedScene" id=6]
-
-[sub_resource type="StyleBoxEmpty" id=1]
-
-[sub_resource type="StyleBoxEmpty" id=2]
-
-[sub_resource type="StyleBoxEmpty" id=3]
-
-[sub_resource type="StyleBoxEmpty" id=4]
-
-[sub_resource type="StyleBoxEmpty" id=5]
-
-[sub_resource type="StyleBoxEmpty" id=6]
-
-[sub_resource type="StyleBoxEmpty" id=7]
-
-[sub_resource type="StyleBoxEmpty" id=8]
 
 [node name="SettingsScreen" type="Node2D"]
 script = ExtResource( 1 )
@@ -40,6 +23,11 @@ anchor_bottom = 0.0
 margin_right = 480.0
 margin_bottom = 128.0
 text = "Settings"
+shows_back = true
+shows_about = false
+shows_settings = false
+shows_logo = false
+shows_game_over = false
 
 [node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 2 )]
 anchor_right = 0.0
@@ -47,6 +35,7 @@ anchor_bottom = 0.0
 margin_top = 132.0
 margin_right = 480.0
 margin_bottom = 612.0
+stretches_horizontally = false
 stretches_vertically = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel"]
@@ -57,14 +46,14 @@ size_flags_vertical = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
 margin_right = 470.0
-margin_bottom = 854.0
+margin_bottom = 770.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
 margin_left = 75.0
 margin_right = 395.0
-margin_bottom = 854.0
+margin_bottom = 770.0
 rect_min_size = Vector2( 320, 0 )
 custom_constants/separation = 0
 
@@ -72,335 +61,23 @@ custom_constants/separation = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 320.0
-margin_bottom = 144.0
-custom_constants/separation = 0
+margin_bottom = 720.0
+row_height = 48.0
+padding_horizontal = 6.0
 
 [node name="Spacer1" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 160.0
-margin_top = 144.0
+margin_top = 720.0
 margin_right = 160.0
-margin_bottom = 144.0
+margin_bottom = 720.0
 size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_top = 144.0
-margin_right = 320.0
-margin_bottom = 804.0
-custom_constants/separation = 0
-
-[node name="Difficulty" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 320.0
-margin_bottom = 44.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-custom_styles/panel = SubResource( 1 )
-label = "Difficulty"
-
-[node name="OptionButton" type="OptionButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/Difficulty"]
-margin_left = 240.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-text = "EASY"
-items = [ "EASY", null, false, 0, null, "MODERATE", null, false, 1, null, "HARD", null, false, 2, null ]
-selected = 0
-
-[node name="MobileControlVersion" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 44.0
-margin_right = 320.0
-margin_bottom = 88.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-label = "Mobile control version"
-is_odd_row = false
-
-[node name="OptionButton" type="OptionButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/MobileControlVersion"]
-margin_left = 275.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-text = "1"
-items = [ "1", null, false, 0, null, "2", null, false, 1, null ]
-selected = 0
-
-[node name="Music" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 88.0
-margin_right = 320.0
-margin_bottom = 132.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-custom_styles/panel = SubResource( 2 )
-label = "Music"
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/Music"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="SoundEffects" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 132.0
-margin_right = 320.0
-margin_bottom = 176.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-label = "Sound effects"
-is_odd_row = false
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/SoundEffects"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="HapticFeedback" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 176.0
-margin_right = 320.0
-margin_bottom = 220.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-custom_styles/panel = SubResource( 3 )
-label = "Haptic feedback"
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HapticFeedback"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="MultiplierCooldownIndicator" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 220.0
-margin_right = 320.0
-margin_bottom = 264.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-label = "Multiplier cooldown indicator"
-is_odd_row = false
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/MultiplierCooldownIndicator"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="HeightIndicator" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 264.0
-margin_right = 320.0
-margin_bottom = 308.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-custom_styles/panel = SubResource( 4 )
-label = "Height indicator"
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HeightIndicator"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="MobileControlDisplay" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 308.0
-margin_right = 320.0
-margin_bottom = 352.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-label = "Mobile control display"
-is_odd_row = false
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/MobileControlDisplay"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="ScoreDisplay" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 352.0
-margin_right = 320.0
-margin_bottom = 396.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-custom_styles/panel = SubResource( 5 )
-label = "Score display"
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/ScoreDisplay"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="LivesDisplay" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 396.0
-margin_right = 320.0
-margin_bottom = 440.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-label = "Lives display"
-is_odd_row = false
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/LivesDisplay"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="HeightDisplay" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 440.0
-margin_right = 320.0
-margin_bottom = 484.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-custom_styles/panel = SubResource( 6 )
-label = "Height display"
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HeightDisplay"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="TierRatioDisplay" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 484.0
-margin_right = 320.0
-margin_bottom = 528.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-label = "Tier ratio display"
-is_odd_row = false
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/TierRatioDisplay"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="MultiplierDisplay" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 528.0
-margin_right = 320.0
-margin_bottom = 572.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-custom_styles/panel = SubResource( 7 )
-label = "Multiplier display"
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/MultiplierDisplay"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="SpeedDisplay" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 572.0
-margin_right = 320.0
-margin_bottom = 616.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-label = "Speed display"
-is_odd_row = false
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/SpeedDisplay"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
-size_flags_vertical = 4
-
-[node name="DebugPanel" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 616.0
-margin_right = 320.0
-margin_bottom = 660.0
-rect_min_size = Vector2( 0, 44 )
-size_flags_horizontal = 1
-custom_styles/panel = SubResource( 8 )
-label = "Debug panel"
-
-[node name="CheckBox" type="CheckBox" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/DebugPanel"]
-margin_left = 304.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 36.0
-size_flags_horizontal = 8
 size_flags_vertical = 4
 
 [node name="Spacer3" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 160.0
-margin_top = 804.0
+margin_top = 720.0
 margin_right = 160.0
-margin_bottom = 854.0
+margin_bottom = 770.0
 rect_min_size = Vector2( 0, 50 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
-[connection signal="item_selected" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/Difficulty/OptionButton" to="." method="_on_difficulty_selected"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/Difficulty/OptionButton" to="." method="_on_difficulty_pressed"]
-[connection signal="item_selected" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/MobileControlVersion/OptionButton" to="." method="_on_mobile_control_version_selected"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/MobileControlVersion/OptionButton" to="." method="_on_mobile_control_version_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/Music/CheckBox" to="." method="_on_music_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/SoundEffects/CheckBox" to="." method="_on_sound_effects_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HapticFeedback/CheckBox" to="." method="_on_haptic_feedback_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/MultiplierCooldownIndicator/CheckBox" to="." method="_on_multiplier_cooldown_indicator_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HeightIndicator/CheckBox" to="." method="_on_height_indicator_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/MobileControlDisplay/CheckBox" to="." method="_on_mobile_control_display_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/ScoreDisplay/CheckBox" to="." method="_on_score_display_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/LivesDisplay/CheckBox" to="." method="_on_lives_display_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HeightDisplay/CheckBox" to="." method="_on_height_display_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/TierRatioDisplay/CheckBox" to="." method="_on_tier_ratio_display_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/MultiplierDisplay/CheckBox" to="." method="_on_multiplier_display_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/SpeedDisplay/CheckBox" to="." method="_on_speed_display_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/DebugPanel/CheckBox" to="." method="_on_debug_panel_pressed"]

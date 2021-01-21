@@ -18,7 +18,9 @@ func _on_RateAppButton_pressed():
 func _on_SendEmailButton_pressed():
     Global.give_button_press_feedback()
     Nav.open(ScreenType.LEVEL_SELECT)
-    OS.shell_open(Constants.SUPPORT_EMAIL)
+    var subject := \
+            "?subject=Inner-Tube Climber question or feedback"
+    OS.shell_open(Constants.SUPPORT_EMAIL_MAILTO + subject)
 
 func _on_KeepPlayingButton_pressed():
     Global.give_button_press_feedback()

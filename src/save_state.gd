@@ -73,3 +73,7 @@ func get_setting( \
                     SETTINGS_SECTION_KEY, \
                     setting_key) else \
             default
+
+func erase_all_state() -> void:
+    for section in config.get_sections():
+        config.erase_section(section)

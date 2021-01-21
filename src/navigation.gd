@@ -16,6 +16,8 @@ const RATE_APP_SCREEN_PATH := \
         "res://src/controls/screens/rate_app_screen.tscn"
 const GAME_OVER_SCREEN_PATH := \
         "res://src/controls/screens/game_over_screen.tscn"
+const CONFIRM_DATA_DELETION_SCREEN_PATH := \
+        "res://src/controls/screens/confirm_data_deletion_screen.tscn"
 
 const SCREEN_SLIDE_DURATION_SEC := 0.3
 const SESSION_END_TIMEOUT_SEC := 2.0
@@ -102,6 +104,11 @@ func create_screens() -> void:
     screens[ScreenType.GAME_OVER] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             GAME_OVER_SCREEN_PATH, \
+            true, \
+            false)
+    screens[ScreenType.CONFIRM_DATA_DELETION] = Utils.add_scene( \
+            Global.canvas_layers.menu_screen_layer, \
+            CONFIRM_DATA_DELETION_SCREEN_PATH, \
             true, \
             false)
 

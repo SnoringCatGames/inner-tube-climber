@@ -29,6 +29,11 @@ anchor_bottom = 0.0
 margin_right = 480.0
 margin_bottom = 128.0
 text = "Third-party licenses"
+shows_back = true
+shows_about = false
+shows_settings = false
+shows_logo = false
+shows_game_over = false
 
 [node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0

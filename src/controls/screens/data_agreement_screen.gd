@@ -14,6 +14,10 @@ func _init().( \
         ) -> void:
     pass
 
+func _get_focused_button() -> ShinyButton:
+    return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+            CenterContainer/VBoxContainer/AgreeButton as ShinyButton
+
 func _on_PrivacyPolicyLink_pressed():
     Global.give_button_press_feedback()
     OS.shell_open(Constants.PRIVACY_POLICY_URL)

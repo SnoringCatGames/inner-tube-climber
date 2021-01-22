@@ -21,6 +21,10 @@ func _ready() -> void:
             "_handle_display_resized")
     _handle_display_resized()
 
+func _get_focused_button() -> ShinyButton:
+    return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+            CenterContainer/VBoxContainer/StartGameButton as ShinyButton
+
 func _handle_display_resized() -> void:
     var viewport_size := get_viewport().size
     var is_wide_enough_to_put_title_in_nav_bar := viewport_size.x > 600

@@ -65,6 +65,14 @@ func _ready() -> void:
 func _on_activated() -> void:
     ._on_activated()
     _update_stats()
+    _give_button_focus($FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/ \
+            ResumeButton)
+
+func _get_focused_button() -> ShinyButton:
+    return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+            CenterContainer/VBoxContainer/VBoxContainer/ResumeButton as \
+            ShinyButton
 
 func _update_stats() -> void:
     var level: Level = Global.level

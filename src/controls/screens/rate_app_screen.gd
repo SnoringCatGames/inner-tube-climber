@@ -14,6 +14,11 @@ func _init().( \
         ) -> void:
     pass
 
+func _get_focused_button() -> ShinyButton:
+    return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+            CenterContainer/VBoxContainer/VBoxContainer2/RateAppButton as \
+            ShinyButton
+
 func _on_RateAppButton_pressed():
     Global.give_button_press_feedback()
     Nav.open(ScreenType.LEVEL_SELECT)

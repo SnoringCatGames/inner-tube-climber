@@ -35,6 +35,11 @@ func _ready() -> void:
     var default_index := level_items.find(default_label)
     selector.select(default_index)
 
+func _get_focused_button() -> ShinyButton:
+    return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+            CenterContainer/VBoxContainer/VBoxContainer/StartGameButton as \
+            ShinyButton
+
 func _on_LevelSelector_pressed():
     Global.give_button_press_feedback()
 

@@ -56,14 +56,28 @@ func _validate_node_hierarchy() -> void:
         Utils.set_mouse_filter_to_pass_recursively(scroll_container)
 
 func _on_activated() -> void:
-    pass
+    _give_button_focus(_get_focused_button())
 
 func _on_deactivated() -> void:
     pass
+
+func _get_focused_button() -> ShinyButton:
+    return null
 
 func _scroll_to_top() -> void:
     if includes_standard_hierarchy:
         yield(get_tree(), "idle_frame")
         var scroll_bar := scroll_container.get_v_scrollbar()
         scroll_container.scroll_vertical = scroll_bar.min_value
-        
+
+var _focused_button: ShinyButton
+
+func _give_button_focus(button: ShinyButton) -> void:
+    if _focused_button != null:
+        _focused_button.is_shiny = false
+        _focused_button.includes_color_pulse = false
+    _focused_button = button
+    if _focused_button != null:
+        _focused_button.is_shiny = true
+        _focused_button.includes_color_pulse = true
+    

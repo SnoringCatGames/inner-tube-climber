@@ -14,6 +14,10 @@ func _init().( \
         ) -> void:
     pass
 
+func _get_focused_button() -> ShinyButton:
+    return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+            CenterContainer/VBoxContainer/CancelButton as ShinyButton
+
 func _on_ConfirmButton_pressed():
     Global.give_button_press_feedback()
     

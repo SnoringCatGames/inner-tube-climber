@@ -36,6 +36,17 @@ func _on_activated() -> void:
     Audio.cross_fade_music(Audio.GAME_OVER_MUSIC_PLAYER_INDEX)
     _update_stats()
 
+func _get_focused_button() -> ShinyButton:
+    # FIXME: Conditionally suggest retry, if the next level is still unlocked.
+    if true:
+        return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+                CenterContainer/VBoxContainer/VBoxContainer/ \
+                SelectLevelButton as ShinyButton
+    else:
+        return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+                CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/ \
+                RetryButton as ShinyButton
+
 func _update_stats() -> void:
     var control_list := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
             ScrollContainer/CenterContainer/VBoxContainer/LabeledControlList

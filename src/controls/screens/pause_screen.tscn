@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/controls/nav_bar.tscn" type="PackedScene" id=2]
@@ -9,13 +9,14 @@
 [ext_resource path="res://assets/images/icons/home-icon-normal.png" type="Texture" id=7]
 [ext_resource path="res://assets/fonts/main_font_l.tres" type="DynamicFont" id=8]
 [ext_resource path="res://src/controls/labeled_control_list.tscn" type="PackedScene" id=9]
+[ext_resource path="res://src/controls/shiny_button.tscn" type="PackedScene" id=10]
 
 [node name="PauseScreen" type="Node2D"]
 script = ExtResource( 3 )
 
 [node name="FullScreenPanel" parent="." instance=ExtResource( 4 )]
 margin_right = 480.0
-margin_bottom = 612.0
+margin_bottom = 480.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel"]
 margin_right = 480.0
@@ -29,7 +30,11 @@ anchor_bottom = 0.0
 margin_right = 480.0
 margin_bottom = 128.0
 text = "Paused"
+shows_back = true
+shows_about = false
 shows_settings = true
+shows_logo = false
+shows_game_over = false
 
 [node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 1 )]
 anchor_right = 0.0
@@ -84,23 +89,15 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 16
 
-[node name="ResumeButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer"]
+[node name="ResumeButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 10 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_right = 128.0
 margin_bottom = 56.0
-rect_min_size = Vector2( 56, 56 )
-custom_fonts/font = ExtResource( 8 )
-
-[node name="TextureRect" type="TextureRect" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/ResumeButton"]
-margin_right = 48.0
-margin_bottom = 48.0
 rect_min_size = Vector2( 128, 56 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 5 )
-stretch_mode = 4
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer"]
 margin_top = 72.0
@@ -108,42 +105,26 @@ margin_right = 128.0
 margin_bottom = 128.0
 custom_constants/separation = 16
 
-[node name="ExitLevelButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="ExitLevelButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 10 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_right = 56.0
 margin_bottom = 56.0
-rect_min_size = Vector2( 56, 56 )
-custom_fonts/font = ExtResource( 8 )
-
-[node name="TextureRect" type="TextureRect" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/ExitLevelButton"]
-margin_right = 48.0
-margin_bottom = 48.0
 rect_min_size = Vector2( 56, 56 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 7 )
-stretch_mode = 4
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
-[node name="RestartButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="RestartButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 10 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 72.0
 margin_right = 128.0
 margin_bottom = 56.0
 rect_min_size = Vector2( 56, 56 )
-custom_fonts/font = ExtResource( 8 )
-
-[node name="TextureRect" type="TextureRect" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/RestartButton"]
-margin_right = 48.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 56, 56 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 6 )
-stretch_mode = 4
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 visible = false

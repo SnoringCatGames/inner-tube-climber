@@ -1,18 +1,15 @@
 tool
-extends Control
+extends Button
 class_name ShinyButton
-
-signal pressed
 
 const SHINE_TEXTURE := \
         preload("res://assets/images/shine-line-fat-sharp-x4.png")
 const SHINE_DURATION_SEC := 0.35
 const SHINE_INTERVAL_SEC := 3.5
-const COLOR_PULSE_DURATION_SEC := 0.8
-const COLOR_PULSE_INTERVAL_SEC := 1.6
+const COLOR_PULSE_DURATION_SEC := 1.2
+const COLOR_PULSE_INTERVAL_SEC := 2.4
 var COLOR_PULSE_COLOR := Constants.INDICATOR_BLUE_COLOR
 
-export var text := "" setget _set_text,_get_text
 export var texture: Texture setget _set_texture,_get_texture
 export var texture_scale := Vector2.ONE setget \
         _set_texture_scale,_get_texture_scale
@@ -26,7 +23,9 @@ var color_pulse_interval_id := -1
 var shine_start_x: float
 var shine_end_x: float
 
-var button_style_original: StyleBox
+var button_style_normal: StyleBox
+var button_style_hover: StyleBox
+var button_style_pressed: StyleBox
 var button_style_pulse: StyleBoxFlat
 
 var shine_tween := Tween.new()
@@ -35,7 +34,13 @@ var color_pulse_tween := Tween.new()
 func _ready() -> void:
     add_child(shine_tween)
     add_child(color_pulse_tween)
-    $TopButton.connect("pressed", self, "_on_pressed")
+    $MarginContainer/TopButton.connect("pressed", self, "_on_pressed")
+    $MarginContainer/TopButton.connect( \
+            "mouse_entered", self, "_on_mouse_entered")
+    $MarginContainer/TopButton.connect("mouse_exited", self, "_on_mouse_exited")
+    $MarginContainer/TopButton.connect("button_down", self, "_on_button_down")
+    $MarginContainer/TopButton.connect("button_up", self, "_on_button_up")
+    Global.connect("display_resized", self, "update")
     update()
 
 func update() -> void:
@@ -47,11 +52,22 @@ func _deferred_update() -> void:
     shine_start_x = shine_base_position.x - rect_size.x
     shine_end_x = shine_base_position.x + rect_size.x
     
-    $BottomButton.text = text
-    $ShineLine.position = Vector2(shine_start_x, shine_base_position.y)
-    $TextureWrapper/TextureRect.texture = texture
-    $TextureWrapper/TextureRect.rect_scale = texture_scale
-    $TextureWrapper/TextureRect.rect_size = half_size
+    button_style_normal = $MarginContainer/BottomButton.get_stylebox("normal")
+    button_style_hover = $MarginContainer/BottomButton.get_stylebox("hover")
+    button_style_pressed = \
+            $MarginContainer/BottomButton.get_stylebox("pressed")
+    button_style_pulse = StyleBoxFlat.new()
+    
+    $MarginContainer.rect_size = rect_size
+    $MarginContainer/BottomButton.text = text
+    $MarginContainer/ShineLine.position = \
+            Vector2(shine_start_x, shine_base_position.y)
+    $MarginContainer/TextureWrapper/TextureRect.texture = texture
+    $MarginContainer/TextureWrapper/TextureRect.rect_scale = texture_scale
+    $MarginContainer/TextureWrapper/TextureRect.rect_size = rect_size / texture_scale
+    $MarginContainer/BottomButton.add_font_override( \
+            "font", \
+            get_font("font"))
     
     if !is_shiny:
         shine_tween.stop_all()
@@ -60,23 +76,39 @@ func _deferred_update() -> void:
     if !includes_color_pulse:
         color_pulse_tween.stop_all()
         Time.clear_interval(color_pulse_interval_id)
-        $BottomButton.add_stylebox_override( \
+        $MarginContainer/BottomButton.add_stylebox_override( \
                 "normal", \
-                button_style_original)
+                button_style_normal)
     
     if is_shiny:
         shine_interval_id = Time.set_interval( \
-                funcref(self, "trigger_shine"), \
+                funcref(self, "_trigger_shine"), \
                 SHINE_INTERVAL_SEC)
     
     if includes_color_pulse:
         color_pulse_interval_id = Time.set_interval( \
-                funcref(self, "trigger_color_pulse"), \
+                funcref(self, "_trigger_color_pulse"), \
                 COLOR_PULSE_INTERVAL_SEC)
 
-func trigger_shine() -> void:
+func _on_mouse_entered() -> void:
+    $MarginContainer/BottomButton \
+            .add_stylebox_override("normal", button_style_hover)
+
+func _on_mouse_exited() -> void:
+    $MarginContainer/BottomButton \
+            .add_stylebox_override("normal", button_style_normal)
+
+func _on_button_down() -> void:
+    $MarginContainer/BottomButton \
+            .add_stylebox_override("normal", button_style_pressed)
+
+func _on_button_up() -> void:
+    $MarginContainer/BottomButton \
+            .add_stylebox_override("normal", button_style_hover)
+
+func _trigger_shine() -> void:
     shine_tween.interpolate_property( \
-            $ShineLine, \
+            $MarginContainer/ShineLine, \
             "position:x", \
             shine_start_x, \
             shine_end_x, \
@@ -85,18 +117,22 @@ func trigger_shine() -> void:
             Tween.EASE_IN_OUT)
     shine_tween.start()
 
-func trigger_color_pulse() -> void:
+func _trigger_color_pulse() -> void:
+    # Give priority to normal button state styling.
+    if $MarginContainer/TopButton.is_hovered() or \
+            $MarginContainer/TopButton.is_pressed():
+        return
+    
     var color_original: Color = \
-            button_style_original.bg_color if \
-            button_style_original is StyleBoxFlat else \
+            button_style_normal.bg_color if \
+            button_style_normal is StyleBoxFlat else \
             Constants.BUTTON_COLOR
     var color_pulse: Color = COLOR_PULSE_COLOR
     var pulse_half_duration := COLOR_PULSE_DURATION_SEC / 2.0
     
-    button_style_original = $BottomButton.get_stylebox("normal")
-    button_style_pulse = StyleBoxFlat.new()
     button_style_pulse.bg_color = color_original
-    $BottomButton.add_stylebox_override("normal", button_style_pulse)
+    $MarginContainer/BottomButton \
+            .add_stylebox_override("normal", button_style_pulse)
     
     color_pulse_tween.interpolate_property( \
             button_style_pulse, \
@@ -116,13 +152,6 @@ func trigger_color_pulse() -> void:
             Tween.EASE_IN_OUT, \
             pulse_half_duration)
     color_pulse_tween.start()
-
-func _set_text(value: String) -> void:
-    text = value
-    update()
-
-func _get_text() -> String:
-    return text
 
 func _set_texture(value: Texture) -> void:
     texture = value

@@ -1,0 +1,69 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://src/controls/shiny_button.gd" type="Script" id=1]
+[ext_resource path="res://assets/images/shine-line-fat-sharp-x4.png" type="Texture" id=2]
+[ext_resource path="res://assets/main_theme.tres" type="Theme" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
+
+[node name="ShinyButton" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -320.0
+margin_bottom = -440.0
+rect_clip_content = true
+theme = ExtResource( 3 )
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BottomButton" type="Button" parent="."]
+margin_right = 160.0
+margin_bottom = 40.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ShineLine" type="Sprite" parent="."]
+position = Vector2( -80, 20 )
+texture = ExtResource( 2 )
+
+[node name="TextureWrapper" type="Control" parent="."]
+margin_right = 160.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="TextureWrapper"]
+margin_right = 80.0
+margin_bottom = 20.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TopButton" type="Button" parent="."]
+margin_right = 160.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )

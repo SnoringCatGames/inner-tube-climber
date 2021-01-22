@@ -548,3 +548,10 @@ func clear_directory( \
         status = directory.remove(path)
         if status != OK:
             Utils.error("Failed to delete directory", false)
+
+static func set_mouse_filter_to_pass_recursively(node: Node) -> void:
+    for child in node.get_children():
+        if child is Control:
+            if !(child is Button):
+                child.mouse_filter = Control.MOUSE_FILTER_PASS
+        set_mouse_filter_to_pass_recursively(child)

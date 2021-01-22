@@ -1,26 +1,20 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://assets/images/signs/score-board-medium.png" type="Texture" id=1]
+[ext_resource path="res://assets/images/signs/score-board-medium-x2.png" type="Texture" id=1]
 [ext_resource path="res://src/overlays/score_board.gd" type="Script" id=2]
 [ext_resource path="res://assets/fonts/main_font_normal.tres" type="DynamicFont" id=3]
 
-[node name="ScoreBoard" type="Panel"]
+[node name="ScoreBoard" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -300.0
 margin_bottom = -438.0
 rect_min_size = Vector2( 180, 42 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-label = "Label"
-value = "0"
 
 [node name="Background" type="Sprite" parent="."]
-scale = Vector2( 2, 2 )
 texture = ExtResource( 1 )
-offset = Vector2( 45, 10.5 )
+offset = Vector2( 90, 21 )
 
 [node name="Label" type="Label" parent="."]
 margin_left = 6.0

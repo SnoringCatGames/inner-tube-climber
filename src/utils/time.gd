@@ -16,6 +16,8 @@ var _elapsed_render_time_sec: float
 
 # Dictionary<int, _Timeout>
 var _timeouts := {}
+# Dictionary<int, _Interval>
+var _intervals := {}
 var _last_timeout_id := -1
 # Dictionary<FuncRef, _Throttler>
 var _throttled_callbacks := {}
@@ -48,6 +50,7 @@ func _process(delta_sec: float) -> void:
     _elapsed_latest_time_sec = _elapsed_render_time_sec
     
     _handle_timeouts()
+    _handle_intervals()
 
 func _handle_timeouts() -> void:
     var expired_timeout_id := -1
@@ -59,9 +62,16 @@ func _handle_timeouts() -> void:
     if expired_timeout_id >= 0:
         _timeouts[expired_timeout_id].callback.call_func()
         _timeouts.erase(expired_timeout_id)
-        
-        # Only handle one timeout per event loop, so we don't lock things up.
-        call_deferred("_handle_timeouts")
+
+func _handle_intervals() -> void:
+    var expired_interval_id := -1
+    for id in _intervals:
+        if _elapsed_latest_time_sec >= _intervals[id].next_trigger_time_sec:
+            expired_interval_id = id
+            break
+    
+    if expired_interval_id >= 0:
+        _intervals[expired_interval_id].trigger()
 
 func _physics_process(delta_sec: float) -> void:
     _elapsed_physics_time_sec += delta_sec
@@ -98,7 +108,7 @@ func set_timeout( \
 func clear_timeout(timeout_id: int) -> bool:
     return _timeouts.erase(timeout_id)
 
-class _Timeout:
+class _Timeout extends Reference:
     var callback: FuncRef
     var time_sec: float
     var id: int
@@ -111,6 +121,40 @@ class _Timeout:
         
         Time._last_timeout_id += 1
         self.id = Time._last_timeout_id
+
+func set_interval( \
+        callback: FuncRef, \
+        interval_sec: float) -> int:
+    var interval := _Interval.new( \
+            callback, \
+            interval_sec)
+    _intervals[interval.id] = interval
+    return interval.id
+
+func clear_interval(interval_id: int) -> bool:
+    return _intervals.erase(interval_id)
+
+class _Interval extends Reference:
+    var callback: FuncRef
+    var interval_sec: float
+    var id: int
+    var next_trigger_time_sec: float
+    
+    func _init( \
+            callback: FuncRef, \
+            interval_sec: float) -> void:
+        self.callback = callback
+        self.interval_sec = interval_sec
+        self.next_trigger_time_sec = \
+                Time._elapsed_latest_time_sec + interval_sec
+        
+        Time._last_timeout_id += 1
+        self.id = Time._last_timeout_id
+    
+    func trigger() -> void:
+        next_trigger_time_sec = \
+                Time._elapsed_latest_time_sec + interval_sec
+        callback.call_func()
 
 func throttle( \
         callback: FuncRef, \
@@ -133,7 +177,7 @@ func cancel_pending_throttle(throttled_callback: FuncRef) -> void:
 func erase_throttle(throttled_callback: FuncRef) -> bool:
     return _throttled_callbacks.erase(throttled_callback)
 
-class _Throttler:
+class _Throttler extends Reference:
     var _callback: FuncRef
     var _interval_sec: float
     var _invokes_at_end: bool

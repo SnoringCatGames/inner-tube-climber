@@ -7,9 +7,11 @@ var game_screen_layer: CanvasLayer
 var menu_screen_layer: CanvasLayer
 var hud_layer: CanvasLayer
 var annotation_layer: CanvasLayer
+var top_layer: CanvasLayer
 
 func _enter_tree() -> void:
     _create_menu_screen_layer()
+    _create_top_layer()
     _create_hud_layer()
     _create_annotation_layer()
     _create_game_screen_layer()
@@ -51,3 +53,8 @@ func _create_annotation_layer() -> void:
     annotation_layer.layer = 200
     annotation_layer.pause_mode = Node.PAUSE_MODE_STOP
     Global.add_overlay_to_current_scene(annotation_layer)
+
+func _create_top_layer() -> void:
+    top_layer = CanvasLayer.new()
+    top_layer.layer = 500
+    Global.add_overlay_to_current_scene(top_layer)

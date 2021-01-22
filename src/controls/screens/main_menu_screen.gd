@@ -26,10 +26,12 @@ func _handle_display_resized() -> void:
     var is_wide_enough_to_put_title_in_nav_bar := viewport_size.x > 600
     $FullScreenPanel/VBoxContainer/NavBar.shows_logo = \
             is_wide_enough_to_put_title_in_nav_bar
-    $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/LogoControl.visible = \
-            !is_wide_enough_to_put_title_in_nav_bar
-    $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Spacer2.visible = \
-            !is_wide_enough_to_put_title_in_nav_bar
+    $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+            CenterContainer/VBoxContainer/LogoControl.visible = \
+                    !is_wide_enough_to_put_title_in_nav_bar
+    $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer \
+            /CenterContainer/VBoxContainer/Spacer2.visible = \
+                    !is_wide_enough_to_put_title_in_nav_bar
     
     var is_tall_enough_to_have_large_animation := viewport_size.y > 600
     if is_tall_enough_to_have_large_animation:

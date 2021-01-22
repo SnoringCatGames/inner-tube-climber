@@ -3,10 +3,11 @@ class_name ScoreMultiplierCooldownIndicator
 
 const COOLDOWN_DURATION_SEC := 4.0
 
-const CORNER_OFFSET := Vector2(72.0, 72.0)
+const CORNER_OFFSET := Vector2(36.0, 96.0)
 
-const LABEL_SCALE := Vector2(1.2, 1.2)
-const LABEL_OFFSET := Vector2(-2.8, -3.0)
+const LABEL_SCALE := Vector2(1.0, 1.0)
+#const LABEL_OFFSET := Vector2(-2.8, -3.0)
+const LABEL_OFFSET := Vector2(0.0, 0.0)
 const RADIUS := 18.0
 const NEXT_STEP_STROKE_WIDTH_START := 1.0
 const NEXT_STEP_STROKE_WIDTH_END := 7.0

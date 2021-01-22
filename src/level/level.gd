@@ -64,6 +64,9 @@ var falls_count: int = 0
 var lives_count: int
 var score := 0.0
 
+# Dictionary<int, float>
+var time_spent_with_multiplier_levels := {}
+
 func _enter_tree() -> void:
     Global.level = self
     
@@ -153,7 +156,12 @@ func start( \
             Vector2.ZERO, \
             Audio.START_MUSIC_INDEX)
     Audio.cross_fade_music(Audio.current_music_player_index)
-    score_boards.visible = true
+    score_boards.visible = !player.is_stuck
+    pause_button.visible = !player.is_stuck
+    cooldown_indicator.visible = \
+            !player.is_stuck and \
+            Global.is_multiplier_cooldown_indicator_shown
+    _update_score_displays()
     
     Analytics.event( \
             "level", \
@@ -217,7 +225,18 @@ func _process(delta_sec: float) -> void:
             player.position, \
             _get_player_height())
     
-    # Update score displays.
+    _update_score_displays()
+    
+    if !time_spent_with_multiplier_levels.has(cooldown_indicator.multiplier):
+        time_spent_with_multiplier_levels[cooldown_indicator.multiplier] = 0
+    time_spent_with_multiplier_levels[cooldown_indicator.multiplier] += \
+            delta_sec
+    
+    # Check for game over.
+    if _get_player_height() < $CameraHandler.fall_height:
+        _fall()
+
+func _update_score_displays() -> void:
     score_boards.set_tier_ratio( \
             current_tier_index + 1, \
             LevelConfig.get_level_config(level_id).tiers.size())
@@ -226,10 +245,6 @@ func _process(delta_sec: float) -> void:
     score_boards.set_multiplier(cooldown_indicator.multiplier)
     score_boards.set_speed($CameraHandler.speed_index + 1)
     score_boards.set_lives(lives_count)
-    
-    # Check for game over.
-    if _get_player_height() < $CameraHandler.fall_height:
-        _fall()
 
 func _fall() -> void:
     falls_count += 1
@@ -310,6 +325,21 @@ func _set_game_over_state() -> void:
     game_over_screen.time = Utils.get_time_string_from_seconds( \
             Time.elapsed_play_time_actual_sec - \
             level_start_time)
+    game_over_screen.average_multiplier = "%.1f" % _get_average_multiplier()
+
+func _get_average_multiplier() -> float:
+    var total_time_sec := 0.0
+    for time_sec in time_spent_with_multiplier_levels.values():
+        total_time_sec += time_sec
+    
+    var average := 0.0
+    for multiplier in time_spent_with_multiplier_levels:
+        average += \
+                multiplier * \
+                time_spent_with_multiplier_levels[multiplier] / \
+                total_time_sec
+    
+    return average
 
 func _on_last_fall_sound_finished() -> void:
     Sound.MANIFEST[Sound.FALL].player.disconnect( \
@@ -364,6 +394,9 @@ func _release_player() -> void:
     $CameraHandler.set_post_stuck_state(true)
     $FogScreenHandler.set_post_stuck_state(true)
     $SnowScreenHandler.set_post_stuck_state(true)
+    score_boards.visible = true
+    pause_button.visible = true
+    cooldown_indicator.visible = Global.is_multiplier_cooldown_indicator_shown
 
 func _destroy_player() -> void:
     if player != null:
@@ -412,6 +445,7 @@ func destroy() -> void:
     _destroy_player()
     _destroy_tiers()
     
+    cooldown_indicator.stop_cooldown()
     $SignAllKeys.visible = false
     Audio.on_cross_fade_music_finished()
     

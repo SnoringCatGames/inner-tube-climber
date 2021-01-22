@@ -88,6 +88,8 @@ func _update_children() -> void:
         spacer2.size_flags_vertical = Control.SIZE_SHRINK_CENTER
         spacer2.rect_min_size.x = padding_horizontal
         hbox.add_child(spacer2)
+    
+    Utils.set_mouse_filter_to_pass_recursively(self)
 
 func _create_control( \
         item: Dictionary, \

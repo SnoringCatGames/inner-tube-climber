@@ -13,6 +13,7 @@ var high_score: String
 var tier_ratio: String 
 var difficulty: String 
 var time: String
+var average_multiplier: String
 
 func _init().( \
         TYPE, \
@@ -56,6 +57,11 @@ func _update_stats() -> void:
             text = high_score,
         },
         {
+            label = "Avg. multiplier:",
+            type = LabeledControlItemType.TEXT,
+            text = average_multiplier,
+        },
+        {
             label = "Tier:",
             type = LabeledControlItemType.TEXT,
             text = tier_ratio,
@@ -74,13 +80,6 @@ func _update_stats() -> void:
 
 func _handle_display_resized() -> void:
     var viewport_size := get_viewport().size
-#    var is_wide_enough_to_put_title_in_nav_bar := viewport_size.x > 600
-#    $FullScreenPanel/VBoxContainer/NavBar.shows_logo = \
-#            is_wide_enough_to_put_title_in_nav_bar
-#    $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/LogoControl.visible = \
-#            !is_wide_enough_to_put_title_in_nav_bar
-#    $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Spacer2.visible = \
-#            !is_wide_enough_to_put_title_in_nav_bar
     
     var is_tall_enough_to_have_large_animation := viewport_size.y > 600
     if is_tall_enough_to_have_large_animation:

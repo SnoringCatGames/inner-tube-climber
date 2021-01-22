@@ -30,6 +30,7 @@ margin_top = 47.0
 margin_right = 180.0
 margin_bottom = 89.0
 label = "Height:"
+value = null
 
 [node name="ScoreBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
@@ -38,6 +39,7 @@ margin_top = 94.0
 margin_right = 180.0
 margin_bottom = 136.0
 label = "Score:"
+value = null
 
 [node name="MultiplierBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
@@ -46,6 +48,7 @@ margin_top = 141.0
 margin_right = 180.0
 margin_bottom = 183.0
 label = "Multiplier:"
+value = null
 
 [node name="SpeedBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
@@ -54,6 +57,7 @@ margin_top = 188.0
 margin_right = 180.0
 margin_bottom = 230.0
 label = "Speed:"
+value = null
 
 [node name="LivesBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
@@ -62,3 +66,4 @@ margin_top = 235.0
 margin_right = 180.0
 margin_bottom = 277.0
 label = "Lives:"
+value = null

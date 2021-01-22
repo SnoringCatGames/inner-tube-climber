@@ -18,6 +18,8 @@ const SUPPORT_EMAIL_MAILTO := "mailto:support@levi.dev"
 
 const MAIN_FONT_NORMAL: Font = \
         preload("res://assets/fonts/main_font_normal.tres")
+const MAIN_FONT_LARGE: Font = \
+        preload("res://assets/fonts/main_font_l.tres")
 
 const CELL_SIZE := Vector2(32.0, 32.0)
 

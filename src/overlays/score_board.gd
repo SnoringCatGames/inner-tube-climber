@@ -1,5 +1,5 @@
 tool
-extends Panel
+extends Control
 class_name ScoreBoard
 
 const NUMBER_TWEEN_DURATION_PER_NUMBER_SEC := 1.0 / 40.0
@@ -12,7 +12,7 @@ var FONT_PULSE_COLOR := \
         Color.from_hsv(Constants.INDICATOR_BLUE_COLOR.h, 0.99, 0.99, 1.0)
 
 export var label: String setget _set_label,_get_label
-export var value: String setget _set_value,_get_value
+export var value := "0" setget _set_value,_get_value
 
 var color_tween: Tween
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tap_indicator.png-4cb67ccd6c6090c0e9f9193955855a12.stex"
+path="res://.import/shine-line.png-2118c8776df91cbfb8fbaba7966da3db.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/signs/tap_indicator.png"
-dest_files=[ "res://.import/tap_indicator.png-4cb67ccd6c6090c0e9f9193955855a12.stex" ]
+source_file="res://assets/images/shine-line.png"
+dest_files=[ "res://.import/shine-line.png-2118c8776df91cbfb8fbaba7966da3db.stex" ]
 
 [params]
 

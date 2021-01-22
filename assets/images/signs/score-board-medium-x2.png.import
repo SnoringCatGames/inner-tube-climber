@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tap_indicator.png-4cb67ccd6c6090c0e9f9193955855a12.stex"
+path="res://.import/score-board-medium-x2.png-840f4c0a8322a92cdd07960e3688e6ee.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/signs/tap_indicator.png"
-dest_files=[ "res://.import/tap_indicator.png-4cb67ccd6c6090c0e9f9193955855a12.stex" ]
+source_file="res://assets/images/signs/score-board-medium-x2.png"
+dest_files=[ "res://.import/score-board-medium-x2.png-840f4c0a8322a92cdd07960e3688e6ee.stex" ]
 
 [params]
 

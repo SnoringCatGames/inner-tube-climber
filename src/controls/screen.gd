@@ -52,6 +52,8 @@ func _validate_node_hierarchy() -> void:
             inner_vbox = $FullScreenPanel/VBoxContainer/CenteredPanel/ \
                     ScrollContainer/VBoxContainer
             assert(inner_vbox != null)
+        
+        Utils.set_mouse_filter_to_pass_recursively(scroll_container)
 
 func _on_activated() -> void:
     pass

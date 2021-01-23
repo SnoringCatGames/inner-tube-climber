@@ -69,16 +69,14 @@ func _deferred_update() -> void:
             "font", \
             get_font("font"))
     
-    if !is_shiny:
-        shine_tween.stop_all()
-        Time.clear_interval(shine_interval_id)
+    shine_tween.stop_all()
+    Time.clear_interval(shine_interval_id)
     
-    if !includes_color_pulse:
-        color_pulse_tween.stop_all()
-        Time.clear_interval(color_pulse_interval_id)
-        $MarginContainer/BottomButton.add_stylebox_override( \
-                "normal", \
-                button_style_normal)
+    color_pulse_tween.stop_all()
+    Time.clear_interval(color_pulse_interval_id)
+    $MarginContainer/BottomButton.add_stylebox_override( \
+            "normal", \
+            button_style_normal)
     
     if is_shiny:
         shine_interval_id = Time.set_interval( \

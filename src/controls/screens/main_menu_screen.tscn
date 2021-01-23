@@ -4,7 +4,7 @@
 [ext_resource path="res://assets/images/logo.png" type="Texture" id=2]
 [ext_resource path="res://src/controls/full_screen_panel.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/controls/screens/main_menu_screen.gd" type="Script" id=4]
-[ext_resource path="res://assets/images/icons/go-icon-normal.png" type="Texture" id=5]
+[ext_resource path="res://assets/images/icons/go-icon-alternate.png" type="Texture" id=5]
 [ext_resource path="res://src/intro_animation/slope_animation_control.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/controls/shiny_button.tscn" type="PackedScene" id=7]
 [ext_resource path="res://assets/fonts/main_font_xl.tres" type="DynamicFont" id=11]
@@ -15,7 +15,7 @@ script = ExtResource( 4 )
 
 [node name="FullScreenPanel" parent="." instance=ExtResource( 3 )]
 margin_right = 480.0
-margin_bottom = 480.0
+margin_bottom = 612.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel"]
 margin_right = 480.0
@@ -134,7 +134,7 @@ rect_min_size = Vector2( 160, 80 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 5 )
-texture_scale = Vector2( 2, 2 )
+texture_scale = Vector2( 1, 1 )
 
 [node name="StartGameButton2" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 visible = false

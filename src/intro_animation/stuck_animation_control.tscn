@@ -8,23 +8,22 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="."]
-margin_left = -32.0
-margin_top = -32.0
-margin_right = 32.0
-margin_bottom = 32.0
+margin_left = -24.0
+margin_top = -24.0
+margin_right = 24.0
+margin_bottom = 24.0
 rect_clip_content = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Control" type="Control" parent="Control"]
-margin_left = 32.0
-margin_top = 32.0
-margin_right = 32.0
-margin_bottom = 32.0
+margin_left = 24.0
+margin_top = 24.0
+margin_right = 24.0
+margin_bottom = 24.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="StuckAnimation" parent="Control/Control" instance=ExtResource( 1 )]
-scale = Vector2( 2, 2 )

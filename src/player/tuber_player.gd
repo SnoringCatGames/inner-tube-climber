@@ -2,7 +2,7 @@ extends Player
 class_name TuberPlayer
 
 var PLAYER_STUCK_ANIMATION_CENTER_OFFSET := \
-        Vector2(0.0, -12.0) * Constants.PLAYER_SIZE_MULTIPLIER
+        Vector2(0.0, -18.0) * Constants.PLAYER_SIZE_MULTIPLIER
 
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38

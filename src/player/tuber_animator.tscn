@@ -1,15 +1,16 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://assets/images/player/tuber-jumping.png" type="Texture" id=1]
-[ext_resource path="res://assets/images/player/tuber-landing.png" type="Texture" id=2]
-[ext_resource path="res://assets/images/player/tuber-standing.png" type="Texture" id=3]
-[ext_resource path="res://assets/images/player/tuber-running.png" type="Texture" id=4]
+[ext_resource path="res://assets/images/player/tuber-alt-standing.png" type="Texture" id=1]
+[ext_resource path="res://assets/images/player/tuber-alt-landing.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/player/tuber-alt-jumping.png" type="Texture" id=3]
+[ext_resource path="res://assets/images/player/tuber-alt-running.png" type="Texture" id=4]
 [ext_resource path="res://src/player/tuber_animator.gd" type="Script" id=5]
-[ext_resource path="res://assets/images/intro_animations/tuber-stuck.png" type="Texture" id=6]
+[ext_resource path="res://assets/images/player/tuber-alt-stuck.png" type="Texture" id=6]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Fall"
-length = 0.1
+length = 0.4
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Fall:frame")
 tracks/0/interp = 1
@@ -17,15 +18,16 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 0 ]
+"values": [ 0, 1, 2, 3 ]
 }
 
 [sub_resource type="Animation" id=2]
 resource_name = "Jump"
-length = 0.1
+length = 0.4
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Jump:frame")
 tracks/0/interp = 1
@@ -33,10 +35,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 0 ]
+"values": [ 0, 1, 2, 3 ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -57,7 +59,8 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=4]
 resource_name = "Stand"
-length = 0.1
+length = 2.0
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Stand:frame")
 tracks/0/interp = 1
@@ -65,10 +68,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 1.9 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 1,
-"values": [ 0 ]
+"values": [ 0, 1 ]
 }
 
 [sub_resource type="Animation" id=5]
@@ -94,10 +97,10 @@ script = ExtResource( 5 )
 
 [node name="Stuck" type="Sprite" parent="."]
 light_mask = 2
-position = Vector2( 0, 12 )
+position = Vector2( 0, 21 )
 texture = ExtResource( 6 )
 hframes = 8
-frame = 5
+frame = 2
 
 [node name="Run" type="Sprite" parent="."]
 visible = false
@@ -108,17 +111,21 @@ hframes = 8
 [node name="Jump" type="Sprite" parent="."]
 visible = false
 light_mask = 2
-texture = ExtResource( 1 )
+texture = ExtResource( 3 )
+hframes = 4
+frame = 1
 
 [node name="Fall" type="Sprite" parent="."]
 visible = false
 light_mask = 2
 texture = ExtResource( 2 )
+hframes = 4
 
 [node name="Stand" type="Sprite" parent="."]
 visible = false
 light_mask = 2
-texture = ExtResource( 3 )
+texture = ExtResource( 1 )
+hframes = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Stuck"

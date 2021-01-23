@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://assets/images/intro_animations/tuber-stuck.png" type="Texture" id=1]
+[ext_resource path="res://assets/images/intro_animations/tuber-alt-stuck.png" type="Texture" id=1]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Stuck"
@@ -24,7 +24,7 @@ tracks/0/keys = {
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 hframes = 8
-frame = 2
+frame = 6
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Stuck"

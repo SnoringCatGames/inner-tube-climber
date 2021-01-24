@@ -124,7 +124,7 @@ func _trigger_color_pulse() -> void:
     var color_original: Color = \
             button_style_normal.bg_color if \
             button_style_normal is StyleBoxFlat else \
-            Constants.BUTTON_COLOR
+            Constants.BUTTON_COLOR_NORMAL
     var color_pulse: Color = COLOR_PULSE_COLOR
     var pulse_half_duration := COLOR_PULSE_DURATION_SEC / 2.0
     

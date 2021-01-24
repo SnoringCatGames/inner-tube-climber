@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/controls/screens/level_select_screen.gd" type="Script" id=1]
 [ext_resource path="res://src/controls/full_screen_panel.tscn" type="PackedScene" id=2]
@@ -6,6 +6,19 @@
 [ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/controls/shiny_button.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/fonts/main_font_xl.tres" type="DynamicFont" id=6]
+[ext_resource path="res://src/controls/accordion_panel.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/images/icons/left_caret_normal.png" type="Texture" id=8]
+[ext_resource path="res://assets/images/icons/play-icon-normal.png" type="Texture" id=9]
+[ext_resource path="res://assets/fonts/main_font_normal.tres" type="DynamicFont" id=10]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.482353, 0.478431, 0.301961, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 7.0
+content_margin_right = 7.0
+content_margin_top = 7.0
+content_margin_bottom = 7.0
 
 [node name="LevelSelectScreen" type="Node2D"]
 script = ExtResource( 1 )
@@ -17,6 +30,8 @@ margin_bottom = 480.0
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel"]
 margin_right = 480.0
 margin_bottom = 612.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="NavBar" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
@@ -53,9 +68,9 @@ size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
 margin_left = 140.0
-margin_top = 176.0
+margin_top = 51.0
 margin_right = 340.0
-margin_bottom = 304.0
+margin_bottom = 429.0
 
 [node name="Spacer1" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 100.0
@@ -66,7 +81,7 @@ size_flags_vertical = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_top = 4.0
 margin_right = 200.0
-margin_bottom = 124.0
+margin_bottom = 374.0
 rect_min_size = Vector2( 140, 0 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -75,14 +90,16 @@ custom_constants/separation = 12
 [node name="StartGameButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = -1.0
-margin_right = 199.0
+margin_right = 200.0
 margin_bottom = 80.0
 rect_min_size = Vector2( 200, 80 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 6 )
 text = "Start game"
+texture_scale = Vector2( 1, 1 )
+is_shiny = false
+includes_color_pulse = false
 
 [node name="LevelSelector" type="OptionButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer"]
 margin_top = 92.0
@@ -91,11 +108,87 @@ margin_bottom = 120.0
 text = "Select level"
 align = 1
 
+[node name="AccordionPanel" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 7 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 132.0
+margin_right = 200.0
+margin_bottom = 370.0
+rect_min_size = Vector2( 0, 238 )
+header_text = "Accordion!"
+header_min_height = 40.0
+header_font = ExtResource( 10 )
+padding = Vector2( 16, 8 )
+
+[node name="PanelContainer" type="PanelContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/AccordionPanel"]
+margin_top = 28.0
+margin_right = 200.0
+margin_bottom = 238.0
+size_flags_horizontal = 8
+size_flags_vertical = 4
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/AccordionPanel/PanelContainer"]
+margin_right = 200.0
+margin_bottom = 210.0
+rect_min_size = Vector2( 200, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/AccordionPanel/PanelContainer/VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 46.0
+custom_styles/normal = SubResource( 2 )
+text = "A button"
+icon = ExtResource( 8 )
+
+[node name="TextureRect" type="TextureRect" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/AccordionPanel/PanelContainer/VBoxContainer"]
+margin_top = 50.0
+margin_right = 200.0
+margin_bottom = 82.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 9 )
+
+[node name="Label" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/AccordionPanel/PanelContainer/VBoxContainer"]
+margin_top = 86.0
+margin_right = 200.0
+margin_bottom = 114.0
+size_flags_horizontal = 3
+text = "foo"
+align = 2
+
+[node name="Label2" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/AccordionPanel/PanelContainer/VBoxContainer"]
+margin_top = 118.0
+margin_right = 200.0
+margin_bottom = 146.0
+size_flags_horizontal = 3
+text = "bar"
+align = 1
+
+[node name="Label3" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/AccordionPanel/PanelContainer/VBoxContainer"]
+margin_top = 150.0
+margin_right = 200.0
+margin_bottom = 178.0
+size_flags_horizontal = 3
+text = "baz"
+
+[node name="Label4" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/AccordionPanel/PanelContainer/VBoxContainer"]
+margin_top = 182.0
+margin_right = 200.0
+margin_bottom = 210.0
+size_flags_horizontal = 3
+text = "qux"
+align = 1
+
 [node name="Spacer2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 100.0
-margin_top = 128.0
+margin_top = 378.0
 margin_right = 100.0
-margin_bottom = 128.0
+margin_bottom = 378.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/StartGameButton" to="." method="_on_StartGameButton_pressed"]

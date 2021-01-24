@@ -47,12 +47,22 @@ const PLAYER_HALF_HEIGHT_DEFAULT := \
 var WALL_COLOR := Color.from_hsv(0.611, 0.43, 0.6, 1.0)
 #273149
 var BACKGROUND_DARKEST_COLOR := Color.from_hsv(0.617, 0.47, 0.29, 1.0)
-#586e9a
-var BUTTON_COLOR := Color.from_hsv(0.6111, 0.43, 0.6, 1.0)
+#576d99
+var BUTTON_COLOR_NORMAL := Color.from_hsv(0.6111, 0.43, 0.6, 1.0)
+#89b4f0
+var BUTTON_COLOR_HOVER := Color.from_hsv(0.597, 0.43, 0.94, 1.0)
+#3a446e
+var BUTTON_COLOR_PRESSED := Color.from_hsv(0.633, 0.47, 0.43, 1.0)
 #273149
 var SCREEN_BACKGROUND_COLOR := Color.from_hsv(0.617, 0.47, 0.29, 1.0)
 var KEY_VALUE_EVEN_ROW_COLOR := Color.from_hsv( \
         SCREEN_BACKGROUND_COLOR.h, 0.1, 0.9, 0.05)
+
+var OPTION_BUTTON_COLOR_NORMAL := SCREEN_BACKGROUND_COLOR
+#3e4c6f
+var OPTION_BUTTON_COLOR_HOVER := Color.from_hsv(0.619, 0.44, 0.44, 1.0)
+#1b2235
+var OPTION_BUTTON_COLOR_PRESSED := Color.from_hsv(0.622, 0.49, 0.21, 1.0)
 
 var INDICATOR_GREEN_COLOR := Color.from_hsv(0.569, 0.78, 0.68, 1.0)
 var INDICATOR_BLUE_COLOR := Color.from_hsv(0.472, 0.40, 0.77, 1.0)

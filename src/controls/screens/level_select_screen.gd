@@ -1,3 +1,4 @@
+tool
 extends Screen
 class_name LevelSelectScreen
 

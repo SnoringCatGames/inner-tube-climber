@@ -98,6 +98,12 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="RankAnimator" parent="Header/HBoxContainer/RankWrapper" instance=ExtResource( 4 )]
+margin_left = 13.5
+margin_top = 16.0
+margin_right = -13.5
+margin_bottom = -16.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="CaretWrapper" type="Control" parent="Header/HBoxContainer"]
 margin_left = 292.0

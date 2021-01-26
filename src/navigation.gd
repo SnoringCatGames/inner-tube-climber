@@ -121,8 +121,11 @@ func close_current_screen() -> void:
             get_active_screen_type(), \
             false)
 
+func get_active_screen() -> Screen:
+    return active_screen_stack.back()
+
 func get_active_screen_type() -> int:
-    return active_screen_stack.back().type
+    return get_active_screen().type
 
 func _set_screen_is_open( \
         screen_type: int, \

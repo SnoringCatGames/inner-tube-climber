@@ -125,6 +125,8 @@ const FRAMERATE_MULTIPLIER_HARD_MIN := 1.25
 const FRAMERATE_MULTIPLIER_HARD_MAX := 1.6
 
 const _DEFAULT_TIER_VALUES := {
+    id = "",
+    version = "",
     camera_horizontally_locked = true,
     zoom_multiplier = 1.0,
     scroll_speed_multiplier = 1.0,
@@ -141,6 +143,10 @@ const _DEFAULT_TIER_VALUES := {
 }
 
 const _DEFAULT_LEVEL_VALUES := {
+    id = "",
+    name = "",
+    version = "",
+    is_locked = true,
     lives_count = 3,
     zoom_multiplier = null,
     scroll_speed_multiplier = null,
@@ -154,6 +160,11 @@ const _DEFAULT_LEVEL_VALUES := {
     fog_screen_secondary_color = null,
     snow_density_multiplier = null,
     windiness = null,
+    rank_thresholds = {
+        Rank.GOLD: 100000,
+        Rank.SILVER: 10000,
+        Rank.BRONZE: 100,
+    },
 }
 
 const _TIERS := {
@@ -201,10 +212,12 @@ const _TIERS := {
 
 const _LEVELS := {
     "1": {
+        name = "foo",
         tiers = ["1", "2", "3", "4", "5", "6", "7"],
         version = "0.1.0",
     },
     "2": {
+        name = "bar",
         tiers = ["6", "3"],
         version = "0.1.0",
     },
@@ -226,9 +239,11 @@ static func get_tier_config(tier_id: String) -> Dictionary:
     assert(_TIERS.has(tier_id))
     var tier_config: Dictionary = _TIERS[tier_id].duplicate()
     assert(tier_config.has("scene_path"))
+    assert(tier_config.has("version"))
     for key in _DEFAULT_TIER_VALUES.keys():
         if !tier_config.has(key):
             tier_config[key] = _DEFAULT_TIER_VALUES[key]
+    tier_config["id"] = tier_id
     _inflated_tiers[tier_id] = tier_config
     return tier_config
 
@@ -238,14 +253,20 @@ static func get_level_config(level_id: String) -> Dictionary:
     
     assert(_LEVELS.has(level_id))
     var level_config: Dictionary = _LEVELS[level_id].duplicate()
+    assert(level_config.has("name"))
     assert(level_config.has("tiers"))
+    assert(level_config.has("version"))
     for key in _DEFAULT_LEVEL_VALUES.keys():
         if !level_config.has(key):
             var value = _DEFAULT_LEVEL_VALUES[key]
             if value == null:
                 value = _DEFAULT_TIER_VALUES[key]
             level_config[key] = value
+    # FIXME:
+    level_config["is_locked"] = false
+    level_config["id"] = level_id
     _inflated_levels[level_id] = level_config
+    assert(level_id == str(int(level_id)))
     return level_config
 
 static func get_value( \
@@ -318,3 +339,15 @@ static func get_walk_sound_for_tile( \
     return Sound.WALK_ICE if \
             get_is_tile_slippery(tile_set, tile_id) else \
             Sound.WALK_SNOW
+
+static func get_level_rank(level_id: String) -> int:
+    var config: Dictionary = get_level_config(level_id)
+    var score := SaveState.get_high_score_for_level(level_id)
+    if score > config.rank_thresholds[Rank.GOLD]:
+        return Rank.GOLD
+    elif score > config.rank_thresholds[Rank.SILVER]:
+        return Rank.SILVER
+    elif score > config.rank_thresholds[Rank.BRONZE]:
+        return Rank.BRONZE
+    else:
+        return Rank.UNRANKED

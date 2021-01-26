@@ -253,8 +253,12 @@ func _on_collect_request_completed( \
     else:
         Utils.error( \
                 "Analytics._on_collect_request_completed failed: " + \
-                "result=%d, code=%d, url=%s" % \
-                        [result, response_code, url], \
+                "result=%d, code=%d, url=%s, body=%s" % [
+                    result, 
+                    response_code, 
+                    url, 
+                    body.get_string_from_utf8(),
+                ], \
                 false)
 
 func _retry_queued_entries() -> void:
@@ -369,8 +373,12 @@ func _on_batch_request_completed( \
     else:
         Utils.error( \
                 "Analytics._on_batch_request_completed failed: " + \
-                "result=%d, code=%d, url=%s" % \
-                        [result, response_code, url], \
+                "result=%d, code=%d, url=%s, body=%s" % [
+                    result, 
+                    response_code, 
+                    url, 
+                    body.get_string_from_utf8(),
+                ], \
                 false)
 
 class _AnalyticsEntry extends Reference:

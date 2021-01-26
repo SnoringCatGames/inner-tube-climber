@@ -89,7 +89,9 @@ func _update_children() -> void:
         spacer2.rect_min_size.x = padding_horizontal
         hbox.add_child(spacer2)
     
-    Utils.set_mouse_filter_to_pass_recursively(self)
+    Utils.set_mouse_filter_recursively( \
+            self, \
+            Control.MOUSE_FILTER_PASS)
 
 func _create_control( \
         item: Dictionary, \

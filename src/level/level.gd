@@ -166,7 +166,7 @@ func start( \
     Analytics.event( \
             "level", \
             "start", \
-            level_id + "v" + LevelConfig._LEVELS[level_id].version)
+            level_id + "v" + LevelConfig.get_level_config(level_id).version)
 
 func _physics_process(_delta_sec: float) -> void:
     _delta_sec *= Time.physics_framerate_multiplier
@@ -262,7 +262,7 @@ func _fall() -> void:
             "level", \
             "fall", \
             current_tier_id + "v" + \
-                    LevelConfig._TIERS[current_tier_id].version, \
+                    LevelConfig.get_tier_config(current_tier_id).version, \
             Time.elapsed_play_time_actual_sec - tier_start_time)
     
     if lives_count > 0:
@@ -310,7 +310,8 @@ func _fall() -> void:
         Analytics.event( \
                 "score", \
                 "v" + Constants.SCORE_VERSION, \
-                level_id + "v" + LevelConfig._LEVELS[level_id].version, \
+                level_id + "v" + \
+                        LevelConfig.get_level_config(level_id).version, \
                 int(score))
 
 func _set_game_over_state() -> void:
@@ -623,7 +624,7 @@ func _on_entered_new_tier() -> void:
             "tier", \
             "end", \
             current_tier_id + "v" + \
-                    LevelConfig._TIERS[current_tier_id].version, \
+                    LevelConfig.get_tier_config(current_tier_id).version, \
             Time.elapsed_play_time_actual_sec - tier_start_time)
     
     tier_start_time = Time.elapsed_play_time_actual_sec

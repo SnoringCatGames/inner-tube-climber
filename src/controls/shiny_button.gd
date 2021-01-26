@@ -11,7 +11,7 @@ const COLOR_PULSE_INTERVAL_SEC := 2.4
 var COLOR_PULSE_COLOR := Constants.INDICATOR_BLUE_COLOR
 
 export var texture: Texture setget _set_texture,_get_texture
-export var texture_scale := Vector2.ONE setget \
+export var texture_scale := Vector2(1.0, 1.0) setget \
         _set_texture_scale,_get_texture_scale
 export var is_shiny := false setget _set_is_shiny,_get_is_shiny
 export var includes_color_pulse := false setget \

@@ -2,17 +2,23 @@ tool
 extends Screen
 class_name LevelSelectScreen
 
+const LEVEL_SELECT_ITEM_RESOURCE_PATH := \
+        "res://src/controls/level_select_item.tscn"
+
+# FIXME:
+# - Determine which level to suggest (or none).
+#   - Auto expand.
+#   - (Don't auto-scroll separately, since that'll happen automatically when expanding?)
+#   - Return it's button as the shiny button to focus on.
+
 const TYPE := ScreenType.LEVEL_SELECT
 const INCLUDES_STANDARD_HIERARCHY := true
 const INCLUDES_NAV_BAR := true
 const INCLUDES_CENTER_CONTAINER := true
-const DEFAULT_SELECTED_LEVEL_ID := "1"
 
-const LEVEL_ITEM_PREFIX := "Level "
-
-var selected_level_id := DEFAULT_SELECTED_LEVEL_ID
 # Array<String>
 var level_items := []
+var expanded_item: LevelSelectItem
 
 func _init().( \
         TYPE, \
@@ -23,34 +29,30 @@ func _init().( \
     pass
 
 func _ready() -> void:
-    var selector := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
-            ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/ \
-            LevelSelector
+    for level_id in LevelConfig.get_level_ids():
+        var item: LevelSelectItem = Utils.add_scene( \
+                $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer \
+                        /CenterContainer/VBoxContainer/LevelSelectItems, \
+                LEVEL_SELECT_ITEM_RESOURCE_PATH, \
+                true, \
+                true)
+        item.level_id = level_id
+        item.is_open = false
+        item.connect("toggled", self, "_on_item_toggled", [item])
+        # FIXME
+        if false:
+            expanded_item = item
     
-    for id in LevelConfig.get_level_ids():
-        var item := "%s%s" % [LEVEL_ITEM_PREFIX, id]
-        level_items.push_back(item)
-        selector.add_item(item)
-    
-    var default_label := "%s%s" % [LEVEL_ITEM_PREFIX, selected_level_id]
-    var default_index := level_items.find(default_label)
-    selector.select(default_index)
+    if expanded_item != null:
+        expanded_item.is_open = true
 
 func _get_focused_button() -> ShinyButton:
-    return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
-            CenterContainer/VBoxContainer/VBoxContainer/StartGameButton as \
-            ShinyButton
+    return null
 
-func _on_LevelSelector_pressed():
-    Global.give_button_press_feedback()
-
-func _on_LevelSelector_item_selected(index: int) -> void:
-    Global.give_button_press_feedback()
-    var level_id: String = \
-            level_items[index].substr(LEVEL_ITEM_PREFIX.length())
-    selected_level_id = level_id
-
-func _on_StartGameButton_pressed():
-    Global.give_button_press_feedback(true)
-    Nav.open(ScreenType.GAME)
-    Nav.screens[ScreenType.GAME].start_level(selected_level_id)
+func _on_item_toggled(item: LevelSelectItem) -> void:
+    if item.is_open:
+        if expanded_item != null:
+            expanded_item.toggle()
+        expanded_item = item
+    elif expanded_item == item:
+        expanded_item = null

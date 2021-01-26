@@ -57,16 +57,15 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
-margin_right = 480.0
-margin_bottom = 480.0
+margin_right = 470.0
+margin_bottom = 857.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
-margin_left = 100.0
-margin_top = 75.0
-margin_right = 380.0
-margin_bottom = 404.0
+margin_left = 95.0
+margin_right = 375.0
+margin_bottom = 857.0
 rect_min_size = Vector2( 280, 0 )
 
 [node name="Spacer6" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
@@ -108,7 +107,6 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 
 [node name="Control2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-visible = false
 margin_left = 140.0
 margin_top = 109.0
 margin_right = 140.0
@@ -127,9 +125,9 @@ size_flags_vertical = 3
 
 [node name="Spacer3" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0
-margin_top = 109.0
+margin_top = 353.0
 margin_right = 140.0
-margin_bottom = 129.0
+margin_bottom = 373.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -138,20 +136,17 @@ __meta__ = {
 }
 
 [node name="LabeledControlList" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer" instance=ExtResource( 6 )]
-visible = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 133.0
+margin_top = 377.0
 margin_right = 280.0
-margin_bottom = 413.0
-row_height = 40.0
-padding_horizontal = 8.0
+margin_bottom = 657.0
 
 [node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0
-margin_top = 133.0
+margin_top = 661.0
 margin_right = 140.0
-margin_bottom = 163.0
+margin_bottom = 691.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -161,9 +156,9 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 76.0
-margin_top = 167.0
+margin_top = 695.0
 margin_right = 204.0
-margin_bottom = 295.0
+margin_bottom = 823.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 16
@@ -180,6 +175,7 @@ rect_min_size = Vector2( 128, 56 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 7 )
+texture_scale = null
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer"]
 margin_top = 72.0
@@ -198,6 +194,7 @@ rect_min_size = Vector2( 56, 56 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 9 )
+texture_scale = null
 
 [node name="RetryButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 10 )]
 anchor_right = 0.0
@@ -209,12 +206,13 @@ rect_min_size = Vector2( 56, 56 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 8 )
+texture_scale = null
 
 [node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0
-margin_top = 299.0
+margin_top = 827.0
 margin_right = 140.0
-margin_bottom = 329.0
+margin_bottom = 857.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 3

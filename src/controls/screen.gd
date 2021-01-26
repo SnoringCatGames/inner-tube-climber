@@ -10,6 +10,8 @@ var nav_bar: NavBar
 var scroll_container: ScrollContainer
 var inner_vbox: VBoxContainer
 
+var _focused_button: ShinyButton
+
 func _init( \
         type: int, \
         includes_standard_hierarchy: bool, \
@@ -53,7 +55,9 @@ func _validate_node_hierarchy() -> void:
                     ScrollContainer/VBoxContainer
             assert(inner_vbox != null)
         
-        Utils.set_mouse_filter_to_pass_recursively(scroll_container)
+        Utils.set_mouse_filter_recursively( \
+                scroll_container, \
+                Control.MOUSE_FILTER_PASS)
 
 func _on_activated() -> void:
     _give_button_focus(_get_focused_button())
@@ -69,8 +73,6 @@ func _scroll_to_top() -> void:
         yield(get_tree(), "idle_frame")
         var scroll_bar := scroll_container.get_v_scrollbar()
         scroll_container.scroll_vertical = scroll_bar.min_value
-
-var _focused_button: ShinyButton
 
 func _give_button_focus(button: ShinyButton) -> void:
     if _focused_button != null:

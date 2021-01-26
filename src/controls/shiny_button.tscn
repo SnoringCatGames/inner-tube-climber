@@ -26,7 +26,6 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-texture_scale = null
 is_shiny = null
 includes_color_pulse = null
 
@@ -62,6 +61,8 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/TextureWrapper"]
+margin_right = 160.0
+margin_bottom = 40.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 stretch_mode = 4

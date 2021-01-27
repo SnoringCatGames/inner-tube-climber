@@ -8,11 +8,8 @@ func _enter_tree() -> void:
     position.x = max(CORNER_OFFSET.x, Utils.get_safe_area_margin_left())
     update_displays()
 
-func set_tier_ratio( \
-        tier_index: int, \
-        tier_count: int) -> void:
-    $VBoxContainer/TierRatioBoard \
-            .set_value_with_color_pulse("%s / %s" % [tier_index, tier_count])
+func set_tier_ratio(tier_ratio) -> void:
+    $VBoxContainer/TierRatioBoard.set_value_with_color_pulse(tier_ratio)
 
 func set_height(height: int) -> void:
     $VBoxContainer/HeightBoard.animate_to_number(height)

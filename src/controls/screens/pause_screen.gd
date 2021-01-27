@@ -81,7 +81,7 @@ func _update_stats() -> void:
     _control_list.find_item("Tier:").text = level.get_tier_ratio()
     _control_list.find_item("Current score:").text = str(int(level.score))
     _control_list.find_item("High score:").text = \
-        str(SaveState.get_high_score_for_level(level.level_id))
+        str(SaveState.get_level_high_score(level.level_id))
     _control_list.find_item("Multiplier:").text = \
         "x%s" % level.cooldown_indicator.multiplier
     _control_list.find_item("Speed:").text = \

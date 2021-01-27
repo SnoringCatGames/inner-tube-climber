@@ -14,6 +14,13 @@ var tier_ratio: String
 var difficulty: String 
 var time: String
 var average_multiplier: String
+# FIXME:
+var finished_level: bool
+var three_looped_level: bool
+var reached_new_high_score: bool
+# Rank
+var rank: int
+var new_unlocked_levels: Array
 
 func _init().( \
         TYPE, \

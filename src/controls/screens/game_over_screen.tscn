@@ -141,6 +141,8 @@ anchor_bottom = 0.0
 margin_top = 377.0
 margin_right = 280.0
 margin_bottom = 657.0
+row_height = 40.0
+padding_horizontal = 8.0
 
 [node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0

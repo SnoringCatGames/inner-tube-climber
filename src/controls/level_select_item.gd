@@ -2,34 +2,13 @@ tool
 extends Control
 class_name LevelSelectItem
 
-# FIXME: ----------------------
-# - SaveState
-#   - save level state by both ID and version
-#   - is_locked
-#   - rank
-#   - high score
-#   - high tier
-#   - total number of plays
-#   - all scores
-#   - all tiers
-# - rank
-#   - Gold, Silver, Bronze
-#   - Create icons
-#   - Create level config values
-#   - Save values in SaveState
-# - total number of plays
-# - start button
-# - locked indicator
-# - High score
-# - High tier
-# - Score for next rank
-
 signal toggled
 
 const HEADER_HEIGHT := 56.0
 const PADDING := Vector2(16.0, 8.0)
 const RANK_ICON_SIZE_DEFAULT := RankAnimator.SMALL_SIZE
 const RANK_ICON_SCALE := Vector2(1.0, 1.0)
+const LOCKED_OPACITY := 0.6
 
 export var level_id := "" setget _set_level_id,_get_level_id
 export var is_open: bool setget _set_is_open,_get_is_open
@@ -82,12 +61,24 @@ func _update() -> void:
         return
     
     var config := LevelConfig.get_level_config(level_id)
-    var rank := LevelConfig.get_level_rank(level_id)
+    var high_score := SaveState.get_level_high_score(level_id)
+    var rank := LevelConfig.get_level_rank( \
+            level_id, \
+            high_score)
+    var high_tier := SaveState.get_level_high_tier(level_id)
+    var high_tier_ratio := "%s / %s" % [
+        high_tier, \
+        config.tiers.size(),
+    ]
+    var score_for_next_rank_str := _get_score_for_next_rank_str(config, rank)
+    var total_plays := SaveState.get_level_total_plays(level_id)
+    var is_unlocked := SaveState.get_level_is_unlocked(level_id)
     
-    $LockedWrapper.visible = config.is_locked
+    $LockedWrapper.visible = !is_unlocked
+    $LockedWrapper.modulate.a = LOCKED_OPACITY
     
-    $Header.visible = !config.is_locked
-    $Header/HBoxContainer/LevelNumber.text = config.id + "."
+    $Header.visible = is_unlocked
+    $Header/HBoxContainer/LevelNumber.text = str(config.number) + "."
     $Header/HBoxContainer/LevelName.text = config.name
     $Header/HBoxContainer/RankWrapper/RankAnimator.rank = rank
     
@@ -95,22 +86,22 @@ func _update() -> void:
         {
             label = "Score for next rank:",
             type = LabeledControlItemType.TEXT,
-            text = "foo",
+            text = score_for_next_rank_str,
         },
         {
             label = "High score:",
             type = LabeledControlItemType.TEXT,
-            text = "bar",
+            text = str(high_score),
         },
         {
             label = "High tier:",
             type = LabeledControlItemType.TEXT,
-            text = "baz",
+            text = high_tier_ratio,
         },
         {
             label = "Total plays:",
             type = LabeledControlItemType.TEXT,
-            text = "qux",
+            text = str(total_plays),
         },
     ]
     $AccordionPanel/VBoxContainer/LabeledControlList.items = list_items
@@ -157,3 +148,19 @@ func _set_is_open(value: bool) -> void:
 
 func _get_is_open() -> bool:
     return $AccordionPanel.is_open
+
+func _get_score_for_next_rank_str( \
+        level_config: Dictionary, \
+        current_rank: int) -> String:
+    match current_rank:
+        Rank.BRONZE:
+            return str(level_config.rank_thresholds[Rank.SILVER])
+        Rank.SILVER:
+            return str(level_config.rank_thresholds[Rank.GOLD])
+        Rank.GOLD:
+            return "-"
+        Rank.UNRANKED:
+            return "(finish level)"
+        _:
+            Utils.error()
+            return ""

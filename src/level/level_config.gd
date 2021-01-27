@@ -126,6 +126,7 @@ const FRAMERATE_MULTIPLIER_HARD_MAX := 1.6
 
 const _DEFAULT_TIER_VALUES := {
     id = "",
+    number = -1,
     version = "",
     camera_horizontally_locked = true,
     zoom_multiplier = 1.0,
@@ -144,9 +145,9 @@ const _DEFAULT_TIER_VALUES := {
 
 const _DEFAULT_LEVEL_VALUES := {
     id = "",
+    number = -1,
     name = "",
     version = "",
-    is_locked = true,
     lives_count = 3,
     zoom_multiplier = null,
     scroll_speed_multiplier = null,
@@ -160,10 +161,17 @@ const _DEFAULT_LEVEL_VALUES := {
     fog_screen_secondary_color = null,
     snow_density_multiplier = null,
     windiness = null,
+    # FIXME: Update these to be more reasonable defaults; but also add actual
+    #        values in level configs;
     rank_thresholds = {
-        Rank.GOLD: 100000,
-        Rank.SILVER: 10000,
-        Rank.BRONZE: 100,
+        Rank.GOLD: 10000,
+        Rank.SILVER: 1000,
+    },
+    unlock_conditions = {
+        bronze_levels = [],
+        silver_levels = [],
+        gold_levels = [],
+        three_loop_levels = [],
     },
 }
 
@@ -213,13 +221,53 @@ const _TIERS := {
 const _LEVELS := {
     "1": {
         name = "foo",
-        tiers = ["1", "2", "3", "4", "5", "6", "7"],
+        # FIXME: 
+        tiers = ["1"],
+#        tiers = ["1", "2", "3", "4", "5", "6", "7"],
         version = "0.1.0",
+        unlock_conditions = {
+        },
     },
+    # FIXME: 
     "2": {
         name = "bar",
-        tiers = ["6", "3"],
+        tiers = ["1"],
         version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["1"],
+        },
+    },
+    "3": {
+        name = "bar",
+        tiers = ["1"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["2"],
+        },
+    },
+    "4": {
+        name = "bar",
+        tiers = ["1"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["3"],
+        },
+    },
+    "5": {
+        name = "bar",
+        tiers = ["1"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["4"],
+        },
+    },
+    "6": {
+        name = "bar",
+        tiers = ["1"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["5"],
+        },
     },
 }
 
@@ -244,6 +292,8 @@ static func get_tier_config(tier_id: String) -> Dictionary:
         if !tier_config.has(key):
             tier_config[key] = _DEFAULT_TIER_VALUES[key]
     tier_config["id"] = tier_id
+    assert(tier_id == str(int(tier_id)))
+    tier_config["number"] = int(tier_id)
     _inflated_tiers[tier_id] = tier_config
     return tier_config
 
@@ -262,11 +312,12 @@ static func get_level_config(level_id: String) -> Dictionary:
             if value == null:
                 value = _DEFAULT_TIER_VALUES[key]
             level_config[key] = value
-    # FIXME:
-    level_config["is_locked"] = false
     level_config["id"] = level_id
-    _inflated_levels[level_id] = level_config
     assert(level_id == str(int(level_id)))
+    level_config["number"] = int(level_id)
+    assert(level_config.rank_thresholds.has(Rank.GOLD))
+    assert(level_config.rank_thresholds.has(Rank.SILVER))
+    _inflated_levels[level_id] = level_config
     return level_config
 
 static func get_value( \
@@ -321,6 +372,18 @@ static func get_tier_gap_scene_path( \
     return LevelConfig.OPENNESS_TO_TIER_GAP_SCENE_PATH \
             [from_openness_type][to_openness_type]
 
+static func get_tier_version_string(tier_id: String) -> String:
+    return tier_id + "v" + get_tier_config(tier_id).version
+
+static func get_level_version_string(level_id: String) -> String:
+    return level_id + "v" + get_level_config(level_id).version
+
+static func get_level_tier_version_string( \
+        level_id: String, \
+        tier_id: String) -> String:
+    return get_level_version_string(level_id) + ":" + \
+            get_tier_version_string(tier_id)
+
 static func get_is_tile_slippery( \
         tile_set: TileSet, \
         tile_id: int) -> bool:
@@ -340,14 +403,66 @@ static func get_walk_sound_for_tile( \
             get_is_tile_slippery(tile_set, tile_id) else \
             Sound.WALK_SNOW
 
-static func get_level_rank(level_id: String) -> int:
+static func get_level_rank( \
+        level_id: String, \
+        score: int) -> int:
     var config: Dictionary = get_level_config(level_id)
-    var score := SaveState.get_high_score_for_level(level_id)
-    if score > config.rank_thresholds[Rank.GOLD]:
+    var has_finished := SaveState.get_level_has_finished(level_id)
+    if !has_finished:
+        return Rank.UNRANKED
+    elif score > config.rank_thresholds[Rank.GOLD]:
         return Rank.GOLD
     elif score > config.rank_thresholds[Rank.SILVER]:
         return Rank.SILVER
-    elif score > config.rank_thresholds[Rank.BRONZE]:
-        return Rank.BRONZE
     else:
-        return Rank.UNRANKED
+        return Rank.BRONZE
+
+static func get_new_unlocked_levels() -> Array:
+    var new_unlocked_levels := []
+    for level_id in get_level_ids():
+        if !SaveState.get_level_is_unlocked(level_id) and \
+                _check_if_level_meets_unlock_conditions(level_id):
+            new_unlocked_levels.push_back(level_id)
+    return new_unlocked_levels
+
+static func _check_if_level_meets_unlock_conditions(level_id: String) -> bool:
+    var config := get_level_config(level_id)
+    var is_unlocked := true
+    for key in config.unlock_conditions:
+        var other_level_ids: Array = config.unlock_conditions[key]
+        match key:
+            "bronze_levels":
+                for other_level_id in other_level_ids:
+                    if !SaveState.get_level_has_finished(other_level_id):
+                        is_unlocked = false
+                        break
+            "silver_levels":
+                for other_level_id in other_level_ids:
+                    var other_config := get_level_config(other_level_id)
+                    var rank_threshold: int = \
+                            other_config.rank_thresholds[Rank.SILVER]
+                    var other_high_score := SaveState \
+                            .get_level_high_score(other_level_id)
+                    if other_high_score < rank_threshold:
+                        is_unlocked = false
+                        break
+            "gold_levels":
+                for other_level_id in other_level_ids:
+                    var other_config := get_level_config(other_level_id)
+                    var rank_threshold: int = \
+                            other_config.rank_thresholds[Rank.GOLD]
+                    var other_high_score := SaveState \
+                            .get_level_high_score(other_level_id)
+                    if other_high_score < rank_threshold:
+                        is_unlocked = false
+                        break
+            "three_loop_levels":
+                for other_level_id in other_level_ids:
+                    if !SaveState.get_level_has_three_looped(other_level_id):
+                        is_unlocked = false
+                        break
+            _:
+                Utils.error()
+        if !is_unlocked:
+            break
+    return is_unlocked

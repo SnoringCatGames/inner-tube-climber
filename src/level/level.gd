@@ -61,8 +61,13 @@ var player_max_platform_height_on_current_life: float = 0.0
 var tier_count: int = 0
 var display_height: int = 0
 var falls_count: int = 0
+var falls_count_on_current_tier: int = 0
 var lives_count: int
 var score := 0.0
+var finished_level := false
+var three_looped_level := false
+var reached_new_high_score := false
+var new_unlocked_levels := []
 
 # Dictionary<int, float>
 var time_spent_with_multiplier_levels := {}
@@ -163,10 +168,13 @@ func start( \
             Global.is_multiplier_cooldown_indicator_shown
     _update_score_displays()
     
+    SaveState.set_level_total_plays( \
+            level_id, \
+            SaveState.get_level_total_plays(level_id) + 1)
     Analytics.event( \
             "level", \
             "start", \
-            level_id + "v" + LevelConfig.get_level_config(level_id).version)
+            LevelConfig.get_level_version_string(level_id))
 
 func _physics_process(_delta_sec: float) -> void:
     _delta_sec *= Time.physics_framerate_multiplier
@@ -237,9 +245,7 @@ func _process(delta_sec: float) -> void:
         _fall()
 
 func _update_score_displays() -> void:
-    score_boards.set_tier_ratio( \
-            current_tier_index + 1, \
-            LevelConfig.get_level_config(level_id).tiers.size())
+    score_boards.set_tier_ratio(get_tier_ratio())
     score_boards.set_height(display_height)
     score_boards.set_score(score)
     score_boards.set_multiplier(cooldown_indicator.multiplier)
@@ -248,6 +254,7 @@ func _update_score_displays() -> void:
 
 func _fall() -> void:
     falls_count += 1
+    falls_count_on_current_tier += 1
     lives_count -= 1
     tiers_count_since_falling = 0
     player_max_height_on_current_life = 0.0
@@ -258,12 +265,21 @@ func _fall() -> void:
     
     Audio.play_sound(Sound.FALL)
     
+    SaveState.set_level_total_falls( \
+            level_id, \
+            SaveState.get_level_total_falls(level_id) + 1)
+    SaveState.set_level_total_falls_on_tier( \
+            level_id, \
+            current_tier_id, \
+            SaveState.get_level_total_falls_on_tier( \
+                    level_id, \
+                    current_tier_id) + \
+                    1)
     Analytics.event( \
             "level", \
             "fall", \
-            current_tier_id + "v" + \
-                    LevelConfig.get_tier_config(current_tier_id).version, \
-            Time.elapsed_play_time_actual_sec - tier_start_time)
+            LevelConfig.get_level_version_string(level_id), \
+            player_max_platform_height_on_current_life)
     
     if lives_count > 0:
         var current_tier_position := current_tier.position
@@ -293,12 +309,40 @@ func _fall() -> void:
         pause_button.visible = false
         Audio.on_cross_fade_music_finished()
         _destroy_player()
-        var high_score := max( \
-                int(score), \
-                SaveState.get_high_score_for_level(level_id))
-        SaveState.set_high_score_for_level( \
-                level_id, \
-                high_score)
+        
+        var previous_high_score := SaveState.get_level_high_score(level_id)
+        if score > previous_high_score:
+            reached_new_high_score = true
+            SaveState.set_level_high_score( \
+                    level_id, \
+                    int(score))
+        
+        var previous_high_tier := SaveState.get_level_high_tier(level_id)
+        if tier_count > previous_high_tier:
+            SaveState.set_level_high_tier( \
+                    level_id, \
+                    int(tier_count))
+        
+        var all_scores: Array = SaveState.get_level_all_scores(level_id)
+        all_scores.push_back(score)
+        SaveState.set_level_all_scores(level_id, all_scores)
+        
+        if finished_level:
+            var all_finished_scores: Array = \
+                    SaveState.get_level_all_finished_scores(level_id)
+            all_finished_scores.push_back(score)
+            SaveState.set_level_all_finished_scores( \
+                    level_id, \
+                    all_finished_scores)
+        
+        new_unlocked_levels = LevelConfig.get_new_unlocked_levels()
+        for other_level_id in new_unlocked_levels:
+            SaveState.set_level_is_unlocked(other_level_id, true)
+            Analytics.event( \
+                    "level", \
+                    "unlocked", \
+                    LevelConfig.get_level_version_string(other_level_id), \
+                    LevelConfig.get_level_config(level_id).number)
         
         _set_game_over_state()
         
@@ -310,8 +354,7 @@ func _fall() -> void:
         Analytics.event( \
                 "score", \
                 "v" + Constants.SCORE_VERSION, \
-                level_id + "v" + \
-                        LevelConfig.get_level_config(level_id).version, \
+                LevelConfig.get_level_version_string(level_id), \
                 int(score))
 
 func _set_game_over_state() -> void:
@@ -319,7 +362,7 @@ func _set_game_over_state() -> void:
     game_over_screen.level_id = level_id
     game_over_screen.score = str(int(score))
     game_over_screen.high_score = \
-            str(SaveState.get_high_score_for_level(level_id))
+            str(SaveState.get_level_high_score(level_id))
     game_over_screen.tier_ratio = get_tier_ratio()
     game_over_screen.difficulty = \
             DifficultyMode.get_type_string(Global.difficulty_mode)
@@ -327,6 +370,11 @@ func _set_game_over_state() -> void:
             Time.elapsed_play_time_actual_sec - \
             level_start_time)
     game_over_screen.average_multiplier = "%.1f" % _get_average_multiplier()
+    game_over_screen.finished_level = finished_level
+    game_over_screen.three_looped_level = three_looped_level
+    game_over_screen.reached_new_high_score = reached_new_high_score
+    game_over_screen.rank = LevelConfig.get_level_rank(level_id, score)
+    game_over_screen.new_unlocked_levels = new_unlocked_levels
 
 func _get_average_multiplier() -> float:
     var total_time_sec := 0.0
@@ -432,6 +480,7 @@ func destroy() -> void:
     Global.level = null
     
     current_tier_id = ""
+    current_tier_index = -1
     is_game_playing = false
     has_input_been_pressed = false
     player_max_height = 0.0
@@ -442,6 +491,17 @@ func destroy() -> void:
     display_height = 0
     tier_count = 0
     tiers_count_since_falling = 0
+    level_start_time = -INF
+    tier_start_time = -INF
+    falls_count = 0
+    falls_count_on_current_tier = 0
+    lives_count = 0
+    score = 0
+    finished_level = false
+    three_looped_level = false
+    reached_new_high_score = false
+    new_unlocked_levels = []
+    time_spent_with_multiplier_levels.clear()
     
     _destroy_player()
     _destroy_tiers()
@@ -484,6 +544,7 @@ func _start_new_tier( \
         tier_position := Vector2.ZERO, \
         music_player_index := Audio.START_MUSIC_INDEX) -> void:
     tier_start_time = Time.elapsed_play_time_actual_sec
+    falls_count_on_current_tier = 0
     start_tier_id = tier_id
     current_tier_id = tier_id
     
@@ -621,13 +682,29 @@ func _start_new_tier( \
 
 func _on_entered_new_tier() -> void:
     Analytics.event( \
-            "tier", \
-            "end", \
-            current_tier_id + "v" + \
-                    LevelConfig.get_tier_config(current_tier_id).version, \
+            "level", \
+            "tier-end", \
+            LevelConfig.get_level_tier_version_string( \
+                    level_id, \
+                    current_tier_id), \
             Time.elapsed_play_time_actual_sec - tier_start_time)
+    if tier_count > 0:
+        var previous_high_tier := SaveState.get_level_high_tier(level_id)
+        if tier_count >= previous_high_tier:
+            var total_falls_on_tier := \
+                    SaveState.get_level_total_falls_on_tier( \
+                            level_id, \
+                            current_tier_id)
+            Analytics.event( \
+                    "level", \
+                    "falls-before-first-tier-finish", \
+                    LevelConfig.get_level_tier_version_string( \
+                            level_id, \
+                            current_tier_id), \
+                    total_falls_on_tier)
     
     tier_start_time = Time.elapsed_play_time_actual_sec
+    falls_count_on_current_tier = 0
     tier_count += 1
     tiers_count_since_falling += 1
     
@@ -707,9 +784,34 @@ func _on_entered_new_tier() -> void:
             current_tier_id)
     _update_margin_color()
     
+    if tier_count == level_config.tiers.size() * 3 + 1:
+        three_looped_level = true
+        SaveState.set_level_has_three_looped(level_id, true)
+        Analytics.event( \
+                "level", \
+                "three-looped", \
+                LevelConfig.get_level_version_string(level_id), \
+                int(score))
+    
     if was_final_tier_completed:
         Audio.play_sound(Sound.TIER_COMPLETE_FINAL)
         Global.falls_count_since_reaching_level_end = 0
+        var is_first_time_finishing := \
+                !SaveState.get_level_has_finished(level_id)
+        finished_level = true
+        SaveState.set_level_has_finished(level_id, true)
+        if is_first_time_finishing:
+            var total_falls := SaveState.get_level_total_falls(level_id)
+            Analytics.event( \
+                    "level", \
+                    "falls-before-first-level-finish", \
+                    LevelConfig.get_level_version_string(level_id), \
+                    total_falls)
+        Analytics.event( \
+                "level", \
+                "finish", \
+                LevelConfig.get_level_version_string(level_id), \
+                Time.elapsed_play_time_actual_sec - level_start_time)
     else:
         Audio.play_sound(Sound.TIER_COMPLETE)
     
@@ -840,6 +942,6 @@ func _get_player_height() -> float:
 
 func get_tier_ratio() -> String:
     return "%s / %s" % [
-        current_tier_index + 1, \
+        tier_count, \
         LevelConfig.get_level_config(level_id).tiers.size(),
     ]

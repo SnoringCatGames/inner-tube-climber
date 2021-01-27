@@ -103,6 +103,15 @@ func _ready() -> void:
                         latest_time, \
                         SPARKLE_FRAME_START_INDEX + index)
                 latest_time += STEP * SPARKLE_STEP_MULTIPLIER
+            for index in range(SPARKLE_FRAME_COUNT - 1):
+                animation.track_insert_key( \
+                        track_index, \
+                        latest_time, \
+                        SPARKLE_FRAME_START_INDEX + \
+                            SPARKLE_FRAME_COUNT - \
+                            1 - \
+                            index)
+                latest_time += STEP * SPARKLE_STEP_MULTIPLIER
             
             latest_time += \
                     STEP * \

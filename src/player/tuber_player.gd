@@ -44,19 +44,19 @@ const PLAY_WALK_EFFECT_THROTTLE_INTERVAL_SEC := 0.15
 const PLAY_WALK_SOUND_THROTTLE_INTERVAL_SEC := 0.25
 
 const STRETCH_DURATION_SEC := 0.2
-const SQUASH_DURATION_SEC := 0.2
+const SQUISH_DURATION_SEC := 0.2
 
 const STRETCH_SCALE_MULTIPLIER := Vector2(0.4, 1.5)
-const SQUASH_SCALE_MULTIPLIER := Vector2(1.7, 0.5)
+const SQUISH_SCALE_MULTIPLIER := Vector2(1.7, 0.5)
 
 var STRETCH_DISPLACEMENT := Vector2( \
         0.0, \
         Constants.PLAYER_HALF_HEIGHT_DEFAULT * \
                 (STRETCH_SCALE_MULTIPLIER.y - 1.0))
-var SQUASH_DISPLACEMENT := Vector2( \
+var SQUISH_DISPLACEMENT := Vector2( \
         0.0, \
         Constants.PLAYER_HALF_HEIGHT_DEFAULT * \
-                (1.0 - SQUASH_SCALE_MULTIPLIER.y))
+                (1.0 - SQUISH_SCALE_MULTIPLIER.y))
 
 var is_stuck := true setget _set_is_stuck,_get_is_stuck
 
@@ -80,7 +80,7 @@ var windiness := Vector2.ZERO
 var effects_animator: EffectsAnimator
 
 var stretch_tween: Tween
-var squash_tween: Tween
+var squish_tween: Tween
 
 var throttled_play_walk_effect: FuncRef = Time.throttle( \
         funcref(self, "_play_walk_effect"), \
@@ -95,8 +95,8 @@ var throttled_play_walk_sound: FuncRef = Time.throttle( \
 func _ready() -> void:
     stretch_tween = Tween.new()
     add_child(stretch_tween)
-    squash_tween = Tween.new()
-    add_child(squash_tween)
+    squish_tween = Tween.new()
+    add_child(squish_tween)
     
     effects_animator = EffectsAnimator.new(self, Global.level)
     
@@ -492,7 +492,7 @@ func _process_animation() -> void:
         return
     
     _update_player_animation()
-    _update_squash_and_stretch()
+    _update_squish_and_stretch()
     _update_effects_animations()
 
 func _update_player_animation() -> void:
@@ -525,7 +525,7 @@ func _update_player_animation() -> void:
         else:
             effects_animator.play(EffectAnimation.JUMP_VERTICAL)
 
-func _update_squash_and_stretch() -> void:
+func _update_squish_and_stretch() -> void:
     if surface_state.just_left_floor and surface_state.entered_air_by_jumping:
         # Stretch.
         var stretch_duration_sec := \
@@ -569,26 +569,26 @@ func _update_squash_and_stretch() -> void:
         stretch_tween.start()
     
     if surface_state.just_left_air and surface_state.is_touching_floor:
-        # Squash.
-        var squash_duration_sec := \
-                SQUASH_DURATION_SEC * Time.physics_framerate_multiplier
-        squash_tween.interpolate_property( \
+        # Squish.
+        var squish_duration_sec := \
+                SQUISH_DURATION_SEC * Time.physics_framerate_multiplier
+        squish_tween.interpolate_property( \
                 $TuberAnimator, \
                 "scale_multiplier", \
-                SQUASH_SCALE_MULTIPLIER, \
+                SQUISH_SCALE_MULTIPLIER, \
                 Vector2.ONE, \
-                squash_duration_sec, \
+                squish_duration_sec, \
                 Tween.TRANS_QUART, \
                 Tween.EASE_OUT)
-        squash_tween.interpolate_property( \
+        squish_tween.interpolate_property( \
                 $TuberAnimator, \
                 "position", \
-                SQUASH_DISPLACEMENT, \
+                SQUISH_DISPLACEMENT, \
                 Vector2.ZERO, \
-                squash_duration_sec, \
+                squish_duration_sec, \
                 Tween.TRANS_QUART, \
                 Tween.EASE_OUT)
-        squash_tween.start()
+        squish_tween.start()
 
 func _update_effects_animations() -> void:
     if surface_state.just_touched_floor:

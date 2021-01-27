@@ -7,7 +7,7 @@ const APP_ID := "dev.levi.inner_tube_climber"
 const APP_VERSION := "0.1.0"
 const SCORE_VERSION := "0.1.0"
 
-const LEVI_URL := "https://levi.dev"
+const LEVI_URL := "https://games.levi.dev"
 const GODOT_URL := "https://godotengine.org"
 const TERMS_AND_CONDITIONS_URL := "https://docs.google.com/document/d/1g1W4F2nJqJsIPKOwRGlFJi4IGj5q1ae7upYOTnVtfyI/preview"
 const PRIVACY_POLICY_URL := "https://docs.google.com/document/d/1kH48Xn62wFnZuy8wFmrsr4lKJ-k3wU-MnqFpYdhwBCc/preview"

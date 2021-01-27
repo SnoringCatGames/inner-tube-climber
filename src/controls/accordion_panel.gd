@@ -250,11 +250,8 @@ func _interpolate_caret_rotation(rotation: float) -> void:
 # off the top of the screen!
 func _calculate_scroll() -> void:
     _scroll_container = Nav.get_active_screen().scroll_container
-    var scroll_bar := _scroll_container.get_v_scrollbar()
     var accordion_position_y_in_scroll_container := \
-            self.rect_global_position.y - \
-            _scroll_container.rect_global_position.y + \
-            _scroll_container.scroll_vertical
+            Utils.get_node_vscroll_position(_scroll_container, self)
     var accordion_height := _projected_control.rect_size.y
     if includes_header:
         accordion_height += _header.rect_size.y
@@ -283,7 +280,7 @@ func _on_is_open_tween_started() -> void:
     _projected_control.visible = true
 
 func _on_is_open_tween_completed() -> void:
-    _header.visible = is_open and includes_header
+    _header.visible = includes_header
     _projected_control.visible = is_open
 
 func _get_configuration_warning() -> String:

@@ -557,3 +557,13 @@ static func set_mouse_filter_recursively( \
             if !(child is Button):
                 child.mouse_filter = mouse_filter
         set_mouse_filter_recursively(child, mouse_filter)
+
+static func get_node_vscroll_position( \
+        scroll_container: ScrollContainer, \
+        node: Node) -> int:
+    var vscroll_position: int = \
+            node.rect_global_position.y - \
+            scroll_container.rect_global_position.y + \
+            scroll_container.scroll_vertical
+    var max_vscroll_position := scroll_container.get_v_scrollbar().max_value
+    return int(min(vscroll_position, max_vscroll_position))

@@ -336,6 +336,7 @@ func _fall() -> void:
                     all_finished_scores)
         
         new_unlocked_levels = LevelConfig.get_new_unlocked_levels()
+        SaveState.set_new_unlocked_levels(new_unlocked_levels)
         for other_level_id in new_unlocked_levels:
             SaveState.set_level_is_unlocked(other_level_id, true)
             Analytics.event( \

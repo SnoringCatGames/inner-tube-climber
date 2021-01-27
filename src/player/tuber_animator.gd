@@ -18,7 +18,10 @@ const STAND_PLAYBACK_RATE := 1.0
 const STUCK_NAME := "Stuck"
 const STUCK_PLAYBACK_RATE := 1.0
 
-var scale_multiplier := Vector2.ONE
+var scale_multiplier := Vector2.ONE setget \
+        _set_scale_multiplier,_get_scale_multiplier
+
+var _scale_x_sign := 1 if FACES_RIGHT_BY_DEFAULT else -1
 
 func _enter_tree() -> void:
     face_right()
@@ -57,21 +60,21 @@ func _show_sprite(animation_name: String) -> void:
             Utils.error()
 
 func face_left() -> void:
-    var scale_x_sign := \
+    _scale_x_sign = \
             -1 if \
             FACES_RIGHT_BY_DEFAULT else \
             1
-    _update_scale(scale_x_sign)
+    _update_scale()
 
 func face_right() -> void:
-    var scale_x_sign := \
+    _scale_x_sign = \
             1 if \
             FACES_RIGHT_BY_DEFAULT else \
             -1
-    _update_scale(scale_x_sign)
+    _update_scale()
 
-func _update_scale(scale_x_sign: int) -> void:
-    var scale := Vector2(scale_x_sign, 1.0)
+func _update_scale() -> void:
+    var scale := Vector2(_scale_x_sign, 1.0)
     scale *= Constants.PLAYER_SIZE_MULTIPLIER
     scale.x *= scale_multiplier.x
     scale.y *= scale_multiplier.y
@@ -101,3 +104,10 @@ func stuck() -> void:
     _play_animation( \
             STUCK_NAME, \
             STUCK_PLAYBACK_RATE)
+
+func _set_scale_multiplier(value: Vector2) -> void:
+    scale_multiplier = value
+    _update_scale()
+
+func _get_scale_multiplier() -> Vector2:
+    return scale_multiplier

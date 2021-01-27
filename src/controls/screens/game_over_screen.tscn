@@ -178,6 +178,8 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 7 )
 texture_scale = null
+is_shiny = null
+includes_color_pulse = null
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer"]
 margin_top = 72.0
@@ -197,6 +199,8 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 9 )
 texture_scale = null
+is_shiny = null
+includes_color_pulse = null
 
 [node name="RetryButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 10 )]
 anchor_right = 0.0
@@ -209,6 +213,8 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 8 )
 texture_scale = null
+is_shiny = null
+includes_color_pulse = null
 
 [node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0

@@ -26,8 +26,6 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-is_shiny = null
-includes_color_pulse = null
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 margin_right = 160.0

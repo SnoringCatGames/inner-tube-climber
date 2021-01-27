@@ -32,15 +32,25 @@ var shine_tween := Tween.new()
 var color_pulse_tween := Tween.new()
 
 func _ready() -> void:
+    button_style_normal = $MarginContainer/BottomButton.get_stylebox("normal")
+    button_style_hover = $MarginContainer/BottomButton.get_stylebox("hover")
+    button_style_pressed = \
+            $MarginContainer/BottomButton.get_stylebox("pressed")
+    
     add_child(shine_tween)
     add_child(color_pulse_tween)
-    $MarginContainer/TopButton.connect("pressed", self, "_on_pressed")
+    $MarginContainer/TopButton.connect( \
+            "pressed", self, "_on_pressed")
     $MarginContainer/TopButton.connect( \
             "mouse_entered", self, "_on_mouse_entered")
-    $MarginContainer/TopButton.connect("mouse_exited", self, "_on_mouse_exited")
-    $MarginContainer/TopButton.connect("button_down", self, "_on_button_down")
-    $MarginContainer/TopButton.connect("button_up", self, "_on_button_up")
-    Global.connect("display_resized", self, "update")
+    $MarginContainer/TopButton.connect( \
+            "mouse_exited", self, "_on_mouse_exited")
+    $MarginContainer/TopButton.connect( \
+            "button_down", self, "_on_button_down")
+    $MarginContainer/TopButton.connect( \
+            "button_up", self, "_on_button_up")
+    Global.connect( \
+            "display_resized", self, "update")
     update()
 
 func update() -> void:
@@ -52,10 +62,6 @@ func _deferred_update() -> void:
     shine_start_x = shine_base_position.x - rect_size.x
     shine_end_x = shine_base_position.x + rect_size.x
     
-    button_style_normal = $MarginContainer/BottomButton.get_stylebox("normal")
-    button_style_hover = $MarginContainer/BottomButton.get_stylebox("hover")
-    button_style_pressed = \
-            $MarginContainer/BottomButton.get_stylebox("pressed")
     button_style_pulse = StyleBoxFlat.new()
     
     $MarginContainer.rect_size = rect_size
@@ -64,7 +70,8 @@ func _deferred_update() -> void:
             Vector2(shine_start_x, shine_base_position.y)
     $MarginContainer/TextureWrapper/TextureRect.texture = texture
     $MarginContainer/TextureWrapper/TextureRect.rect_scale = texture_scale
-    $MarginContainer/TextureWrapper/TextureRect.rect_size = rect_size / texture_scale
+    $MarginContainer/TextureWrapper/TextureRect.rect_size = \
+            rect_size / texture_scale
     $MarginContainer/BottomButton.add_font_override( \
             "font", \
             get_font("font"))

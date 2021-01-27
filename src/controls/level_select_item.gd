@@ -9,17 +9,14 @@ const PADDING := Vector2(16.0, 8.0)
 const RANK_ICON_SIZE_DEFAULT := RankAnimator.SMALL_SIZE
 const RANK_ICON_SCALE := Vector2(1.0, 1.0)
 const LOCKED_OPACITY := 0.6
+const FADE_TWEEN_DURATION_SEC := 0.3
 
 export var level_id := "" setget _set_level_id,_get_level_id
 export var is_open: bool setget _set_is_open,_get_is_open
 
 func _ready() -> void:
     _init_children()
-    call_deferred("_update")
-
-func _on_activated() -> void:
-    ._on_activated()
-    _update()
+    call_deferred("update")
 
 func _process(_delta_sec: float) -> void:
     rect_min_size.y = $AccordionPanel.rect_min_size.y
@@ -27,38 +24,44 @@ func _process(_delta_sec: float) -> void:
 func _init_children() -> void:
     var header_size := Vector2(rect_size.x, HEADER_HEIGHT)
     
-    $LockedWrapper.rect_min_size = header_size
+    $HeaderWrapper/LockedWrapper.rect_min_size = header_size
     
-    $Header.rect_min_size = header_size
-    $Header.connect("pressed", self, "_on_header_pressed")
-    $Header/HBoxContainer.add_constant_override("separation", PADDING.x)
-    $Header/HBoxContainer.rect_min_size = header_size
-    $Header/HBoxContainer/RankWrapper.rect_min_size = \
+    $HeaderWrapper/Header.rect_min_size = header_size
+    $HeaderWrapper/Header.connect("pressed", self, "_on_header_pressed")
+    $HeaderWrapper/Header/HBoxContainer \
+            .add_constant_override("separation", PADDING.x)
+    $HeaderWrapper/Header/HBoxContainer.rect_min_size = header_size
+    $HeaderWrapper/Header/HBoxContainer/RankWrapper.rect_min_size = \
             RANK_ICON_SIZE_DEFAULT * RANK_ICON_SCALE
-    $Header/HBoxContainer/RankWrapper/RankAnimator.rect_scale = RANK_ICON_SCALE
-    $Header/HBoxContainer/CaretWrapper.rect_min_size = \
+    $HeaderWrapper/Header/HBoxContainer/RankWrapper/RankAnimator \
+            .rect_scale = RANK_ICON_SCALE
+    $HeaderWrapper/Header/HBoxContainer/CaretWrapper.rect_min_size = \
             AccordionPanel.CARET_SIZE_DEFAULT * AccordionPanel.CARET_SCALE
     
     var header_style_normal := StyleBoxFlat.new()
     header_style_normal.bg_color = Constants.OPTION_BUTTON_COLOR_NORMAL
-    $Header.add_stylebox_override("normal", header_style_normal)
+    $HeaderWrapper/Header.add_stylebox_override("normal", header_style_normal)
     var header_style_hover := StyleBoxFlat.new()
     header_style_hover.bg_color = Constants.OPTION_BUTTON_COLOR_HOVER
-    $Header.add_stylebox_override("hover", header_style_hover)
+    $HeaderWrapper/Header.add_stylebox_override("hover", header_style_hover)
     var header_style_pressed := StyleBoxFlat.new()
     header_style_pressed.bg_color = Constants.OPTION_BUTTON_COLOR_PRESSED
-    $Header.add_stylebox_override("pressed", header_style_pressed)
+    $HeaderWrapper/Header \
+            .add_stylebox_override("pressed", header_style_pressed)
     
     Utils.set_mouse_filter_recursively( \
-            $Header, \
+            $HeaderWrapper/Header, \
             Control.MOUSE_FILTER_IGNORE)
     
     $AccordionPanel.connect("caret_rotated", self, "_on_caret_rotated")
     $AccordionPanel.connect("toggled", self, "_on_accordion_toggled")
 
-func _update() -> void:
+func update() -> void:
     if level_id == "":
         return
+    
+    # FIXME: REMOVE: for debugging
+#    SaveState.set_level_is_unlocked(level_id, true)
     
     var config := LevelConfig.get_level_config(level_id)
     var high_score := SaveState.get_level_high_score(level_id)
@@ -74,13 +77,14 @@ func _update() -> void:
     var total_plays := SaveState.get_level_total_plays(level_id)
     var is_unlocked := SaveState.get_level_is_unlocked(level_id)
     
-    $LockedWrapper.visible = !is_unlocked
-    $LockedWrapper.modulate.a = LOCKED_OPACITY
+    $HeaderWrapper/LockedWrapper.visible = !is_unlocked
+    $HeaderWrapper/LockedWrapper.modulate.a = LOCKED_OPACITY
     
-    $Header.visible = is_unlocked
-    $Header/HBoxContainer/LevelNumber.text = str(config.number) + "."
-    $Header/HBoxContainer/LevelName.text = config.name
-    $Header/HBoxContainer/RankWrapper/RankAnimator.rank = rank
+    $HeaderWrapper/Header.visible = is_unlocked
+    $HeaderWrapper/Header/HBoxContainer/LevelNumber.text = \
+            str(config.number) + "."
+    $HeaderWrapper/Header/HBoxContainer/LevelName.text = config.name
+    $HeaderWrapper/Header/HBoxContainer/RankWrapper/RankAnimator.rank = rank
     
     var list_items := [
         {
@@ -110,15 +114,49 @@ func toggle() -> void:
     $AccordionPanel.toggle()
 
 func unlock() -> void:
-    $LockedWrapper/LockAnimation.unlock()
-    $LockedWrapper/LockAnimation.connect( \
+    $HeaderWrapper/LockedWrapper.visible = true
+    $HeaderWrapper/LockedWrapper.modulate.a = LOCKED_OPACITY
+    $HeaderWrapper/Header.visible = false
+    $HeaderWrapper/Header.modulate.a = 0.0
+    $HeaderWrapper/LockedWrapper/LockAnimation.unlock()
+    $HeaderWrapper/LockedWrapper/LockAnimation.connect( \
             "unlock_finished", \
             self, \
-            "_on_unlock_finished")
+            "_on_unlock_animation_finished")
 
-func _on_unlock_finished() -> void:
-    $LockedWrapper.visible = false
-    $Header.visible = true
+func _on_unlock_animation_finished() -> void:
+    $HeaderWrapper/LockedWrapper.visible = true
+    $HeaderWrapper/Header.visible = true
+    var fade_tween := Tween.new()
+    $HeaderWrapper/LockedWrapper.add_child(fade_tween)
+    fade_tween.connect( \
+            "tween_all_completed", \
+            self, \
+            "_on_unlock_fade_finished", \
+            [fade_tween])
+    fade_tween.interpolate_property( \
+            $HeaderWrapper/LockedWrapper, \
+            "modulate:a", \
+            LOCKED_OPACITY, \
+            0.0, \
+            FADE_TWEEN_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    fade_tween.interpolate_property( \
+            $HeaderWrapper/Header, \
+            "modulate:a", \
+            0.0, \
+            1.0, \
+            FADE_TWEEN_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    fade_tween.start()
+
+func _on_unlock_fade_finished(fade_tween: Tween) -> void:
+    $HeaderWrapper/LockedWrapper.remove_child(fade_tween)
+    $HeaderWrapper/LockedWrapper.visible = false
+    $HeaderWrapper/Header.visible = true
+    toggle()
 
 func _on_header_pressed() -> void:
     Global.give_button_press_feedback()
@@ -133,18 +171,19 @@ func _on_accordion_toggled() -> void:
     emit_signal("toggled")
 
 func _on_caret_rotated(rotation: float) -> void:
-    $Header/HBoxContainer/CaretWrapper/Caret.rect_rotation = rotation
+    $HeaderWrapper/Header/HBoxContainer/CaretWrapper/Caret \
+            .rect_rotation = rotation
 
 func _set_level_id(value: String) -> void:
     level_id = value
-    _update()
+    update()
 
 func _get_level_id() -> String:
     return level_id
 
 func _set_is_open(value: bool) -> void:
     $AccordionPanel.is_open = value
-    _update()
+    update()
 
 func _get_is_open() -> bool:
     return $AccordionPanel.is_open

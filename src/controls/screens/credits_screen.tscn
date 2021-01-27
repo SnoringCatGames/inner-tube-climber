@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/images/logo.png" type="Texture" id=1]
 [ext_resource path="res://assets/images/godot-logo-small.png" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://assets/fonts/main_font_normal.tres" type="DynamicFont" id=7]
 [ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=8]
 [ext_resource path="res://assets/fonts/main_font_s.tres" type="DynamicFont" id=9]
+[ext_resource path="res://src/controls/accordion_panel.tscn" type="PackedScene" id=10]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 1, 1, 1, 0.835294 )
@@ -56,14 +57,14 @@ size_flags_vertical = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
 margin_right = 470.0
-margin_bottom = 721.0
+margin_bottom = 625.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
 margin_left = 26.0
 margin_right = 443.0
-margin_bottom = 721.0
+margin_bottom = 625.0
 
 [node name="Control" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_right = 417.0
@@ -115,13 +116,13 @@ __meta__ = {
 }
 
 [node name="URL" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
-margin_left = 61.0
+margin_left = 14.0
 margin_top = 43.0
-margin_right = 253.0
+margin_right = 299.0
 margin_bottom = 82.0
 size_flags_horizontal = 4
 custom_fonts/font = ExtResource( 6 )
-text = "https://levi.dev"
+text = "https://games.levi.dev"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -238,32 +239,64 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.6
 
-[node name="DataDeletionButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 108.0
+[node name="AccordionPanel" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer" instance=ExtResource( 10 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 68.0
 margin_top = 549.0
-margin_right = 308.0
-margin_bottom = 589.0
+margin_right = 348.0
+margin_bottom = 581.0
+rect_min_size = Vector2( 280, 32 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+header_text = "More details"
+is_caret_on_left = false
+padding = Vector2( 16, 8 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel"]
+margin_right = 40.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel/VBoxContainer"]
+margin_left = 140.0
+margin_right = 140.0
+margin_bottom = 10.0
+rect_min_size = Vector2( 0, 10 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="DataDeletionButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel/VBoxContainer"]
+margin_left = 40.0
+margin_top = 14.0
+margin_right = 240.0
+margin_bottom = 54.0
 rect_min_size = Vector2( 200, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 9 )
 text = "Request data deletion"
 
-[node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 208.0
-margin_top = 593.0
-margin_right = 208.0
-margin_bottom = 623.0
+[node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel/VBoxContainer"]
+margin_left = 140.0
+margin_top = 58.0
+margin_right = 140.0
+margin_bottom = 88.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.6
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Button" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 68.0
-margin_top = 626.0
-margin_right = 348.0
-margin_bottom = 676.0
+[node name="Button" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel/VBoxContainer"]
+margin_top = 92.0
+margin_right = 280.0
+margin_bottom = 142.0
 rect_min_size = Vector2( 280, 50 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -275,9 +308,9 @@ __meta__ = {
 
 [node name="PaddingBottom" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 208.0
-margin_top = 681.0
+margin_top = 585.0
 margin_right = 208.0
-margin_bottom = 721.0
+margin_bottom = 625.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -288,5 +321,5 @@ size_flags_vertical = 3
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/TermsAndConditionsLink" to="." method="_on_TermsAndConditionsLink_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/PrivacyPolicyLink" to="." method="_on_PrivacyPolicyLink_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/SupportLink" to="." method="_on_SupportLink_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/DataDeletionButton" to="." method="_on_DataDeletionButton_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Button" to="." method="_on_third_party_licenses_button_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel/VBoxContainer/DataDeletionButton" to="." method="_on_DataDeletionButton_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel/VBoxContainer/Button" to="." method="_on_third_party_licenses_button_pressed"]

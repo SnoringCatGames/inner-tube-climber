@@ -12,9 +12,11 @@ const IS_UNLOCKED_SECTION_KEY := "is_unlocked"
 const HAS_FINISHED_SECTION_KEY := "has_finished"
 const HAS_THREE_LOOPED_SECTION_KEY := "has_three_looped"
 const SETTINGS_SECTION_KEY := "settings"
+const MISCELLANEOUS_SECTION_KEY := "miscellaneous"
 
 const CLIENT_ID_KEY := "cliend_id"
 const AGREED_TO_TERMS_KEY := "agreed_to_terms"
+const NEW_UNLOCKED_LEVELS_KEY := "new_unlocked_levels"
 const DIFFICULTY_KEY := "difficulty"
 const IS_GIVING_HAPTIC_FEEDBACK_KEY := "is_giving_haptic_feedback"
 const IS_DEBUG_PANEL_SHOWN_KEY := "is_debug_panel_shown"
@@ -173,6 +175,19 @@ func get_level_is_unlocked(level_id: String) -> bool:
             IS_UNLOCKED_SECTION_KEY, \
             level_id, \
             false) as bool
+
+func set_new_unlocked_levels(new_unlocked_levels: Array) -> void:
+    config.set_value( \
+            MISCELLANEOUS_SECTION_KEY, \
+            NEW_UNLOCKED_LEVELS_KEY, \
+            new_unlocked_levels)
+    save_config()
+
+func get_new_unlocked_levels() -> Array:
+    return config.get_value( \
+            MISCELLANEOUS_SECTION_KEY, \
+            NEW_UNLOCKED_LEVELS_KEY, \
+            []) as Array
 
 func set_level_has_finished( \
         level_id: String, \

@@ -38,8 +38,10 @@ export var includes_random_delay := true setget \
         _set_includes_random_delay,_get_includes_random_delay
 
 var _timeout_id: int
+var _is_ready := false
 
 func _ready() -> void:
+    _is_ready = true
     for rank in [Rank.GOLD, Rank.SILVER, Rank.BRONZE]:
         for is_small in [true, false]:
             var animation_name := _get_animation_name(rank, is_small)
@@ -127,6 +129,9 @@ func _ready() -> void:
             assert(latest_time <= INTERVAL)
 
 func _update() -> void:
+    if !_is_ready:
+        return
+    
     var size := SMALL_SIZE if is_small else LARGE_SIZE
     $Control.rect_position = -size / 2.0
     $Control.rect_size = size

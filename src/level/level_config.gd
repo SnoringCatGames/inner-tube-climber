@@ -117,8 +117,8 @@ const SLIPPERY_TILES := [
     "ice_platform_tile",
 ]
 
-const FRAMERATE_MULTIPLIER_EASY_MIN := 0.7
-const FRAMERATE_MULTIPLIER_EASY_MAX := 1.0
+const FRAMERATE_MULTIPLIER_EASY_MIN := 0.8
+const FRAMERATE_MULTIPLIER_EASY_MAX := 1.1
 const FRAMERATE_MULTIPLIER_MODERATE_MIN := 1.25
 const FRAMERATE_MULTIPLIER_MODERATE_MAX := 1.25
 const FRAMERATE_MULTIPLIER_HARD_MIN := 1.25
@@ -132,7 +132,7 @@ const _DEFAULT_TIER_VALUES := {
     zoom_multiplier = 1.0,
     scroll_speed_multiplier = 1.0,
     scroll_speed_min = 20.0,
-    scroll_speed_max = 160.0,
+    scroll_speed_max = 100.0,
     light_energy = {value = 0.6, weight = 0.0},
     peep_hole_size = {value = Vector2(360.0, 360.0), weight = 0.0},
     fog_screen_opacity = {value = 0.0, weight = 0.0},
@@ -405,9 +405,9 @@ static func get_walk_sound_for_tile( \
 
 static func get_level_rank( \
         level_id: String, \
-        score: int) -> int:
+        score: int, \
+        has_finished: bool) -> int:
     var config: Dictionary = get_level_config(level_id)
-    var has_finished := SaveState.get_level_has_finished(level_id)
     if !has_finished:
         return Rank.UNRANKED
     elif score > config.rank_thresholds[Rank.GOLD]:

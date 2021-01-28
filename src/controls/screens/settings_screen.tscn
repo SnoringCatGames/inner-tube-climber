@@ -48,15 +48,16 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
-margin_right = 470.0
-margin_bottom = 780.0
+margin_right = 480.0
+margin_bottom = 480.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
-margin_left = 75.0
-margin_right = 395.0
-margin_bottom = 780.0
+margin_left = 80.0
+margin_top = 90.0
+margin_right = 400.0
+margin_bottom = 390.0
 rect_min_size = Vector2( 320, 0 )
 custom_constants/separation = 0
 
@@ -64,15 +65,15 @@ custom_constants/separation = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 320.0
-margin_bottom = 720.0
+margin_bottom = 240.0
 row_height = 48.0
 padding_horizontal = 6.0
 
 [node name="Spacer1" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 160.0
-margin_top = 719.0
+margin_top = 240.0
 margin_right = 160.0
-margin_bottom = 749.0
+margin_bottom = 270.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -81,9 +82,9 @@ size_flags_vertical = 4
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 750.0
+margin_top = 270.0
 margin_right = 320.0
-margin_bottom = 750.0
+margin_bottom = 270.0
 is_open = false
 includes_header = true
 header_text = "More details"
@@ -100,8 +101,8 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel/VBoxContainer"]
-margin_left = 20.0
-margin_right = 20.0
+margin_left = 141.0
+margin_right = 141.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 0, 10 )
 size_flags_horizontal = 4
@@ -111,17 +112,17 @@ size_flags_vertical = 4
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 14.0
-margin_right = 40.0
-margin_bottom = 14.0
+margin_right = 283.0
+margin_bottom = 494.0
 size_flags_vertical = 4
 row_height = 48.0
 padding_horizontal = 6.0
 
 [node name="Spacer3" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 160.0
-margin_top = 749.0
+margin_top = 270.0
 margin_right = 160.0
-margin_bottom = 779.0
+margin_bottom = 300.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 4

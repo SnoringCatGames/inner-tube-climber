@@ -345,6 +345,14 @@ func _fall() -> void:
                     LevelConfig.get_level_version_string(other_level_id), \
                     LevelConfig.get_level_config(level_id).number)
         
+        if finished_level:
+            SaveState.set_finished_level_streak( \
+                    SaveState.get_finished_level_streak() + 1)
+            SaveState.set_failed_level_streak(0)
+        else:
+            SaveState.set_finished_level_streak(0)
+            SaveState.set_failed_level_streak( \
+                    SaveState.get_failed_level_streak() + 1)
         _set_game_over_state()
         
         Sound.MANIFEST[Sound.FALL].player.connect( \
@@ -374,8 +382,15 @@ func _set_game_over_state() -> void:
     game_over_screen.finished_level = finished_level
     game_over_screen.three_looped_level = three_looped_level
     game_over_screen.reached_new_high_score = reached_new_high_score
-    game_over_screen.rank = LevelConfig.get_level_rank(level_id, score)
+    game_over_screen.rank = LevelConfig.get_level_rank( \
+            level_id, \
+            score, \
+            finished_level)
     game_over_screen.new_unlocked_levels = new_unlocked_levels
+    game_over_screen.finished_last_three_levels = \
+            SaveState.get_finished_level_streak() >= 3
+    game_over_screen.failed_last_three_levels = \
+            SaveState.get_failed_level_streak() >= 3
 
 func _get_average_multiplier() -> float:
     var total_time_sec := 0.0

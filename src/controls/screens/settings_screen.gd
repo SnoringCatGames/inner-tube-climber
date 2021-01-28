@@ -127,7 +127,7 @@ func _initialize_selections() -> void:
     for i in range(difficulty_item.options.size()):
         if difficulty_item.options[i] == \
                 DifficultyMode.get_type_string(Global.difficulty_mode):
-            difficulty_item.selected_index = 1
+            difficulty_item.selected_index = i
             break
     
     var control_version_item: Dictionary = \
@@ -135,7 +135,7 @@ func _initialize_selections() -> void:
     for i in range(control_version_item.options.size()):
         if control_version_item.options[i] == \
                 str(Global.mobile_control_version):
-            control_version_item.selected_index = 1
+            control_version_item.selected_index = i
             break
     
     _main_list.find_item("Haptic feedback").pressed = \

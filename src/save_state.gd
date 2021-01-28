@@ -17,6 +17,8 @@ const MISCELLANEOUS_SECTION_KEY := "miscellaneous"
 const CLIENT_ID_KEY := "cliend_id"
 const AGREED_TO_TERMS_KEY := "agreed_to_terms"
 const NEW_UNLOCKED_LEVELS_KEY := "new_unlocked_levels"
+const FINISHED_LEVEL_STREAK_KEY := "finished_level_streak"
+const FAILED_LEVEL_STREAK_KEY := "failed_level_streak"
 const DIFFICULTY_KEY := "difficulty"
 const IS_GIVING_HAPTIC_FEEDBACK_KEY := "is_giving_haptic_feedback"
 const IS_DEBUG_PANEL_SHOWN_KEY := "is_debug_panel_shown"
@@ -218,6 +220,32 @@ func get_level_has_three_looped(level_id: String) -> bool:
             HAS_THREE_LOOPED_SECTION_KEY, \
             level_id, \
             false) as bool
+
+func set_finished_level_streak(streak: int) -> void:
+    config.set_value( \
+            MISCELLANEOUS_SECTION_KEY, \
+            FINISHED_LEVEL_STREAK_KEY, \
+            streak)
+    save_config()
+
+func get_finished_level_streak() -> int:
+    return config.get_value( \
+            MISCELLANEOUS_SECTION_KEY, \
+            FINISHED_LEVEL_STREAK_KEY, \
+            0) as int
+
+func set_failed_level_streak(streak: int) -> void:
+    config.set_value( \
+            MISCELLANEOUS_SECTION_KEY, \
+            FAILED_LEVEL_STREAK_KEY, \
+            streak)
+    save_config()
+
+func get_failed_level_streak() -> int:
+    return config.get_value( \
+            MISCELLANEOUS_SECTION_KEY, \
+            FAILED_LEVEL_STREAK_KEY, \
+            0) as int
 
 func set_setting( \
         setting_key: String, \

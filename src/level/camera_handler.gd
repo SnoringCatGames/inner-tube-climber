@@ -11,7 +11,7 @@ const CAMERA_HORIZONTAL_LOCK_DISPLACMENT_TWEEN_DURATION_SEC := \
 
 # This is how many tiers the player must pass through without falling before
 # hitting the max camera scroll speed and framerate speed.
-const MAX_SPEED_INDEX := 9
+const MAX_SPEED_INDEX := 7
 const SPEED_INDEX_DECREMENT_AMOUNT := 1
 const SPEED_INCREASE_EASING := "linear"
 

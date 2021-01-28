@@ -67,9 +67,11 @@ func update() -> void:
     
     var config := LevelConfig.get_level_config(level_id)
     var high_score := SaveState.get_level_high_score(level_id)
+    var has_finished := SaveState.get_level_has_finished(level_id)
     var rank := LevelConfig.get_level_rank( \
             level_id, \
-            high_score)
+            high_score, \
+            has_finished)
     var high_tier := SaveState.get_level_high_tier(level_id)
     var high_tier_ratio := "%s / %s" % [
         high_tier, \

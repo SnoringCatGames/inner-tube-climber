@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/images/gui/game-over.png" type="Texture" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://assets/images/icons/retry-icon-normal.png" type="Texture" id=8]
 [ext_resource path="res://assets/images/icons/home-icon-normal.png" type="Texture" id=9]
 [ext_resource path="res://src/controls/shiny_button.tscn" type="PackedScene" id=10]
+[ext_resource path="res://src/controls/accordion_panel.tscn" type="PackedScene" id=11]
+[ext_resource path="res://src/level/rank_animator.tscn" type="PackedScene" id=12]
 
 [node name="GameOverScreen" type="Node2D"]
 script = ExtResource( 4 )
@@ -44,14 +46,14 @@ size_flags_vertical = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
 margin_right = 470.0
-margin_bottom = 857.0
+margin_bottom = 659.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
 margin_left = 95.0
 margin_right = 375.0
-margin_bottom = 857.0
+margin_bottom = 659.0
 rect_min_size = Vector2( 280, 0 )
 
 [node name="Spacer6" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
@@ -60,7 +62,7 @@ margin_right = 140.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
-size_flags_vertical = 3
+size_flags_vertical = 4
 
 [node name="LogoControl" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0
@@ -90,7 +92,7 @@ margin_right = 140.0
 margin_bottom = 105.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 4
-size_flags_vertical = 3
+size_flags_vertical = 4
 
 [node name="Control2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0
@@ -109,44 +111,138 @@ rect_scale = Vector2( 4, 4 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="RankAnimator" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2" instance=ExtResource( 12 )]
+margin_left = 72.7914
+margin_top = 21.423
+margin_right = 72.7914
+margin_bottom = -62.577
+is_small = false
+
 [node name="Spacer3" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0
 margin_top = 353.0
 margin_right = 140.0
-margin_bottom = 373.0
-rect_min_size = Vector2( 0, 20 )
+margin_bottom = 363.0
+rect_min_size = Vector2( 0, 10 )
 size_flags_horizontal = 4
-size_flags_vertical = 3
+size_flags_vertical = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LabeledControlList" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer" instance=ExtResource( 6 )]
+[node name="VBoxContainer2" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
+margin_top = 367.0
+margin_right = 280.0
+margin_bottom = 451.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UnlockedNewLevelLabel" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+visible = false
+margin_right = 280.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 1, 0.946, 0.46, 1 )
+text = "You unlocked a new level!"
+align = 1
+
+[node name="ThreeLoopedLevelLabel" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+visible = false
+margin_top = 32.0
+margin_right = 280.0
+margin_bottom = 60.0
+custom_colors/font_color = Color( 1, 0.946, 0.46, 1 )
+text = "You three-looped the level!!"
+align = 1
+
+[node name="FinishedLevelLabel" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+visible = false
+margin_right = 280.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 1, 0.946, 0.46, 1 )
+text = "You finished the level!"
+align = 1
+
+[node name="HighScoreLabel" type="Label" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+visible = false
+margin_right = 280.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 1, 0.946, 0.46, 1 )
+text = "That's a new high score!"
+align = 1
+
+[node name="DecreaseDifficultyButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+margin_left = 39.0
+margin_right = 239.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 200, 40 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Decrease difficulty?"
+
+[node name="IncreaseDifficultyButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
+margin_left = 39.0
+margin_top = 44.0
+margin_right = 239.0
+margin_bottom = 84.0
+rect_min_size = Vector2( 200, 40 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Increase difficulty?"
+
+[node name="Spacer7" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
+margin_left = 140.0
+margin_top = 455.0
+margin_right = 140.0
+margin_bottom = 465.0
+rect_min_size = Vector2( 0, 10 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AccordionPanel" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer" instance=ExtResource( 11 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 377.0
+margin_left = 0.0
+margin_top = 469.0
 margin_right = 280.0
-margin_bottom = 657.0
+margin_bottom = 469.0
+is_open = false
+includes_header = true
+header_text = "Details from your climb"
+header_min_height = 0.0
+header_font = null
+is_caret_on_left = false
+padding = Vector2( 16, 8 )
+
+[node name="LabeledControlList" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel" instance=ExtResource( 6 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 4.0
+margin_right = 280.0
+margin_bottom = 284.0
 row_height = 40.0
 padding_horizontal = 8.0
 
 [node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0
-margin_top = 661.0
+margin_top = 473.0
 margin_right = 140.0
-margin_bottom = 691.0
-rect_min_size = Vector2( 0, 30 )
+margin_bottom = 493.0
+rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 4
-size_flags_vertical = 3
+size_flags_vertical = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 76.0
-margin_top = 695.0
+margin_top = 497.0
 margin_right = 204.0
-margin_bottom = 823.0
+margin_bottom = 625.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 16
@@ -195,12 +291,14 @@ texture = ExtResource( 8 )
 
 [node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0
-margin_top = 827.0
+margin_top = 629.0
 margin_right = 140.0
-margin_bottom = 857.0
+margin_bottom = 659.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
-size_flags_vertical = 3
+size_flags_vertical = 4
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/DecreaseDifficultyButton" to="." method="_on_DecreaseDifficultyButton_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/IncreaseDifficultyButton" to="." method="_on_IncreaseDifficultyButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/SelectLevelButton" to="." method="_on_SelectLevelButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/HomeButton" to="." method="_on_HomeButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/RetryButton" to="." method="_on_RetryButton_pressed"]

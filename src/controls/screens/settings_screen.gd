@@ -8,7 +8,7 @@ const INCLUDES_NAV_BAR := true
 const INCLUDES_CENTER_CONTAINER := true
 
 # Array<Dictionary>
-var list_items := [
+var main_items := [
     {
         label = "Difficulty",
         type = LabeledControlItemType.DROPDOWN,
@@ -38,6 +38,10 @@ var list_items := [
         label = "Haptic feedback",
         type = LabeledControlItemType.CHECKBOX,
     },
+]
+
+# Array<Dictionary>
+var details_items := [
     {
         label = "Multiplier cooldown indicator",
         type = LabeledControlItemType.CHECKBOX,
@@ -80,7 +84,8 @@ var list_items := [
     },
 ]
 
-var _control_list: LabeledControlList
+var _main_list: LabeledControlList
+var _details_list: LabeledControlList
 
 func _init().( \
         TYPE, \
@@ -91,23 +96,34 @@ func _init().( \
     pass
 
 func _ready() -> void:
-    _control_list = $FullScreenPanel/VBoxContainer/CenteredPanel/ \
-            ScrollContainer/CenterContainer/VBoxContainer/LabeledControlList
-    _control_list.connect( \
+    _main_list = $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            ScrollContainer/CenterContainer/VBoxContainer/MainList
+    _details_list = $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel/ \
+            VBoxContainer/DetailsList
+    _main_list.connect( \
             "control_changed", \
             self, \
-            "_on_control_changed")
-    _control_list.items = list_items
+            "_on_control_changed", \
+            [true])
+    _details_list.connect( \
+            "control_changed", \
+            self, \
+            "_on_control_changed", \
+            [false])
+    _main_list.items = main_items
+    _details_list.items = details_items
 
 func _on_activated() -> void:
     ._on_activated()
     _initialize_selections()
     _initialize_enablement()
-    _control_list.items = list_items
+    _main_list.items = main_items
+    _details_list.items = details_items
 
 func _initialize_selections() -> void:
     var difficulty_item: Dictionary = \
-            _control_list.find_item("Difficulty")
+            _main_list.find_item("Difficulty")
     for i in range(difficulty_item.options.size()):
         if difficulty_item.options[i] == \
                 DifficultyMode.get_type_string(Global.difficulty_mode):
@@ -115,65 +131,70 @@ func _initialize_selections() -> void:
             break
     
     var control_version_item: Dictionary = \
-            _control_list.find_item("Control version")
+            _main_list.find_item("Control version")
     for i in range(control_version_item.options.size()):
         if control_version_item.options[i] == \
                 str(Global.mobile_control_version):
             control_version_item.selected_index = 1
             break
     
-    _control_list.find_item("Haptic feedback").pressed = \
+    _main_list.find_item("Haptic feedback").pressed = \
             Global.is_giving_haptic_feedback
-    _control_list.find_item("Debug panel").pressed = \
+    _details_list.find_item("Debug panel").pressed = \
             Global.is_debug_panel_shown
-    _control_list.find_item("Control display").pressed = \
+    _details_list.find_item("Control display").pressed = \
             Global.are_mobile_controls_shown
     
-    _control_list.find_item("Multiplier cooldown indicator").pressed = \
+    _details_list.find_item("Multiplier cooldown indicator").pressed = \
             Global.is_multiplier_cooldown_indicator_shown
-    _control_list.find_item("Height indicator").pressed = \
+    _details_list.find_item("Height indicator").pressed = \
             Global.is_height_indicator_shown
-    _control_list.find_item("Score display").pressed = \
+    _details_list.find_item("Score display").pressed = \
             Global.is_score_display_shown
-    _control_list.find_item("Height display").pressed = \
+    _details_list.find_item("Height display").pressed = \
             Global.is_height_display_shown
-    _control_list.find_item("Lives display").pressed = \
+    _details_list.find_item("Lives display").pressed = \
             Global.is_lives_display_shown
-    _control_list.find_item("Tier ratio display").pressed = \
+    _details_list.find_item("Tier ratio display").pressed = \
             Global.is_tier_ratio_display_shown
-    _control_list.find_item("Multiplier display").pressed = \
+    _details_list.find_item("Multiplier display").pressed = \
             Global.is_multiplier_display_shown
-    _control_list.find_item("Speed display").pressed = \
+    _details_list.find_item("Speed display").pressed = \
             Global.is_speed_display_shown
     
-    _control_list.find_item("Music").pressed = \
+    _main_list.find_item("Music").pressed = \
             Audio.is_music_enabled
-    _control_list.find_item("Sound effects").pressed = \
+    _main_list.find_item("Sound effects").pressed = \
             Audio.is_sound_effects_enabled
 
 func _initialize_enablement() -> void:
     var is_level_active := Global.level != null
-    _control_list.find_item("Difficulty").disabled = is_level_active
-    _control_list.find_item("Control version").disabled = is_level_active
+    _main_list.find_item("Difficulty").disabled = is_level_active
+    _main_list.find_item("Control version").disabled = is_level_active
     
-    _control_list.find_item("Haptic feedback").disabled = \
+    _main_list.find_item("Haptic feedback").disabled = \
             !Utils.get_is_mobile_device()
     
-    _control_list.find_item("Debug panel").disabled = false 
-    _control_list.find_item("Control display").disabled = false 
-    _control_list.find_item("Multiplier cooldown indicator").disabled = false 
-    _control_list.find_item("Height indicator").disabled = false 
-    _control_list.find_item("Score display").disabled = false 
-    _control_list.find_item("Height display").disabled = false 
-    _control_list.find_item("Lives display").disabled = false 
-    _control_list.find_item("Tier ratio display").disabled = false 
-    _control_list.find_item("Multiplier display").disabled = false 
-    _control_list.find_item("Speed display").disabled = false 
-    _control_list.find_item("Music").disabled = false 
-    _control_list.find_item("Sound effects").disabled = false 
+    _details_list.find_item("Debug panel").disabled = false 
+    _details_list.find_item("Control display").disabled = false 
+    _details_list.find_item("Multiplier cooldown indicator").disabled = false 
+    _details_list.find_item("Height indicator").disabled = false 
+    _details_list.find_item("Score display").disabled = false 
+    _details_list.find_item("Height display").disabled = false 
+    _details_list.find_item("Lives display").disabled = false 
+    _details_list.find_item("Tier ratio display").disabled = false 
+    _details_list.find_item("Multiplier display").disabled = false 
+    _details_list.find_item("Speed display").disabled = false 
+    _main_list.find_item("Music").disabled = false 
+    _main_list.find_item("Sound effects").disabled = false 
 
-func _on_control_changed(index: int) -> void:
-    var item: Dictionary = list_items[index]
+func _on_control_changed( \
+        index: int, \
+        is_main: bool) -> void:
+    var item: Dictionary = \
+            main_items[index] if \
+            is_main else \
+            details_items[index]
     
     match item.label:
         "Difficulty":

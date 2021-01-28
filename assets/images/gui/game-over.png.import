@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/rank-small-silver.png-c29c7b4fe3cebb7f6ff7e250c5488d97.stex"
+path="res://.import/game-over.png-a20693de420a38645bcd6615a903dc3d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/rank-small-silver.png"
-dest_files=[ "res://.import/rank-small-silver.png-c29c7b4fe3cebb7f6ff7e250c5488d97.stex" ]
+source_file="res://assets/images/gui/game-over.png"
+dest_files=[ "res://.import/game-over.png-a20693de420a38645bcd6615a903dc3d.stex" ]
 
 [params]
 

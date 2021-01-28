@@ -1,13 +1,19 @@
 extends Node
 
+const SPLASH_SCREEN_PATH := \
+        "res://src/controls/screens/splash_screen.tscn"
 const MAIN_MENU_SCREEN_PATH := \
         "res://src/controls/screens/main_menu_screen.tscn"
-const GAME_SCREEN_PATH := "res://src/controls/screens/game_screen.tscn"
-const SETTINGS_SCREEN_PATH := "res://src/controls/screens/settings_screen.tscn"
-const PAUSE_SCREEN_PATH := "res://src/controls/screens/pause_screen.tscn"
+const GAME_SCREEN_PATH := \
+        "res://src/controls/screens/game_screen.tscn"
+const SETTINGS_SCREEN_PATH := \
+        "res://src/controls/screens/settings_screen.tscn"
+const PAUSE_SCREEN_PATH := \
+        "res://src/controls/screens/pause_screen.tscn"
 const THIRD_PARTY_LICENSES_SCREEN_PATH := \
         "res://src/controls/screens/third_party_licenses_screen.tscn"
-const CREDITS_SCREEN_PATH := "res://src/controls/screens/credits_screen.tscn"
+const CREDITS_SCREEN_PATH := \
+        "res://src/controls/screens/credits_screen.tscn"
 const LEVEL_SELECT_SCREEN_PATH := \
         "res://src/controls/screens/level_select_screen.tscn"
 const DATA_AGREEMENT_SCREEN_PATH := \
@@ -56,6 +62,11 @@ func _on_session_end() -> void:
     get_tree().quit()
 
 func create_screens() -> void:
+    screens[ScreenType.SPLASH] = Utils.add_scene( \
+            Global.canvas_layers.menu_screen_layer, \
+            SPLASH_SCREEN_PATH, \
+            true, \
+            false)
     screens[ScreenType.MAIN_MENU] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             MAIN_MENU_SCREEN_PATH, \
@@ -189,6 +200,7 @@ func _set_screen_is_open( \
             tween_screen = previous_screen
         var screen_slide_tween := Tween.new()
         add_child(screen_slide_tween)
+        tween_screen.position = start_position
         screen_slide_tween.interpolate_property( \
                 tween_screen, \
                 "position", \

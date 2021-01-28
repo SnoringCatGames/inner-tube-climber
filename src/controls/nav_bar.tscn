@@ -11,8 +11,9 @@
 [ext_resource path="res://assets/images/icons/about-icon-normal-large.png" type="Texture" id=9]
 [ext_resource path="res://assets/images/icons/about-icon-hover-large.png" type="Texture" id=10]
 [ext_resource path="res://assets/images/icons/about-icon-active-large.png" type="Texture" id=11]
-[ext_resource path="res://assets/images/logo.png" type="Texture" id=12]
-[ext_resource path="res://assets/images/game-over.png" type="Texture" id=13]
+[ext_resource path="res://assets/images/gui/logo.png" type="Texture" id=12]
+[ext_resource path="res://assets/images/gui/game-over.png" type="Texture" id=13]
+
 
 [sub_resource type="StyleBoxEmpty" id=1]
 

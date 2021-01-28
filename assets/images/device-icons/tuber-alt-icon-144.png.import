@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/rank-large-gold.png-3a5a2b7787884bd51ada04fbf368dae8.stex"
+path="res://.import/tuber-alt-icon-144.png-874310a4d1ed67145df0304d76d5c2c9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/rank-large-gold.png"
-dest_files=[ "res://.import/rank-large-gold.png-3a5a2b7787884bd51ada04fbf368dae8.stex" ]
+source_file="res://assets/images/device-icons/tuber-alt-icon-144.png"
+dest_files=[ "res://.import/tuber-alt-icon-144.png-874310a4d1ed67145df0304d76d5c2c9.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

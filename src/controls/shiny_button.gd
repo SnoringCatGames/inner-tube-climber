@@ -3,7 +3,7 @@ extends Button
 class_name ShinyButton
 
 const SHINE_TEXTURE := \
-        preload("res://assets/images/shine-line-fat-sharp-x4.png")
+        preload("res://assets/images/gui/shine-line-fat-sharp-x4.png")
 const SHINE_DURATION_SEC := 0.35
 const SHINE_INTERVAL_SEC := 3.5
 const COLOR_PULSE_DURATION_SEC := 1.2

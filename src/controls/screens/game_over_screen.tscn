@@ -1,7 +1,7 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/images/game-over.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/gui/game-over.png" type="Texture" id=2]
 [ext_resource path="res://src/controls/full_screen_panel.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/controls/screens/game_over_screen.gd" type="Script" id=4]
 [ext_resource path="res://src/intro_animation/stuck_animation_control.tscn" type="PackedScene" id=5]
@@ -10,7 +10,6 @@
 [ext_resource path="res://assets/images/icons/retry-icon-normal.png" type="Texture" id=8]
 [ext_resource path="res://assets/images/icons/home-icon-normal.png" type="Texture" id=9]
 [ext_resource path="res://src/controls/shiny_button.tscn" type="PackedScene" id=10]
-[ext_resource path="res://src/controls/nav_bar.tscn" type="PackedScene" id=12]
 
 [node name="GameOverScreen" type="Node2D"]
 script = ExtResource( 4 )
@@ -28,19 +27,6 @@ size_flags_stretch_ratio = 8.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="NavBar" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 12 )]
-visible = false
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 480.0
-margin_bottom = 128.0
-text = ""
-shows_back = false
-shows_about = false
-shows_settings = true
-shows_logo = false
-shows_game_over = false
 
 [node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 1 )]
 anchor_right = 0.0

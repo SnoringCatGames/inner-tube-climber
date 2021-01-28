@@ -1,9 +1,10 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/controls/shiny_button.gd" type="Script" id=1]
-[ext_resource path="res://assets/images/shine-line-fat-sharp-x4.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/gui/shine-line-fat-sharp-x4.png" type="Texture" id=2]
 [ext_resource path="res://assets/main_theme.tres" type="Theme" id=3]
 [ext_resource path="res://assets/fonts/main_font_normal.tres" type="DynamicFont" id=4]
+
 
 [sub_resource type="StyleBoxEmpty" id=1]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/shine-line.png-2118c8776df91cbfb8fbaba7966da3db.stex"
+path="res://.import/rank-small-bronze.png-87086f2c04e310ed3511a2237ef3538f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/shine-line.png"
-dest_files=[ "res://.import/shine-line.png-2118c8776df91cbfb8fbaba7966da3db.stex" ]
+source_file="res://assets/images/gui/rank-small-bronze.png"
+dest_files=[ "res://.import/rank-small-bronze.png-87086f2c04e310ed3511a2237ef3538f.stex" ]
 
 [params]
 

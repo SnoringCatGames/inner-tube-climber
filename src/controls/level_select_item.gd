@@ -163,7 +163,7 @@ func _on_header_pressed() -> void:
     toggle()
 
 func _on_PlayButton_pressed():
-    Global.give_button_press_feedback()
+    Global.give_button_press_feedback(true)
     Nav.open(ScreenType.GAME)
     Nav.screens[ScreenType.GAME].start_level(level_id)
 

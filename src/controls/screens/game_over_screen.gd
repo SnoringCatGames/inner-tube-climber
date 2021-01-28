@@ -4,7 +4,7 @@ class_name GameOverScreen
 
 const TYPE := ScreenType.GAME_OVER
 const INCLUDES_STANDARD_HIERARCHY := true
-const INCLUDES_NAV_BAR := true
+const INCLUDES_NAV_BAR := false
 const INCLUDES_CENTER_CONTAINER := true
 
 var level_id: String

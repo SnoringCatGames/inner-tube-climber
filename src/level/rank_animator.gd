@@ -3,17 +3,17 @@ extends Control
 class_name RankAnimator
 
 const GOLD_TEXTURE_LARGE := \
-        preload("res://assets/images/rank-large-gold.png")
+        preload("res://assets/images/gui/rank-large-gold.png")
 const SILVER_TEXTURE_LARGE := \
-        preload("res://assets/images/rank-large-silver.png")
+        preload("res://assets/images/gui/rank-large-silver.png")
 const BRONZE_TEXTURE_LARGE := \
-        preload("res://assets/images/rank-large-bronze.png")
+        preload("res://assets/images/gui/rank-large-bronze.png")
 const GOLD_TEXTURE_SMALL := \
-        preload("res://assets/images/rank-small-gold.png")
+        preload("res://assets/images/gui/rank-small-gold.png")
 const SILVER_TEXTURE_SMALL := \
-        preload("res://assets/images/rank-small-silver.png")
+        preload("res://assets/images/gui/rank-small-silver.png")
 const BRONZE_TEXTURE_SMALL := \
-        preload("res://assets/images/rank-small-bronze.png")
+        preload("res://assets/images/gui/rank-small-bronze.png")
 
 const LARGE_SIZE := Vector2(54.0, 64.0)
 const SMALL_SIZE := Vector2(27.0, 32.0)

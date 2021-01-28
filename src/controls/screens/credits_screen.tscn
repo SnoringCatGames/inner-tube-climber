@@ -93,29 +93,29 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 51.0
+margin_left = 55.0
 margin_top = 75.0
-margin_right = 365.0
+margin_right = 362.0
 margin_bottom = 157.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 size_flags_stretch_ratio = 2.0
 
 [node name="Label" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
-margin_right = 314.0
+margin_right = 307.0
 margin_bottom = 39.0
 size_flags_horizontal = 4
 custom_fonts/font = ExtResource( 6 )
-text = "Created by Levi Lindsey."
+text = "Created by Levi Lindsey"
 underline = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="URL" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
-margin_left = 14.0
+margin_left = 11.0
 margin_top = 43.0
-margin_right = 299.0
+margin_right = 296.0
 margin_bottom = 82.0
 size_flags_horizontal = 4
 custom_fonts/font = ExtResource( 6 )
@@ -163,13 +163,13 @@ __meta__ = {
 }
 
 [node name="LinkButton" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer3"]
-margin_left = 19.0
+margin_left = 37.0
 margin_top = 89.0
-margin_right = 215.0
+margin_right = 197.0
 margin_bottom = 117.0
 size_flags_horizontal = 4
 custom_fonts/font = ExtResource( 7 )
-text = "Created using Godot."
+text = "Made with Godot"
 __meta__ = {
 "_edit_use_anchors_": false
 }

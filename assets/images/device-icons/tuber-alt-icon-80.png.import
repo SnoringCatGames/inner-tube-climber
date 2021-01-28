@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tuber-alt-icon-192.png-1c39969a42fab5ad03a9322e4e6eb8f0.stex"
+path="res://.import/tuber-alt-icon-80.png-6722df00b2e12ba2f535532a50504c25.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/device-icons/tuber-alt-icon-192.png"
-dest_files=[ "res://.import/tuber-alt-icon-192.png-1c39969a42fab5ad03a9322e4e6eb8f0.stex" ]
+source_file="res://assets/images/device-icons/tuber-alt-icon-80.png"
+dest_files=[ "res://.import/tuber-alt-icon-80.png-6722df00b2e12ba2f535532a50504c25.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

@@ -7,12 +7,6 @@ const LEVEL_SELECT_ITEM_RESOURCE_PATH := \
 
 const SCROLL_TWEEN_DURATION_SEC := 0.3
 
-# FIXME:
-# - Determine which level to suggest (or none).
-#   - Auto expand.
-#   - (Don't auto-scroll separately, since that'll happen automatically when expanding?)
-#   - Return it's button as the shiny button to focus on.
-
 const TYPE := ScreenType.LEVEL_SELECT
 const INCLUDES_STANDARD_HIERARCHY := true
 const INCLUDES_NAV_BAR := true
@@ -33,8 +27,6 @@ func _init().( \
 func _on_activated() -> void:
     ._on_activated()
     _update()
-    # FIXME
-    level_items[0].unlock()
 
 func _ready() -> void:
     for level_id in LevelConfig.get_level_ids():

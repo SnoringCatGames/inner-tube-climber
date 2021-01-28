@@ -17,6 +17,8 @@ enum {
     TIER_COMPLETE_FINAL,
     WALK_SNOW,
     WALK_ICE,
+    LOCK_LOW,
+    LOCK_HIGH,
 }
 
 var MANIFEST := {
@@ -99,6 +101,16 @@ var MANIFEST := {
         stream = preload("res://assets/sounds/walk_ice.wav"),
         text = "WALK_ICE",
         volume_db = 15.0,
+    },
+    LOCK_LOW: {
+        stream = preload("res://assets/sounds/lock-low.wav"),
+        text = "LOCK_LOW",
+        volume_db = 0.0,
+    },
+    LOCK_HIGH: {
+        stream = preload("res://assets/sounds/lock-high.wav"),
+        text = "LOCK_HIGH",
+        volume_db = 0.0,
     },
 }
 

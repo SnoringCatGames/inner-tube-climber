@@ -10,6 +10,8 @@ const RANK_ICON_SIZE_DEFAULT := RankAnimator.SMALL_SIZE
 const RANK_ICON_SCALE := Vector2(1.0, 1.0)
 const LOCKED_OPACITY := 0.6
 const FADE_TWEEN_DURATION_SEC := 0.3
+const LOCK_LOW_PART_DELAY_SEC := 0.7
+const LOCK_HIGH_PART_DELAY_SEC := 0.15
 
 export var level_id := "" setget _set_level_id,_get_level_id
 export var is_open: bool setget _set_is_open,_get_is_open
@@ -118,11 +120,23 @@ func unlock() -> void:
     $HeaderWrapper/LockedWrapper.modulate.a = LOCKED_OPACITY
     $HeaderWrapper/Header.visible = false
     $HeaderWrapper/Header.modulate.a = 0.0
-    $HeaderWrapper/LockedWrapper/LockAnimation.unlock()
     $HeaderWrapper/LockedWrapper/LockAnimation.connect( \
             "unlock_finished", \
             self, \
             "_on_unlock_animation_finished")
+    
+    Time.set_timeout( \
+            funcref($HeaderWrapper/LockedWrapper/LockAnimation, "unlock"), \
+            LOCK_LOW_PART_DELAY_SEC)
+    
+    Time.set_timeout( \
+            funcref(Audio, "play_sound"), \
+            LOCK_LOW_PART_DELAY_SEC, \
+            [Sound.LOCK_LOW])
+    Time.set_timeout( \
+            funcref(Audio, "play_sound"), \
+            LOCK_LOW_PART_DELAY_SEC + LOCK_HIGH_PART_DELAY_SEC, \
+            [Sound.LOCK_HIGH])
 
 func _on_unlock_animation_finished() -> void:
     $HeaderWrapper/LockedWrapper.visible = true

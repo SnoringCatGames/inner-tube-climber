@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/lock-low.wav-41b431cade4ffd366a9b965462ed5cb3.sample"
+
+[deps]
+
+source_file="res://assets/sounds/lock-low.wav"
+dest_files=[ "res://.import/lock-low.wav-41b431cade4ffd366a9b965462ed5cb3.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

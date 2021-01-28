@@ -181,6 +181,7 @@ rect_min_size = Vector2( 120, 60 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 6 )
+texture_scale = null
 is_shiny = true
 includes_color_pulse = true
 

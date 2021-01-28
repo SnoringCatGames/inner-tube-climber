@@ -33,6 +33,8 @@ func _init().( \
 func _on_activated() -> void:
     ._on_activated()
     _update()
+    # FIXME
+    level_items[0].unlock()
 
 func _ready() -> void:
     for level_id in LevelConfig.get_level_ids():

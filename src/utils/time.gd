@@ -60,7 +60,7 @@ func _handle_timeouts() -> void:
             break
     
     if expired_timeout_id >= 0:
-        _timeouts[expired_timeout_id].callback.call_func()
+        _timeouts[expired_timeout_id].trigger()
         _timeouts.erase(expired_timeout_id)
 
 func _handle_intervals() -> void:
@@ -98,10 +98,12 @@ func _get_elapsed_play_time_modified_sec() -> float:
 
 func set_timeout( \
         callback: FuncRef, \
-        delay_sec: float) -> int:
+        delay_sec: float, \
+        arguments := []) -> int:
     var timeout := _Timeout.new( \
             callback, \
-            _elapsed_latest_time_sec + delay_sec)
+            _elapsed_latest_time_sec + delay_sec, \
+            arguments)
     _timeouts[timeout.id] = timeout
     return timeout.id
 
@@ -111,23 +113,47 @@ func clear_timeout(timeout_id: int) -> bool:
 class _Timeout extends Reference:
     var callback: FuncRef
     var time_sec: float
+    var arguments: Array
     var id: int
     
     func _init( \
             callback: FuncRef, \
-            time_sec: float) -> void:
+            time_sec: float, \
+            arguments: Array) -> void:
         self.callback = callback
         self.time_sec = time_sec
+        self.arguments = arguments
         
         Time._last_timeout_id += 1
         self.id = Time._last_timeout_id
+    
+    func trigger() -> void:
+        match arguments.size():
+            0:
+                callback.call_func()
+            1:
+                callback.call_func(arguments[0])
+            2:
+                callback.call_func(arguments[0], arguments[1])
+            3:
+                callback.call_func(arguments[0], arguments[1], arguments[2])
+            4:
+                callback.call_func(arguments[0], arguments[1], arguments[2], \
+                        arguments[3])
+            5:
+                callback.call_func(arguments[0], arguments[1], arguments[2], \
+                        arguments[3], arguments[4])
+            _:
+                Utils.error()
 
 func set_interval( \
         callback: FuncRef, \
-        interval_sec: float) -> int:
+        interval_sec: float, \
+        arguments := []) -> int:
     var interval := _Interval.new( \
             callback, \
-            interval_sec)
+            interval_sec, \
+            arguments)
     _intervals[interval.id] = interval
     return interval.id
 
@@ -137,14 +163,17 @@ func clear_interval(interval_id: int) -> bool:
 class _Interval extends Reference:
     var callback: FuncRef
     var interval_sec: float
+    var arguments: Array
     var id: int
     var next_trigger_time_sec: float
     
     func _init( \
             callback: FuncRef, \
-            interval_sec: float) -> void:
+            interval_sec: float, \
+            arguments: Array) -> void:
         self.callback = callback
         self.interval_sec = interval_sec
+        self.arguments = arguments
         self.next_trigger_time_sec = \
                 Time._elapsed_latest_time_sec + interval_sec
         
@@ -154,7 +183,23 @@ class _Interval extends Reference:
     func trigger() -> void:
         next_trigger_time_sec = \
                 Time._elapsed_latest_time_sec + interval_sec
-        callback.call_func()
+        match arguments.size():
+            0:
+                callback.call_func()
+            1:
+                callback.call_func(arguments[0])
+            2:
+                callback.call_func(arguments[0], arguments[1])
+            3:
+                callback.call_func(arguments[0], arguments[1], arguments[2])
+            4:
+                callback.call_func(arguments[0], arguments[1], arguments[2], \
+                        arguments[3])
+            5:
+                callback.call_func(arguments[0], arguments[1], arguments[2], \
+                        arguments[3], arguments[4])
+            _:
+                Utils.error()
 
 func throttle( \
         callback: FuncRef, \

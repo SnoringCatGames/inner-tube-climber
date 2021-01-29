@@ -68,6 +68,7 @@ var finished_level := false
 var three_looped_level := false
 var reached_new_high_score := false
 var new_unlocked_levels := []
+var is_rate_app_screen_next := false
 
 # Dictionary<int, float>
 var time_spent_with_multiplier_levels := {}
@@ -353,6 +354,13 @@ func _fall() -> void:
             SaveState.set_finished_level_streak(0)
             SaveState.set_failed_level_streak( \
                     SaveState.get_failed_level_streak() + 1)
+        
+        var old_unlocked_levels: Array = LevelConfig.get_old_unlocked_levels()
+        if !new_unlocked_levels.empty() and \
+                ((new_unlocked_levels.size() + old_unlocked_levels.size()) % \
+                Constants.LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN) == 0:
+            is_rate_app_screen_next = true
+        
         _set_game_over_state()
         
         Sound.MANIFEST[Sound.FALL].player.connect( \
@@ -423,7 +431,12 @@ func _on_game_over_sound_finished() -> void:
             "finished", \
             self, \
             "_on_game_over_sound_finished")
-    Nav.open(ScreenType.GAME_OVER)
+    var next_screen_type := \
+            ScreenType.RATE_APP if \
+            is_rate_app_screen_next and \
+                    !SaveState.get_gave_feedback() else \
+            ScreenType.GAME_OVER
+    Nav.open(next_screen_type)
     Nav.screens[ScreenType.GAME].destroy_level()
 
 func _add_player(is_base_tier := false) -> void:
@@ -517,6 +530,7 @@ func destroy() -> void:
     three_looped_level = false
     reached_new_high_score = false
     new_unlocked_levels = []
+    is_rate_app_screen_next = false
     time_spent_with_multiplier_levels.clear()
     
     _destroy_player()

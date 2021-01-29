@@ -17,11 +17,16 @@ const IOS_APP_STORE_URL := "https://"
 const SUPPORT_EMAIL_MAILTO := "mailto:support@levi.dev"
 
 const SPLASH_SCREEN_DURATION_SEC := 1.0
+# FIXME
+const LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN := 1
+#const LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN := 3
 
 const MAIN_FONT_NORMAL: Font = \
         preload("res://assets/fonts/main_font_normal.tres")
 const MAIN_FONT_LARGE: Font = \
         preload("res://assets/fonts/main_font_l.tres")
+const MAIN_FONT_XL: Font = \
+        preload("res://assets/fonts/main_font_xl.tres")
 
 const CELL_SIZE := Vector2(32.0, 32.0)
 

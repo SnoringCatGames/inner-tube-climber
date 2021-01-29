@@ -16,10 +16,11 @@ func _ready() -> void:
             Constants.SPLASH_SCREEN_DURATION_SEC)
 
 func _on_splash_finished() -> void:
-    if Global.agreed_to_terms:
-        Nav.open(ScreenType.MAIN_MENU)
-    else:
-        Nav.open(ScreenType.DATA_AGREEMENT)
+    var next_screen_type := \
+        ScreenType.MAIN_MENU if \
+        Global.agreed_to_terms else \
+        ScreenType.DATA_AGREEMENT
+    Nav.open(next_screen_type)
     
     # Start playing the default music for the menu screen.
     Audio.cross_fade_music( \

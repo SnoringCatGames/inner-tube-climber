@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/controls/level_select_item.gd" type="Script" id=1]
 [ext_resource path="res://src/controls/accordion_panel.tscn" type="PackedScene" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://src/controls/shiny_button.tscn" type="PackedScene" id=7]
 [ext_resource path="res://assets/images/icons/left_caret_normal.png" type="Texture" id=8]
 [ext_resource path="res://src/controls/lock_animation.tscn" type="PackedScene" id=9]
+[ext_resource path="res://assets/fonts/main_font_s.tres" type="DynamicFont" id=10]
+[ext_resource path="res://assets/images/icons/three-loop-icon.png" type="Texture" id=11]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.65, 0.65, 0.65, 0.443137 )
@@ -18,7 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -160.0
 margin_bottom = -480.0
-rect_min_size = Vector2( 320, 0 )
+rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 3
 size_flags_vertical = 4
 custom_constants/separation = 0
@@ -28,23 +30,23 @@ __meta__ = {
 }
 
 [node name="HeaderWrapper" type="Control" parent="."]
-margin_right = 320.0
+margin_right = 400.0
 margin_bottom = 56.0
-rect_min_size = Vector2( 320, 56 )
+rect_min_size = Vector2( 400, 56 )
 
 [node name="LockedWrapper" type="PanelContainer" parent="HeaderWrapper"]
 margin_right = 320.0
 margin_bottom = 56.0
-rect_min_size = Vector2( 320, 56 )
+rect_min_size = Vector2( 400, 56 )
 custom_styles/panel = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="LockAnimation" parent="HeaderWrapper/LockedWrapper" instance=ExtResource( 9 )]
-margin_left = 160.0
+margin_left = 200.0
 margin_top = 28.0
-margin_right = 160.0
+margin_right = 200.0
 margin_bottom = 28.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -52,7 +54,7 @@ size_flags_vertical = 4
 [node name="Header" type="Button" parent="HeaderWrapper"]
 margin_right = 320.0
 margin_bottom = 56.0
-rect_min_size = Vector2( 320, 56 )
+rect_min_size = Vector2( 400, 56 )
 size_flags_horizontal = 3
 size_flags_vertical = 4
 __meta__ = {
@@ -62,7 +64,7 @@ __meta__ = {
 [node name="HBoxContainer" type="HBoxContainer" parent="HeaderWrapper/Header"]
 margin_right = 40.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 320, 56 )
+rect_min_size = Vector2( 400, 56 )
 custom_constants/separation = 16
 __meta__ = {
 "_edit_use_anchors_": false
@@ -86,16 +88,37 @@ align = 2
 [node name="LevelName" type="Label" parent="HeaderWrapper/Header/HBoxContainer"]
 margin_left = 62.0
 margin_top = 8.0
-margin_right = 234.0
+margin_right = 298.0
 margin_bottom = 47.0
 rect_clip_content = true
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 3 )
 
+[node name="ThreeLoopWrapper" type="Control" parent="HeaderWrapper/Header/HBoxContainer"]
+margin_left = 314.0
+margin_top = 28.0
+margin_right = 314.0
+margin_bottom = 28.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ThreeLoop" type="TextureRect" parent="HeaderWrapper/Header/HBoxContainer/ThreeLoopWrapper"]
+margin_left = -26.0
+margin_top = -16.0
+margin_right = 6.0
+margin_bottom = 16.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 11 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="RankWrapper" type="Control" parent="HeaderWrapper/Header/HBoxContainer"]
-margin_left = 250.0
+margin_left = 330.0
 margin_top = 12.0
-margin_right = 277.0
+margin_right = 357.0
 margin_bottom = 44.0
 rect_min_size = Vector2( 27, 32 )
 size_flags_horizontal = 4
@@ -108,11 +131,14 @@ margin_right = -13.5
 margin_bottom = -16.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
+rank = 0
+is_small = true
+includes_random_delay = true
 
 [node name="CaretWrapper" type="Control" parent="HeaderWrapper/Header/HBoxContainer"]
-margin_left = 292.0
+margin_left = 372.0
 margin_top = 20.0
-margin_right = 303.5
+margin_right = 383.5
 margin_bottom = 36.0
 rect_min_size = Vector2( 11.5, 16 )
 size_flags_horizontal = 4
@@ -132,32 +158,33 @@ __meta__ = {
 }
 
 [node name="Spacer2" type="Control" parent="HeaderWrapper/Header/HBoxContainer"]
-margin_left = 320.0
+margin_left = 400.0
 margin_top = 28.0
-margin_right = 320.0
+margin_right = 400.0
 margin_bottom = 28.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="UnlockHint" type="Label" parent="."]
-margin_top = 55.0
-margin_right = 320.0
-margin_bottom = 83.0
-rect_min_size = Vector2( 320, 28 )
+margin_top = 56.0
+margin_right = 400.0
+margin_bottom = 79.0
+rect_min_size = Vector2( 400, 18 )
 size_flags_horizontal = 3
-text = "(Finish the previous level to unlock this one)"
+custom_fonts/font = ExtResource( 10 )
+text = "(Finish the previous level)"
 align = 1
 valign = 1
+autowrap = true
 
 [node name="AccordionPanel" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 84.0
-margin_right = 320.0
-margin_bottom = 84.0
+margin_top = 79.0
+margin_right = 400.0
+margin_bottom = 79.0
 size_flags_horizontal = 3
-is_open = false
 includes_header = false
 header_text = " "
 header_min_height = 40.0
@@ -166,7 +193,7 @@ is_caret_on_left = false
 padding = Vector2( 16, 8 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="AccordionPanel"]
-margin_right = 320.0
+margin_right = 400.0
 margin_bottom = 108.0
 size_flags_horizontal = 8
 size_flags_vertical = 4
@@ -176,30 +203,32 @@ __meta__ = {
 }
 
 [node name="Spacer" type="Control" parent="AccordionPanel/VBoxContainer"]
-margin_left = 160.0
-margin_right = 160.0
+margin_left = 200.0
+margin_right = 200.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="PlayButton" parent="AccordionPanel/VBoxContainer" instance=ExtResource( 7 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 100.0
+margin_left = 140.0
 margin_top = 16.0
-margin_right = 220.0
+margin_right = 260.0
 margin_bottom = 76.0
 rect_min_size = Vector2( 120, 60 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 6 )
+texture_scale = null
 is_shiny = true
 includes_color_pulse = true
+is_font_xl = null
 
 [node name="LabeledControlList" parent="AccordionPanel/VBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 92.0
-margin_right = 320.0
+margin_right = 400.0
 margin_bottom = 92.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -207,9 +236,9 @@ row_height = 40.0
 padding_horizontal = 8.0
 
 [node name="Spacer2" type="Control" parent="AccordionPanel/VBoxContainer"]
-margin_left = 160.0
+margin_left = 200.0
 margin_top = 108.0
-margin_right = 160.0
+margin_right = 200.0
 margin_bottom = 108.0
 size_flags_horizontal = 4
 size_flags_vertical = 4

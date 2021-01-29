@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tuber-alt-icon-40.png-bced4f5ba4bfb04f6a600c38a7249606.stex"
+path="res://.import/three-loop-icon-large.png-afcdf15705782551e55bc20552945577.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/device-icons/tuber-alt-icon-40.png"
-dest_files=[ "res://.import/tuber-alt-icon-40.png-bced4f5ba4bfb04f6a600c38a7249606.stex" ]
+source_file="res://assets/images/icons/three-loop-icon-large.png"
+dest_files=[ "res://.import/three-loop-icon-large.png-afcdf15705782551e55bc20552945577.stex" ]
 
 [params]
 

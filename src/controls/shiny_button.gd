@@ -16,6 +16,7 @@ export var texture_scale := Vector2(1.0, 1.0) setget \
 export var is_shiny := false setget _set_is_shiny,_get_is_shiny
 export var includes_color_pulse := false setget \
         _set_includes_color_pulse,_get_includes_color_pulse
+export var is_font_xl := false setget _set_is_font_xl,_get_is_font_xl
 
 var shine_interval_id := -1
 var color_pulse_interval_id := -1
@@ -72,9 +73,13 @@ func _deferred_update() -> void:
     $MarginContainer/TextureWrapper/TextureRect.rect_scale = texture_scale
     $MarginContainer/TextureWrapper/TextureRect.rect_size = \
             rect_size / texture_scale
+    var font := \
+            Constants.MAIN_FONT_XL if \
+            is_font_xl else \
+            Constants.MAIN_FONT_NORMAL
     $MarginContainer/BottomButton.add_font_override( \
             "font", \
-            get_font("font"))
+            font)
     
     shine_tween.stop_all()
     Time.clear_interval(shine_interval_id)
@@ -185,6 +190,13 @@ func _set_includes_color_pulse(value: bool) -> void:
 
 func _get_includes_color_pulse() -> bool:
     return includes_color_pulse
+
+func _set_is_font_xl(value: bool) -> void:
+    is_font_xl = value
+    update()
+
+func _get_is_font_xl() -> bool:
+    return is_font_xl
 
 func _on_pressed() -> void:
     emit_signal("pressed")

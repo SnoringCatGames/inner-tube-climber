@@ -85,7 +85,8 @@ func update() -> void:
         high_tier, \
         config.tiers.size(),
     ]
-    var score_for_next_rank_str := _get_score_for_next_rank_str(config, rank)
+    var score_for_next_rank_str := \
+            LevelConfig.get_score_for_next_rank_str(level_id, rank)
     var total_plays := SaveState.get_level_total_plays(level_id)
     var is_unlocked := SaveState.get_level_is_unlocked(level_id)
     
@@ -96,6 +97,8 @@ func update() -> void:
     $HeaderWrapper/Header/HBoxContainer/LevelNumber.text = \
             str(config.number) + "."
     $HeaderWrapper/Header/HBoxContainer/LevelName.text = config.name
+    $HeaderWrapper/Header/HBoxContainer/ThreeLoopWrapper/ThreeLoop.visible = \
+            SaveState.get_level_has_three_looped(level_id)
     $HeaderWrapper/Header/HBoxContainer/RankWrapper/RankAnimator.rank = rank
     
     var list_items := [
@@ -211,19 +214,3 @@ func _set_is_open(value: bool) -> void:
 
 func _get_is_open() -> bool:
     return $AccordionPanel.is_open
-
-func _get_score_for_next_rank_str( \
-        level_config: Dictionary, \
-        current_rank: int) -> String:
-    match current_rank:
-        Rank.BRONZE:
-            return str(level_config.rank_thresholds[Rank.SILVER])
-        Rank.SILVER:
-            return str(level_config.rank_thresholds[Rank.GOLD])
-        Rank.GOLD:
-            return "-"
-        Rank.UNRANKED:
-            return "(finish level)"
-        _:
-            Utils.error()
-            return ""

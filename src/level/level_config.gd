@@ -417,6 +417,13 @@ static func get_level_rank( \
     else:
         return Rank.BRONZE
 
+static func get_old_unlocked_levels() -> Array:
+    var old_unlocked_levels := []
+    for level_id in get_level_ids():
+        if SaveState.get_level_is_unlocked(level_id):
+            old_unlocked_levels.push_back(level_id)
+    return old_unlocked_levels
+
 static func get_new_unlocked_levels() -> Array:
     var new_unlocked_levels := []
     for level_id in get_level_ids():
@@ -496,4 +503,20 @@ static func get_next_level_to_unlock() -> String:
         return ""
     else:
         return str(locked_level_numbers.front())
-        
+
+static func get_score_for_next_rank_str( \
+        level_id: String, \
+        current_rank: int) -> String:
+    var config := get_level_config(level_id)
+    match current_rank:
+        Rank.BRONZE:
+            return str(config.rank_thresholds[Rank.SILVER])
+        Rank.SILVER:
+            return str(config.rank_thresholds[Rank.GOLD])
+        Rank.GOLD:
+            return "-"
+        Rank.UNRANKED:
+            return "(finish level)"
+        _:
+            Utils.error()
+            return ""

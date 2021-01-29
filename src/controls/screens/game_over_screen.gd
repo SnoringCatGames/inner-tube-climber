@@ -80,6 +80,9 @@ func _update_stats() -> void:
     var rank_animator := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
             ScrollContainer/CenterContainer/VBoxContainer/Control2/ \
             RankAnimator
+    var three_loop_icon := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            ScrollContainer/CenterContainer/VBoxContainer/Control2/ \
+            ThreeLoopIcon
     var decrease_difficulty_button := $FullScreenPanel/VBoxContainer/ \
             CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/ \
             VBoxContainer2/DecreaseDifficultyButton
@@ -111,6 +114,24 @@ func _update_stats() -> void:
                 RANK_TWEEN_DURATION_SEC, \
                 [Sound.LAND])
     
+    three_loop_icon.visible = three_looped_level
+    if three_looped_level:
+        rank_tween.interpolate_property( \
+                three_loop_icon, \
+                "rect_scale", \
+                Vector2(15, 15), \
+                Vector2.ONE, \
+                RANK_TWEEN_DURATION_SEC, \
+                Tween.TRANS_QUAD, \
+                Tween.EASE_IN, \
+                RANK_TWEEN_DURATION_SEC / 2.0)
+        rank_tween.start()
+        Audio.play_sound(Sound.WALK_SNOW)
+        Time.set_timeout( \
+                funcref(Audio, "play_sound"), \
+                RANK_TWEEN_DURATION_SEC * 1.5, \
+                [Sound.LAND])
+    
     if !new_unlocked_levels.empty():
         unlocked_new_level_label.visible = true
         three_looped_level_label.visible = false
@@ -130,6 +151,11 @@ func _update_stats() -> void:
     
     high_score_label.visible = reached_new_high_score
     
+    var score_for_next_rank_str: String = \
+            LevelConfig.get_score_for_next_rank_str(level_id, rank) if \
+            level_id != "" else \
+            ""
+    
     control_list.items = [
         {
             label = "Level:",
@@ -145,6 +171,11 @@ func _update_stats() -> void:
             label = "High score:",
             type = LabeledControlItemType.TEXT,
             text = high_score,
+        },
+        {
+            label = "Score for next rank:",
+            type = LabeledControlItemType.TEXT,
+            text = score_for_next_rank_str,
         },
         {
             label = "Avg. multiplier:",

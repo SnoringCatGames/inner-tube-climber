@@ -19,6 +19,7 @@ const AGREED_TO_TERMS_KEY := "agreed_to_terms"
 const NEW_UNLOCKED_LEVELS_KEY := "new_unlocked_levels"
 const FINISHED_LEVEL_STREAK_KEY := "finished_level_streak"
 const FAILED_LEVEL_STREAK_KEY := "failed_level_streak"
+const GAVE_FEEDBACK_KEY := "gave_feedback"
 const DIFFICULTY_KEY := "difficulty"
 const IS_GIVING_HAPTIC_FEEDBACK_KEY := "is_giving_haptic_feedback"
 const IS_DEBUG_PANEL_SHOWN_KEY := "is_debug_panel_shown"
@@ -246,6 +247,19 @@ func get_failed_level_streak() -> int:
             MISCELLANEOUS_SECTION_KEY, \
             FAILED_LEVEL_STREAK_KEY, \
             0) as int
+
+func set_gave_feedback(gave_feedback: bool) -> void:
+    config.set_value( \
+            MISCELLANEOUS_SECTION_KEY, \
+            GAVE_FEEDBACK_KEY, \
+            gave_feedback)
+    save_config()
+
+func get_gave_feedback() -> bool:
+    return config.get_value( \
+            MISCELLANEOUS_SECTION_KEY, \
+            GAVE_FEEDBACK_KEY, \
+            false) as bool
 
 func set_setting( \
         setting_key: String, \

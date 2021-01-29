@@ -10,7 +10,7 @@ const RANK_ICON_SIZE_DEFAULT := RankAnimator.SMALL_SIZE
 const RANK_ICON_SCALE := Vector2(1.0, 1.0)
 const LOCKED_OPACITY := 0.6
 const FADE_TWEEN_DURATION_SEC := 0.3
-const LOCK_LOW_PART_DELAY_SEC := 0.7
+const LOCK_LOW_PART_DELAY_SEC := 0.4
 const LOCK_HIGH_PART_DELAY_SEC := 0.15
 
 export var level_id := "" setget _set_level_id,_get_level_id

@@ -52,23 +52,23 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
-margin_left = 95.0
-margin_right = 375.0
+margin_left = 55.0
+margin_right = 415.0
 margin_bottom = 659.0
 rect_min_size = Vector2( 280, 0 )
 
 [node name="Spacer6" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 140.0
-margin_right = 140.0
+margin_left = 180.0
+margin_right = 180.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="LogoControl" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 140.0
+margin_left = 180.0
 margin_top = 34.0
-margin_right = 140.0
+margin_right = 180.0
 margin_bottom = 81.0
 rect_min_size = Vector2( 0, 47 )
 size_flags_horizontal = 4
@@ -87,18 +87,18 @@ __meta__ = {
 }
 
 [node name="Spacer2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 140.0
+margin_left = 180.0
 margin_top = 85.0
-margin_right = 140.0
+margin_right = 180.0
 margin_bottom = 105.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="Control2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 140.0
+margin_left = 180.0
 margin_top = 109.0
-margin_right = 140.0
+margin_right = 180.0
 margin_bottom = 349.0
 rect_min_size = Vector2( 0, 240 )
 size_flags_horizontal = 4
@@ -132,9 +132,9 @@ __meta__ = {
 }
 
 [node name="Spacer3" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 140.0
+margin_left = 180.0
 margin_top = 353.0
-margin_right = 140.0
+margin_right = 180.0
 margin_bottom = 363.0
 rect_min_size = Vector2( 0, 10 )
 size_flags_horizontal = 4
@@ -145,7 +145,7 @@ __meta__ = {
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_top = 367.0
-margin_right = 280.0
+margin_right = 360.0
 margin_bottom = 451.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -185,8 +185,8 @@ text = "That's a new high score!"
 align = 1
 
 [node name="DecreaseDifficultyButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
-margin_left = 40.0
-margin_right = 240.0
+margin_left = 80.0
+margin_right = 280.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 200, 40 )
 size_flags_horizontal = 4
@@ -194,9 +194,9 @@ size_flags_vertical = 4
 text = "Decrease difficulty?"
 
 [node name="IncreaseDifficultyButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
-margin_left = 40.0
+margin_left = 80.0
 margin_top = 44.0
-margin_right = 240.0
+margin_right = 280.0
 margin_bottom = 84.0
 rect_min_size = Vector2( 200, 40 )
 size_flags_horizontal = 4
@@ -204,9 +204,9 @@ size_flags_vertical = 4
 text = "Increase difficulty?"
 
 [node name="Spacer7" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 140.0
+margin_left = 180.0
 margin_top = 455.0
-margin_right = 140.0
+margin_right = 180.0
 margin_bottom = 465.0
 rect_min_size = Vector2( 0, 10 )
 size_flags_horizontal = 4
@@ -220,8 +220,9 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
 margin_top = 469.0
-margin_right = 280.0
+margin_right = 360.0
 margin_bottom = 469.0
+rect_min_size = Vector2( 360, 0 )
 header_text = "Details from your climb"
 is_caret_on_left = false
 padding = Vector2( 16, 8 )
@@ -230,15 +231,16 @@ padding = Vector2( 16, 8 )
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 4.0
-margin_right = 280.0
+margin_right = 360.0
 margin_bottom = 284.0
+rect_min_size = Vector2( 360, 0 )
 row_height = 40.0
 padding_horizontal = 8.0
 
 [node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 140.0
+margin_left = 180.0
 margin_top = 473.0
-margin_right = 140.0
+margin_right = 180.0
 margin_bottom = 493.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 4
@@ -248,9 +250,9 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 76.0
+margin_left = 116.0
 margin_top = 497.0
-margin_right = 204.0
+margin_right = 244.0
 margin_bottom = 625.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -311,9 +313,9 @@ includes_color_pulse = null
 is_font_xl = null
 
 [node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 140.0
+margin_left = 180.0
 margin_top = 629.0
-margin_right = 140.0
+margin_right = 180.0
 margin_bottom = 659.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4

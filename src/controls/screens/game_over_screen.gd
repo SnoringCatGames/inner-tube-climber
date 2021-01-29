@@ -51,8 +51,8 @@ func _on_activated() -> void:
     _update_stats()
 
 func _get_focused_button() -> ShinyButton:
-    # FIXME: Conditionally suggest retry, if the next level is still unlocked.
-    if true:
+    # Conditionally suggest retry, if the player didn't finish the level.
+    if finished_level:
         return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
                 CenterContainer/VBoxContainer/VBoxContainer/ \
                 SelectLevelButton as ShinyButton
@@ -173,7 +173,7 @@ func _update_stats() -> void:
             text = high_score,
         },
         {
-            label = "Score for next rank:",
+            label = "Next rank at:",
             type = LabeledControlItemType.TEXT,
             text = score_for_next_rank_str,
         },

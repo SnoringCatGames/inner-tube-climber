@@ -269,6 +269,38 @@ const _LEVELS := {
             bronze_levels = ["5"],
         },
     },
+    "7": {
+        name = "bar",
+        tiers = ["1"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["6"],
+        },
+    },
+    "8": {
+        name = "bar",
+        tiers = ["1"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["7"],
+        },
+    },
+    "9": {
+        name = "bar",
+        tiers = ["1"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["8"],
+        },
+    },
+    "10": {
+        name = "bar",
+        tiers = ["1"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["9"],
+        },
+    },
 }
 
 const _inflated_tiers := {}
@@ -520,3 +552,26 @@ static func get_score_for_next_rank_str( \
         _:
             Utils.error()
             return ""
+
+static func get_suggested_next_level() -> String:
+    var next_level_number = INF
+    for rank in [Rank.BRONZE, Rank.SILVER, Rank.GOLD]:
+        for level_id in get_level_ids():
+            if !has_level_earned_rank(level_id, rank) and \
+                    int(level_id) < next_level_number and \
+                    SaveState.get_level_is_unlocked(level_id):
+                next_level_number = int(level_id)
+        
+        if next_level_number != INF:
+            return str(next_level_number)
+    
+    for level_id in get_level_ids():
+        if !SaveState.get_level_has_three_looped(level_id) and \
+                int(level_id) < next_level_number and \
+                SaveState.get_level_is_unlocked(level_id):
+            next_level_number = int(level_id)
+    
+    if next_level_number != INF:
+        return str(next_level_number)
+    
+    return "1"

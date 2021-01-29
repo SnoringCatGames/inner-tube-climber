@@ -185,7 +185,6 @@ margin_top = 79.0
 margin_right = 400.0
 margin_bottom = 79.0
 size_flags_horizontal = 3
-is_open = false
 includes_header = false
 header_text = " "
 header_min_height = 40.0

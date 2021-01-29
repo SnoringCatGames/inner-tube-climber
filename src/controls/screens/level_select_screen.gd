@@ -15,6 +15,7 @@ const INCLUDES_CENTER_CONTAINER := true
 # Array<LevelSelectItem>
 var level_items := []
 var expanded_item: LevelSelectItem
+var _scroll_target: LevelSelectItem
 
 func _init().( \
         TYPE, \
@@ -40,47 +41,80 @@ func _ready() -> void:
         item.level_id = level_id
         item.is_open = false
         item.connect("toggled", self, "_on_item_toggled", [item])
-        # FIXME
-        if false:
-            expanded_item = item
-    
-    if expanded_item != null:
-        expanded_item.is_open = true
 
 func _update() -> void:
     for item in level_items:
         item.update()
+    call_deferred("_deferred_update")
+
+func _deferred_update() -> void:
+    var previous_open_item: LevelSelectItem
+    for item in level_items:
+        if item.is_open:
+            previous_open_item = item
+    
     var new_unlocked_levels := SaveState.get_new_unlocked_levels()
-    if !new_unlocked_levels.empty():
+    
+    if new_unlocked_levels.empty():
+        if previous_open_item == null:
+            var suggested_level_id: String = \
+                    LevelConfig.get_suggested_next_level()
+            var item_to_open: LevelSelectItem
+            for item in level_items:
+                if item.level_id == suggested_level_id:
+                    item_to_open = item
+            assert(item_to_open != null)
+            item_to_open.toggle()
+    else:
         var last_new_unlocked_level: String = new_unlocked_levels.back()
         var unlocked_item: LevelSelectItem
         for item in level_items:
-            if item.is_open:
-                item.toggle()
             if item.level_id == last_new_unlocked_level:
                 unlocked_item = item
         assert(unlocked_item != null)
-        _scroll_to_item_to_unlock(unlocked_item)
+        
+        var is_closing_accordion_first := previous_open_item != null
+        if is_closing_accordion_first:
+            previous_open_item.toggle()
+        
+        _scroll_to_item_to_unlock( \
+                unlocked_item, \
+                is_closing_accordion_first)
 
-func _scroll_to_item_to_unlock(item: LevelSelectItem) -> void:
+func _scroll_to_item_to_unlock( \
+        item: LevelSelectItem, \
+        include_delay_for_accordion_scroll: bool) -> void:
     var scroll_tween := Tween.new()
     add_child(scroll_tween)
-    var scroll_start := scroll_container.get_v_scrollbar().min_value
-    var scroll_end := Utils.get_node_vscroll_position(scroll_container, item)
-    scroll_tween.interpolate_property( \
-            scroll_container, \
-            "scroll_vertical", \
-            scroll_start, \
-            scroll_end, \
+    _scroll_target = item
+    var delay := \
+            AccordionPanel.SCROLL_TWEEN_DURATION_SEC if \
+            include_delay_for_accordion_scroll else \
+            0.0
+    scroll_tween.interpolate_method( \
+            self, \
+            "_interpolate_scroll", \
+            0.0, \
+            1.0, \
             SCROLL_TWEEN_DURATION_SEC, \
             Tween.TRANS_QUAD, \
-            Tween.EASE_IN_OUT)
+            Tween.EASE_IN_OUT, \
+            delay)
     scroll_tween.connect( \
             "tween_all_completed", \
             self, \
             "_on_unlock_scroll_finished", \
             [item, scroll_tween])
     scroll_tween.start()
+
+func _interpolate_scroll(scroll_ratio: float) -> void:
+    var scroll_start := scroll_container.get_v_scrollbar().min_value
+    var scroll_end := \
+            Utils.get_node_vscroll_position(scroll_container, _scroll_target)
+    scroll_container.scroll_vertical = lerp( \
+            scroll_start, \
+            scroll_end, \
+            scroll_ratio)
 
 func _on_unlock_scroll_finished( \
         item: LevelSelectItem, \

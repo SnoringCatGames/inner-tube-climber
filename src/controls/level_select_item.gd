@@ -82,7 +82,8 @@ func update() -> void:
         Time.set_timeout(funcref(self, "_fade_in_unlock_hint"), \
                 level_select_screen_scroll_duration + \
                 LOCK_LOW_PART_DELAY_SEC + \
-                LockAnimation.UNLOCK_DURATION_SEC)
+                LockAnimation.UNLOCK_DURATION_SEC + \
+                FADE_TWEEN_DURATION_SEC)
     
     var config := LevelConfig.get_level_config(level_id)
     var high_score := SaveState.get_level_high_score(level_id)
@@ -114,7 +115,7 @@ func update() -> void:
     
     var list_items := [
         {
-            label = "Score for next rank:",
+            label = "Next rank at:",
             type = LabeledControlItemType.TEXT,
             text = score_for_next_rank_str,
         },

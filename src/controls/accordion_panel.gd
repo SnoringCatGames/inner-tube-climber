@@ -38,9 +38,7 @@ var _projected_control: Control
 var _caret: TextureRect
 var _is_open_tween: Tween
 
-var _should_auto_scroll: bool
 var _start_scroll_vertical: int
-var _end_scroll_vertical: int
 
 func _ready() -> void:
     _is_ready = true
@@ -216,13 +214,15 @@ func _trigger_open_change(is_tweening: bool) -> void:
                 Tween.TRANS_QUAD, \
                 Tween.EASE_IN_OUT)
         if is_open:
-            _calculate_scroll()
-            if _should_auto_scroll:
-                _is_open_tween.interpolate_property( \
-                        _scroll_container, \
-                        "scroll_vertical", \
-                        _start_scroll_vertical, \
-                        _end_scroll_vertical, \
+            if _calculate_should_scroll():
+                var scroll_container := \
+                        Nav.get_active_screen().scroll_container
+                _start_scroll_vertical = scroll_container.scroll_vertical
+                _is_open_tween.interpolate_method( \
+                        self, \
+                        "_interpolate_scroll", \
+                        0.0, \
+                        1.0, \
                         SCROLL_TWEEN_DURATION_SEC, \
                         Tween.TRANS_QUAD, \
                         Tween.EASE_IN_OUT)
@@ -248,10 +248,10 @@ func _interpolate_caret_rotation(rotation: float) -> void:
 
 # Auto-scroll if opened past bottom of screen, but don't auto-scroll the header
 # off the top of the screen!
-func _calculate_scroll() -> void:
-    _scroll_container = Nav.get_active_screen().scroll_container
+func _interpolate_scroll(open_ratio: float) -> void:
+    var scroll_container := Nav.get_active_screen().scroll_container
     var accordion_position_y_in_scroll_container := \
-            Utils.get_node_vscroll_position(_scroll_container, self)
+            Utils.get_node_vscroll_position(scroll_container, self)
     var accordion_height := _projected_control.rect_size.y
     if includes_header:
         accordion_height += _header.rect_size.y
@@ -259,21 +259,43 @@ func _calculate_scroll() -> void:
     var min_scroll_vertical_to_show_accordion_bottom := \
             accordion_position_y_in_scroll_container + \
             accordion_height - \
-            _scroll_container.rect_size.y
+            scroll_container.rect_size.y
     var max_scroll_vertical_to_show_accordion_top := \
             accordion_position_y_in_scroll_container
-    var current_scroll_vertical := _scroll_container.scroll_vertical
     
-    _should_auto_scroll = \
+    var end_scroll_vertical := min( \
+            min_scroll_vertical_to_show_accordion_bottom, \
+            max_scroll_vertical_to_show_accordion_top)
+    
+    scroll_container.scroll_vertical = lerp( \
+            _start_scroll_vertical, \
+            end_scroll_vertical, \
+            open_ratio)
+
+# Auto-scroll if opened past bottom of screen, but don't auto-scroll the header
+# off the top of the screen!
+func _calculate_should_scroll() -> bool:
+    var scroll_container := Nav.get_active_screen().scroll_container
+    var accordion_position_y_in_scroll_container := \
+            Utils.get_node_vscroll_position(scroll_container, self)
+    var accordion_height := _projected_control.rect_size.y
+    if includes_header:
+        accordion_height += _header.rect_size.y
+    
+    var min_scroll_vertical_to_show_accordion_bottom := \
+            accordion_position_y_in_scroll_container + \
+            accordion_height - \
+            scroll_container.rect_size.y
+    var max_scroll_vertical_to_show_accordion_top := \
+            accordion_position_y_in_scroll_container
+    var current_scroll_vertical := scroll_container.scroll_vertical
+    
+    var should_auto_scroll := \
             current_scroll_vertical < \
                     min_scroll_vertical_to_show_accordion_bottom and \
             current_scroll_vertical < \
                     max_scroll_vertical_to_show_accordion_top - 2.0
-    if _should_auto_scroll:
-        _start_scroll_vertical = current_scroll_vertical
-        _end_scroll_vertical = min( \
-                min_scroll_vertical_to_show_accordion_bottom, \
-                max_scroll_vertical_to_show_accordion_top)
+    return should_auto_scroll
 
 func _on_is_open_tween_started() -> void:
     _header.visible = includes_header

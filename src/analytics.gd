@@ -185,7 +185,7 @@ func _trigger_collect( \
             [entry, request, url, is_session_end])
     add_child(request)
     
-    # FIXME: REMOVE: ----------------------------------------
+    # FIXME:
 #    if true and \
 #            Time.elapsed_app_time_actual_sec < 61:
 #        _on_collect_request_completed( \
@@ -307,7 +307,7 @@ func _trigger_batch(batch: Array) -> void:
             [batch, request, url])
     add_child(request)
     
-    # FIXME: REMOVE: ----------------------------------------
+    # FIXME:
 #    if true and \
 #            Time.elapsed_app_time_actual_sec < 61:
 #        _on_batch_request_completed( \

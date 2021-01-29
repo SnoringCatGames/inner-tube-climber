@@ -185,7 +185,7 @@ const _TIERS := {
     },
     "1": {
         scene_path = "res://src/level/tiers/tier_1.tscn",
-        # FIXME: --------------------------------- REMOVE
+        # FIXME:
         peep_hole_size = {value = Vector2(200.0, 200.0), weight = 0.0},
         fog_screen_opacity = {value = 0.3, weight = 0.0},
         snow_density_multiplier = 4.0,
@@ -426,43 +426,74 @@ static func get_new_unlocked_levels() -> Array:
     return new_unlocked_levels
 
 static func _check_if_level_meets_unlock_conditions(level_id: String) -> bool:
+    return get_unlock_hint(level_id) == ""
+
+static func get_unlock_hint(level_id: String) -> String:
     var config := get_level_config(level_id)
-    var is_unlocked := true
+    var hint := ""
     for key in config.unlock_conditions:
         var other_level_ids: Array = config.unlock_conditions[key]
+        if !hint.empty() and \
+                !other_level_ids.empty():
+            hint += ". "
         match key:
             "bronze_levels":
+                var bronze_hint := ""
                 for other_level_id in other_level_ids:
-                    if !SaveState.get_level_has_finished(other_level_id):
-                        is_unlocked = false
-                        break
+                    if !has_level_earned_rank(other_level_id, Rank.BRONZE):
+                        bronze_hint += " " + other_level_id
+                if bronze_hint != "":
+                    hint += "Finish level" + bronze_hint
             "silver_levels":
+                var silver_hint := ""
                 for other_level_id in other_level_ids:
-                    var other_config := get_level_config(other_level_id)
-                    var rank_threshold: int = \
-                            other_config.rank_thresholds[Rank.SILVER]
-                    var other_high_score := SaveState \
-                            .get_level_high_score(other_level_id)
-                    if other_high_score < rank_threshold:
-                        is_unlocked = false
-                        break
+                    if !has_level_earned_rank(other_level_id, Rank.SILVER):
+                        silver_hint += " " + other_level_id
+                if silver_hint != "":
+                    hint += "Get silver on level" + silver_hint
             "gold_levels":
+                var gold_hint := ""
                 for other_level_id in other_level_ids:
-                    var other_config := get_level_config(other_level_id)
-                    var rank_threshold: int = \
-                            other_config.rank_thresholds[Rank.GOLD]
-                    var other_high_score := SaveState \
-                            .get_level_high_score(other_level_id)
-                    if other_high_score < rank_threshold:
-                        is_unlocked = false
-                        break
+                    if !has_level_earned_rank(other_level_id, Rank.GOLD):
+                        gold_hint += " " + other_level_id
+                if gold_hint != "":
+                    hint += "Get gold on level" + gold_hint
             "three_loop_levels":
+                var three_loop_hint := ""
                 for other_level_id in other_level_ids:
                     if !SaveState.get_level_has_three_looped(other_level_id):
-                        is_unlocked = false
-                        break
+                        three_loop_hint += " " + other_level_id
+                if three_loop_hint != "":
+                    hint += "Three-loop level" + three_loop_hint
             _:
                 Utils.error()
-        if !is_unlocked:
-            break
-    return is_unlocked
+    if !hint.empty():
+        hint += "."
+    return hint
+
+static func has_level_earned_rank( \
+        level_id: String, \
+        rank: int) -> bool:
+    var config := get_level_config(level_id)
+    if rank == Rank.UNRANKED:
+        return true
+    elif rank == Rank.BRONZE:
+        return SaveState.get_level_has_finished(level_id)
+    else:
+        var rank_threshold: int = config.rank_thresholds[rank]
+        var high_score := SaveState.get_level_high_score(level_id)
+        return high_score >= rank_threshold
+
+static func get_next_level_to_unlock() -> String:
+    var locked_level_numbers := []
+    for level_id in get_level_ids():
+        if !SaveState.get_level_is_unlocked(level_id):
+            var config := get_level_config(level_id)
+            locked_level_numbers.push_back(config.number)
+    locked_level_numbers.sort()
+    
+    if locked_level_numbers.empty():
+        return ""
+    else:
+        return str(locked_level_numbers.front())
+        

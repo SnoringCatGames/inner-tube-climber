@@ -24,7 +24,7 @@ func _process(_delta_sec: float) -> void:
     rect_min_size.y = $AccordionPanel.rect_min_size.y
 
 func _init_children() -> void:
-    var header_size := Vector2(rect_size.x, HEADER_HEIGHT)
+    var header_size := Vector2(rect_min_size.x, HEADER_HEIGHT)
     
     $HeaderWrapper/LockedWrapper.rect_min_size = header_size
     
@@ -64,6 +64,14 @@ func update() -> void:
     
     # FIXME: REMOVE: for debugging
 #    SaveState.set_level_is_unlocked(level_id, true)
+    
+    var unlock_hint_message := LevelConfig.get_unlock_hint(level_id)
+    var is_next_level_to_unlock := \
+            LevelConfig.get_next_level_to_unlock() == level_id
+    $UnlockHint.visible = \
+            unlock_hint_message != "" and \
+            is_next_level_to_unlock
+    $UnlockHint.text = unlock_hint_message
     
     var config := LevelConfig.get_level_config(level_id)
     var high_score := SaveState.get_level_high_score(level_id)

@@ -139,14 +139,25 @@ margin_bottom = 28.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
+[node name="UnlockHint" type="Label" parent="."]
+margin_top = 55.0
+margin_right = 320.0
+margin_bottom = 83.0
+rect_min_size = Vector2( 320, 28 )
+size_flags_horizontal = 3
+text = "(Finish the previous level to unlock this one)"
+align = 1
+valign = 1
+
 [node name="AccordionPanel" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 56.0
+margin_top = 84.0
 margin_right = 320.0
-margin_bottom = 56.0
+margin_bottom = 84.0
 size_flags_horizontal = 3
+is_open = false
 includes_header = false
 header_text = " "
 header_min_height = 40.0
@@ -181,7 +192,6 @@ rect_min_size = Vector2( 120, 60 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 6 )
-texture_scale = null
 is_shiny = true
 includes_color_pulse = true
 

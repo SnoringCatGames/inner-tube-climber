@@ -72,6 +72,17 @@ func update() -> void:
             unlock_hint_message != "" and \
             is_next_level_to_unlock
     $UnlockHint.text = unlock_hint_message
+    if $UnlockHint.visible and \
+            !SaveState.get_new_unlocked_levels().empty():
+        # Finish the unlock animation for the previous item before showing the
+        # unlock hint for this item.
+        $UnlockHint.modulate.a = 0.0
+        $UnlockHint.visible = false
+        var level_select_screen_scroll_duration := 0.3
+        Time.set_timeout(funcref(self, "_fade_in_unlock_hint"), \
+                level_select_screen_scroll_duration + \
+                LOCK_LOW_PART_DELAY_SEC + \
+                LockAnimation.UNLOCK_DURATION_SEC)
     
     var config := LevelConfig.get_level_config(level_id)
     var high_score := SaveState.get_level_high_score(level_id)
@@ -184,6 +195,28 @@ func _on_unlock_fade_finished(fade_tween: Tween) -> void:
     $HeaderWrapper/LockedWrapper.visible = false
     $HeaderWrapper/Header.visible = true
     toggle()
+
+func _fade_in_unlock_hint() -> void:
+    $UnlockHint.visible = true
+    var fade_tween := Tween.new()
+    $UnlockHint.add_child(fade_tween)
+    fade_tween.connect( \
+            "tween_all_completed", \
+            self, \
+            "_fade_in_unlock_finished", \
+            [fade_tween])
+    fade_tween.interpolate_property( \
+            $UnlockHint, \
+            "modulate:a", \
+            0.0, \
+            1.0, \
+            FADE_TWEEN_DURATION_SEC, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT)
+    fade_tween.start()
+
+func _fade_in_unlock_finished(fade_tween: Tween) -> void:
+    $UnlockHint.remove_child(fade_tween)
 
 func _on_header_pressed() -> void:
     Global.give_button_press_feedback()

@@ -3,7 +3,6 @@
 [ext_resource path="res://assets/images/gui/lock.png" type="Texture" id=1]
 [ext_resource path="res://src/controls/lock_animation.gd" type="Script" id=2]
 
-
 [sub_resource type="Animation" id=1]
 resource_name = "Locked"
 length = 0.1
@@ -73,6 +72,7 @@ position = Vector2( 16, 16 )
 [node name="Lock" type="Sprite" parent="Control/Node2D"]
 texture = ExtResource( 1 )
 hframes = 7
+frame = 6
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Control/Node2D"]
 autoplay = "Locked"

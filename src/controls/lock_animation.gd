@@ -3,6 +3,8 @@ class_name LockAnimation
 
 signal unlock_finished
 
+const UNLOCK_DURATION_SEC := 0.8
+
 func _ready() -> void:
     $Control/Node2D/AnimationPlayer.connect( \
             "animation_finished", \

@@ -8,6 +8,7 @@ const INCLUDES_NAV_BAR := false
 const INCLUDES_CENTER_CONTAINER := true
 
 const RANK_TWEEN_DURATION_SEC := 0.6
+const RANK_TWEEN_SCALE_START := Vector2(15, 15)
 
 var level_id: String
 var score: String
@@ -79,10 +80,10 @@ func _update_stats() -> void:
             LabeledControlList
     var rank_animator := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
             ScrollContainer/CenterContainer/VBoxContainer/Control2/ \
-            RankAnimator
+            RankWrapper/Node2D/RankAnimator
     var three_loop_icon := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
             ScrollContainer/CenterContainer/VBoxContainer/Control2/ \
-            ThreeLoopIcon
+            RankWrapper/Node2D/ThreeLoopIcon
     var decrease_difficulty_button := $FullScreenPanel/VBoxContainer/ \
             CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/ \
             VBoxContainer2/DecreaseDifficultyButton
@@ -102,7 +103,7 @@ func _update_stats() -> void:
         rank_tween.interpolate_property( \
                 rank_animator, \
                 "rect_scale", \
-                Vector2(15, 15), \
+                RANK_TWEEN_SCALE_START, \
                 Vector2.ONE, \
                 RANK_TWEEN_DURATION_SEC, \
                 Tween.TRANS_QUAD, \
@@ -114,17 +115,19 @@ func _update_stats() -> void:
                 RANK_TWEEN_DURATION_SEC, \
                 [Sound.LAND])
     
-    three_loop_icon.visible = three_looped_level
+    three_loop_icon.visible = false
     if three_looped_level:
+        var delay := RANK_TWEEN_DURATION_SEC / 2.0
+        Time.set_timeout(funcref(three_loop_icon, "set_visible"), delay, [true])
         rank_tween.interpolate_property( \
                 three_loop_icon, \
                 "rect_scale", \
-                Vector2(15, 15), \
+                RANK_TWEEN_SCALE_START, \
                 Vector2.ONE, \
                 RANK_TWEEN_DURATION_SEC, \
                 Tween.TRANS_QUAD, \
                 Tween.EASE_IN, \
-                RANK_TWEEN_DURATION_SEC / 2.0)
+                delay)
         rank_tween.start()
         Audio.play_sound(Sound.WALK_SNOW)
         Time.set_timeout( \

@@ -131,9 +131,6 @@ margin_right = -13.5
 margin_bottom = -16.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
-rank = 0
-is_small = true
-includes_random_delay = true
 
 [node name="CaretWrapper" type="Control" parent="HeaderWrapper/Header/HBoxContainer"]
 margin_left = 372.0

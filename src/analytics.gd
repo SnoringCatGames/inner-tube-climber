@@ -167,6 +167,10 @@ func _trigger_collect( \
             print("  Payload (readable):\n    " + \
                     payload.replace("&", "\n    &"))
     
+    if OS.is_debug_build():
+        print("Skipping Analytics collection in debug environment")
+        return
+    
     var url := GOOGLE_ANALYTICS_COLLECT_URL + "?" + payload
     var body := payload
     var entry := _AnalyticsEntry.new(payload)

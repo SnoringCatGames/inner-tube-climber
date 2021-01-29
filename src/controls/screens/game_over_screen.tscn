@@ -105,31 +105,40 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 size_flags_stretch_ratio = 3.0
 
+[node name="RankWrapper" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2"]
+size_flags_horizontal = 4
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Node2D" type="Node2D" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2/RankWrapper"]
+z_index = 1
+
+[node name="RankAnimator" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2/RankWrapper/Node2D" instance=ExtResource( 12 )]
+margin_left = 87.244
+margin_top = 34.4178
+margin_right = 87.244
+margin_bottom = 34.4178
+is_small = false
+
+[node name="ThreeLoopIcon" type="TextureRect" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2/RankWrapper/Node2D"]
+margin_left = -124.632
+margin_top = 3.78024
+margin_right = -60.632
+margin_bottom = 67.7802
+rect_pivot_offset = Vector2( 32, 32 )
+texture = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="StuckAnimationControl" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2" instance=ExtResource( 5 )]
 margin_top = 120.0
 margin_bottom = 120.0
 rect_scale = Vector2( 4, 4 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="RankAnimator" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2" instance=ExtResource( 12 )]
-margin_left = 72.7914
-margin_top = 21.423
-margin_right = 72.7914
-margin_bottom = -62.577
-rank = 0
-is_small = false
-includes_random_delay = true
-
-[node name="ThreeLoopIcon" type="TextureRect" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2"]
-margin_left = -122.212
-margin_top = -8.18948
-margin_right = -58.2125
-margin_bottom = 55.8105
-texture = ExtResource( 13 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Spacer3" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 180.0

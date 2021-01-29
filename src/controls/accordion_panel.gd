@@ -250,6 +250,9 @@ func _interpolate_caret_rotation(rotation: float) -> void:
 # off the top of the screen!
 func _interpolate_scroll(open_ratio: float) -> void:
     var scroll_container := Nav.get_active_screen().scroll_container
+    if scroll_container == null:
+        return
+    
     var accordion_position_y_in_scroll_container := \
             Utils.get_node_vscroll_position(scroll_container, self)
     var accordion_height := _projected_control.rect_size.y

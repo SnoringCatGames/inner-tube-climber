@@ -61,6 +61,10 @@ func _validate_node_hierarchy() -> void:
 
 func _on_activated() -> void:
     _give_button_focus(_get_focused_button())
+    if includes_standard_hierarchy:
+        Utils.set_mouse_filter_recursively( \
+                scroll_container, \
+                Control.MOUSE_FILTER_PASS)
 
 func _on_deactivated() -> void:
     pass

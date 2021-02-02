@@ -6,6 +6,7 @@ var includes_standard_hierarchy: bool
 var includes_nav_bar: bool
 var includes_center_container: bool
 
+var outer_panel_container: PanelContainer
 var nav_bar: NavBar
 var scroll_container: ScrollContainer
 var inner_vbox: VBoxContainer
@@ -26,6 +27,16 @@ func _ready() -> void:
     _validate_node_hierarchy()
 
 func _validate_node_hierarchy() -> void:
+    # Give a shadow to the outer-most panel.
+    outer_panel_container = get_child(0)
+    assert(outer_panel_container is PanelContainer)
+    var style_original := outer_panel_container.get_stylebox("panel")
+    var style_updated := StyleBoxFlat.new()
+    style_updated.bg_color = style_original.bg_color
+    style_updated.shadow_size = 8
+    style_updated.shadow_offset = Vector2(-4.0, 4.0)
+    outer_panel_container.add_stylebox_override("panel", style_updated)
+    
     if includes_standard_hierarchy:
         var outer_vbox: VBoxContainer = $FullScreenPanel/VBoxContainer
         outer_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL

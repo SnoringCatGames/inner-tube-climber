@@ -169,6 +169,8 @@ func _trigger_collect( \
     
     if OS.is_debug_build():
         print("Skipping Analytics collection in debug environment")
+        if is_session_end:
+            emit_signal("session_end")
         return
     
     var url := GOOGLE_ANALYTICS_COLLECT_URL + "?" + payload

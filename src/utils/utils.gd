@@ -561,10 +561,12 @@ static func set_mouse_filter_recursively( \
 static func get_node_vscroll_position( \
         scroll_container: ScrollContainer, \
         control: Control) -> int:
+    var scroll_container_global_position := \
+            scroll_container.rect_global_position
+    var control_global_position := control.rect_global_position
     var vscroll_position: int = \
-            control.rect_global_position.y - \
-            scroll_container.rect_global_position.y + \
+            control_global_position.y - \
+            scroll_container_global_position.y + \
             scroll_container.scroll_vertical
     var max_vscroll_position := scroll_container.get_v_scrollbar().max_value
-    assert(vscroll_position <= max_vscroll_position)
     return vscroll_position

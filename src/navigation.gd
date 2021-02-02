@@ -24,8 +24,11 @@ const GAME_OVER_SCREEN_PATH := \
         "res://src/controls/screens/game_over_screen.tscn"
 const CONFIRM_DATA_DELETION_SCREEN_PATH := \
         "res://src/controls/screens/confirm_data_deletion_screen.tscn"
+const FADE_TRANSITION_PATH := \
+        "res://src/controls/screens/fade_transition.tscn"
 
 const SCREEN_SLIDE_DURATION_SEC := 0.3
+const SCREEN_FADE_DURATION_SEC := 1.0
 const SESSION_END_TIMEOUT_SEC := 2.0
 
 # Dictionary<ScreenType, Screen>
@@ -33,7 +36,13 @@ var screens := {}
 # Array<Screen>
 var active_screen_stack := []
 
+var fade_transition: FadeTransition
+
 func _ready() -> void:
+    fade_transition.connect( \
+            "fade_complete", \
+            self, \
+            "_on_fade_complete")
     get_tree().set_auto_accept_quit(false)
     Analytics.connect( \
             "session_end", \
@@ -122,6 +131,12 @@ func create_screens() -> void:
             CONFIRM_DATA_DELETION_SCREEN_PATH, \
             true, \
             false)
+    fade_transition = Utils.add_scene( \
+            Global.canvas_layers.top_layer, \
+            FADE_TRANSITION_PATH, \
+            true, \
+            false)
+    fade_transition.duration = SCREEN_FADE_DURATION_SEC
 
 func open(screen_type: int) -> void:
     _set_screen_is_open(screen_type, true)
@@ -163,10 +178,12 @@ func _set_screen_is_open( \
             next_screen.type != ScreenType.GAME
     var is_first_screen := is_open and active_screen_stack.empty()
     
+    var next_screen_was_already_shown := false
     if is_open:
         if !active_screen_stack.has(next_screen):
             active_screen_stack.push_back(next_screen)
-            next_screen.z_index = -100 + active_screen_stack.size()
+        else:
+            next_screen_was_already_shown = true
     
     # Remove all (potential) following screens from the stack.
     var index := active_screen_stack.find(next_screen)
@@ -179,14 +196,34 @@ func _set_screen_is_open( \
     
     if previous_screen != null:
         previous_screen.visible = true
+        previous_screen.z_index = \
+                -100 + active_screen_stack.find(previous_screen) if \
+                active_screen_stack.has(previous_screen) else \
+                -100 + active_screen_stack.size()
     if next_screen != null:
         next_screen.visible = true
+        next_screen.z_index = -100 + active_screen_stack.find(next_screen)
     
     if !is_first_screen:
         var start_position: Vector2
         var end_position: Vector2
         var tween_screen: Screen
-        if is_open:
+        if screen_type == ScreenType.GAME:
+            start_position = Vector2.ZERO
+            end_position = Vector2( \
+                    -get_viewport().size.x, \
+                    0.0)
+            tween_screen = previous_screen
+        elif next_screen_was_already_shown:
+            start_position = Vector2( \
+                    get_viewport().size.x, \
+                    0.0)
+            end_position = Vector2.ZERO
+            tween_screen = next_screen
+            var swap_z_index := next_screen.z_index
+            next_screen.z_index = previous_screen.z_index
+            previous_screen.z_index = swap_z_index
+        elif is_open:
             start_position = Vector2( \
                     get_viewport().size.x, \
                     0.0)
@@ -198,6 +235,16 @@ func _set_screen_is_open( \
                     get_viewport().size.x, \
                     0.0)
             tween_screen = previous_screen
+        
+        var slide_duration := SCREEN_SLIDE_DURATION_SEC
+        var slide_delay := 0.0
+        if screen_type == ScreenType.GAME or \
+                screen_type == ScreenType.GAME_OVER:
+            fade_transition.visible = true
+            fade_transition.fade()
+            slide_duration = SCREEN_SLIDE_DURATION_SEC / 2.0
+            slide_delay = (SCREEN_FADE_DURATION_SEC - slide_duration) / 2.0
+        
         var screen_slide_tween := Tween.new()
         add_child(screen_slide_tween)
         tween_screen.position = start_position
@@ -208,7 +255,8 @@ func _set_screen_is_open( \
                 end_position, \
                 SCREEN_SLIDE_DURATION_SEC, \
                 Tween.TRANS_QUAD, \
-                Tween.EASE_IN_OUT)
+                Tween.EASE_IN_OUT, \
+                slide_delay)
         screen_slide_tween.start()
         screen_slide_tween.connect( \
                 "tween_completed", \
@@ -247,3 +295,7 @@ func _on_screen_slide_completed( \
     if next_screen != null:
         next_screen.visible = true
         next_screen.position = Vector2.ZERO
+
+func _on_fade_complete() -> void:
+    if !fade_transition.is_transitioning:
+        fade_transition.visible = false

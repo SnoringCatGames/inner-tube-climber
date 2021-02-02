@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/images/gui/game-over.png" type="Texture" id=2]
@@ -14,12 +14,18 @@
 [ext_resource path="res://src/level/rank_animator.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/images/icons/three-loop-icon-large.png" type="Texture" id=13]
 
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.152941, 0.192157, 0.286275, 1 )
+shadow_size = 8
+shadow_offset = Vector2( -4, 4 )
+
 [node name="GameOverScreen" type="Node2D"]
 script = ExtResource( 4 )
 
 [node name="FullScreenPanel" parent="." instance=ExtResource( 3 )]
 margin_right = 480.0
 margin_bottom = 480.0
+custom_styles/panel = SubResource( 1 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel"]
 margin_right = 480.0
@@ -47,14 +53,14 @@ size_flags_vertical = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
 margin_right = 470.0
-margin_bottom = 659.0
+margin_bottom = 539.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
 margin_left = 55.0
 margin_right = 415.0
-margin_bottom = 659.0
+margin_bottom = 539.0
 rect_min_size = Vector2( 280, 0 )
 
 [node name="Spacer6" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
@@ -99,8 +105,8 @@ size_flags_vertical = 4
 margin_left = 180.0
 margin_top = 109.0
 margin_right = 180.0
-margin_bottom = 349.0
-rect_min_size = Vector2( 0, 240 )
+margin_bottom = 229.0
+rect_min_size = Vector2( 0, 120 )
 size_flags_horizontal = 4
 size_flags_vertical = 0
 size_flags_stretch_ratio = 3.0
@@ -120,7 +126,9 @@ margin_left = 87.244
 margin_top = 34.4178
 margin_right = 87.244
 margin_bottom = 34.4178
+rank = 0
 is_small = false
+includes_random_delay = true
 
 [node name="ThreeLoopIcon" type="TextureRect" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2/RankWrapper/Node2D"]
 margin_left = -124.632
@@ -134,17 +142,17 @@ __meta__ = {
 }
 
 [node name="StuckAnimationControl" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/Control2" instance=ExtResource( 5 )]
-margin_top = 120.0
-margin_bottom = 120.0
-rect_scale = Vector2( 4, 4 )
+margin_top = 60.0
+margin_bottom = 60.0
+rect_scale = Vector2( 2, 2 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Spacer3" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 180.0
-margin_top = 353.0
+margin_top = 233.0
 margin_right = 180.0
-margin_bottom = 363.0
+margin_bottom = 243.0
 rect_min_size = Vector2( 0, 10 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -153,9 +161,9 @@ __meta__ = {
 }
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_top = 367.0
+margin_top = 247.0
 margin_right = 360.0
-margin_bottom = 451.0
+margin_bottom = 331.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -214,9 +222,9 @@ text = "Increase difficulty?"
 
 [node name="Spacer7" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 180.0
-margin_top = 455.0
+margin_top = 335.0
 margin_right = 180.0
-margin_bottom = 465.0
+margin_bottom = 345.0
 rect_min_size = Vector2( 0, 10 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -228,11 +236,15 @@ __meta__ = {
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 469.0
+margin_top = 349.0
 margin_right = 360.0
-margin_bottom = 469.0
+margin_bottom = 349.0
 rect_min_size = Vector2( 360, 0 )
+is_open = false
+includes_header = true
 header_text = "Details from your climb"
+header_min_height = 0.0
+header_font = null
 is_caret_on_left = false
 padding = Vector2( 16, 8 )
 
@@ -248,9 +260,9 @@ padding_horizontal = 8.0
 
 [node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 180.0
-margin_top = 473.0
+margin_top = 353.0
 margin_right = 180.0
-margin_bottom = 493.0
+margin_bottom = 373.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -260,9 +272,9 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 116.0
-margin_top = 497.0
+margin_top = 377.0
 margin_right = 244.0
-margin_bottom = 625.0
+margin_bottom = 505.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 16
@@ -279,10 +291,6 @@ rect_min_size = Vector2( 128, 56 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 7 )
-texture_scale = null
-is_shiny = null
-includes_color_pulse = null
-is_font_xl = null
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer"]
 margin_top = 72.0
@@ -301,10 +309,6 @@ rect_min_size = Vector2( 56, 56 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 9 )
-texture_scale = null
-is_shiny = null
-includes_color_pulse = null
-is_font_xl = null
 
 [node name="RetryButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 10 )]
 anchor_right = 0.0
@@ -316,16 +320,12 @@ rect_min_size = Vector2( 56, 56 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 8 )
-texture_scale = null
-is_shiny = null
-includes_color_pulse = null
-is_font_xl = null
 
 [node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 180.0
-margin_top = 629.0
+margin_top = 509.0
 margin_right = 180.0
-margin_bottom = 659.0
+margin_bottom = 539.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 4

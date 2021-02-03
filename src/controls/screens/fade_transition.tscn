@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/controls/screens/fade_transition.gd" type="Script" id=1]
-[ext_resource path="res://assets/images/fade-transition-3.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/transition-5-out.png" type="Texture" id=2]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;

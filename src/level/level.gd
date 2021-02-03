@@ -439,7 +439,7 @@ func _on_game_over_sound_finished() -> void:
             is_rate_app_screen_next and \
                     !SaveState.get_gave_feedback() else \
             ScreenType.GAME_OVER
-    Nav.open(next_screen_type)
+    Nav.open(next_screen_type, true)
     Nav.screens[ScreenType.GAME].destroy_level()
 
 func _add_player(is_base_tier := false) -> void:

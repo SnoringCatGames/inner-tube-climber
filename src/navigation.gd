@@ -28,7 +28,7 @@ const FADE_TRANSITION_PATH := \
         "res://src/controls/screens/fade_transition.tscn"
 
 const SCREEN_SLIDE_DURATION_SEC := 0.3
-const SCREEN_FADE_DURATION_SEC := 1.0
+const SCREEN_FADE_DURATION_SEC := 1.2
 const SESSION_END_TIMEOUT_SEC := 2.0
 
 # Dictionary<ScreenType, Screen>
@@ -138,7 +138,9 @@ func create_screens() -> void:
             false)
     fade_transition.duration = SCREEN_FADE_DURATION_SEC
 
-func open(screen_type: int) -> void:
+func open( \
+        screen_type: int, \
+        includes_fade := false) -> void:
     var previous_type_str := \
             ScreenType.get_type_string(get_active_screen_type()) if \
             !active_screen_stack.empty() else \
@@ -148,9 +150,12 @@ func open(screen_type: int) -> void:
         ScreenType.get_type_string(screen_type),
     ])
     
-    _set_screen_is_open(screen_type, true)
+    _set_screen_is_open( \
+            screen_type, \
+            true, \
+            includes_fade)
 
-func close_current_screen() -> void:
+func close_current_screen(includes_fade := false) -> void:
     assert(!active_screen_stack.empty())
     
     var previous_type := get_active_screen_type()
@@ -168,7 +173,8 @@ func close_current_screen() -> void:
     
     _set_screen_is_open( \
             previous_type, \
-            false)
+            false, \
+            includes_fade)
 
 func get_active_screen() -> Screen:
     return active_screen_stack.back()
@@ -178,7 +184,8 @@ func get_active_screen_type() -> int:
 
 func _set_screen_is_open( \
         screen_type: int, \
-        is_open: bool) -> void:
+        is_open: bool, \
+        includes_fade := false) -> void:
     var next_screen: Screen
     var previous_screen: Screen
     if is_open:
@@ -261,8 +268,7 @@ func _set_screen_is_open( \
         
         var slide_duration := SCREEN_SLIDE_DURATION_SEC
         var slide_delay := 0.0
-        if screen_type == ScreenType.GAME or \
-                screen_type == ScreenType.GAME_OVER:
+        if includes_fade:
             fade_transition.visible = true
             fade_transition.fade()
             slide_duration = SCREEN_SLIDE_DURATION_SEC / 2.0

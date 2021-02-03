@@ -304,7 +304,9 @@ func _on_is_open_tween_started() -> void:
     _header.visible = includes_header
     _projected_control.visible = true
 
-func _on_is_open_tween_completed() -> void:
+func _on_is_open_tween_completed( \
+        _object = null, \
+        _key = null) -> void:
     _header.visible = includes_header
     _projected_control.visible = is_open
 

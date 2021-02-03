@@ -104,7 +104,7 @@ func _on_ExitLevelButton_pressed():
     Global.give_button_press_feedback()
     Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
     Nav.screens[ScreenType.GAME].destroy_level()
-    Nav.open(ScreenType.MAIN_MENU)
+    Nav.open(ScreenType.MAIN_MENU, true)
 
 func _on_ResumeButton_pressed():
     Global.give_button_press_feedback()
@@ -113,4 +113,4 @@ func _on_ResumeButton_pressed():
 func _on_RestartButton_pressed():
     Global.give_button_press_feedback()
     Nav.screens[ScreenType.GAME].restart_level()
-    Nav.close_current_screen()
+    Nav.close_current_screen(true)

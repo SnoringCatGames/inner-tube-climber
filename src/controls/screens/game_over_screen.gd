@@ -249,7 +249,7 @@ func _on_HomeButton_pressed():
 
 func _on_RetryButton_pressed():
     Global.give_button_press_feedback(true)
-    Nav.open(ScreenType.GAME)
+    Nav.open(ScreenType.GAME, true)
     Nav.screens[ScreenType.GAME].start_level(level_id)
 
 func _on_DecreaseDifficultyButton_pressed():

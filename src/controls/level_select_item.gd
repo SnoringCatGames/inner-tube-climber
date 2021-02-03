@@ -225,7 +225,7 @@ func _on_header_pressed() -> void:
 
 func _on_PlayButton_pressed():
     Global.give_button_press_feedback(true)
-    Nav.open(ScreenType.GAME)
+    Nav.open(ScreenType.GAME, true)
     Nav.screens[ScreenType.GAME].start_level(level_id)
 
 func _on_accordion_toggled() -> void:

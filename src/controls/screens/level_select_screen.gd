@@ -133,3 +133,5 @@ func _on_item_toggled(item: LevelSelectItem) -> void:
         expanded_item = item
     elif expanded_item == item:
         expanded_item = null
+    
+    _give_button_focus(item.get_button())

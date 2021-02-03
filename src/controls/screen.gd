@@ -70,6 +70,14 @@ func _validate_node_hierarchy() -> void:
                 scroll_container, \
                 Control.MOUSE_FILTER_PASS)
 
+func _unhandled_key_input(event: InputEventKey) -> void:
+    if (event.scancode == KEY_SPACE or \
+            event.scancode == KEY_ENTER) and \
+            event.pressed and \
+            _focused_button != null and \
+            Nav.get_active_screen() == self:
+        _focused_button.press()
+
 func _on_activated() -> void:
     _give_button_focus(_get_focused_button())
     if includes_standard_hierarchy:

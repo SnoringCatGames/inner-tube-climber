@@ -248,3 +248,6 @@ func _set_is_open(value: bool) -> void:
 
 func _get_is_open() -> bool:
     return $AccordionPanel.is_open
+
+func get_button() -> ShinyButton:
+    return $AccordionPanel/VBoxContainer/PlayButton as ShinyButton

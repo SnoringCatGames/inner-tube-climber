@@ -198,5 +198,8 @@ func _set_is_font_xl(value: bool) -> void:
 func _get_is_font_xl() -> bool:
     return is_font_xl
 
+func press() -> void:
+    _on_pressed()
+
 func _on_pressed() -> void:
     emit_signal("pressed")

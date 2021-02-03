@@ -213,7 +213,7 @@ func _physics_process(_delta_sec: float) -> void:
     cooldown_indicator.check_for_updates( \
             player_max_platform_height_on_current_life, \
             player_latest_platform_height, \
-            !player.surface_state.is_touching_a_surface)
+            !player.surface_state.is_touching_floor)
     max_height_indicator.check_for_updates(player_max_platform_height)
     max_height_on_current_height_indicator.check_for_updates( \
             player_max_platform_height_on_current_life)

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/rising-through-rarified-air.wav-e920ea0721c21ff4795801c5a65eb886.sample"
+
+[deps]
+
+source_file="res://assets/music/rising-through-rarified-air.wav"
+dest_files=[ "res://.import/rising-through-rarified-air.wav-e920ea0721c21ff4795801c5a65eb886.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

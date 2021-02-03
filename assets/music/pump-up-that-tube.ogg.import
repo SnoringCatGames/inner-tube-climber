@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/pump-up-that-tube.ogg-007a26353de06e2c00aa340f4488dba1.oggstr"
+
+[deps]
+
+source_file="res://assets/music/pump-up-that-tube.ogg"
+dest_files=[ "res://.import/pump-up-that-tube.ogg-007a26353de06e2c00aa340f4488dba1.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

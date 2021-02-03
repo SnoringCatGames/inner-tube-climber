@@ -5,15 +5,17 @@ const SILENT_VOLUME_DB := -80.0
 
 const GLOBAL_AUDIO_VOLUME_OFFSET_DB := -20.0
 
-const MAIN_MENU_MUSIC_PLAYER_INDEX := 2
-const GAME_OVER_MUSIC_PLAYER_INDEX := 0
+const MAIN_MENU_MUSIC_PLAYER_INDEX := 3
+const GAME_OVER_MUSIC_PLAYER_INDEX := 2
 
 const START_MUSIC_INDEX := 0
 
 var MUSIC_PLAYERS = [
     Music.get_player(Music.STUCK_IN_A_CREVASSE),
     Music.get_player(Music.NO_ESCAPE_FROM_THE_LOOP),
+    Music.get_player(Music.RISING_THROUGH_RARIFIED_AIR),
     Music.get_player(Music.OUT_FOR_A_LOOP_RIDE),
+    Music.get_player(Music.PUMP_UP_THAT_TUBE),
 ]
 
 var fade_out_tween: Tween

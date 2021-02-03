@@ -240,11 +240,7 @@ margin_top = 349.0
 margin_right = 360.0
 margin_bottom = 349.0
 rect_min_size = Vector2( 360, 0 )
-is_open = false
-includes_header = true
 header_text = "Details from your climb"
-header_min_height = 0.0
-header_font = null
 is_caret_on_left = false
 padding = Vector2( 16, 8 )
 

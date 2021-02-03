@@ -149,18 +149,20 @@ const _DEFAULT_LEVEL_VALUES := {
     name = "",
     version = "",
     lives_count = 3,
-    zoom_multiplier = null,
-    scroll_speed_multiplier = null,
-    scroll_speed_min = null,
-    scroll_speed_max = null,
-    light_energy = null,
-    peep_hole_size = null,
-    fog_screen_opacity = null,
-    fog_screen_secondary_color_opacity_multiplier = null,
-    fog_screen_primary_color = null,
-    fog_screen_secondary_color = null,
-    snow_density_multiplier = null,
-    windiness = null,
+    zoom_multiplier = _DEFAULT_TIER_VALUES.zoom_multiplier,
+    scroll_speed_multiplier = _DEFAULT_TIER_VALUES.scroll_speed_multiplier,
+    scroll_speed_min = _DEFAULT_TIER_VALUES.scroll_speed_min,
+    scroll_speed_max = _DEFAULT_TIER_VALUES.scroll_speed_max,
+    light_energy = _DEFAULT_TIER_VALUES.light_energy,
+    peep_hole_size = _DEFAULT_TIER_VALUES.peep_hole_size,
+    fog_screen_opacity = _DEFAULT_TIER_VALUES.fog_screen_opacity,
+    fog_screen_secondary_color_opacity_multiplier = \
+            _DEFAULT_TIER_VALUES.fog_screen_secondary_color_opacity_multiplier,
+    fog_screen_primary_color = _DEFAULT_TIER_VALUES.fog_screen_primary_color,
+    fog_screen_secondary_color = \
+            _DEFAULT_TIER_VALUES.fog_screen_secondary_color,
+    snow_density_multiplier = _DEFAULT_TIER_VALUES.snow_density_multiplier,
+    windiness = _DEFAULT_TIER_VALUES.windiness,
     # FIXME: Update these to be more reasonable defaults; but also add actual
     #        values in level configs;
     rank_thresholds = {

@@ -139,12 +139,35 @@ func create_screens() -> void:
     fade_transition.duration = SCREEN_FADE_DURATION_SEC
 
 func open(screen_type: int) -> void:
+    var previous_type_str := \
+            ScreenType.get_type_string(get_active_screen_type()) if \
+            !active_screen_stack.empty() else \
+            "-"
+    print("Nav.open: %s=>%s" % [
+        previous_type_str,
+        ScreenType.get_type_string(screen_type),
+    ])
+    
     _set_screen_is_open(screen_type, true)
 
 func close_current_screen() -> void:
     assert(!active_screen_stack.empty())
+    
+    var previous_type := get_active_screen_type()
+    var previous_index := active_screen_stack.find(screens[previous_type])
+    assert(previous_index >= 0)
+    var next_type_str = \
+            ScreenType.get_type_string( \
+                    active_screen_stack[previous_index - 1].type) if \
+            previous_index > 0 else \
+            "-"
+    print("Nav.close_current_screen: %s=>%s" % [
+        ScreenType.get_type_string(previous_type),
+        next_type_str,
+    ])
+    
     _set_screen_is_open( \
-            get_active_screen_type(), \
+            previous_type, \
             false)
 
 func get_active_screen() -> Screen:

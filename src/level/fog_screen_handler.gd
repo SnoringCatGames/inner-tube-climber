@@ -79,6 +79,16 @@ func _enter_tree() -> void:
             FOG_SCREEN_RESOURCE_PATH, \
             true, \
             true)
+    
+    Global.connect( \
+            "display_resized", \
+            self, \
+            "_handle_display_resize")
+    _handle_display_resize()
+
+func _handle_display_resize() -> void:
+    # FIXME:
+    pass
 
 func destroy() -> void:
     if fog_screen != null:

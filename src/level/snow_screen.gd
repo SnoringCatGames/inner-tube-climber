@@ -44,9 +44,9 @@ func _set_snow_density_multiplier(value: float) -> void:
         _update_shader_args()
 
 func _set_is_active(value: bool) -> void:
-    is_active = value
-    for particles_node in [$SnowFlakes1, $SnowFlakes2]:
-        particles_node.emitting = is_active
+    if is_active != value:
+        is_active = value
+        _update_shader_args()
 
 func _update_shader_args() -> void:
     var velocity := \
@@ -128,6 +128,7 @@ func _update_shader_args() -> void:
     
     position = node_position
     for particles_node in [$SnowFlakes1, $SnowFlakes2]:
+        particles_node.emitting = is_active
         particles_node.amount = particle_count
         particles_node.lifetime = particle_duration
         particles_node.visibility_rect = particle_region

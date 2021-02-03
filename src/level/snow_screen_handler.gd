@@ -13,7 +13,6 @@ var active_snow_screen: SnowScreen
 var inactive_snow_screen: SnowScreen
 var snow_density_multiplier_tween: Tween
 var snow_density_multiplier := SNOW_DENSITY_MULTIPLIER_POST_STUCK
-var is_stuck := true
 
 func _enter_tree() -> void:
     snow_density_multiplier_tween = Tween.new()
@@ -42,6 +41,7 @@ func destroy() -> void:
 
 func update_windiness(windiness: Vector2) -> void:
     active_snow_screen.windiness = windiness
+    inactive_snow_screen.windiness = windiness
 
 func set_start_state() -> void:
     _interpolate_snow_density_multiplier(SNOW_DENSITY_MULTIPLIER_PRE_STUCK)
@@ -64,12 +64,11 @@ func set_post_stuck_state(animates: bool) -> void:
     else:
         _interpolate_snow_density_multiplier( \
                 SNOW_DENSITY_MULTIPLIER_POST_STUCK)
-    
-    is_stuck = false
 
 func update_for_current_tier( \
         level_id: String, \
-        tier_id: String) -> void:
+        tier_id: String, \
+        is_new_life: bool) -> void:
     var is_base_tier := tier_id == "0"
     var level_config: Dictionary = LevelConfig.get_level_config(level_id)
     var tier_config: Dictionary = LevelConfig.get_tier_config(tier_id)
@@ -106,8 +105,10 @@ func update_for_current_tier( \
 #    snow_density_multiplier_tween.start()
     _interpolate_snow_density_multiplier(next_snow_density_multiplier)
     
-    active_snow_screen.update_preprocess(is_stuck)
+    active_snow_screen.update_preprocess(is_new_life)
+    inactive_snow_screen.update_preprocess(is_new_life)
 
 func _interpolate_snow_density_multiplier(value: float) -> void:
     snow_density_multiplier = value
     active_snow_screen.snow_density_multiplier = snow_density_multiplier
+    inactive_snow_screen.snow_density_multiplier = snow_density_multiplier

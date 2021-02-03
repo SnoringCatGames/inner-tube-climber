@@ -15,7 +15,4 @@ texture_normal = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="button_down" from="TextureButton" to="." method="_on_TextureButton_button_down"]
-[connection signal="button_up" from="TextureButton" to="." method="_on_TextureButton_button_up"]
 [connection signal="gui_input" from="TextureButton" to="." method="_on_TextureButton_gui_input"]
-[connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]

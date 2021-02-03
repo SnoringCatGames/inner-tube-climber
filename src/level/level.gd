@@ -694,7 +694,8 @@ func _start_new_tier( \
             current_tier_id)
     $SnowScreenHandler.update_for_current_tier( \
             level_id, \
-            current_tier_id)
+            current_tier_id, \
+            true)
     _update_margin_color()
     
     # Render the basic input instructions sign.
@@ -811,7 +812,8 @@ func _on_entered_new_tier() -> void:
             current_tier_id)
     $SnowScreenHandler.update_for_current_tier( \
             level_id, \
-            current_tier_id)
+            current_tier_id, \
+            false)
     _update_margin_color()
     
     if tier_count == level_config.tiers.size() * 3 + 1:

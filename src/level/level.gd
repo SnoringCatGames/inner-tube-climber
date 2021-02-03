@@ -381,6 +381,9 @@ func _set_game_over_state() -> void:
     game_over_screen.high_score = \
             str(SaveState.get_level_high_score(level_id))
     game_over_screen.tier_ratio = get_tier_ratio()
+    game_over_screen.tiers_remaining_count = \
+            (LevelConfig.get_level_config(level_id).tiers.size() - \
+                    tier_count) + 1
     game_over_screen.difficulty = \
             DifficultyMode.get_type_string(Global.difficulty_mode)
     game_over_screen.time = Utils.get_time_string_from_seconds( \

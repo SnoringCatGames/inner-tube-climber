@@ -237,7 +237,7 @@ func _handle_display_resize() -> void:
     var game_area_size: Vector2 = Global.get_game_area_region().size
     camera_max_distance_below_player_with_default_zoom = game_area_size.y / 4
     player_max_distance_below_camera_with_default_zoom = \
-            game_area_size.y / 2 - 4.0
+            game_area_size.y / 2 + 1.0
 
 func set_start_state( \
         player_position: Vector2, \

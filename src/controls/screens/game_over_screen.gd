@@ -14,6 +14,7 @@ var level_id: String
 var score: String
 var high_score: String
 var tier_ratio: String 
+var tiers_remaining_count: int
 var difficulty: String 
 var time: String
 var average_multiplier: String
@@ -75,6 +76,9 @@ func _update_stats() -> void:
     var high_score_label := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
             ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/ \
             HighScoreLabel
+    var tiers_remaining_label := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/ \
+            TiersRemainingLabel
     var control_list := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
             ScrollContainer/CenterContainer/VBoxContainer/AccordionPanel/ \
             LabeledControlList
@@ -139,18 +143,26 @@ func _update_stats() -> void:
         unlocked_new_level_label.visible = true
         three_looped_level_label.visible = false
         finished_level_label.visible = false
+        tiers_remaining_label.visible = false
     elif three_looped_level:
         unlocked_new_level_label.visible = false
         three_looped_level_label.visible = true
         finished_level_label.visible = false
+        tiers_remaining_label.visible = false
     elif finished_level:
         unlocked_new_level_label.visible = false
         three_looped_level_label.visible = false
         finished_level_label.visible = true
+        tiers_remaining_label.visible = false
     else:
         unlocked_new_level_label.visible = false
         three_looped_level_label.visible = false
         finished_level_label.visible = false
+        tiers_remaining_label.visible = true
+        
+        tiers_remaining_label.text = \
+                "Try clearing %d more tiers to finish the level!" % \
+                tiers_remaining_count
     
     high_score_label.visible = reached_new_high_score
     

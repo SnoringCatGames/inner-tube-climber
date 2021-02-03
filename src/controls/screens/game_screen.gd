@@ -28,6 +28,11 @@ func _update_viewport_region() -> void:
             (viewport_size - game_area_region.size) * 0.5
     $PanelContainer/ViewportContainer/Viewport.size = \
             game_area_region.size
+    
+    # TODO: This hack seems to be needed in order for the viewport to actually
+    #       update its dimensions correctly.
+    self.visible = false
+    call_deferred("set_visible", true)
 
 func start_level(level_id: String) -> void:
     if level != null:

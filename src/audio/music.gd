@@ -52,7 +52,7 @@ var MANIFEST := {
                 Utils.get_is_ios_device() else \
                 load("res://assets/music/rising-through-rarified-air.ogg"),
         text = "RISING_THROUGH_RARIFIED_AIR",
-        volume_db = -0.0,
+        volume_db = 5.0,
     },
     OUT_FOR_A_LOOP_RIDE: {
         stream = \
@@ -68,7 +68,7 @@ var MANIFEST := {
                 Utils.get_is_ios_device() else \
                 load("res://assets/music/pump-up-that-tube.ogg"),
         text = "PUMP_UP_THAT_TUBE",
-        volume_db = -0.0,
+        volume_db = 5.0,
     },
 }
 
@@ -90,3 +90,10 @@ func get_player(type: int) -> AudioStreamPlayer:
 
 func get_type_string(type: int) -> String:
     return MANIFEST[type].text
+
+func get_volume_for_player(player: AudioStreamPlayer) -> float:
+    for config in Music.MANIFEST.values():
+        if config.player == player:
+            return config.volume_db
+    Utils.error()
+    return -80.0

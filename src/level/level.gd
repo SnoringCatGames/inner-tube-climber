@@ -422,15 +422,26 @@ func _on_last_fall_sound_finished() -> void:
             "finished", \
             self, \
             "_on_last_fall_sound_finished")
-    Sound.MANIFEST[Sound.GAME_OVER].player.connect( \
+    Sound.MANIFEST[Sound.GAME_OVER_SUCCESS].player.connect( \
+            "finished", \
+            self, \
+            "_on_game_over_sound_finished")
+    Sound.MANIFEST[Sound.GAME_OVER_FAILURE].player.connect( \
             "finished", \
             self, \
             "_on_game_over_sound_finished")
     Audio.current_music_player.stop()
-    Audio.play_sound(Sound.GAME_OVER)
+    if finished_level:
+        Audio.play_sound(Sound.GAME_OVER_SUCCESS)
+    else:
+        Audio.play_sound(Sound.GAME_OVER_FAILURE)
 
 func _on_game_over_sound_finished() -> void:
-    Sound.MANIFEST[Sound.GAME_OVER].player.disconnect( \
+    Sound.MANIFEST[Sound.GAME_OVER_SUCCESS].player.disconnect( \
+            "finished", \
+            self, \
+            "_on_game_over_sound_finished")
+    Sound.MANIFEST[Sound.GAME_OVER_FAILURE].player.disconnect( \
             "finished", \
             self, \
             "_on_game_over_sound_finished")

@@ -5,7 +5,7 @@ const SILENT_VOLUME_DB := -80.0
 
 const GLOBAL_AUDIO_VOLUME_OFFSET_DB := -20.0
 
-const MAIN_MENU_MUSIC_PLAYER_INDEX := 3
+const MAIN_MENU_MUSIC_PLAYER_INDEX := 4
 const GAME_OVER_MUSIC_PLAYER_INDEX := 2
 
 const START_MUSIC_INDEX := 0
@@ -47,7 +47,8 @@ func cross_fade_music( \
         transitions_immediately := false) -> void:
     if fade_out_tween != null:
         on_cross_fade_music_finished()
-    if previous_music_player != null and previous_music_player.playing:
+    if previous_music_player != null and \
+            previous_music_player.playing:
         # TODO: This shouldn't happen, but it does sometimes.
         pass
     
@@ -60,23 +61,24 @@ func cross_fade_music( \
             current_music_player.playing:
         return
     
-    var loud_volume := \
-            -0.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
-            is_music_enabled else \
-            SILENT_VOLUME_DB
-    
     var transition_duration_sec := \
             0.01 if \
             transitions_immediately else \
             MUSIC_CROSS_FADE_DURATION_SEC
     
-    if previous_music_player != null and previous_music_player.playing:
+    if previous_music_player != null and \
+            previous_music_player.playing:
+        var previous_loud_volume := \
+                Music.get_volume_for_player(previous_music_player) + \
+                        GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
+                is_music_enabled else \
+                SILENT_VOLUME_DB
         fade_out_tween = Tween.new()
         add_child(fade_out_tween)
         fade_out_tween.interpolate_property( \
                 previous_music_player, \
                 "volume_db", \
-                loud_volume, \
+                previous_loud_volume, \
                 SILENT_VOLUME_DB, \
                 transition_duration_sec, \
                 Tween.TRANS_QUAD, \
@@ -87,13 +89,18 @@ func cross_fade_music( \
     current_music_player.volume_db = SILENT_VOLUME_DB
     current_music_player.play()
     
+    var current_loud_volume := \
+            Music.get_volume_for_player(current_music_player) + \
+                    GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
+            is_music_enabled else \
+            SILENT_VOLUME_DB
     fade_in_tween = Tween.new()
     add_child(fade_in_tween)
     fade_in_tween.interpolate_property( \
             current_music_player, \
             "volume_db", \
             SILENT_VOLUME_DB, \
-            loud_volume, \
+            current_loud_volume, \
             transition_duration_sec, \
             Tween.TRANS_QUAD, \
             Tween.EASE_OUT)
@@ -119,7 +126,8 @@ func on_cross_fade_music_finished( \
         fade_in_tween = null
         if current_music_player != null:
             var loud_volume := \
-                    -0.0 + GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
+                    Music.get_volume_for_player(current_music_player) + \
+                            GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
                     is_music_enabled else \
                     SILENT_VOLUME_DB
             current_music_player.volume_db = loud_volume

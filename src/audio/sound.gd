@@ -3,7 +3,8 @@ extends Node
 enum {
     BOUNCE,
     FALL,
-    GAME_OVER,
+    GAME_OVER_SUCCESS,
+    GAME_OVER_FAILURE,
     JUMP,
     JUMP_INPUT,
     LAND,
@@ -32,10 +33,15 @@ var MANIFEST := {
         text = "FALL",
         volume_db = 16.0,
     },
-    GAME_OVER: {
-        stream = preload("res://assets/sounds/yeti_yell.wav"),
-        text = "GAME_OVER",
-        volume_db = -6.0,
+    GAME_OVER_SUCCESS: {
+        stream = preload("res://assets/sounds/cadence-success.wav"),
+        text = "GAME_OVER_SUCCESS",
+        volume_db = 10.0,
+    },
+    GAME_OVER_FAILURE: {
+        stream = preload("res://assets/sounds/cadence-failure.wav"),
+        text = "GAME_OVER_FAILURE",
+        volume_db = 10.0,
     },
     JUMP: {
         stream = preload("res://assets/sounds/tuber_jump.wav"),

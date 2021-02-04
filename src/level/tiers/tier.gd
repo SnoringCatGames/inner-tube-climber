@@ -4,6 +4,8 @@ class_name Tier
 
 const TIER_RATIO_SIGN_RESOURCE_PATH := \
         "res://src/level/tier_ratio_sign/tier_ratio_sign.tscn"
+const TIER_START_ICICLE_FALL_ANIMATOR_RESOURCE_PATH := \
+        "res://src/level/tier_start_icicle_fall_animator.tscn"
 
 # NOTE: Keep in-sync with the values in openness_type.gd.
 enum OpennessType {
@@ -30,6 +32,7 @@ var tier_start: TierStart
 var tier_end: TierEnd
 
 var tier_ratio_sign: TierRatioSign
+var icicle_fall_animator: TierStartIcicleFallAnimator
 
 func _ready() -> void:
     if Engine.editor_hint:
@@ -93,6 +96,15 @@ func setup( \
                 true)
         tier_ratio_sign.position = tier_start.position
         tier_ratio_sign.text = "%s / %s" % [tier_index + 1, tier_count]
+    
+    if !is_base_tier:
+        icicle_fall_animator = Utils.add_scene( \
+                self, \
+                TIER_START_ICICLE_FALL_ANIMATOR_RESOURCE_PATH, \
+                true, \
+                true)
+        icicle_fall_animator.position = tier_start.position
+        add_child(icicle_fall_animator)
 
 func on_entered_tier(is_new_life: bool) -> void:
     if !is_new_life:
@@ -101,8 +113,20 @@ func on_entered_tier(is_new_life: bool) -> void:
         tier_ratio_sign.ignite(is_new_life)
 
 func on_landed_in_tier() -> void:
-    # FIXME: Shake icicles off of tier-start platform.
-    pass
+    if icicle_fall_animator != null:
+        var delay := 0.1
+        Time.set_timeout(funcref(self, "_start_icicle_fall"), delay)
+        Time.set_timeout( \
+                funcref(self, "_end_icicle_fall"), \
+                delay + IcicleFallAnimator.FALL_DURATION)
+
+func _start_icicle_fall() -> void:
+    icicle_fall_animator.fall()
+
+func _end_icicle_fall() -> void:
+    icicle_fall_animator.queue_free()
+    remove_child(icicle_fall_animator)
+    icicle_fall_animator = null
 
 func _get_tier_start_position() -> Vector2:
     return position + tier_start.position

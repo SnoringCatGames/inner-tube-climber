@@ -22,7 +22,7 @@
 [ext_resource path="res://addons/shaderV/tools/random/hash2d.gd" type="Script" id=20]
 [ext_resource path="res://addons/shaderV/tools/random/hash2dvector.gd" type="Script" id=21]
 [ext_resource path="res://addons/shaderV/tools/random/randomFloat.gd" type="Script" id=22]
-[ext_resource path="res://src/level/fog_shader.tres" type="Shader" id=23]
+[ext_resource path="res://src/level/fog/fog_shader.tres" type="Shader" id=23]
 [ext_resource path="res://addons/shaderV/tools/random/randomGoldNoiseFloat.gd" type="Script" id=24]
 [ext_resource path="res://addons/shaderV/tools/vec2Compose.gd" type="Script" id=25]
 [ext_resource path="res://addons/shaderV/tools/remap.gd" type="Script" id=26]
@@ -93,6 +93,7 @@
 [ext_resource path="res://addons/shaderV/tools/transformCoordinates/polarToCartesian.gd" type="Script" id=92]
 [ext_resource path="res://addons/shaderV/rgba/generate_shapes/gridShape.gd" type="Script" id=93]
 [ext_resource path="res://addons/shaderV/rgba/sobelEdge.gd" type="Script" id=94]
+
 
 [sub_resource type="VisualShaderNodeCustom" id=1]
 default_input_values = [ 1, 0, 2, 0, 3, 0, 4, 0 ]

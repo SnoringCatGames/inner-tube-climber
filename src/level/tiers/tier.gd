@@ -3,7 +3,7 @@ extends Node2D
 class_name Tier
 
 const TIER_RATIO_SIGN_RESOURCE_PATH := \
-        "res://src/overlays/tier_ratio_sign.tscn"
+        "res://src/level/tier_ratio_sign/tier_ratio_sign.tscn"
 
 # NOTE: Keep in-sync with the values in openness_type.gd.
 enum OpennessType {
@@ -93,6 +93,16 @@ func setup( \
                 true)
         tier_ratio_sign.position = tier_start.position
         tier_ratio_sign.text = "%s / %s" % [tier_index + 1, tier_count]
+
+func on_entered_tier(is_new_life: bool) -> void:
+    if !is_new_life:
+        assert(tier_ratio_sign != null)
+    if tier_ratio_sign != null:
+        tier_ratio_sign.ignite(is_new_life)
+
+func on_landed_in_tier() -> void:
+    # FIXME: Shake icicles off of tier-start platform.
+    pass
 
 func _get_tier_start_position() -> Vector2:
     return position + tier_start.position

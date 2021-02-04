@@ -3,7 +3,7 @@
 [ext_resource path="res://src/controls/level_select_item.gd" type="Script" id=1]
 [ext_resource path="res://src/controls/accordion_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/fonts/main_font_l.tres" type="DynamicFont" id=3]
-[ext_resource path="res://src/level/rank_animator.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/controls/rank_animator.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/controls/labeled_control_list.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/images/icons/go-icon-alternate.png" type="Texture" id=6]
 [ext_resource path="res://src/controls/shiny_button.tscn" type="PackedScene" id=7]
@@ -11,6 +11,7 @@
 [ext_resource path="res://src/controls/lock_animation.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/fonts/main_font_s.tres" type="DynamicFont" id=10]
 [ext_resource path="res://assets/images/icons/three-loop-icon.png" type="Texture" id=11]
+
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.65, 0.65, 0.65, 0.443137 )

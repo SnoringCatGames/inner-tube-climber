@@ -1,7 +1,7 @@
 extends Node2D
 class_name SnowScreenHandler
 
-const SNOW_SCREEN_RESOURCE_PATH := "res://src/level/snow_screen.tscn"
+const SNOW_SCREEN_RESOURCE_PATH := "res://src/level/snow/snow_screen.tscn"
 
 const SNOW_DENSITY_MULTIPLIER_PRE_STUCK := 1.0
 var SNOW_DENSITY_MULTIPLIER_POST_STUCK: float = \

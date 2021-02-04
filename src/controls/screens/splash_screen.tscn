@@ -1,8 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/images/gui/godot-logo-splash.png" type="Texture" id=1]
 [ext_resource path="res://src/controls/full_screen_panel.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/controls/screens/splash_screen.gd" type="Script" id=4]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.152941, 0.192157, 0.286275, 1 )
+shadow_size = 8
+shadow_offset = Vector2( -4, 4 )
 
 [node name="SplashScreen" type="Node2D"]
 script = ExtResource( 4 )
@@ -10,6 +15,7 @@ script = ExtResource( 4 )
 [node name="FullScreenPanel" parent="." instance=ExtResource( 3 )]
 margin_right = 480.0
 margin_bottom = 480.0
+custom_styles/panel = SubResource( 1 )
 
 [node name="Control" type="Control" parent="FullScreenPanel"]
 margin_left = 240.0

@@ -11,8 +11,9 @@
 [ext_resource path="res://assets/images/icons/home-icon-normal.png" type="Texture" id=9]
 [ext_resource path="res://src/controls/shiny_button.tscn" type="PackedScene" id=10]
 [ext_resource path="res://src/controls/accordion_panel.tscn" type="PackedScene" id=11]
-[ext_resource path="res://src/level/rank_animator.tscn" type="PackedScene" id=12]
+[ext_resource path="res://src/controls/rank_animator.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/images/icons/three-loop-icon-large.png" type="Texture" id=13]
+
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.152941, 0.192157, 0.286275, 1 )

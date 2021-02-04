@@ -1,17 +1,17 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/fonts/main_font_s.tres" type="DynamicFont" id=1]
-[ext_resource path="res://src/overlays/tier_ratio_sign.gd" type="Script" id=3]
-[ext_resource path="res://src/level/torch.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/images/signs/tier-ratio-sign.png" type="Texture" id=5]
+[ext_resource path="res://src/level/tier_ratio_sign/tier_ratio_sign.gd" type="Script" id=2]
+[ext_resource path="res://src/level/tier_ratio_sign/torch.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/images/signs/tier-ratio-sign.png" type="Texture" id=4]
 
 [node name="TierRatioSign" type="Node2D"]
-script = ExtResource( 3 )
+script = ExtResource( 2 )
 
 [node name="Sign" type="Sprite" parent="."]
 light_mask = 4
 position = Vector2( 0, -18 )
-texture = ExtResource( 5 )
+texture = ExtResource( 4 )
 
 [node name="Label" type="Label" parent="."]
 light_mask = 4
@@ -28,10 +28,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LeftTorch" parent="." instance=ExtResource( 4 )]
+[node name="LeftTorch" parent="." instance=ExtResource( 3 )]
 light_mask = 4
 position = Vector2( 36, -24 )
 
-[node name="RightTorch" parent="." instance=ExtResource( 4 )]
+[node name="RightTorch" parent="." instance=ExtResource( 3 )]
 light_mask = 4
 position = Vector2( -36, -24 )

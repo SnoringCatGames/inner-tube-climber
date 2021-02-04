@@ -1,14 +1,14 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://src/level/torch.gd" type="Script" id=1]
-[ext_resource path="res://src/level/torch_flame.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/level/tier_ratio_sign/torch_flame.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/level/tier_ratio_sign/torch.gd" type="Script" id=2]
 [ext_resource path="res://assets/images/circle-gradient-1024.png" type="Texture" id=3]
 [ext_resource path="res://assets/images/signs/torch.png" type="Texture" id=4]
 
 [node name="Torch" type="Node2D"]
-script = ExtResource( 1 )
+script = ExtResource( 2 )
 
-[node name="TorchFlame" parent="." instance=ExtResource( 2 )]
+[node name="TorchFlame" parent="." instance=ExtResource( 1 )]
 scale = Vector2( 0.25, 0.25 )
 
 [node name="Light2D" type="Light2D" parent="."]
@@ -16,7 +16,7 @@ light_mask = 4
 position = Vector2( 0, -0.0441933 )
 scale = Vector2( 0.15, 0.15 )
 texture = ExtResource( 3 )
-color = Color( 1, 0.558, 0.22, 1 )
+color = Color( 1, 0.694118, 0.219608, 1 )
 energy = 0.95
 range_layer_min = -100
 range_layer_max = 100

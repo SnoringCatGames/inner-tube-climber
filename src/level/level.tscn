@@ -3,10 +3,13 @@
 [ext_resource path="res://src/level/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/level/level.gd" type="Script" id=2]
 [ext_resource path="res://assets/images/signs/signs.png" type="Texture" id=3]
-[ext_resource path="res://src/level/fog_screen_handler.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/level/fog/fog_screen_handler.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/level/camera_handler.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/images/signs/sign-all-keys.png" type="Texture" id=6]
-[ext_resource path="res://src/level/snow_screen_handler.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/level/snow/snow_screen_handler.tscn" type="PackedScene" id=7]
+
+
+
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 2 )

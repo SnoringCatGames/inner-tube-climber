@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://src/level/rank_animator.gd" type="Script" id=1]
+[ext_resource path="res://src/controls/rank_animator.gd" type="Script" id=1]
 
 [sub_resource type="Animation" id=1]
 length = 3.6

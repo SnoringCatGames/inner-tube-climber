@@ -24,7 +24,7 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
 shader_param/cutoff = null
-shader_param/smooth_size = 0.05
+shader_param/smooth_size = 0.2
 shader_param/mask = ExtResource( 2 )
 
 [node name="FadeTransition" type="ColorRect"]

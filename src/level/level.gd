@@ -30,6 +30,7 @@ var current_tier: Tier
 var next_tier: Tier
 var previous_tier_gap: TierGap
 var next_tier_gap: TierGap
+var tier_of_last_platform: Tier
 
 var margin_left_color_tween: Tween
 var margin_right_color_tween: Tween
@@ -205,6 +206,9 @@ func _physics_process(_delta_sec: float) -> void:
                 player_max_platform_height_on_current_life, \
                 _get_player_height())
         _update_score_for_height_change(platform_height_delta)
+        if tier_of_last_platform != current_tier:
+            tier_of_last_platform = current_tier
+            current_tier.on_landed_in_tier()
         Global.debug_panel.add_message( \
                 "Platform height=%s" % player_latest_platform_height)
     display_height = \
@@ -705,6 +709,7 @@ func _start_new_tier( \
                 true)
         previous_tier_gap.sync_position_to_previous_tier(previous_tier)
     
+    current_tier.on_entered_tier(true)
     $CameraHandler.update_for_current_tier( \
             level_id, \
             current_tier_id, \
@@ -823,6 +828,7 @@ func _on_entered_new_tier() -> void:
                 Audio.MUSIC_PLAYERS.size()
         Audio.cross_fade_music(Audio.current_music_player_index)
     
+    current_tier.on_entered_tier(false)
     $CameraHandler.update_for_current_tier( \
             level_id, \
             current_tier_id, \

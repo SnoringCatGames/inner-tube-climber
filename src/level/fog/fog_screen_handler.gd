@@ -3,7 +3,7 @@ class_name FogScreenHandler
 
 signal updated
 
-const FOG_SCREEN_RESOURCE_PATH := "res://src/level/fog_screen.tscn"
+const FOG_SCREEN_RESOURCE_PATH := "res://src/level/fog/fog_screen.tscn"
 
 var PEEP_HOLE_SIZE_PRE_STUCK: Vector2 = \
         Vector2(400.0, 400.0)

@@ -2,7 +2,9 @@
 
 [ext_resource path="res://assets/images/snowflake-particle-2.png" type="Texture" id=1]
 [ext_resource path="res://assets/images/snowflake-particle-3.png" type="Texture" id=2]
-[ext_resource path="res://src/level/snow_screen.gd" type="Script" id=3]
+[ext_resource path="res://src/level/snow/snow_screen.gd" type="Script" id=3]
+
+
 
 [sub_resource type="ParticlesMaterial" id=1]
 emission_shape = 2

@@ -592,9 +592,17 @@ func _update_squish_and_stretch() -> void:
 
 func _update_effects_animations() -> void:
     if surface_state.just_touched_floor:
-        effects_animator.play(EffectAnimation.LAND)
+        if abs(velocity.x) < 1:
+            effects_animator.play( \
+                    EffectAnimation.LAND_VERTICAL, \
+                    1 if velocity.x > 0 else -1)
+        else:
+            effects_animator.play( \
+                    EffectAnimation.LAND_SIDEWAYS, \
+                    1 if velocity.x > 0 else -1)
     
-    if surface_state.just_touched_wall and !surface_state.is_touching_floor:
+    if surface_state.just_touched_wall and \
+            !surface_state.is_touching_floor:
         effects_animator.play( \
                 EffectAnimation.WALL_BOUNCE, \
                 -1 if surface_state.is_touching_left_wall else 1)
@@ -602,12 +610,15 @@ func _update_effects_animations() -> void:
     if surface_state.just_touched_ceiling:
         effects_animator.play(EffectAnimation.CEILING_HIT)
     
-    if surface_state.is_touching_floor and velocity.x != 0.0:
+    if surface_state.is_touching_floor and \
+            velocity.x != 0.0:
         throttled_play_walk_effect.call_func()
 
 func _play_walk_effect() -> void:
     if surface_state.is_touching_floor:
-        effects_animator.play(EffectAnimation.WALK)
+        effects_animator.play( \
+                EffectAnimation.WALK, \
+                surface_state.horizontal_facing_sign)
 
 # Updates sounds for the current frame.
 func _process_sounds() -> void:

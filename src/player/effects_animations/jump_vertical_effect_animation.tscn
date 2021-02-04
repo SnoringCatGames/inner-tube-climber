@@ -65,5 +65,5 @@ animations = [ {
 [node name="JumpVerticalEffectAnimation" type="Node2D"]
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 0, -16 )
+position = Vector2( 0, -14 )
 frames = SubResource( 14 )

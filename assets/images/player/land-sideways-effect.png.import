@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/land-effect.png-c6a3edd71f2b89fd852ad5d555ab8c6e.stex"
+path="res://.import/land-sideways-effect.png-78ddcfbe1528a67fe3192d26a3b8b154.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/player/land-effect.png"
-dest_files=[ "res://.import/land-effect.png-c6a3edd71f2b89fd852ad5d555ab8c6e.stex" ]
+source_file="res://assets/images/player/land-sideways-effect.png"
+dest_files=[ "res://.import/land-sideways-effect.png-78ddcfbe1528a67fe3192d26a3b8b154.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

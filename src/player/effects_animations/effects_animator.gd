@@ -5,8 +5,10 @@ const JUMP_SIDEWAYS_EFFECT_ANIMATION_RESOURCE_PATH := \
         "res://src/player/effects_animations/jump_sideways_effect_animation.tscn"
 const JUMP_VERTICAL_EFFECT_ANIMATION_RESOURCE_PATH := \
         "res://src/player/effects_animations/jump_vertical_effect_animation.tscn"
-const LAND_EFFECT_ANIMATION_RESOURCE_PATH := \
-        "res://src/player/effects_animations/land_effect_animation.tscn"
+const LAND_SIDEWAYS_EFFECT_ANIMATION_RESOURCE_PATH := \
+        "res://src/player/effects_animations/land_sideways_effect_animation.tscn"
+const LAND_VERTICAL_EFFECT_ANIMATION_RESOURCE_PATH := \
+        "res://src/player/effects_animations/land_vertical_effect_animation.tscn"
 const WALK_EFFECT_ANIMATION_RESOURCE_PATH := \
         "res://src/player/effects_animations/walk_effect_animation.tscn"
 const WALL_BOUNCE_EFFECT_ANIMATION_RESOURCE_PATH := \
@@ -39,8 +41,10 @@ func play( \
             path = JUMP_SIDEWAYS_EFFECT_ANIMATION_RESOURCE_PATH
         EffectAnimation.JUMP_VERTICAL:
             path = JUMP_VERTICAL_EFFECT_ANIMATION_RESOURCE_PATH
-        EffectAnimation.LAND:
-            path = LAND_EFFECT_ANIMATION_RESOURCE_PATH
+        EffectAnimation.LAND_SIDEWAYS:
+            path = LAND_SIDEWAYS_EFFECT_ANIMATION_RESOURCE_PATH
+        EffectAnimation.LAND_VERTICAL:
+            path = LAND_VERTICAL_EFFECT_ANIMATION_RESOURCE_PATH
         EffectAnimation.WALK:
             path = WALK_EFFECT_ANIMATION_RESOURCE_PATH
         EffectAnimation.WALL_BOUNCE:
@@ -73,6 +77,7 @@ func play( \
     
     var sprite: AnimatedSprite = effect_animator.get_node("AnimatedSprite")
     sprite.frame = 0
+    sprite.speed_scale = Time._ADDITIONAL_FRAMERATE_MULTIPLIER_FOR_DEBUGGING
     sprite.connect( \
             "animation_finished", \
             self, \

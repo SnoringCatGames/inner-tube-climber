@@ -57,5 +57,5 @@ animations = [ {
 [node name="CeilingHitEffectAnimation" type="Node2D"]
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 0, -30 )
+position = Vector2( 0, -18 )
 frames = SubResource( 12 )

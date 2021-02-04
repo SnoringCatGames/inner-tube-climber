@@ -1,5 +1,7 @@
 extends Node
 
+const _ADDITIONAL_FRAMERATE_MULTIPLIER_FOR_DEBUGGING := 1.0
+
 const PHYSICS_TIME_STEP_SEC := 1 / 60.0
 
 var _play_time: _PlayTime
@@ -79,16 +81,18 @@ func _physics_process(delta_sec: float) -> void:
 
 func _set_physics_framerate_multiplier(value: float) -> void:
     physics_framerate_multiplier = value
-    _play_time.physics_framerate_multiplier = value
+    _play_time.physics_framerate_multiplier = \
+            _get_physics_framerate_multiplier()
 
 func _get_physics_framerate_multiplier() -> float:
-    return physics_framerate_multiplier
+    return physics_framerate_multiplier * \
+            _ADDITIONAL_FRAMERATE_MULTIPLIER_FOR_DEBUGGING
 
 func _get_elapsed_app_time_actual_sec() -> float:
     return _elapsed_latest_time_sec
 
 func _get_elapsed_app_time_modified_sec() -> float:
-    return _elapsed_latest_time_sec * physics_framerate_multiplier
+    return _elapsed_latest_time_sec * _get_physics_framerate_multiplier()
 
 func _get_elapsed_play_time_actual_sec() -> float:
     return _play_time.elapsed_time_actual_sec

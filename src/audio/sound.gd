@@ -20,6 +20,7 @@ enum {
     WALK_ICE,
     LOCK_LOW,
     LOCK_HIGH,
+    CRACK_ICE,
 }
 
 var MANIFEST := {
@@ -117,6 +118,11 @@ var MANIFEST := {
         stream = preload("res://assets/sounds/lock-high.wav"),
         text = "LOCK_HIGH",
         volume_db = 0.0,
+    },
+    CRACK_ICE: {
+        stream = preload("res://assets/sounds/crack-ice.wav"),
+        text = "CRACK_ICE",
+        volume_db = -9.0,
     },
 }
 

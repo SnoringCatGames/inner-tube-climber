@@ -114,6 +114,7 @@ func on_entered_tier(is_new_life: bool) -> void:
 
 func on_landed_in_tier() -> void:
     if icicle_fall_animator != null:
+        Audio.play_sound(Sound.CRACK_ICE)
         var delay := 0.1
         Time.set_timeout(funcref(self, "_start_icicle_fall"), delay)
         Time.set_timeout( \

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/crack-ice.wav-d3425f113a68b210519eadd4799fdf96.sample"
+
+[deps]
+
+source_file="res://assets/sounds/crack-ice.wav"
+dest_files=[ "res://.import/crack-ice.wav-d3425f113a68b210519eadd4799fdf96.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -8,6 +8,7 @@ const INCLUDES_NAV_BAR := false
 const INCLUDES_CENTER_CONTAINER := true
 
 const RANK_TWEEN_DURATION_SEC := 0.6
+const RANK_TWEEN_DELAY_SEC := 1.2
 const RANK_TWEEN_SCALE_START := Vector2(15, 15)
 
 var level_id: String
@@ -103,7 +104,12 @@ func _update_stats() -> void:
             finished_last_three_levels
     
     rank_animator.rank = rank
+    rank_animator.visible = false
     if rank != Rank.UNRANKED:
+        Time.set_timeout( \
+                funcref(rank_animator, "set_visible"), \
+                RANK_TWEEN_DELAY_SEC, \
+                [true])
         rank_tween.interpolate_property( \
                 rank_animator, \
                 "rect_scale", \
@@ -111,18 +117,22 @@ func _update_stats() -> void:
                 Vector2.ONE, \
                 RANK_TWEEN_DURATION_SEC, \
                 Tween.TRANS_QUAD, \
-                Tween.EASE_IN)
+                Tween.EASE_IN, \
+                RANK_TWEEN_DELAY_SEC)
         rank_tween.start()
         Audio.play_sound(Sound.WALK_SNOW)
         Time.set_timeout( \
                 funcref(Audio, "play_sound"), \
-                RANK_TWEEN_DURATION_SEC, \
+                RANK_TWEEN_DURATION_SEC + RANK_TWEEN_DELAY_SEC, \
                 [Sound.LAND])
     
     three_loop_icon.visible = false
     if three_looped_level:
-        var delay := RANK_TWEEN_DURATION_SEC / 2.0
-        Time.set_timeout(funcref(three_loop_icon, "set_visible"), delay, [true])
+        var delay := RANK_TWEEN_DELAY_SEC + RANK_TWEEN_DURATION_SEC / 2.0
+        Time.set_timeout( \
+                funcref(three_loop_icon, "set_visible"), \
+                delay, \
+                [true])
         rank_tween.interpolate_property( \
                 three_loop_icon, \
                 "rect_scale", \
@@ -136,7 +146,7 @@ func _update_stats() -> void:
         Audio.play_sound(Sound.WALK_SNOW)
         Time.set_timeout( \
                 funcref(Audio, "play_sound"), \
-                RANK_TWEEN_DURATION_SEC * 1.5, \
+                RANK_TWEEN_DURATION_SEC + delay, \
                 [Sound.LAND])
     
     if !new_unlocked_levels.empty():

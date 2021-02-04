@@ -36,7 +36,7 @@ var MANIFEST := {
                 Utils.get_is_ios_device() else \
                 load("res://assets/music/stuck_in_a_crevasse.ogg"),
         text = "STUCK_IN_A_CREVASSE",
-        volume_db = -0.0,
+        volume_db = 6.0,
     },
     NO_ESCAPE_FROM_THE_LOOP: {
         stream = \
@@ -44,7 +44,7 @@ var MANIFEST := {
                 Utils.get_is_ios_device() else \
                 load("res://assets/music/no_escape_from_the_loop.ogg"),
         text = "NO_ESCAPE_FROM_THE_LOOP",
-        volume_db = -0.0,
+        volume_db = 6.0,
     },
     RISING_THROUGH_RARIFIED_AIR: {
         stream = \
@@ -52,7 +52,7 @@ var MANIFEST := {
                 Utils.get_is_ios_device() else \
                 load("res://assets/music/rising-through-rarified-air.ogg"),
         text = "RISING_THROUGH_RARIFIED_AIR",
-        volume_db = 5.0,
+        volume_db = 8.0,
     },
     OUT_FOR_A_LOOP_RIDE: {
         stream = \
@@ -60,7 +60,7 @@ var MANIFEST := {
                 Utils.get_is_ios_device() else \
                 load("res://assets/music/out_for_a_loop_ride.ogg"),
         text = "OUT_FOR_A_LOOP_RIDE",
-        volume_db = -0.0,
+        volume_db = 7.0,
     },
     PUMP_UP_THAT_TUBE: {
         stream = \
@@ -68,7 +68,7 @@ var MANIFEST := {
                 Utils.get_is_ios_device() else \
                 load("res://assets/music/pump-up-that-tube.ogg"),
         text = "PUMP_UP_THAT_TUBE",
-        volume_db = 5.0,
+        volume_db = 4.0,
     },
 }
 

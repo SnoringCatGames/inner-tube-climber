@@ -26,22 +26,22 @@ var MANIFEST := {
     BOUNCE: {
         stream = preload("res://assets/sounds/tuber_bounce.wav"),
         text = "BOUNCE",
-        volume_db = -2.0,
+        volume_db = -4.0,
     },
     FALL: {
         stream = preload("res://assets/sounds/fall.wav"),
         text = "FALL",
-        volume_db = 16.0,
+        volume_db = 18.0,
     },
     GAME_OVER_SUCCESS: {
         stream = preload("res://assets/sounds/cadence-success.wav"),
         text = "GAME_OVER_SUCCESS",
-        volume_db = 10.0,
+        volume_db = 8.0,
     },
     GAME_OVER_FAILURE: {
         stream = preload("res://assets/sounds/cadence-failure.wav"),
         text = "GAME_OVER_FAILURE",
-        volume_db = 10.0,
+        volume_db = 8.0,
     },
     JUMP: {
         stream = preload("res://assets/sounds/tuber_jump.wav"),

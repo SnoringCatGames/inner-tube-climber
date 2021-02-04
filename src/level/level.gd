@@ -221,7 +221,7 @@ func _physics_process(_delta_sec: float) -> void:
 func _process(delta_sec: float) -> void:
     delta_sec *= Time.physics_framerate_multiplier
     
-    if !is_game_playing:
+    if !is_game_playing or player == null:
         return
     
     $FogScreenHandler.sync_to_player_position(player.position)
@@ -282,26 +282,15 @@ func _fall() -> void:
             LevelConfig.get_level_version_string(level_id), \
             player_max_platform_height_on_current_life)
     
-    if lives_count > 0:
-        var current_tier_position := current_tier.position
-        
+    var was_last_life := lives_count == 0
+    $CameraHandler.on_fall_before_new_tier(was_last_life)
+    
+    if !was_last_life:
         _destroy_player()
-        _destroy_tiers()
-        
-        # Reset state to replay the level at the latest tier.
-        _start_new_tier( \
-                current_tier_id, \
-                current_tier_position, \
-                Audio.current_music_player_index)
-        
-        # Match player and camera positions to the current tier height.
-        player_max_height = max(player_max_height, _get_player_height())
-        player_max_height_on_current_life = \
-                max(player_max_height_on_current_life, _get_player_height())
-        $CameraHandler.on_fall( \
-                current_tier_position, \
-                player.position, \
-                _get_player_height())
+        Time.set_timeout( \
+                funcref(self, "_start_new_tier_after_fall"), \
+                1.0, \
+                [current_tier.position])
     else:
         is_game_playing = false
         $CameraHandler.speed_index = 0
@@ -373,6 +362,22 @@ func _fall() -> void:
                 "v" + Constants.SCORE_VERSION, \
                 LevelConfig.get_level_version_string(level_id), \
                 int(score))
+
+func _start_new_tier_after_fall(current_tier_position: Vector2) -> void:
+    _destroy_tiers()
+    # Reset state to replay the level at the latest tier.
+    _start_new_tier( \
+            current_tier_id, \
+            current_tier_position, \
+            Audio.current_music_player_index)
+    # Match player and camera positions to the current tier height.
+    player_max_height = max(player_max_height, _get_player_height())
+    player_max_height_on_current_life = \
+            max(player_max_height_on_current_life, _get_player_height())
+    $CameraHandler.on_new_tier_after_fall( \
+            current_tier_position, \
+            player.position, \
+            _get_player_height())
 
 func _set_game_over_state() -> void:
     var game_over_screen: GameOverScreen = Nav.screens[ScreenType.GAME_OVER]
@@ -677,7 +682,8 @@ func _start_new_tier( \
                             LevelConfig.TIER_EMPTY_WALLED_RIGHT_SCENE_PATH
                 _:
                     Utils.error()
-        previous_tier.queue_free()
+        if previous_tier != null:
+            previous_tier.queue_free()
         previous_tier = Utils.add_scene( \
                 self, \
                 previous_tier_scene_path, \

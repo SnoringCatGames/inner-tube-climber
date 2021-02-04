@@ -12,7 +12,7 @@ const CAMERA_HORIZONTAL_LOCK_DISPLACMENT_TWEEN_DURATION_SEC := \
 # This is how many tiers the player must pass through without falling before
 # hitting the max camera scroll speed and framerate speed.
 const MAX_SPEED_INDEX := 7
-const SPEED_INDEX_DECREMENT_AMOUNT := 1
+const SPEED_INDEX_DECREMENT_AMOUNT := 2
 const SPEED_INCREASE_EASING := "linear"
 
 var speed_index := 0
@@ -52,8 +52,11 @@ func _enter_tree() -> void:
 func destroy() -> void:
     speed_index = 0
     camera_position = -Vector2.INF
-    Global.camera_controller.offset = Utils.floor_vector(camera_position)
+    _update_camera_position()
     Global.camera_controller.animate_to_zoom(CAMERA_START_ZOOM_PRE_STUCK)
+
+func _process(_delta_sec: float) -> void:
+    _update_camera_position()
 
 func sync_to_player_position( \
         delta_modified_sec: float, \
@@ -88,9 +91,6 @@ func sync_to_player_position( \
     fall_height = \
             _get_camera_height() - \
             player_max_distance_below_camera_with_default_zoom * camera_zoom
-    
-    Global.camera_controller.offset.y = floor(camera_position.y)
-    Global.camera_controller.offset.x = floor(camera_position.x)
 
 func update_for_current_tier( \
         level_id: String, \
@@ -109,7 +109,12 @@ func update_for_current_tier( \
     _update_camera_horizontally_locked( \
             LevelConfig.get_tier_config(tier_id).camera_horizontally_locked)
 
-func on_fall( \
+func on_fall_before_new_tier(shakes_harder: bool) -> void:
+    camera_speed = 0.0
+    var shake_strength := 1.0 if shakes_harder else 0.8
+    $CameraShake.shake(shake_strength)
+
+func on_new_tier_after_fall( \
         current_tier_position: Vector2, \
         player_position: Vector2, \
         player_height: float) -> void:
@@ -120,7 +125,6 @@ func on_fall( \
     camera_position = Vector2( \
             0.0, \
             CAMERA_START_POSITION_POST_STUCK.y + current_tier_position.y)
-    Global.camera_controller.offset = Utils.floor_vector(camera_position)
 
 func _get_min_framerate_multiplier() -> float:
     match Global.difficulty_mode:
@@ -237,7 +241,7 @@ func _handle_display_resize() -> void:
     var game_area_size: Vector2 = Global.get_game_area_region().size
     camera_max_distance_below_player_with_default_zoom = game_area_size.y / 4
     player_max_distance_below_camera_with_default_zoom = \
-            game_area_size.y / 2 + 1.0
+            game_area_size.y / 2 + 4.0
 
 func set_start_state( \
         player_position: Vector2, \
@@ -245,7 +249,6 @@ func set_start_state( \
     self.player_position = player_position
     self.player_height = player_height
     camera_position = _get_camera_start_position_pre_stuck()
-    Global.camera_controller.offset = Utils.floor_vector(camera_position)
     Global.camera_controller.zoom = CAMERA_START_ZOOM_PRE_STUCK
 
 func set_post_stuck_state(animates: bool) -> void:
@@ -296,3 +299,11 @@ func _get_camera_start_position_pre_stuck() -> Vector2:
 
 func _get_camera_height() -> float:
     return -camera_position.y
+
+func _update_camera_position() -> void:
+    Global.camera_controller.offset = \
+            Utils.floor_vector(camera_position)
+    Global.camera_controller.offset = \
+            Utils.floor_vector(camera_position) + \
+            $CameraShake.position
+    Global.camera_controller._current_camera.rotation = $CameraShake.rotation

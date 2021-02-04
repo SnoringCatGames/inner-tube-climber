@@ -91,11 +91,13 @@ func _deferred_update() -> void:
             button_style_normal)
     
     if is_shiny:
+        _trigger_shine()
         shine_interval_id = Time.set_interval( \
                 funcref(self, "_trigger_shine"), \
                 SHINE_INTERVAL_SEC)
     
     if includes_color_pulse:
+        _trigger_color_pulse()
         color_pulse_interval_id = Time.set_interval( \
                 funcref(self, "_trigger_color_pulse"), \
                 COLOR_PULSE_INTERVAL_SEC)

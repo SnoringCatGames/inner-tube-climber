@@ -1003,3 +1003,6 @@ func get_tier_ratio() -> String:
         tier_count, \
         LevelConfig.get_level_config(level_id).tiers.size(),
     ]
+
+func add_life() -> void:
+    lives_count += 1

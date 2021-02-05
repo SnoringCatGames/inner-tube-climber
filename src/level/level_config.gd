@@ -224,7 +224,7 @@ const _LEVELS := {
     "1": {
         name = "Stuck",
         # FIXME: 
-        tiers = ["3"],
+        tiers = ["5"],
 #        tiers = ["1", "2", "3", "4", "5", "6", "7"],
         version = "0.1.0",
         unlock_conditions = {

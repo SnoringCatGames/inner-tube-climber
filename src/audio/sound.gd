@@ -21,6 +21,7 @@ enum {
     LOCK_LOW,
     LOCK_HIGH,
     CRACK_ICE,
+    IGNITE,
 }
 
 var MANIFEST := {
@@ -123,6 +124,11 @@ var MANIFEST := {
         stream = preload("res://assets/sounds/crack-ice.wav"),
         text = "CRACK_ICE",
         volume_db = -9.0,
+    },
+    IGNITE: {
+        stream = preload("res://assets/sounds/ignite.wav"),
+        text = "IGNITE",
+        volume_db = 9.0,
     },
 }
 

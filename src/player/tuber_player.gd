@@ -14,6 +14,7 @@ var WALL_BOUNCE_HORIZONTAL_BOOST := \
 const WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER := 0.6
 const WALL_BOUNCE_VERTICAL_BOOST_OFFSET := -400.0
 const FLOOR_BOUNCE_BOOST := -800.0
+const WALL_BOUNCE_MIN_SPEED_THRESHOLD := 80.0
 var IN_AIR_HORIZONTAL_ACCELERATION := \
         600.0 if Global.mobile_control_version == 1 else 500.0
 var IN_AIR_HORIZONTAL_DECELERATION := \
@@ -67,6 +68,7 @@ var just_triggered_jump := false
 var is_rising_from_jump := false
 var jump_count := 0
 var max_jump_count := 1
+var just_bounced_off_wall := false
 
 var has_hit_wall_since_pressing_move := false
 var last_hit_wall_time := -INF
@@ -346,19 +348,23 @@ func _process_actions(delta_sec: float) -> void:
     just_triggered_jump = false
     
     # Bounce horizontal velocity off of walls.
+    just_bounced_off_wall = false
     if surface_state.just_touched_wall:
-        velocity.x = -velocity.x
-        velocity.x += \
-                WALL_BOUNCE_HORIZONTAL_BOOST if \
-                velocity.x > 0 else \
-                -WALL_BOUNCE_HORIZONTAL_BOOST
-        if surface_state.is_touching_left_wall:
-            velocity.x = max(velocity.x, 0)
-        else:
-            velocity.x = min(velocity.x, 0)
-        
-        velocity.y *= WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER
-        velocity.y += WALL_BOUNCE_VERTICAL_BOOST_OFFSET
+        if abs(velocity.x) > WALL_BOUNCE_MIN_SPEED_THRESHOLD:
+            just_bounced_off_wall = true
+            
+            velocity.x = -velocity.x
+            velocity.x += \
+                    WALL_BOUNCE_HORIZONTAL_BOOST if \
+                    velocity.x > 0 else \
+                    -WALL_BOUNCE_HORIZONTAL_BOOST
+            if surface_state.is_touching_left_wall:
+                velocity.x = max(velocity.x, 0)
+            else:
+                velocity.x = min(velocity.x, 0)
+            
+            velocity.y *= WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER
+            velocity.y += WALL_BOUNCE_VERTICAL_BOOST_OFFSET
     
     var is_previous_jump_input_still_consumable := \
             !was_last_jump_input_consumed and \
@@ -601,7 +607,7 @@ func _update_effects_animations() -> void:
                     EffectAnimation.LAND_SIDEWAYS, \
                     1 if velocity.x > 0 else -1)
     
-    if surface_state.just_touched_wall and \
+    if just_bounced_off_wall and \
             !surface_state.is_touching_floor:
         effects_animator.play( \
                 EffectAnimation.WALL_BOUNCE, \
@@ -632,7 +638,7 @@ func _process_sounds() -> void:
             surface_state.just_touched_ceiling:
         Audio.play_sound(Sound.LAND)
     
-    if surface_state.just_touched_wall:
+    if just_bounced_off_wall:
         Audio.play_sound(Sound.BOUNCE)
     
     if Input.is_action_just_pressed("jump"):

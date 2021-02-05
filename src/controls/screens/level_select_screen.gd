@@ -65,6 +65,8 @@ func _deferred_update() -> void:
                     item_to_open = item
             assert(item_to_open != null)
             item_to_open.toggle()
+        else:
+            _give_button_focus(previous_open_item.get_button())
     else:
         var last_new_unlocked_level: String = new_unlocked_levels.back()
         var unlocked_item: LevelSelectItem

@@ -7,6 +7,9 @@ func _enter_tree() -> void:
     Nav.create_screens()
 
 func _ready() -> void:
+    # FIXME
+    OS.window_size = Vector2(3840, 2160)
+    
     Nav.open(ScreenType.SPLASH)
     
     Audio.play_sound(Sound.MENU_SELECT_FANCY)

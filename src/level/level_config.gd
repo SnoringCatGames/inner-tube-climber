@@ -166,8 +166,8 @@ const _DEFAULT_LEVEL_VALUES := {
     # FIXME: Update these to be more reasonable defaults; but also add actual
     #        values in level configs;
     rank_thresholds = {
-        Rank.GOLD: 10000,
-        Rank.SILVER: 1000,
+        Rank.GOLD: 6000,
+        Rank.SILVER: 2000,
     },
     unlock_conditions = {
         bronze_levels = [],
@@ -188,8 +188,8 @@ const _TIERS := {
     "1": {
         scene_path = "res://src/level/tiers/tier_1.tscn",
         # FIXME:
-        peep_hole_size = {value = Vector2(200.0, 200.0), weight = 1.0},
-        fog_screen_opacity = {value = 0.3, weight = 1.0},
+#        peep_hole_size = {value = Vector2(200.0, 200.0), weight = 1.0},
+#        fog_screen_opacity = {value = 0.3, weight = 1.0},
         snow_density_multiplier = 4.0,
         windiness = {value = Vector2(2.0, -2.0), weight = 1.0},
         version = "0.1.0",
@@ -222,9 +222,9 @@ const _TIERS := {
 
 const _LEVELS := {
     "1": {
-        name = "foo",
+        name = "Stuck",
         # FIXME: 
-        tiers = ["1"],
+        tiers = ["3"],
 #        tiers = ["1", "2", "3", "4", "5", "6", "7"],
         version = "0.1.0",
         unlock_conditions = {

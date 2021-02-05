@@ -380,3 +380,6 @@ func _set_padding(value: Vector2) -> void:
 
 func _get_padding() -> Vector2:
     return padding
+
+func update() -> void:
+    _update_children()

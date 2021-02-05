@@ -136,6 +136,7 @@ func update() -> void:
         },
     ]
     $AccordionPanel/VBoxContainer/LabeledControlList.items = list_items
+    $AccordionPanel.update()
 
 func toggle() -> void:
     $AccordionPanel.toggle()

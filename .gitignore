@@ -72,3 +72,7 @@ local.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# App-release secrets
+secret/
+export_presets.cfg

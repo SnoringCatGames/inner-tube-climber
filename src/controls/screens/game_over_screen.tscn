@@ -14,7 +14,6 @@
 [ext_resource path="res://src/controls/rank_animator.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/images/icons/three-loop-icon-large.png" type="Texture" id=13]
 
-
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.152941, 0.192157, 0.286275, 1 )
 shadow_size = 8
@@ -249,11 +248,7 @@ margin_top = 469.0
 margin_right = 360.0
 margin_bottom = 469.0
 rect_min_size = Vector2( 360, 0 )
-is_open = false
-includes_header = true
 header_text = "Details from your climb"
-header_min_height = 0.0
-header_font = null
 is_caret_on_left = false
 padding = Vector2( 16, 8 )
 

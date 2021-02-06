@@ -13,7 +13,7 @@ script = ExtResource( 4 )
 
 [node name="FullScreenPanel" parent="." instance=ExtResource( 3 )]
 margin_right = 480.0
-margin_bottom = 612.0
+margin_bottom = 480.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel"]
 margin_right = 480.0
@@ -139,9 +139,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 11 )
 text = "Rate app!"
-texture_scale = null
-is_shiny = null
-includes_color_pulse = null
+texture = null
 is_font_xl = true
 
 [node name="Spacer" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
@@ -163,10 +161,7 @@ rect_min_size = Vector2( 200, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Don't ask again"
-texture_scale = null
-is_shiny = null
-includes_color_pulse = null
-is_font_xl = null
+texture = null
 
 [node name="Spacer2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
 margin_left = 140.0
@@ -187,10 +182,7 @@ rect_min_size = Vector2( 200, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Just keep playing!"
-texture_scale = null
-is_shiny = null
-includes_color_pulse = null
-is_font_xl = null
+texture = null
 
 [node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0

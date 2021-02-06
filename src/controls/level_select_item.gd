@@ -191,6 +191,7 @@ func _on_unlock_animation_finished() -> void:
             Tween.TRANS_QUAD, \
             Tween.EASE_IN_OUT)
     fade_tween.start()
+    Time.set_timeout(funcref(Audio, "play_sound"), 0.3, [Sound.ACHIEVEMENT])
 
 func _on_unlock_fade_finished(fade_tween: Tween) -> void:
     $HeaderWrapper/LockedWrapper.remove_child(fade_tween)

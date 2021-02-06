@@ -224,7 +224,7 @@ const _LEVELS := {
     "1": {
         name = "Stuck",
         # FIXME: 
-        tiers = ["5"],
+        tiers = ["1"],
 #        tiers = ["1", "2", "3", "4", "5", "6", "7"],
         version = "0.1.0",
         unlock_conditions = {
@@ -232,75 +232,51 @@ const _LEVELS := {
     },
     # FIXME: 
     "2": {
-        name = "bar",
-        tiers = ["1"],
+        name = "Higher",
+        tiers = ["2"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["1"],
         },
     },
     "3": {
-        name = "bar",
-        tiers = ["1"],
+        name = "Bounce",
+        tiers = ["3"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["2"],
         },
     },
     "4": {
-        name = "bar",
-        tiers = ["1"],
+        name = "Slip",
+        tiers = ["4"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["3"],
         },
     },
     "5": {
-        name = "bar",
-        tiers = ["1"],
+        name = "Elevator",
+        tiers = ["5"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["4"],
         },
     },
     "6": {
-        name = "bar",
-        tiers = ["1"],
+        name = "Expanse",
+        tiers = ["6"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["5"],
         },
     },
     "7": {
-        name = "bar",
-        tiers = ["1"],
+        name = "Precision",
+        tiers = ["7"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["6"],
-        },
-    },
-    "8": {
-        name = "bar",
-        tiers = ["1"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["7"],
-        },
-    },
-    "9": {
-        name = "bar",
-        tiers = ["1"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["8"],
-        },
-    },
-    "10": {
-        name = "bar",
-        tiers = ["1"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["9"],
         },
     },
 }

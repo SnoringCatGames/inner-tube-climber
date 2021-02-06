@@ -110,17 +110,48 @@ func on_entered_tier(is_new_life: bool) -> void:
     if !is_new_life:
         assert(tier_ratio_sign != null)
     if tier_ratio_sign != null:
-        Audio.play_sound(Sound.IGNITE)
+        if !is_new_life:
+            Audio.play_sound(Sound.IGNITE)
         tier_ratio_sign.ignite(is_new_life)
 
 func on_landed_in_tier() -> void:
     if icicle_fall_animator != null:
-        Audio.play_sound(Sound.CRACK_ICE)
         var delay := 0.1
         Time.set_timeout(funcref(self, "_start_icicle_fall"), delay)
         Time.set_timeout( \
                 funcref(self, "_end_icicle_fall"), \
                 delay + IcicleFallAnimator.FALL_DURATION)
+        
+        # FIXME:
+        var crack_ice_delay := 0.3
+        Time.set_timeout( \
+                funcref(Audio, "play_sound"), \
+                crack_ice_delay, \
+                [Sound.CRACK_ICE])
+        Time.set_timeout( \
+                funcref(Audio, "play_sound"), \
+                crack_ice_delay + 0.2, \
+                [Sound.ICICLE_1])
+        Time.set_timeout( \
+                funcref(Audio, "play_sound"), \
+                crack_ice_delay + 0.27, \
+                [Sound.ICICLE_2])
+        Time.set_timeout( \
+                funcref(Audio, "play_sound"), \
+                crack_ice_delay + 0.38, \
+                [Sound.ICICLE_5])
+        Time.set_timeout( \
+                funcref(Audio, "play_sound"), \
+                crack_ice_delay + 0.5, \
+                [Sound.ICICLE_1])
+#        Time.set_timeout( \
+#                funcref(Audio, "play_sound"), \
+#                crack_ice_delay + 0.81, \
+#                [Sound.ICICLE_2])
+#        Time.set_timeout( \
+#                funcref(Audio, "play_sound"), \
+#                crack_ice_delay + 0.74, \
+#                [Sound.ICICLE_5])
 
 func _start_icicle_fall() -> void:
     icicle_fall_animator.fall()

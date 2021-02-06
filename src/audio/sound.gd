@@ -22,6 +22,10 @@ enum {
     LOCK_HIGH,
     CRACK_ICE,
     IGNITE,
+    ICICLE_1,
+    ICICLE_2,
+    ICICLE_5,
+    ACHIEVEMENT,
 }
 
 var MANIFEST := {
@@ -128,7 +132,27 @@ var MANIFEST := {
     IGNITE: {
         stream = preload("res://assets/sounds/ignite.wav"),
         text = "IGNITE",
-        volume_db = 9.0,
+        volume_db = 15.0,
+    },
+    ICICLE_1: {
+        stream = preload("res://assets/sounds/icicle1.wav"),
+        text = "ICICLE_1",
+        volume_db = -3.0,
+    },
+    ICICLE_2: {
+        stream = preload("res://assets/sounds/icicle2.wav"),
+        text = "ICICLE_2",
+        volume_db = -3.0,
+    },
+    ICICLE_5: {
+        stream = preload("res://assets/sounds/icicle5.wav"),
+        text = "ICICLE_5",
+        volume_db = -3.0,
+    },
+    ACHIEVEMENT: {
+        stream = preload("res://assets/sounds/achievement.wav"),
+        text = "ACHIEVEMENT",
+        volume_db = 12.0,
     },
 }
 

@@ -778,11 +778,9 @@ func _on_entered_new_tier() -> void:
     
     var level_config: Dictionary = LevelConfig.get_level_config(level_id)
     
-    var was_final_tier_completed := false
     current_tier_index += 1
     if current_tier_index == level_config.tiers.size():
         # Loop back around, and skip the first/base tier.
-        was_final_tier_completed = true
         current_tier_index = 0
     current_tier_id = level_config.tiers[current_tier_index]
     var next_tier_index := current_tier_index + 1
@@ -851,8 +849,16 @@ func _on_entered_new_tier() -> void:
                 LevelConfig.get_level_version_string(level_id), \
                 int(score))
     
-    if was_final_tier_completed:
-        Audio.play_sound(Sound.TIER_COMPLETE_FINAL)
+    var was_final_tier_completed_first_time: bool = \
+            tier_count - 1 == level_config.tiers.size()
+    var was_final_tier_completed_third_time: bool = \
+            tier_count - 1 == level_config.tiers.size() * 3
+    if was_final_tier_completed_first_time or \
+            was_final_tier_completed_third_time:
+        Time.set_timeout( \
+                funcref(Audio, "play_sound"), \
+                0.8, \
+                [Sound.ACHIEVEMENT])
         Global.falls_count_since_reaching_level_end = 0
         var is_first_time_finishing := \
                 !SaveState.get_level_has_finished(level_id)
@@ -871,7 +877,8 @@ func _on_entered_new_tier() -> void:
                 LevelConfig.get_level_version_string(level_id), \
                 Time.elapsed_play_time_actual_sec - level_start_time)
     else:
-        Audio.play_sound(Sound.TIER_COMPLETE)
+        pass
+#        Audio.play_sound(Sound.TIER_COMPLETE)
     
     _update_score_for_tier_change()
     

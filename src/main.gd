@@ -7,12 +7,12 @@ func _enter_tree() -> void:
     Nav.create_screens()
 
 func _ready() -> void:
-    # FIXME
-    OS.window_size = Vector2(3840, 2160)
+    # FIXME: Remove: Useful for getting screenshots at specific resolutions.
+#    OS.window_size = Vector2(3840, 2160)
     
     Nav.open(ScreenType.SPLASH)
     
-    Audio.play_sound(Sound.MENU_SELECT_FANCY)
+    Audio.play_sound(Sound.ACHIEVEMENT)
     
     Time.set_timeout( \
             funcref(self, "_on_splash_finished"), \

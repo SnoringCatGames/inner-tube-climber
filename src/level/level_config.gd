@@ -279,6 +279,14 @@ const _LEVELS := {
             bronze_levels = ["6"],
         },
     },
+    "8": {
+        name = "Hey, Alden, 'sup",
+        tiers = ["1", "2", "3", "4", "5", "6", "7"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["6"],
+        },
+    },
 }
 
 const _inflated_tiers := {}

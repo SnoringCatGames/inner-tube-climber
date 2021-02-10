@@ -194,7 +194,7 @@ func _on_unlock_animation_finished() -> void:
     Time.set_timeout(funcref(Audio, "play_sound"), 0.3, [Sound.ACHIEVEMENT])
 
 func _on_unlock_fade_finished(fade_tween: Tween) -> void:
-    $HeaderWrapper/LockedWrapper.remove_child(fade_tween)
+    fade_tween.queue_free()
     $HeaderWrapper/LockedWrapper.visible = false
     $HeaderWrapper/Header.visible = true
     toggle()
@@ -219,7 +219,7 @@ func _fade_in_unlock_hint() -> void:
     fade_tween.start()
 
 func _fade_in_unlock_finished(fade_tween: Tween) -> void:
-    $UnlockHint.remove_child(fade_tween)
+    fade_tween.queue_free()
 
 func _on_header_pressed() -> void:
     Global.give_button_press_feedback()

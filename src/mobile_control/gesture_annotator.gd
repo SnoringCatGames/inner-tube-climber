@@ -18,7 +18,6 @@ func _sync_gesture_buffer() -> void:
     while !gesture_buffer.empty() and \
             gesture_buffer.back().time_sec < oldest_rendered_gesture_time:
         var child_annotator: Annotator = gesture_buffer.back().annotator
-        remove_child(child_annotator)
         child_annotator.queue_free()
         
         gesture_buffer.pop_back()

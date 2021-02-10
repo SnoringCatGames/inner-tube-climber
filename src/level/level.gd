@@ -503,30 +503,23 @@ func _destroy_player() -> void:
     if player != null:
         player.destroy()
         player.queue_free()
-        remove_child(player)
         player = null
     if mobile_control_ui != null:
         mobile_control_ui.destroy()
         mobile_control_ui.queue_free()
-        Global.canvas_layers.hud_layer.remove_child(mobile_control_ui)
         mobile_control_ui = null
 
 func _destroy_tiers() -> void:
     if previous_tier != null:
         previous_tier.queue_free()
-        remove_child(previous_tier)
     if current_tier != null:
         current_tier.queue_free()
-        remove_child(current_tier)
     if next_tier != null:
         next_tier.queue_free()
-        remove_child(next_tier)
     if previous_tier_gap != null:
         previous_tier_gap.queue_free()
-        remove_child(previous_tier_gap)
     if next_tier_gap != null:
         next_tier_gap.queue_free()
-        remove_child(next_tier_gap)
 
 func destroy() -> void:
     Global.level = null
@@ -568,27 +561,22 @@ func destroy() -> void:
     $SnowScreenHandler.destroy()
     
     if score_boards != null:
-        Global.canvas_layers.hud_layer.remove_child(score_boards)
         score_boards.queue_free()
         score_boards = null
     
     if cooldown_indicator != null:
-        Global.canvas_layers.hud_layer.remove_child(cooldown_indicator)
         cooldown_indicator.queue_free()
         cooldown_indicator = null
     
     if max_height_indicator != null:
-        remove_child(max_height_indicator)
         max_height_indicator.queue_free()
         max_height_indicator = null
     
     if max_height_on_current_height_indicator != null:
-        remove_child(max_height_on_current_height_indicator)
         max_height_on_current_height_indicator.queue_free()
         max_height_on_current_height_indicator = null
     
     if pause_button != null:
-        remove_child(pause_button)
         pause_button.queue_free()
         pause_button = null
 
@@ -766,10 +754,8 @@ func _on_entered_new_tier() -> void:
     
     # Destroy the previous tier.
     if previous_tier != null:
-        remove_child(previous_tier)
         previous_tier.queue_free()
     if previous_tier_gap != null:
-        remove_child(previous_tier_gap)
         previous_tier_gap.queue_free()
     
     previous_tier = current_tier

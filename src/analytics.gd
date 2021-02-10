@@ -233,7 +233,6 @@ func _on_collect_request_completed( \
             print("  Body:\n    " + body.get_string_from_utf8())
             print("  Headers:\n    " + Utils.join(headers, ",\n    "))
     
-    remove_child(request)
     request.queue_free()
     
     if result == HTTPRequest.RESULT_SUCCESS and \
@@ -354,7 +353,6 @@ func _on_batch_request_completed( \
             print("  Body:\n    " + body.get_string_from_utf8())
             print("  Headers:\n    " + Utils.join(headers, ",\n    "))
     
-    remove_child(request)
     request.queue_free()
     
     if result == HTTPRequest.RESULT_SUCCESS and \

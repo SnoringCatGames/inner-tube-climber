@@ -122,7 +122,6 @@ func _on_number_tween_completed( \
         object: Object, \
         key: NodePath, \
         number_tween: Tween) -> void:
-    remove_child(number_tween)
     number_tweens.erase(number_tween)
     number_tween.queue_free()
 

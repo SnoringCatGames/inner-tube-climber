@@ -59,7 +59,6 @@ func _create_header() -> void:
     # TODO: For some reason, when running in-editor, there can be extra
     #       children created?
     if _header != null:
-        remove_child(_header)
         _header.queue_free()
     
     _header = Button.new()

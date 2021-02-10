@@ -82,7 +82,6 @@ func _enter_tree() -> void:
 
 func destroy() -> void:
     if fog_screen != null:
-        remove_child(fog_screen)
         fog_screen.queue_free()
         fog_screen = null
 

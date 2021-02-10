@@ -15,4 +15,5 @@ texture_normal = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="gui_input" from="TextureButton" to="." method="_on_TextureButton_gui_input"]

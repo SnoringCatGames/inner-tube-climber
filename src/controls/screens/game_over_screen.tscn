@@ -259,8 +259,6 @@ margin_top = 4.0
 margin_right = 360.0
 margin_bottom = 284.0
 rect_min_size = Vector2( 360, 0 )
-row_height = 40.0
-padding_horizontal = 8.0
 
 [node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 180.0
@@ -333,6 +331,7 @@ margin_bottom = 659.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/DecreaseDifficultyButton" to="." method="_on_DecreaseDifficultyButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/IncreaseDifficultyButton" to="." method="_on_IncreaseDifficultyButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/SelectLevelButton" to="." method="_on_SelectLevelButton_pressed"]

@@ -47,10 +47,11 @@ func _on_TextureButton_gui_input(event: InputEvent) -> void:
             (event is InputEventScreenTouch and \
                     !event.pressed)
     
-    var is_pointer_event := \
-            is_mouse_down or is_touch_down or is_mouse_up or is_touch_up
+    var is_mouse_event := is_mouse_down or is_mouse_up
+    var is_touch_event := is_touch_down or is_touch_up
+    var is_pointer_event := is_mouse_event or is_touch_event
     
-    if is_pointer_event and \
+    if is_mouse_event and \
             position.distance_squared_to(event.global_position) < \
                     PAUSE_BUTTON_RADIUS * PAUSE_BUTTON_RADIUS:
         if is_mouse_down or is_touch_down:

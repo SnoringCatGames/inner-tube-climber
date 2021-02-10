@@ -43,7 +43,6 @@ func _ready() -> void:
 
 func _update_children() -> void:
     for child in get_children():
-        remove_child(child)
         child.queue_free()
     
     for index in range(items.size()):

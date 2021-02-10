@@ -115,13 +115,11 @@ func on_cross_fade_music_finished( \
         _object = null, \
         _key = null) -> void:
     if fade_out_tween != null:
-        remove_child(fade_out_tween)
         fade_out_tween.queue_free()
         fade_out_tween = null
         if previous_music_player != null:
             previous_music_player.volume_db = SILENT_VOLUME_DB
     if fade_in_tween != null:
-        remove_child(fade_in_tween)
         fade_in_tween.queue_free()
         fade_in_tween = null
         if current_music_player != null:

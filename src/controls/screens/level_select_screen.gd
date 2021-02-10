@@ -121,7 +121,7 @@ func _interpolate_scroll(scroll_ratio: float) -> void:
 func _on_unlock_scroll_finished( \
         item: LevelSelectItem, \
         scroll_tween: Tween) -> void:
-    remove_child(scroll_tween)
+    scroll_tween.queue_free()
     item.unlock()
     SaveState.set_new_unlocked_levels([])
 

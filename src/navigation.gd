@@ -327,7 +327,6 @@ func _on_screen_slide_completed( \
         previous_screen: Screen, \
         next_screen: Screen, \
         tween: Tween) -> void:
-    remove_child(tween)
     tween.queue_free()
     
     if previous_screen != null:

@@ -133,7 +133,6 @@ func _process(_delta_sec: float) -> void:
         if mobile_control_input.recent_gesture_positions.empty():
             # Destroy finished gesture annotator.
             if is_instance_valid(gesture_annotator):
-                remove_child(gesture_annotator)
                 gesture_annotator.queue_free()
                 gesture_annotator = null
         
@@ -151,5 +150,4 @@ func _start_child_annotator(annotator: Annotator) -> void:
             [annotator])
 
 func _destroy_child_annotator(annotator: Annotator) -> void:
-    remove_child(annotator)
     annotator.queue_free()

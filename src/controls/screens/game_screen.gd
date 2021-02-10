@@ -46,7 +46,6 @@ func start_level(level_id: String) -> void:
 
 func destroy_level() -> void:
     level.destroy()
-    $PanelContainer/ViewportContainer/Viewport.remove_child(level)
     level.queue_free()
     level = null
 

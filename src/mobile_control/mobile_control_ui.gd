@@ -33,13 +33,10 @@ func _enter_tree() -> void:
 
 func destroy() -> void:
     if mobile_control_display != null:
-        remove_child(mobile_control_display)
         mobile_control_display.queue_free()
     if mobile_control_input != null:
-        remove_child(mobile_control_input)
         mobile_control_input.queue_free()
     if mobile_control_gesture_annotator != null:
-        remove_child(mobile_control_gesture_annotator)
         mobile_control_gesture_annotator.queue_free()
 
 func update_displays() -> void:

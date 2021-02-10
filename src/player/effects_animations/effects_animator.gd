@@ -88,6 +88,5 @@ func play( \
     effects[effect_animator] = effect_animator
 
 func _on_animation_finished(effect_animator: Node2D) -> void:
-    level.remove_child(effect_animator)
     effect_animator.queue_free()
     effects.erase(effect_animator)

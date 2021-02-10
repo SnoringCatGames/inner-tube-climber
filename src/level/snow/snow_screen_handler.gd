@@ -31,11 +31,9 @@ func _enter_tree() -> void:
 
 func destroy() -> void:
     if active_snow_screen != null:
-        remove_child(active_snow_screen)
         active_snow_screen.queue_free()
         active_snow_screen = null
     if inactive_snow_screen != null:
-        remove_child(inactive_snow_screen)
         inactive_snow_screen.queue_free()
         inactive_snow_screen = null
 

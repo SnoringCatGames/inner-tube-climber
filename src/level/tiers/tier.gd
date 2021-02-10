@@ -158,7 +158,6 @@ func _start_icicle_fall() -> void:
 
 func _end_icicle_fall() -> void:
     icicle_fall_animator.queue_free()
-    remove_child(icicle_fall_animator)
     icicle_fall_animator = null
 
 func _get_tier_start_position() -> Vector2:

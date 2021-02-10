@@ -8,9 +8,6 @@
 [ext_resource path="res://assets/images/signs/sign-all-keys.png" type="Texture" id=6]
 [ext_resource path="res://src/level/snow/snow_screen_handler.tscn" type="PackedScene" id=7]
 
-
-
-
 [node name="Level" type="Node2D"]
 script = ExtResource( 2 )
 

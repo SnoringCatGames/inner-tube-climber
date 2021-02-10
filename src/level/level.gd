@@ -384,7 +384,7 @@ func _start_new_tier_after_fall(current_tier_position: Vector2) -> void:
             _get_player_height())
 
 func _set_game_over_state() -> void:
-    var game_over_screen: GameOverScreen = Nav.screens[ScreenType.GAME_OVER]
+    var game_over_screen = Nav.screens[ScreenType.GAME_OVER]
     game_over_screen.level_id = level_id
     game_over_screen.score = str(int(score))
     game_over_screen.high_score = \

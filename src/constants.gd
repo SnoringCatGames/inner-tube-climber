@@ -3,18 +3,18 @@ extends Node
 const GOOGLE_ANALYTICS_ID := "UA-186405125-1"
 
 const APP_NAME := "Inner-Tube Climber"
-const APP_ID := "dev.levi.inner_tube_climber"
+const APP_ID := "games.snoringcat.inner_tube_climber"
 const APP_VERSION := "0.1.0"
 const SCORE_VERSION := "0.1.0"
 
-const LEVI_URL := "https://games.levi.dev"
+const SNORING_CAT_GAMES_URL := "https://snoringcat.games"
 const GODOT_URL := "https://godotengine.org"
 const TERMS_AND_CONDITIONS_URL := "https://docs.google.com/document/d/1g1W4F2nJqJsIPKOwRGlFJi4IGj5q1ae7upYOTnVtfyI/preview"
 const PRIVACY_POLICY_URL := "https://docs.google.com/document/d/1kH48Xn62wFnZuy8wFmrsr4lKJ-k3wU-MnqFpYdhwBCc/preview"
 # FIXME:
 const ANDROID_APP_STORE_URL := "http://"
 const IOS_APP_STORE_URL := "https://"
-const SUPPORT_EMAIL_MAILTO := "mailto:support@levi.dev"
+const SUPPORT_EMAIL_MAILTO := "mailto:support@snoringcat.games"
 
 const SPLASH_SCREEN_DURATION_SEC := 0.8
 # FIXME:

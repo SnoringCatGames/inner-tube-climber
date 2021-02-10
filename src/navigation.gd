@@ -24,6 +24,8 @@ const GAME_OVER_SCREEN_PATH := \
         "res://src/controls/screens/game_over_screen.tscn"
 const CONFIRM_DATA_DELETION_SCREEN_PATH := \
         "res://src/controls/screens/confirm_data_deletion_screen.tscn"
+const NOTIFICATION_SCREEN_PATH := \
+        "res://src/controls/screens/notification_screen.tscn"
 const FADE_TRANSITION_PATH := \
         "res://src/controls/screens/fade_transition.tscn"
 
@@ -131,6 +133,11 @@ func create_screens() -> void:
             CONFIRM_DATA_DELETION_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.NOTIFICATION] = Utils.add_scene( \
+            Global.canvas_layers.menu_screen_layer, \
+            NOTIFICATION_SCREEN_PATH, \
+            true, \
+            false)
     fade_transition = Utils.add_scene( \
             Global.canvas_layers.top_layer, \
             FADE_TRANSITION_PATH, \
@@ -140,7 +147,8 @@ func create_screens() -> void:
 
 func open( \
         screen_type: int, \
-        includes_fade := false) -> void:
+        includes_fade := false, \
+        params = null) -> void:
     var previous_type_str := \
             ScreenType.get_type_string(get_active_screen_type()) if \
             !active_screen_stack.empty() else \
@@ -153,7 +161,8 @@ func open( \
     _set_screen_is_open( \
             screen_type, \
             true, \
-            includes_fade)
+            includes_fade, \
+            params)
 
 func close_current_screen(includes_fade := false) -> void:
     assert(!active_screen_stack.empty())
@@ -174,7 +183,8 @@ func close_current_screen(includes_fade := false) -> void:
     _set_screen_is_open( \
             previous_type, \
             false, \
-            includes_fade)
+            includes_fade, \
+            null)
 
 func get_active_screen() -> Screen:
     return active_screen_stack.back()
@@ -185,7 +195,8 @@ func get_active_screen_type() -> int:
 func _set_screen_is_open( \
         screen_type: int, \
         is_open: bool, \
-        includes_fade := false) -> void:
+        includes_fade := false, \
+        params = null) -> void:
     var next_screen: Screen
     var previous_screen: Screen
     if is_open:
@@ -304,6 +315,8 @@ func _set_screen_is_open( \
         # so the user can remember where they were.
         if is_open:
             next_screen._scroll_to_top()
+    
+    next_screen.set_params(params)
     
     if next_screen != null:
         Analytics.screen(ScreenType.get_type_string(next_screen.type))

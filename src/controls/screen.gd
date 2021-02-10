@@ -13,6 +13,8 @@ var inner_vbox: VBoxContainer
 
 var _focused_button: ShinyButton
 
+var params: Dictionary
+
 func _init( \
         type: int, \
         includes_standard_hierarchy: bool, \
@@ -105,4 +107,8 @@ func _give_button_focus(button: ShinyButton) -> void:
     if _focused_button != null:
         _focused_button.is_shiny = true
         _focused_button.includes_color_pulse = true
-    
+
+func set_params(params) -> void:
+    if params == null:
+        return
+    self.params = params

@@ -156,6 +156,7 @@ rect_min_size = Vector2( 100, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Cancel!"
+texture = null
 
 [node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 160.0
@@ -165,5 +166,6 @@ margin_bottom = 475.0
 rect_min_size = Vector2( 0, 50 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
+
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/ConfirmButton" to="." method="_on_ConfirmButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/CancelButton" to="." method="_on_CancelButton_pressed"]

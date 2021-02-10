@@ -32,7 +32,20 @@ func _on_ConfirmButton_pressed():
     var body := \
             "&body=(Don't change the subject! The client ID number must " + \
             "be included for us to know which data to delete.)"
-    OS.shell_open(Constants.SUPPORT_EMAIL_MAILTO + subject + body)
+    var status := OS.shell_open( \
+            Constants.SUPPORT_EMAIL_MAILTO + subject + body)
+    if status != OK:
+        Nav.open(ScreenType.NOTIFICATION, false, {
+            header_text = "Send email manually",
+            is_back_button_shown = false,
+            body_text = ("There was a problem automatically opening the " + \
+                    "mail client on your device. You need to manually send " + \
+                    "an email to support@snoringcat.games. Include this " + \
+                    "client ID number, so we know which data to delete: %s") % \
+                    str(Analytics.client_id),
+            close_button_text = "Close app",
+            close_callback = funcref(get_tree(), "quit"),
+        })
     
     get_tree().quit()
 

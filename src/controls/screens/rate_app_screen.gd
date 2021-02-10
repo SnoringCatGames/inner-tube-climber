@@ -40,7 +40,16 @@ func _on_SendEmailButton_pressed():
     Nav.open(NEXT_SCREEN_TYPE)
     var subject := \
             "?subject=Inner-Tube Climber question or feedback"
-    OS.shell_open(Constants.SUPPORT_EMAIL_MAILTO + subject)
+    var status := OS.shell_open(Constants.SUPPORT_EMAIL_MAILTO + subject)
+    if status != OK:
+        Nav.open(ScreenType.NOTIFICATION, false, {
+            header_text = "Send email manually",
+            is_back_button_shown = false,
+            body_text = ("There was a problem automatically opening the " + \
+                    "mail client on your device. Please manually send " + \
+                    "an email to support@snoringcat.games."),
+            close_button_text = "OK",
+        })
 
 func _on_DontAskAgainButton_pressed():
     Global.give_button_press_feedback()

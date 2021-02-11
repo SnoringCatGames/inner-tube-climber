@@ -280,7 +280,7 @@ const _LEVELS := {
         },
     },
     "8": {
-        name = "Hey, Alden, 'sup",
+        name = "Aggregation",
         tiers = ["1", "2", "3", "4", "5", "6", "7"],
         version = "0.1.0",
         unlock_conditions = {

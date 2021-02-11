@@ -75,4 +75,5 @@ Thumbs.db
 
 # App-release secrets
 secret/
+secrets/
 export_presets.cfg

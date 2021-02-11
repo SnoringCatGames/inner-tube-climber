@@ -1,12 +1,8 @@
 tool
 extends Screen
-class_name SplashScreen
+class_name SnoringCatSplashScreen
 
-# NOTE: This is actually an extra splash screen. This is shown after the
-#       built-in "boot splash" that Godot always renders. This is made to be a
-#       pixel-perfect duplicate of Godot's built-in splash screen.
-
-const TYPE := ScreenType.SPLASH
+const TYPE := ScreenType.SNORING_CAT_SPLASH
 const INCLUDES_STANDARD_HIERARCHY := false
 const INCLUDES_NAV_BAR := false
 const INCLUDES_CENTER_CONTAINER := false

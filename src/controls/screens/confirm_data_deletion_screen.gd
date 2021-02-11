@@ -26,31 +26,11 @@ func _on_ConfirmButton_pressed():
     # Erase user files.
     Utils.clear_directory("user://")
     
-    var subject := \
-            "?subject=DATA-DELETION REQUEST: Inner-Tube Climber: " + \
-            str(Analytics.client_id)
-    var body := \
-            "&body=(Don't change the subject! The client ID number must " + \
-            "be included for us to know which data to delete.)"
-    var status := OS.shell_open( \
-            Constants.SUPPORT_EMAIL_MAILTO + subject + body)
-    if status != OK:
-        OS.set_clipboard("Client ID: %s" % Analytics.client_id)
-        Nav.open(ScreenType.NOTIFICATION, false, {
-            header_text = "Send email manually",
-            is_back_button_shown = false,
-            body_text = ("There was a problem automatically opening the " + \
-                    "mail client on your device. You need to manually send " + \
-                    "an email to support@snoringcat.games. Include this " + \
-                    "client ID number, so we know which data to delete: %s " + \
-                    "(including a screenshot of this page will also work).") % \
-                    str(Analytics.client_id),
-            close_button_text = "Close app",
-            close_callback = funcref(self, "quit"),
-            next_screen = ScreenType.DATA_AGREEMENT,
-        })
-    else:
-        quit()
+    var url := Utils.get_support_url()
+    url += "&request-data-deletion=true&client-id=" + str(Analytics.client_id)
+    OS.shell_open(url)
+    
+    quit()
 
 func quit() -> void:
     get_tree().quit()

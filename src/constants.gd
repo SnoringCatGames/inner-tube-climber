@@ -14,9 +14,10 @@ const PRIVACY_POLICY_URL := "https://docs.google.com/document/d/1kH48Xn62wFnZuy8
 # FIXME:
 const ANDROID_APP_STORE_URL := "http://"
 const IOS_APP_STORE_URL := "https://"
-const SUPPORT_EMAIL_MAILTO := "mailto:support@snoringcat.games"
+const SUPPORT_URL_BASE := "https://snoringcat.games/support"
 
-const SPLASH_SCREEN_DURATION_SEC := 0.8
+const GODOT_SPLASH_SCREEN_DURATION_SEC := 0.8
+const SNORING_CAT_SPLASH_SCREEN_DURATION_SEC := 1.0
 # FIXME:
 #const LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN := 1
 const LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN := 3

@@ -2,7 +2,8 @@ class_name ScreenType
 
 enum {
     UNKNOWN,
-    SPLASH,
+    GODOT_SPLASH,
+    SNORING_CAT_SPLASH,
     MAIN_MENU,
     GAME,
     CREDITS,
@@ -21,8 +22,10 @@ static func get_type_string(type: int) -> String:
     match type:
         UNKNOWN:
             return "UNKNOWN"
-        SPLASH:
-            return "SPLASH"
+        GODOT_SPLASH:
+            return "GODOT_SPLASH"
+        SNORING_CAT_SPLASH:
+            return "SNORING_CAT_SPLASH"
         MAIN_MENU:
             return "MAIN_MENU"
         GAME:

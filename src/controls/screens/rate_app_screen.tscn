@@ -104,13 +104,13 @@ __meta__ = {
 }
 
 [node name="Label4" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer"]
-margin_left = 74.0
+margin_left = 11.0
 margin_top = 82.0
-margin_right = 205.0
+margin_right = 269.0
 margin_bottom = 105.0
 size_flags_horizontal = 4
 custom_fonts/font = ExtResource( 5 )
-text = "support@levi.dev"
+text = "https://snoringcat.games/support"
 
 [node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0
@@ -192,7 +192,7 @@ margin_bottom = 318.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/Label4" to="." method="_on_SendEmailButton_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/Label4" to="." method="_on_SupportButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/RateAppButton" to="." method="_on_RateAppButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/DontAskAgainButton" to="." method="_on_DontAskAgainButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/KeepPlayingButton" to="." method="_on_KeepPlayingButton_pressed"]

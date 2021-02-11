@@ -15,25 +15,7 @@ func _ready() -> void:
     # App Store: 12.9'' iPad
 #    OS.window_size = Vector2(2732, 2048)
     
-    Nav.open(ScreenType.SPLASH)
-    
-    Audio.play_sound(Sound.ACHIEVEMENT)
-    
-    Time.set_timeout( \
-            funcref(self, "_on_splash_finished"), \
-            Constants.SPLASH_SCREEN_DURATION_SEC)
-
-func _on_splash_finished() -> void:
-    var next_screen_type := \
-        ScreenType.MAIN_MENU if \
-        Global.agreed_to_terms else \
-        ScreenType.DATA_AGREEMENT
-    Nav.open(next_screen_type)
-    
-    # Start playing the default music for the menu screen.
-    Audio.cross_fade_music( \
-            Audio.MAIN_MENU_MUSIC_PLAYER_INDEX, \
-            true)
+    Nav.splash()
 
 func _process(_delta_sec: float) -> void:
     if Input.is_action_just_pressed("screenshot"):

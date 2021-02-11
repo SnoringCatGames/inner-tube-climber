@@ -36,18 +36,7 @@ func _on_TermsAndConditionsLink_pressed():
 
 func _on_SupportLink_pressed():
     Global.give_button_press_feedback()
-    var subject := \
-            "?subject=Inner-Tube Climber question or feedback"
-    var status := OS.shell_open(Constants.SUPPORT_EMAIL_MAILTO + subject)
-    if status != OK:
-        Nav.open(ScreenType.NOTIFICATION, false, {
-            header_text = "Send email manually",
-            is_back_button_shown = false,
-            body_text = ("There was a problem automatically opening the " + \
-                    "mail client on your device. Please manually send " + \
-                    "an email to support@snoringcat.games."),
-            close_button_text = "OK",
-        })
+    OS.shell_open(Utils.get_support_url())
 
 func _on_DataDeletionButton_pressed():
     Global.give_button_press_feedback()

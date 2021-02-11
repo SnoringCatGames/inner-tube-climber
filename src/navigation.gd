@@ -1,7 +1,9 @@
 extends Node
 
-const SPLASH_SCREEN_PATH := \
-        "res://src/controls/screens/splash_screen.tscn"
+const GODOT_SPLASH_SCREEN_PATH := \
+        "res://src/controls/screens/godot_splash_screen.tscn"
+const SNORING_CAT_SPLASH_SCREEN_PATH := \
+        "res://src/controls/screens/snoring_cat_splash_screen.tscn"
 const MAIN_MENU_SCREEN_PATH := \
         "res://src/controls/screens/main_menu_screen.tscn"
 const GAME_SCREEN_PATH := \
@@ -73,9 +75,14 @@ func _on_session_end() -> void:
     get_tree().quit()
 
 func create_screens() -> void:
-    screens[ScreenType.SPLASH] = Utils.add_scene( \
+    screens[ScreenType.GODOT_SPLASH] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
-            SPLASH_SCREEN_PATH, \
+            GODOT_SPLASH_SCREEN_PATH, \
+            true, \
+            false)
+    screens[ScreenType.SNORING_CAT_SPLASH] = Utils.add_scene( \
+            Global.canvas_layers.menu_screen_layer, \
+            SNORING_CAT_SPLASH_SCREEN_PATH, \
             true, \
             false)
     screens[ScreenType.MAIN_MENU] = Utils.add_scene( \
@@ -340,3 +347,26 @@ func _on_screen_slide_completed( \
 func _on_fade_complete() -> void:
     if !fade_transition.is_transitioning:
         fade_transition.visible = false
+
+func splash() -> void:
+    open(ScreenType.GODOT_SPLASH)
+    Audio.play_sound(Sound.ACHIEVEMENT)
+    yield(get_tree() \
+            .create_timer(Constants.GODOT_SPLASH_SCREEN_DURATION_SEC), \
+            "timeout")
+    
+    open(ScreenType.SNORING_CAT_SPLASH)
+    Audio.play_sound(Sound.CAT_SNORE)
+    yield(get_tree() \
+            .create_timer(Constants.SNORING_CAT_SPLASH_SCREEN_DURATION_SEC), \
+            "timeout")
+    
+    var next_screen_type := \
+        ScreenType.MAIN_MENU if \
+        Global.agreed_to_terms else \
+        ScreenType.DATA_AGREEMENT
+    open(next_screen_type)
+    # Start playing the default music for the menu screen.
+    Audio.cross_fade_music( \
+            Audio.MAIN_MENU_MUSIC_PLAYER_INDEX, \
+            true)

@@ -570,3 +570,8 @@ static func get_node_vscroll_position( \
             scroll_container.scroll_vertical
     var max_vscroll_position := scroll_container.get_v_scrollbar().max_value
     return vscroll_position
+
+static func get_support_url() -> String:
+    var params := "?source=" + OS.get_name()
+    params += "&app=inner-tube-climber"
+    return Constants.SUPPORT_URL_BASE + params

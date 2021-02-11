@@ -26,6 +26,7 @@ enum {
     ICICLE_2,
     ICICLE_5,
     ACHIEVEMENT,
+    CAT_SNORE,
 }
 
 var MANIFEST := {
@@ -153,6 +154,11 @@ var MANIFEST := {
         stream = preload("res://assets/sounds/achievement.wav"),
         text = "ACHIEVEMENT",
         volume_db = 12.0,
+    },
+    CAT_SNORE: {
+        stream = preload("res://assets/sounds/single-cat-snore.wav"),
+        text = "CAT_SNORE",
+        volume_db = 21.0,
     },
 }
 

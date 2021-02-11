@@ -5,7 +5,7 @@
 [ext_resource path="res://src/controls/screens/credits_screen.gd" type="Script" id=3]
 [ext_resource path="res://src/controls/nav_bar.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/controls/full_screen_panel.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/fonts/main_font_l.tres" type="DynamicFont" id=6]
+[ext_resource path="res://assets/images/gui/snoring-cat-logo-about.png" type="Texture" id=6]
 [ext_resource path="res://assets/fonts/main_font_normal.tres" type="DynamicFont" id=7]
 [ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=8]
 [ext_resource path="res://assets/fonts/main_font_s.tres" type="DynamicFont" id=9]
@@ -16,7 +16,7 @@ script = ExtResource( 3 )
 
 [node name="FullScreenPanel" parent="." instance=ExtResource( 5 )]
 margin_right = 480.0
-margin_bottom = 612.0
+margin_bottom = 480.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel"]
 margin_right = 480.0
@@ -54,14 +54,14 @@ size_flags_vertical = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
 margin_right = 470.0
-margin_bottom = 590.0
+margin_bottom = 645.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
 margin_left = 26.0
 margin_right = 443.0
-margin_bottom = 590.0
+margin_bottom = 645.0
 
 [node name="Control" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_right = 417.0
@@ -92,33 +92,54 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_left = 31.0
+[node name="VBoxContainer4" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
+margin_left = 83.0
 margin_top = 75.0
-margin_right = 385.0
-margin_bottom = 157.0
+margin_right = 333.0
+margin_bottom = 216.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
-size_flags_stretch_ratio = 2.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Label" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
-margin_right = 354.0
-margin_bottom = 39.0
+[node name="LinkButton2" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer4"]
+margin_right = 250.0
+margin_bottom = 85.0
+rect_min_size = Vector2( 235, 85 )
+
+[node name="SnoringCatLogo" type="TextureRect" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer4/LinkButton2"]
+margin_right = 469.0
+margin_bottom = 170.0
+rect_scale = Vector2( 0.5, 0.5 )
 size_flags_horizontal = 4
-custom_fonts/font = ExtResource( 6 )
+size_flags_vertical = 4
+texture = ExtResource( 6 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LinkButton" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer4"]
+margin_top = 85.0
+margin_right = 250.0
+margin_bottom = 113.0
+size_flags_horizontal = 4
+custom_fonts/font = ExtResource( 7 )
 text = "Created by Snoring Cat LLC"
 underline = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="URL" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2"]
-margin_left = 15.0
-margin_top = 43.0
-margin_right = 338.0
-margin_bottom = 82.0
+[node name="LinkButton3" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer4"]
+margin_left = 9.0
+margin_top = 113.0
+margin_right = 241.0
+margin_bottom = 141.0
 size_flags_horizontal = 4
-custom_fonts/font = ExtResource( 6 )
+custom_fonts/font = ExtResource( 7 )
 text = "https://snoringcat.games"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -126,9 +147,9 @@ __meta__ = {
 
 [node name="Spacer3" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 208.0
-margin_top = 161.0
+margin_top = 220.0
 margin_right = 208.0
-margin_bottom = 201.0
+margin_bottom = 260.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -136,11 +157,12 @@ size_flags_stretch_ratio = 0.8
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 91.0
-margin_top = 205.0
+margin_top = 264.0
 margin_right = 326.0
-margin_bottom = 322.0
+margin_bottom = 377.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
+custom_constants/separation = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -164,9 +186,9 @@ __meta__ = {
 
 [node name="LinkButton" type="LinkButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer3"]
 margin_left = 37.0
-margin_top = 89.0
+margin_top = 85.0
 margin_right = 197.0
-margin_bottom = 117.0
+margin_bottom = 113.0
 size_flags_horizontal = 4
 custom_fonts/font = ExtResource( 7 )
 text = "Made with Godot"
@@ -176,18 +198,18 @@ __meta__ = {
 
 [node name="Spacer1" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 208.0
-margin_top = 326.0
+margin_top = 381.0
 margin_right = 208.0
-margin_bottom = 366.0
+margin_bottom = 421.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_top = 370.0
+margin_top = 425.0
 margin_right = 417.0
-margin_bottom = 476.0
+margin_bottom = 531.0
 custom_constants/separation = 11
 __meta__ = {
 "_edit_use_anchors_": false
@@ -218,9 +240,9 @@ text = "Support"
 
 [node name="Spacer2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 208.0
-margin_top = 480.0
+margin_top = 535.0
 margin_right = 208.0
-margin_bottom = 510.0
+margin_bottom = 565.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -230,9 +252,9 @@ size_flags_stretch_ratio = 0.6
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 68.0
-margin_top = 514.0
+margin_top = 569.0
 margin_right = 348.0
-margin_bottom = 546.0
+margin_bottom = 601.0
 rect_min_size = Vector2( 280, 32 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -295,14 +317,15 @@ __meta__ = {
 
 [node name="PaddingBottom" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 208.0
-margin_top = 550.0
+margin_top = 605.0
 margin_right = 208.0
-margin_bottom = 590.0
+margin_bottom = 645.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/Label" to="." method="_on_snoring_cat_games_link_pressed"]
-[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer2/URL" to="." method="_on_snoring_cat_games_link_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer4/LinkButton2" to="." method="_on_snoring_cat_games_link_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer4/LinkButton" to="." method="_on_snoring_cat_games_link_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer4/LinkButton3" to="." method="_on_snoring_cat_games_link_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer3/LinkButton2" to="." method="_on_godot_link_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer3/LinkButton" to="." method="_on_godot_link_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/TermsAndConditionsLink" to="." method="_on_TermsAndConditionsLink_pressed"]

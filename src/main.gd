@@ -8,7 +8,12 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
     # FIXME: Remove: Useful for getting screenshots at specific resolutions.
+    # Play Store
 #    OS.window_size = Vector2(3840, 2160)
+    # App Store: 6.5'' iPhone
+#    OS.window_size = Vector2(2778, 1284)
+    # App Store: 12.9'' iPad
+#    OS.window_size = Vector2(2732, 2048)
     
     Nav.open(ScreenType.SPLASH)
     

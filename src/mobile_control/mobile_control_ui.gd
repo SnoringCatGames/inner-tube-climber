@@ -19,6 +19,10 @@ func _enter_tree() -> void:
             mobile_control_input = MobileControlInputV2.new()
             mobile_control_display = \
                     MobileControlDisplayV2.new(mobile_control_input)
+        3:
+            mobile_control_input = MobileControlInputV3.new()
+            mobile_control_display = \
+                    MobileControlDisplayV1.new(mobile_control_input)
         _:
             Utils.error()
     
@@ -35,6 +39,7 @@ func destroy() -> void:
     if mobile_control_display != null:
         mobile_control_display.queue_free()
     if mobile_control_input != null:
+        mobile_control_input.destroy()
         mobile_control_input.queue_free()
     if mobile_control_gesture_annotator != null:
         mobile_control_gesture_annotator.queue_free()

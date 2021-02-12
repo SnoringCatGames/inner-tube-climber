@@ -22,6 +22,25 @@ var is_move_right_pressed := false
 func _init() -> void:
     self.is_mobile_device = Utils.get_is_mobile_device()
 
+func destroy() -> void:
+    if Input.is_action_pressed("jump"):
+        var action := InputEventAction.new() 
+        action.action = "jump"
+        action.pressed = false
+        Input.parse_input_event(action)
+    
+    if Input.is_action_pressed("move_left"):
+        var action := InputEventAction.new() 
+        action.action = "move_left"
+        action.pressed = false
+        Input.parse_input_event(action)
+    
+    if Input.is_action_pressed("move_right"):
+        var action := InputEventAction.new() 
+        action.action = "move_right"
+        action.pressed = false
+        Input.parse_input_event(action)
+
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey:
         was_last_event_from_keyboard = true
@@ -149,3 +168,6 @@ func _get_velocity() -> Vector2:
     return delta_position / delta_time if \
             delta_time > 0.0 else \
             Vector2.ZERO
+
+func get_pointer_down_position_to_annotate() -> Vector2:
+    return Vector2.INF

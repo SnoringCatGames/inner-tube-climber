@@ -10,19 +10,19 @@ const RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER := 0.68
 const WINDINESS_MULTIPLIER := 80.0
 const JUMP_BOOST := -600.0
 var WALL_BOUNCE_HORIZONTAL_BOOST := \
-        0.0 if Global.mobile_control_version == 1 else 20.0
+        0.0 if !Global.get_is_mobile_control_version_one_handed() else 20.0
 const WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER := 0.6
 const WALL_BOUNCE_VERTICAL_BOOST_OFFSET := -420.0
 const FLOOR_BOUNCE_BOOST := -800.0
 const WALL_BOUNCE_MIN_SPEED_THRESHOLD := 80.0
 var IN_AIR_HORIZONTAL_ACCELERATION := \
-        600.0 if Global.mobile_control_version == 1 else 500.0
+        600.0 if !Global.get_is_mobile_control_version_one_handed() else 500.0
 var IN_AIR_HORIZONTAL_DECELERATION := \
-        380.0 if Global.mobile_control_version == 1 else 560.0
+        380.0 if !Global.get_is_mobile_control_version_one_handed() else 560.0
 var WALK_ACCELERATION := \
-        15.0 if Global.mobile_control_version == 1 else 13.0
+        15.0 if !Global.get_is_mobile_control_version_one_handed() else 13.0
 var WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION := \
-        250.0 if Global.mobile_control_version == 1 else 200.0
+        250.0 if !Global.get_is_mobile_control_version_one_handed() else 200.0
 const LOW_SPEED_THRESHOLD_FOR_WALK_ACCELERATION_FOR_LOW_SPEED_LOW_FRICTION := \
         500.0
 const MIN_HORIZONTAL_SPEED := 5.0
@@ -32,9 +32,9 @@ const MIN_VERTICAL_SPEED := 0.0
 const MAX_VERTICAL_SPEED := 4000.0
 const MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION := 15.0
 var FRICTION_COEFFICIENT := \
-        0.02 if Global.mobile_control_version == 1 else 0.03
+        0.02 if !Global.get_is_mobile_control_version_one_handed() else 0.03
 var WALL_BOUNCE_MOVEMENT_DELAY_SEC := \
-        0.7 if Global.mobile_control_version == 1 else 1.0
+        0.7 if !Global.get_is_mobile_control_version_one_handed() else 1.0
 const JUMP_ANTICIPATION_FORGIVENESS_THRESHOLD_SEC := 0.1
 const JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC := 0.1
 

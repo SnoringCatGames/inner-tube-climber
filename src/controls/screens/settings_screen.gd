@@ -24,6 +24,7 @@ var main_items := [
         options = [
             "1",
             "2",
+            "3",
         ],
     },
     {

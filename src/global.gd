@@ -171,3 +171,6 @@ func _set_is_debug_panel_shown(is_visible: bool) -> void:
 
 func _get_is_debug_panel_shown() -> bool:
     return is_debug_panel_shown
+
+func get_is_mobile_control_version_one_handed() -> bool:
+    return mobile_control_version == 2

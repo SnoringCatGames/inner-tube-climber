@@ -5,6 +5,7 @@ var mobile_control_input: MobileControlInput
 
 var jump_pulse_annotator: PulseAnnotator
 var move_sideways_pulse_annotator: PulseAnnotator
+var move_sideways_pointer_down_position_pulse_annotator: PulseAnnotator
 var gesture_annotator: GestureAnnotator
 
 func _init(mobile_control_input: MobileControlInput) -> void:
@@ -76,6 +77,23 @@ func _process(_delta_sec: float) -> void:
                     ACTION_PULSE_OPACITY_START, \
                     ACTION_PULSE_OPACITY_END)
             _start_child_annotator(move_sideways_pulse_annotator)
+            
+            if mobile_control_input \
+                    .get_pointer_down_position_to_annotate() != Vector2.INF:
+                move_sideways_pointer_down_position_pulse_annotator = \
+                        PulseAnnotator.new( \
+                                mobile_control_input \
+                                        .get_pointer_down_position_to_annotate(), \
+                                Time.elapsed_play_time_actual_sec, \
+                                POINTER_DOWN_POSITION_PULSE_PERIOD_SEC, \
+                                UNKNOWN_DIRECTION_ANGLE, \
+                                POINTER_DOWN_POSITION_PULSE_RADIUS_START_PIXELS, \
+                                POINTER_DOWN_POSITION_PULSE_RADIUS_END_PIXELS, \
+                                Constants.UNKNOWN_COLOR, \
+                                POINTER_DOWN_POSITION_PULSE_OPACITY_START, \
+                                POINTER_DOWN_POSITION_PULSE_OPACITY_END)
+                _start_child_annotator( \
+                        move_sideways_pointer_down_position_pulse_annotator)
         else:
             move_sideways_pulse_annotator.direction_angle = \
                     MOVE_LEFT_DIRECTION_ANGLE
@@ -110,6 +128,23 @@ func _process(_delta_sec: float) -> void:
                     ACTION_PULSE_OPACITY_START, \
                     ACTION_PULSE_OPACITY_END)
             _start_child_annotator(move_sideways_pulse_annotator)
+            
+            if mobile_control_input \
+                    .get_pointer_down_position_to_annotate() != Vector2.INF:
+                move_sideways_pointer_down_position_pulse_annotator = \
+                        PulseAnnotator.new( \
+                                mobile_control_input \
+                                        .get_pointer_down_position_to_annotate(), \
+                                Time.elapsed_play_time_actual_sec, \
+                                POINTER_DOWN_POSITION_PULSE_PERIOD_SEC, \
+                                UNKNOWN_DIRECTION_ANGLE, \
+                                POINTER_DOWN_POSITION_PULSE_RADIUS_START_PIXELS, \
+                                POINTER_DOWN_POSITION_PULSE_RADIUS_END_PIXELS, \
+                                Constants.UNKNOWN_COLOR, \
+                                POINTER_DOWN_POSITION_PULSE_OPACITY_START, \
+                                POINTER_DOWN_POSITION_PULSE_OPACITY_END)
+                _start_child_annotator( \
+                        move_sideways_pointer_down_position_pulse_annotator)
         else:
             move_sideways_pulse_annotator.direction_angle = \
                     MOVE_RIGHT_DIRECTION_ANGLE
@@ -126,6 +161,9 @@ func _process(_delta_sec: float) -> void:
             !Input.is_action_just_pressed("move_right"):
         if is_instance_valid(move_sideways_pulse_annotator):
             move_sideways_pulse_annotator.emit_signal("finished")
+        if is_instance_valid(move_sideways_pointer_down_position_pulse_annotator):
+            move_sideways_pointer_down_position_pulse_annotator \
+                    .emit_signal("finished")
     
     if mobile_control_input.is_positions_buffer_dirty:
         mobile_control_input.is_positions_buffer_dirty = false

@@ -144,9 +144,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 2 )
 text = "I agree"
-texture_scale = null
-is_shiny = null
-includes_color_pulse = null
+texture = null
 
 [node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 179.0

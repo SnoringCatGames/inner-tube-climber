@@ -9,11 +9,13 @@ const SCORE_VERSION := "0.1.0"
 
 const SNORING_CAT_GAMES_URL := "https://snoringcat.games"
 const GODOT_URL := "https://godotengine.org"
-const TERMS_AND_CONDITIONS_URL := "https://docs.google.com/document/d/1g1W4F2nJqJsIPKOwRGlFJi4IGj5q1ae7upYOTnVtfyI/preview"
-const PRIVACY_POLICY_URL := "https://docs.google.com/document/d/1kH48Xn62wFnZuy8wFmrsr4lKJ-k3wU-MnqFpYdhwBCc/preview"
-# FIXME:
-const ANDROID_APP_STORE_URL := "http://"
-const IOS_APP_STORE_URL := "https://"
+const TERMS_AND_CONDITIONS_URL := "https://snoringcat.games/inner-tube-climber/terms-and-conditions"
+const PRIVACY_POLICY_URL := "https://snoringcat.games/inner-tube-climber/privacy-policy"
+const ANDROID_APP_STORE_URL := "market://details?id=dev.levi.inner_tube_climber"
+#const ANDROID_APP_STORE_URL := "https://play.google.com/store/apps/details?id=dev.levi.inner_tube_climber"
+const IOS_APP_STORE_URL := "itms-apps://apps.apple.com/us/app/inner-tube-climber/id1553158659"
+#const IOS_APP_STORE_URL := "itms-apps://itunes.apple.com/app/apple-store/id1553158659?mt=8"
+#const IOS_APP_STORE_URL := "https://apps.apple.com/us/app/inner-tube-climber/id1553158659"
 const SUPPORT_URL_BASE := "https://snoringcat.games/support"
 
 const GODOT_SPLASH_SCREEN_DURATION_SEC := 0.8

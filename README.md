@@ -1,6 +1,4 @@
-# stuck-in-an-inner-tube
-
-_Don't make this repo public! It contains app-secret data._
+# Inner-Tube Climber
 
 ## Software used
 

@@ -163,6 +163,7 @@ func _on_checkbox_pressed(checkbox_index: int) -> void:
 func _on_dropdown_item_selected( \
         _option_index: int, \
         dropdown_index: int) -> void:
+    Global.give_button_press_feedback()
     var item: Dictionary = items[dropdown_index]
     item.selected_index = item.control.selected
     emit_signal("control_changed", dropdown_index)

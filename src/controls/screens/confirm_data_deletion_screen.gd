@@ -14,6 +14,11 @@ func _init().( \
         ) -> void:
     pass
 
+func _ready() -> void:
+    $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+            CenterContainer/VBoxContainer/ClientIdNumber.text = \
+            str(Analytics.client_id)
+
 func _get_focused_button() -> ShinyButton:
     return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
             CenterContainer/VBoxContainer/CancelButton as ShinyButton

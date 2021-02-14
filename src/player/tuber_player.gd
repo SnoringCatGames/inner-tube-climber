@@ -44,20 +44,33 @@ const PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO := 1.3
 const PLAY_WALK_EFFECT_THROTTLE_INTERVAL_SEC := 0.15
 const PLAY_WALK_SOUND_THROTTLE_INTERVAL_SEC := 0.25
 
-const STRETCH_DURATION_SEC := 0.2
-const SQUISH_DURATION_SEC := 0.2
+const JUMP_STRETCH_DURATION_SEC := 0.2
+const LAND_SQUISH_DURATION_SEC := 0.2
 
-const STRETCH_SCALE_MULTIPLIER := Vector2(0.4, 1.5)
-const SQUISH_SCALE_MULTIPLIER := Vector2(1.7, 0.5)
+const BOUNCE_SQUISH_DURATION_SEC := 0.16
+const BOUNCE_STRETCH_DURATION_SEC := 0.10
 
-var STRETCH_DISPLACEMENT := Vector2( \
+const JUMP_STRETCH_SCALE_MULTIPLIER := Vector2(0.4, 1.5)
+const LAND_SQUISH_SCALE_MULTIPLIER := Vector2(1.7, 0.5)
+
+const BOUNCE_SQUISH_SCALE_MULTIPLIER := Vector2(0.35, 1.2)
+const BOUNCE_STRETCH_SCALE_MULTIPLIER := Vector2(1.7, 0.8)
+
+var JUMP_STRETCH_DISPLACEMENT := Vector2( \
         0.0, \
         Constants.PLAYER_HALF_HEIGHT_DEFAULT * \
-                (STRETCH_SCALE_MULTIPLIER.y - 1.0))
-var SQUISH_DISPLACEMENT := Vector2( \
+                (JUMP_STRETCH_SCALE_MULTIPLIER.y - 1.0))
+var LAND_SQUISH_DISPLACEMENT := Vector2( \
         0.0, \
         Constants.PLAYER_HALF_HEIGHT_DEFAULT * \
-                (1.0 - SQUISH_SCALE_MULTIPLIER.y))
+                (1.0 - LAND_SQUISH_SCALE_MULTIPLIER.y))
+
+var BOUNCE_SQUISH_DISPLACEMENT := Vector2( \
+        0.0, \
+        0.0)
+var BOUNCE_STRETCH_DISPLACEMENT := Vector2( \
+        0.0, \
+        0.0)
 
 var is_stuck := true setget _set_is_stuck,_get_is_stuck
 
@@ -83,6 +96,7 @@ var effects_animator: EffectsAnimator
 
 var stretch_tween: Tween
 var squish_tween: Tween
+var bounce_tween: Tween
 
 var throttled_play_walk_effect: FuncRef = Time.throttle( \
         funcref(self, "_play_walk_effect"), \
@@ -99,6 +113,8 @@ func _ready() -> void:
     add_child(stretch_tween)
     squish_tween = Tween.new()
     add_child(squish_tween)
+    bounce_tween = Tween.new()
+    add_child(bounce_tween)
     
     effects_animator = EffectsAnimator.new(self, Global.level)
     
@@ -532,32 +548,33 @@ func _update_player_animation() -> void:
             effects_animator.play(EffectAnimation.JUMP_VERTICAL)
 
 func _update_squish_and_stretch() -> void:
-    if surface_state.just_left_floor and surface_state.entered_air_by_jumping:
+    if surface_state.just_left_floor and \
+            surface_state.entered_air_by_jumping:
         # Stretch.
         var stretch_duration_sec := \
-                STRETCH_DURATION_SEC * Time.physics_framerate_multiplier
+                JUMP_STRETCH_DURATION_SEC / Time.physics_framerate_multiplier
         var duration_a := stretch_duration_sec * 0.25
         var duration_b := stretch_duration_sec - duration_a
         stretch_tween.interpolate_property( \
                 $TuberAnimator, \
-                "scale_multiplier", \
+                "jump_scale_multiplier", \
                 Vector2.ONE, \
-                STRETCH_SCALE_MULTIPLIER, \
+                JUMP_STRETCH_SCALE_MULTIPLIER, \
                 duration_a, \
                 Tween.TRANS_QUART, \
                 Tween.EASE_OUT)
         stretch_tween.interpolate_property( \
                 $TuberAnimator, \
-                "position", \
+                "jump_offset", \
                 Vector2.ZERO, \
-                STRETCH_DISPLACEMENT, \
+                JUMP_STRETCH_DISPLACEMENT, \
                 duration_a, \
                 Tween.TRANS_QUART, \
                 Tween.EASE_OUT)
         stretch_tween.interpolate_property( \
                 $TuberAnimator, \
-                "scale_multiplier", \
-                STRETCH_SCALE_MULTIPLIER, \
+                "jump_scale_multiplier", \
+                JUMP_STRETCH_SCALE_MULTIPLIER, \
                 Vector2.ONE, \
                 duration_b, \
                 Tween.TRANS_QUAD, \
@@ -565,36 +582,106 @@ func _update_squish_and_stretch() -> void:
                 duration_a)
         stretch_tween.interpolate_property( \
                 $TuberAnimator, \
-                "position", \
-                STRETCH_DISPLACEMENT, \
+                "jump_offset", \
+                JUMP_STRETCH_DISPLACEMENT, \
                 Vector2.ZERO, \
                 duration_b, \
                 Tween.TRANS_QUAD, \
                 Tween.EASE_OUT, \
                 duration_a)
         stretch_tween.start()
+        bounce_tween.stop_all()
+        $TuberAnimator.bounce_scale_multiplier = Vector2.ONE
+        $TuberAnimator.bounce_offset = Vector2.ZERO
     
-    if surface_state.just_left_air and surface_state.is_touching_floor:
+    if surface_state.just_left_air and \
+            surface_state.is_touching_floor:
         # Squish.
         var squish_duration_sec := \
-                SQUISH_DURATION_SEC * Time.physics_framerate_multiplier
+                LAND_SQUISH_DURATION_SEC / Time.physics_framerate_multiplier
         squish_tween.interpolate_property( \
                 $TuberAnimator, \
-                "scale_multiplier", \
-                SQUISH_SCALE_MULTIPLIER, \
+                "jump_scale_multiplier", \
+                LAND_SQUISH_SCALE_MULTIPLIER, \
                 Vector2.ONE, \
                 squish_duration_sec, \
                 Tween.TRANS_QUART, \
                 Tween.EASE_OUT)
         squish_tween.interpolate_property( \
                 $TuberAnimator, \
-                "position", \
-                SQUISH_DISPLACEMENT, \
+                "jump_offset", \
+                LAND_SQUISH_DISPLACEMENT, \
                 Vector2.ZERO, \
                 squish_duration_sec, \
                 Tween.TRANS_QUART, \
                 Tween.EASE_OUT)
         squish_tween.start()
+        bounce_tween.stop_all()
+        $TuberAnimator.bounce_scale_multiplier = Vector2.ONE
+        $TuberAnimator.bounce_offset = Vector2.ZERO
+    
+    if just_bounced_off_wall and \
+            !surface_state.is_touching_floor:
+        var squish_duration_sec := \
+                BOUNCE_SQUISH_DURATION_SEC / \
+                Time.physics_framerate_multiplier / \
+                2.0
+        var stretch_duration_sec := \
+                BOUNCE_STRETCH_DURATION_SEC / Time.physics_framerate_multiplier
+        var recover_duration_sec := squish_duration_sec
+        bounce_tween.interpolate_property( \
+                $TuberAnimator, \
+                "bounce_scale_multiplier", \
+                Vector2.ONE, \
+                BOUNCE_SQUISH_SCALE_MULTIPLIER, \
+                squish_duration_sec, \
+                Tween.TRANS_QUART, \
+                Tween.EASE_OUT)
+        bounce_tween.interpolate_property( \
+                $TuberAnimator, \
+                "bounce_offset", \
+                Vector2.ZERO, \
+                BOUNCE_SQUISH_DISPLACEMENT, \
+                squish_duration_sec, \
+                Tween.TRANS_QUART, \
+                Tween.EASE_OUT)
+        bounce_tween.interpolate_property( \
+                $TuberAnimator, \
+                "bounce_scale_multiplier", \
+                BOUNCE_SQUISH_SCALE_MULTIPLIER, \
+                BOUNCE_STRETCH_SCALE_MULTIPLIER, \
+                stretch_duration_sec, \
+                Tween.TRANS_QUAD, \
+                Tween.EASE_IN_OUT, \
+                squish_duration_sec)
+        bounce_tween.interpolate_property( \
+                $TuberAnimator, \
+                "bounce_offset", \
+                BOUNCE_SQUISH_DISPLACEMENT, \
+                BOUNCE_STRETCH_DISPLACEMENT, \
+                stretch_duration_sec, \
+                Tween.TRANS_QUAD, \
+                Tween.EASE_IN_OUT, \
+                squish_duration_sec)
+        bounce_tween.interpolate_property( \
+                $TuberAnimator, \
+                "bounce_scale_multiplier", \
+                BOUNCE_STRETCH_SCALE_MULTIPLIER, \
+                Vector2.ONE, \
+                recover_duration_sec, \
+                Tween.TRANS_QUAD, \
+                Tween.EASE_IN, \
+                squish_duration_sec + stretch_duration_sec)
+        bounce_tween.interpolate_property( \
+                $TuberAnimator, \
+                "bounce_offset", \
+                BOUNCE_STRETCH_DISPLACEMENT, \
+                Vector2.ZERO, \
+                recover_duration_sec, \
+                Tween.TRANS_QUAD, \
+                Tween.EASE_IN, \
+                squish_duration_sec + stretch_duration_sec)
+        bounce_tween.start()
 
 func _update_effects_animations() -> void:
     if surface_state.just_touched_floor:

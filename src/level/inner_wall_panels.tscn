@@ -1,0 +1,9 @@
+[gd_scene format=2]
+
+[node name="InnerWallPanel" type="ColorRect"]
+margin_right = 1408.0
+margin_bottom = 2048.0
+color = Color( 0.345098, 0.431373, 0.603922, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

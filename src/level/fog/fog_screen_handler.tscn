@@ -2,6 +2,5 @@
 
 [ext_resource path="res://src/level/fog/fog_screen_handler.gd" type="Script" id=1]
 
-
 [node name="FogScreenHandler" type="Node2D"]
 script = ExtResource( 1 )

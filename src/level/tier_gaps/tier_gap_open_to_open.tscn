@@ -7,4 +7,3 @@
 script = ExtResource( 1 )
 
 [node name="TierTileMap" parent="." instance=ExtResource( 2 )]
-tile_data = PoolIntArray( -39, 0, 0, -65498, 0, 0, 65497, 0, 131072, 38, 0, 131072 )

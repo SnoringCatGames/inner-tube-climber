@@ -324,24 +324,10 @@ $GODOT_HEAD_INCLUDE
 			// --- THIS WAS CHANGED FROM THE DEFAULT GODOT TEMPLATE. --- //
 			console.info('Main script loaded')
 			setStatusNotice('Loading scripts...');
-			window.onLevelReady = function onLevelReady() {
-				console.info('Level ready');
+			window.onGameReady = function onGameReady() {
+				console.info('Godot bootstrapped');
 				setStatusMode('hidden');
 				initializing = false;
-			};
-			window.onLoadingScreenReady = function onLoadingScreenReady() {
-				console.info('Godot bootstrapped');
-				setStatusNotice('Loading level...');
-			};
-			
-			// --- THIS WAS CHANGED FROM THE DEFAULT GODOT TEMPLATE. --- //
-			window.setHighScore = function setHighScore(highScore) {
-				console.info('setHighScore');
-				window.localStorage.setItem('highScore', highScore);
-			};
-			window.getHighScore = function getHighScore() {
-				console.info('getHighScore');
-				return window.localStorage.getItem('highScore') || 0;
 			};
 		})();
 	//]]></script>

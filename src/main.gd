@@ -15,6 +15,9 @@ func _ready() -> void:
     # App Store: 12.9'' iPad
 #    OS.window_size = Vector2(2732, 2048)
     
+    if OS.get_name() == "HTML5":
+        JavaScript.eval("window.onGameReady()")
+    
     Nav.splash()
 
 func _process(_delta_sec: float) -> void:

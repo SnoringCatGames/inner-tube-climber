@@ -177,4 +177,3 @@ func get_is_mobile_control_version_one_handed() -> bool:
 
 func print(message: String) -> void:
     debug_panel.add_message(message)
-    print(message)

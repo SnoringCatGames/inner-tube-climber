@@ -50,7 +50,7 @@ func _ready() -> void:
 
 func _on_activated() -> void:
     ._on_activated()
-    Audio.cross_fade_music(Audio.GAME_OVER_MUSIC_PLAYER_INDEX)
+    Audio.play_music(Music.GAME_OVER_MUSIC_TYPE)
     _update_stats()
 
 func _get_focused_button() -> ShinyButton:
@@ -249,12 +249,12 @@ func _handle_display_resized() -> void:
 
 func _on_SelectLevelButton_pressed():
     Global.give_button_press_feedback()
-    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
+    Audio.play_music(Music.MAIN_MENU_MUSIC_TYPE)
     Nav.open(ScreenType.LEVEL_SELECT)
 
 func _on_HomeButton_pressed():
     Global.give_button_press_feedback()
-    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
+    Audio.play_music(Music.MAIN_MENU_MUSIC_TYPE)
     Nav.open(ScreenType.MAIN_MENU)
 
 func _on_RetryButton_pressed():

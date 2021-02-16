@@ -367,6 +367,4 @@ func splash() -> void:
         ScreenType.DATA_AGREEMENT
     open(next_screen_type)
     # Start playing the default music for the menu screen.
-    Audio.cross_fade_music( \
-            Audio.MAIN_MENU_MUSIC_PLAYER_INDEX, \
-            true)
+    Audio.play_music(Music.MAIN_MENU_MUSIC_TYPE, true)

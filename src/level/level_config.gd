@@ -149,6 +149,13 @@ const _DEFAULT_LEVEL_VALUES := {
     name = "",
     version = "",
     lives_count = 3,
+    music_sequence = [
+        Music.STUCK_IN_A_CREVASSE,
+        Music.NO_ESCAPE_FROM_THE_LOOP,
+        Music.RISING_THROUGH_RARIFIED_AIR,
+        Music.OUT_FOR_A_LOOP_RIDE,
+        Music.PUMP_UP_THAT_TUBE,
+    ],
     zoom_multiplier = _DEFAULT_TIER_VALUES.zoom_multiplier,
     scroll_speed_multiplier = _DEFAULT_TIER_VALUES.scroll_speed_multiplier,
     scroll_speed_min = _DEFAULT_TIER_VALUES.scroll_speed_min,

@@ -5,23 +5,8 @@ const SILENT_VOLUME_DB := -80.0
 
 const GLOBAL_AUDIO_VOLUME_OFFSET_DB := -20.0
 
-const MAIN_MENU_MUSIC_PLAYER_INDEX := 3
-const GAME_OVER_MUSIC_PLAYER_INDEX := 2
-
-const START_MUSIC_INDEX := 0
-
-var MUSIC_PLAYERS = [
-    Music.get_player(Music.STUCK_IN_A_CREVASSE),
-    Music.get_player(Music.NO_ESCAPE_FROM_THE_LOOP),
-    Music.get_player(Music.RISING_THROUGH_RARIFIED_AIR),
-    Music.get_player(Music.OUT_FOR_A_LOOP_RIDE),
-    Music.get_player(Music.PUMP_UP_THAT_TUBE),
-]
-
 var fade_out_tween: Tween
 var fade_in_tween: Tween
-
-var current_music_player_index := START_MUSIC_INDEX
 
 var current_playback_speed := 1.0
 
@@ -42,19 +27,19 @@ func _init() -> void:
 func play_sound(sound: int) -> void:
     call_deferred("_play_sound_deferred", sound)
 
+func play_music( \
+        music_type: int, \
+        transitions_immediately := false) -> void:
+    call_deferred( \
+            "_cross_fade_music", \
+            music_type, \
+            transitions_immediately)
+
 func _play_sound_deferred(sound: int) -> void:
     Sound.MANIFEST[sound].player.play()
 
-func cross_fade_music( \
-        next_music_player_index: int, \
-        transitions_immediately := false) -> void:
-    call_deferred( \
-            "_cross_fade_music_deferred", \
-            next_music_player_index, \
-            transitions_immediately)
-
-func _cross_fade_music_deferred( \
-        next_music_player_index: int, \
+func _cross_fade_music( \
+        music_type: int, \
         transitions_immediately := false) -> void:
     if fade_out_tween != null:
         on_cross_fade_music_finished()
@@ -63,8 +48,7 @@ func _cross_fade_music_deferred( \
         # TODO: This shouldn't happen, but it does sometimes.
         pass
     
-    var next_music_player: AudioStreamPlayer = \
-            MUSIC_PLAYERS[next_music_player_index]
+    var next_music_player := Music.get_player(music_type)
     previous_music_player = current_music_player
     current_music_player = next_music_player
     

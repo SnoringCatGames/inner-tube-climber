@@ -18,7 +18,7 @@ func _init().( \
 
 func _on_activated() -> void:
     ._on_activated()
-    Audio.cross_fade_music(Audio.MAIN_MENU_MUSIC_PLAYER_INDEX)
+    Audio.play_music(Music.MAIN_MENU_MUSIC_TYPE)
 
 func _get_focused_button() -> ShinyButton:
     return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \

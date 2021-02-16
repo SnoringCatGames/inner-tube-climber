@@ -1,26 +1,5 @@
 extends Node
 
-var MUSIC_STREAM_0: AudioStream = \
-        load("res://assets/music/stuck_in_a_crevasse.wav") if \
-        Utils.get_is_ios_device() else \
-        load("res://assets/music/stuck_in_a_crevasse.ogg")
-var MUSIC_STREAM_1: AudioStream = \
-        load("res://assets/music/no_escape_from_the_loop.wav") if \
-        Utils.get_is_ios_device() else \
-        load("res://assets/music/no_escape_from_the_loop.ogg")
-var MUSIC_STREAM_2: AudioStream = \
-        load("res://assets/music/rising-through-rarified-air.wav") if \
-        Utils.get_is_ios_device() else \
-        load("res://assets/music/rising-through-rarified-air.ogg")
-var MUSIC_STREAM_3: AudioStream = \
-        load("res://assets/music/out_for_a_loop_ride.wav") if \
-        Utils.get_is_ios_device() else \
-        load("res://assets/music/out_for_a_loop_ride.ogg")
-var MUSIC_STREAM_4: AudioStream = \
-        load("res://assets/music/pump-up-that-tube.wav") if \
-        Utils.get_is_ios_device() else \
-        load("res://assets/music/pump-up-that-tube.ogg")
-
 enum {
     STUCK_IN_A_CREVASSE,
     NO_ESCAPE_FROM_THE_LOOP,
@@ -28,6 +7,10 @@ enum {
     OUT_FOR_A_LOOP_RIDE,
     PUMP_UP_THAT_TUBE,
 }
+
+var MAIN_MENU_MUSIC_TYPE := OUT_FOR_A_LOOP_RIDE
+var GAME_OVER_MUSIC_TYPE := RISING_THROUGH_RARIFIED_AIR
+var BASE_TIER_MUSIC_TYPE := STUCK_IN_A_CREVASSE
 
 var MANIFEST := {
     STUCK_IN_A_CREVASSE: {

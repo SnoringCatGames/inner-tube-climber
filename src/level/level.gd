@@ -14,8 +14,6 @@ const INPUT_SIGN_POSITION := Vector2(0.0, 10.0)
 
 const PLAYER_START_VELOCITY := Vector2(0.0, -300.0)
 
-const NUMBER_OF_LEVELS_PER_MUSIC := 1
-
 # How many pixels correspond to a single display-height unit. 
 const DISPLAY_HEIGHT_INTERVAL := 32.0
 
@@ -43,9 +41,9 @@ var max_height_on_current_height_indicator: MaxHeightIndicator
 var pause_button: PauseButton
 
 var level_id := ""
-var start_tier_id := START_TIER_ID
 var current_tier_id := START_TIER_ID
 var current_tier_index := -1
+var music_index := -1
 var has_input_been_pressed := false
 var is_game_playing := false
 var tiers_count_since_falling := 0
@@ -160,9 +158,7 @@ func start( \
     score = 0.0
     _start_new_tier( \
             tier_id, \
-            Vector2.ZERO, \
-            Audio.START_MUSIC_INDEX)
-    Audio.cross_fade_music(Audio.current_music_player_index)
+            Vector2.ZERO)
     score_boards.visible = !player.is_stuck
     pause_button.visible = !player.is_stuck
     cooldown_indicator.visible = \
@@ -372,8 +368,7 @@ func _start_new_tier_after_fall(current_tier_position: Vector2) -> void:
     # Reset state to replay the level at the latest tier.
     _start_new_tier( \
             current_tier_id, \
-            current_tier_position, \
-            Audio.current_music_player_index)
+            current_tier_position)
     # Match player and camera positions to the current tier height.
     player_max_height = max(player_max_height, _get_player_height())
     player_max_height_on_current_life = \
@@ -582,16 +577,15 @@ func destroy() -> void:
 
 func _start_new_tier( \
         tier_id := START_TIER_ID, \
-        tier_position := Vector2.ZERO, \
-        music_player_index := Audio.START_MUSIC_INDEX) -> void:
+        tier_position := Vector2.ZERO) -> void:
     tier_start_time = Time.elapsed_play_time_actual_sec
     falls_count_on_current_tier = 0
-    start_tier_id = tier_id
     current_tier_id = tier_id
     
+    var is_base_tier := tier_id == "0"
     var level_config: Dictionary = LevelConfig.get_level_config(level_id)
     
-    if current_tier_id == "0":
+    if is_base_tier:
         current_tier_index = -1
     else:
         assert(level_config.tiers.has(current_tier_id))
@@ -641,7 +635,7 @@ func _start_new_tier( \
             true)
     next_tier_gap.sync_position_to_previous_tier(current_tier)
     
-    if current_tier_id != "0":
+    if !is_base_tier:
         var previous_tier_scene_path: String
         var previous_tier_index := current_tier_index - 1
         if previous_tier_index < 0:
@@ -697,7 +691,13 @@ func _start_new_tier( \
                 true)
         previous_tier_gap.sync_position_to_previous_tier(previous_tier)
     
-    _add_player(tier_id == "0")
+    if is_base_tier:
+        music_index = -1
+        Audio.play_music(Music.STUCK_IN_A_CREVASSE)
+    else:
+        Audio.play_music(level_config.music_sequence[music_index])
+    
+    _add_player(is_base_tier)
     
     current_tier.on_entered_tier(true)
     $CameraHandler.update_for_current_tier( \
@@ -716,10 +716,8 @@ func _start_new_tier( \
     # Render the basic input instructions sign.
     $SignAllKeys.visible = Global.are_keyboard_controls_shown
     $SignAllKeys.position = INPUT_SIGN_POSITION
-    if current_tier_id != "0":
+    if !is_base_tier:
         $SignAllKeys.position.y -= Constants.CELL_SIZE.y
-    
-    Audio.current_music_player_index = music_player_index
     
     has_input_been_pressed = false
     is_game_playing = true
@@ -804,13 +802,10 @@ func _on_entered_new_tier() -> void:
     next_tier_gap.sync_position_to_previous_tier(current_tier)
     
     # Maybe play new music.
-    if (start_tier_id != "0" or \
-            tier_count != 1) and \
-            tier_count % NUMBER_OF_LEVELS_PER_MUSIC == 0:
-        Audio.current_music_player_index = \
-                (Audio.current_music_player_index + 1) % \
-                Audio.MUSIC_PLAYERS.size()
-        Audio.cross_fade_music(Audio.current_music_player_index)
+    music_index = \
+            (music_index + 1) % \
+            level_config.music_sequence.size()
+    Audio.play_music(level_config.music_sequence[music_index])
     
     current_tier.on_entered_tier(false)
     $CameraHandler.update_for_current_tier( \

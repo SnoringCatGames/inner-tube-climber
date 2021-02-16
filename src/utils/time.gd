@@ -132,6 +132,9 @@ class _Timeout extends Reference:
         self.id = Time._last_timeout_id
     
     func trigger() -> void:
+        if !callback.is_valid():
+            return
+        
         match arguments.size():
             0:
                 callback.call_func()
@@ -185,6 +188,9 @@ class _Interval extends Reference:
         self.id = Time._last_timeout_id
     
     func trigger() -> void:
+        if !callback.is_valid():
+            return
+        
         next_trigger_time_sec = \
                 Time._elapsed_latest_time_sec + interval_sec
         match arguments.size():
@@ -265,7 +271,8 @@ class _Throttler extends Reference:
     func _trigger_callback() -> void:
         _last_call_time_sec = Time.elapsed_app_time_actual_sec
         _is_callback_scheduled = false
-        _callback.call_func()
+        if _callback.is_valid():
+            _callback.call_func()
 
 # Keeps track of the current total elapsed time of _unpaused_ gameplay.
 class _PlayTime extends Node:

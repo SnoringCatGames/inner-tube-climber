@@ -24,9 +24,9 @@ func _ready() -> void:
 func snuff() -> void:
     _update_lit(false, false)
 
-func ignite(is_bursting: bool) -> void:
+func ignite(is_bursting := true) -> void:
     _update_lit(true, is_bursting)
-    if !is_bursting:
+    if is_bursting:
         var flare_up_duration_sec := BURST_DURATION_SEC * 0.67
         var flare_down_duration_sec := \
                 BURST_DURATION_SEC - flare_up_duration_sec
@@ -55,12 +55,12 @@ func _update_lit( \
     self.is_lit = is_lit
     _set_directional_flame_visibile()
     if is_bursting:
-        $Burst.visible = false
-        $Burst.playing = false
-    else:
         $Burst.frame = 0
         $Burst.visible = is_lit
         $Burst.playing = is_lit
+    else:
+        $Burst.visible = false
+        $Burst.playing = false
 
 func _set_windiness(value: Vector2) -> void:
     if windiness != value:

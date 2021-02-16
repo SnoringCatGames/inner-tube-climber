@@ -697,6 +697,8 @@ func _start_new_tier( \
                 true)
         previous_tier_gap.sync_position_to_previous_tier(previous_tier)
     
+    _add_player(tier_id == "0")
+    
     current_tier.on_entered_tier(true)
     $CameraHandler.update_for_current_tier( \
             level_id, \
@@ -718,8 +720,6 @@ func _start_new_tier( \
         $SignAllKeys.position.y -= Constants.CELL_SIZE.y
     
     Audio.current_music_player_index = music_player_index
-    
-    _add_player(tier_id == "0")
     
     has_input_been_pressed = false
     is_game_playing = true

@@ -41,10 +41,10 @@ func _ready() -> void:
     else:
         snuff()
 
-func ignite(is_new_life: bool) -> void:
-    $TorchFlame.ignite(is_new_life)
+func ignite(is_bursting := true) -> void:
+    $TorchFlame.ignite(is_bursting)
     $Light2D.enabled = true
-    if !is_new_life:
+    if is_bursting:
         var flare_up_duration_sec := LIGHT_INITIAL_BURST_DURATION_SEC * 0.67
         var flare_down_duration_sec := \
                 LIGHT_INITIAL_BURST_DURATION_SEC - flare_up_duration_sec

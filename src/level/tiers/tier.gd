@@ -110,9 +110,8 @@ func on_entered_tier(is_new_life: bool) -> void:
     if !is_new_life:
         assert(tier_ratio_sign != null)
     if tier_ratio_sign != null:
-        if !is_new_life:
-            Audio.play_sound(Sound.IGNITE)
-        tier_ratio_sign.ignite(is_new_life)
+        Audio.play_sound(Sound.IGNITE)
+        tier_ratio_sign.ignite()
 
 func on_landed_in_tier() -> void:
     if icicle_fall_animator != null:

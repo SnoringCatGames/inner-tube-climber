@@ -131,14 +131,8 @@ func _update_shader_args() -> void:
         particles_node.emitting = is_active
         particles_node.amount = particle_count
         particles_node.lifetime = particle_duration
+        particles_node.preprocess = particle_duration
         particles_node.visibility_rect = particle_region
         particles_node.process_material.emission_box_extents = emission_extents
         particles_node.process_material.direction = direction
         particles_node.process_material.initial_velocity = shader_speed_value
-
-func update_preprocess(preprocesses: bool) -> void:
-    for particles_node in [$SnowFlakes1, $SnowFlakes2]:
-        particles_node.preprocess = \
-                particles_node.lifetime if \
-                preprocesses else \
-                0.0

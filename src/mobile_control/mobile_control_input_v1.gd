@@ -15,7 +15,7 @@ extends MobileControlInput
 class_name MobileControlInputV1
 
 const GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.12, 0.12)
-const REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.64, 0.32)
+const REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.50, 0.25)
 
 var gesture_velocity_threshold_pixels_per_sec: Vector2 = \
         GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC * Utils.get_viewport_ppi()

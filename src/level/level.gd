@@ -473,7 +473,7 @@ func _add_player(is_base_tier := false) -> void:
             is_base_tier)
     player.velocity = PLAYER_START_VELOCITY
     player.is_stuck = is_base_tier
-    player.on_new_tier()
+    player.on_new_tier(current_tier)
     
     $CameraHandler.set_start_state( \
             player.position, \
@@ -868,7 +868,7 @@ func _on_entered_new_tier() -> void:
     
     _update_score_for_tier_change()
     
-    player.on_new_tier()
+    player.on_new_tier(current_tier)
 
 func _update_margin_color() -> void:
     var previous_left_margin_color: Color

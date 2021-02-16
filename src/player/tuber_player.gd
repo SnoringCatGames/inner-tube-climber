@@ -83,6 +83,7 @@ var jump_count := 0
 var max_jump_count := 1
 var just_bounced_off_wall := false
 
+var has_touched_floor_in_current_tier := false
 var has_hit_wall_since_pressing_move := false
 var last_hit_wall_time := -INF
 var is_in_post_bounce_horizontal_acceleration_grace_period := false
@@ -91,6 +92,7 @@ var last_jump_input_time := 0.0
 var last_floor_departure_time := 0.0
 
 var windiness := Vector2.ZERO
+var tier_start: TierStart
 
 var effects_animator: EffectsAnimator
 
@@ -130,14 +132,15 @@ func _ready() -> void:
 #                Constants.PLAYER_HALF_HEIGHT_DEFAULT)
     else:
         Utils.error()
-    on_new_tier()
 
 func destroy() -> void:
     effects_animator.destroy()
 
-func on_new_tier() -> void:
+func on_new_tier(current_tier: Tier) -> void:
     tilemaps = get_tree().get_nodes_in_group( \
                     Constants.GROUP_NAME_TIER_TILE_MAPS)
+    has_touched_floor_in_current_tier = false
+    tier_start = current_tier.tier_start
 
 func _apply_movement() -> void:
     if is_stuck:
@@ -153,6 +156,14 @@ func _apply_movement() -> void:
             false, \
             4, \
             Geometry.FLOOR_MAX_ANGLE)
+    
+    if !has_touched_floor_in_current_tier:
+        var min_x := \
+                tier_start.get_x_start() + Constants.PLAYER_HALF_WIDTH_DEFAULT
+        position.x = max(position.x, min_x)
+        var max_x := \
+                tier_start.get_x_end() - Constants.PLAYER_HALF_WIDTH_DEFAULT
+        position.x = min(position.x, max_x)
 
 # Calculates basic surface-related state for the current frame.
 func _update_surface_state() -> void:
@@ -411,6 +422,7 @@ func _process_actions(delta_sec: float) -> void:
         jump_count = 0
         surface_state.entered_air_by_jumping = false
         is_rising_from_jump = false
+        has_touched_floor_in_current_tier = true
         
         # The move_and_slide system depends on some vertical gravity always pushing
         # the player into the floor. If we just zero this out, is_on_floor() will

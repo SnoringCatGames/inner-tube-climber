@@ -40,9 +40,20 @@ func _init() -> void:
     _update_volume()
 
 func play_sound(sound: int) -> void:
+    call_deferred("_play_sound_deferred", sound)
+
+func _play_sound_deferred(sound: int) -> void:
     Sound.MANIFEST[sound].player.play()
 
 func cross_fade_music( \
+        next_music_player_index: int, \
+        transitions_immediately := false) -> void:
+    call_deferred( \
+            "_cross_fade_music_deferred", \
+            next_music_player_index, \
+            transitions_immediately)
+
+func _cross_fade_music_deferred( \
         next_music_player_index: int, \
         transitions_immediately := false) -> void:
     if fade_out_tween != null:

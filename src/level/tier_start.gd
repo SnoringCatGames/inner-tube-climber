@@ -34,3 +34,9 @@ func _draw() -> void:
                 spawn_position, \
                 12.0, \
                 SURFACE_COLOR)
+
+func get_x_start() -> float:
+    return position.x - width * 0.5
+
+func get_x_end() -> float:
+    return position.x + width * 0.5

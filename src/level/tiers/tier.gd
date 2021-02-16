@@ -121,7 +121,6 @@ func on_landed_in_tier() -> void:
                 funcref(self, "_end_icicle_fall"), \
                 delay + IcicleFallAnimator.FALL_DURATION)
         
-        # FIXME:
         var crack_ice_delay := 0.3
         Time.set_timeout( \
                 funcref(Audio, "play_sound"), \
@@ -143,14 +142,6 @@ func on_landed_in_tier() -> void:
                 funcref(Audio, "play_sound"), \
                 crack_ice_delay + 0.5, \
                 [Sound.ICICLE_1])
-#        Time.set_timeout( \
-#                funcref(Audio, "play_sound"), \
-#                crack_ice_delay + 0.81, \
-#                [Sound.ICICLE_2])
-#        Time.set_timeout( \
-#                funcref(Audio, "play_sound"), \
-#                crack_ice_delay + 0.74, \
-#                [Sound.ICICLE_5])
 
 func _start_icicle_fall() -> void:
     icicle_fall_animator.fall()

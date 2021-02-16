@@ -39,14 +39,6 @@ func _create_hud_layer() -> void:
     hud_layer.layer = 300
     hud_layer.pause_mode = Node.PAUSE_MODE_STOP
     Global.add_overlay_to_current_scene(hud_layer)
-    
-    Global.debug_panel = Utils.add_scene( \
-            hud_layer, \
-            DEBUG_PANEL_RESOURCE_PATH, \
-            true, \
-            true)
-    Global.debug_panel.z_index = 1000
-    Global.debug_panel.visible = Global.is_debug_panel_shown
 
 func _create_annotation_layer() -> void:
     annotation_layer = CanvasLayer.new()
@@ -58,3 +50,11 @@ func _create_top_layer() -> void:
     top_layer = CanvasLayer.new()
     top_layer.layer = 500
     Global.add_overlay_to_current_scene(top_layer)
+    
+    Global.debug_panel = Utils.add_scene( \
+            top_layer, \
+            DEBUG_PANEL_RESOURCE_PATH, \
+            true, \
+            true)
+    Global.debug_panel.z_index = 1000
+    Global.debug_panel.visible = Global.is_debug_panel_shown

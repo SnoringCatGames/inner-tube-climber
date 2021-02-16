@@ -15,6 +15,16 @@ func _enter_tree() -> void:
 func _ready() -> void:
     is_ready = true
     Time.set_timeout(funcref(self, "_delayed_init"), 0.8)
+    Global.connect( \
+            "display_resized", \
+            self, \
+            "_handle_display_resized")
+    _handle_display_resized()
+
+func _handle_display_resized() -> void:
+    var viewport_size := get_viewport().size
+    $PanelContainer/ScrollContainer.rect_min_size = viewport_size
+    $PanelContainer/ScrollContainer/Label.rect_min_size.x = viewport_size.x
 
 func _delayed_init() -> void:
     $PanelContainer/ScrollContainer/Label.text = text
@@ -97,5 +107,5 @@ func _on_PanelContainer_gui_input(event: InputEvent) -> void:
             event.button_index == BUTTON_WHEEL_DOWN)\
     
     if (is_mouse_down or is_touch_down or is_scroll) and \
-            $PanelContainer.has_point(event.position):
+            $PanelContainer.get_rect().has_point(event.position):
         $PanelContainer.accept_event()

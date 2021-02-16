@@ -91,6 +91,8 @@ func _on_height_tween_completed( \
         _object: Object, \
         _key: NodePath) -> void:
     active_tween_count -= 1
+    current_tween_height = previous_max_height
+    update()
 
 func _draw() -> void:
     # Draw pulses.

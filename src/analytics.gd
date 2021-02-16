@@ -46,7 +46,7 @@ func screen(name: String) -> void:
     var payload := _get_payload( \
             "screenview", \
             details)
-    _trigger_collect(payload)
+    _trigger_collect(payload, details)
 
 func event( \
         category: String, \
@@ -76,6 +76,7 @@ func event( \
             details)
     _trigger_collect( \
             payload, \
+            details, \
             is_session_end)
 
 func _log_device_info() -> void:
@@ -159,11 +160,11 @@ func _get_payload( \
 
 func _trigger_collect( \
         payload: String, \
+        details: String, \
         is_session_end := false) -> void:
     if DEBUG:
-        print("Analytics._trigger_collect")
+        print("Analytics._trigger_collect: " + details)
         if VERBOSE:
-            print("  Payload:\n    " + payload)
             print("  Payload (readable):\n    " + \
                     payload.replace("&", "\n    &"))
     

@@ -20,7 +20,7 @@ func _enter_tree() -> void:
     add_child(zoom_tween)
 
 func _process(_delta_sec: float) -> void:
-    if _current_camera != null:
+    if is_instance_valid(_current_camera):
         # Handle zooming.
         if Input.is_action_pressed("zoom_in"):
             _current_camera.zoom -= _current_camera.zoom * ZOOM_STEP_RATIO
@@ -41,7 +41,7 @@ func _unhandled_input(event: InputEvent) -> void:
     # Mouse wheel events are never considered pressed by Godot--rather they are
     # only ever considered to have just happened.
     if event is InputEventMouseButton and \
-            _current_camera != null:
+            is_instance_valid(_current_camera):
         if event.button_index == BUTTON_WHEEL_UP:
             _current_camera.zoom -= _current_camera.zoom * ZOOM_STEP_RATIO
         if event.button_index == BUTTON_WHEEL_DOWN:
@@ -55,7 +55,7 @@ func get_current_camera() -> Camera2D:
     return _current_camera
 
 func _set_offset(offset: Vector2) -> void:
-    assert(_current_camera != null)
+    assert(is_instance_valid(_current_camera))
     _current_camera.offset = offset
 
 func _get_offset() -> Vector2:
@@ -71,7 +71,7 @@ func get_position() -> Vector2:
 func _set_zoom(zoom: float) -> void:
     if _current_camera == null:
         return
-#    assert(_current_camera != null)
+#    assert(is_instance_valid(_current_camera))
     _current_camera.zoom = Vector2(zoom, zoom)
 
 func _get_zoom() -> float:

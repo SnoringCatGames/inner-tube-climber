@@ -19,7 +19,7 @@ func _enter_tree() -> void:
 func _process(_delta_sec: float) -> void:
     # Transform the annotation layer to follow the camera.
     var camera: Camera2D = Global.camera_controller.get_current_camera()
-    if camera != null:
+    if is_instance_valid(camera):
         annotation_layer.transform = get_canvas_transform()
 
 func _create_game_screen_layer() -> void:

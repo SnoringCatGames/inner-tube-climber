@@ -209,7 +209,7 @@ func _physics_process(_delta_sec: float) -> void:
         if tier_of_last_platform != current_tier:
             tier_of_last_platform = current_tier
             current_tier.on_landed_in_tier()
-        Global.debug_panel.add_message( \
+        Global.print( \
                 "Platform height=%s" % player_latest_platform_height)
     display_height = \
             floor(player_max_platform_height / DISPLAY_HEIGHT_INTERVAL) as int

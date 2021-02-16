@@ -160,7 +160,7 @@ func open( \
             ScreenType.get_type_string(get_active_screen_type()) if \
             !active_screen_stack.empty() else \
             "-"
-    print("Nav.open: %s=>%s" % [
+    Global.print("Nav.open: %s=>%s" % [
         previous_type_str,
         ScreenType.get_type_string(screen_type),
     ])
@@ -182,7 +182,7 @@ func close_current_screen(includes_fade := false) -> void:
                     active_screen_stack[previous_index - 1].type) if \
             previous_index > 0 else \
             "-"
-    print("Nav.close_current_screen: %s=>%s" % [
+    Global.print("Nav.close_current_screen: %s=>%s" % [
         ScreenType.get_type_string(previous_type),
         next_type_str,
     ])

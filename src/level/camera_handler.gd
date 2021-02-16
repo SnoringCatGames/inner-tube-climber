@@ -199,11 +199,11 @@ func update_speed() -> void:
             frame_rate_multiplier_max, \
             speed_index_progress)
     
-    Global.debug_panel.add_message( \
+    Global.print( \
             ("Updated speed: " + \
             "index=%s; " + \
             "scroll_speed=%s; " + \
-            "frame_rate_mulitplier=%s") % [
+            "frame_rate_multiplier=%s") % [
                 speed_index,
                 camera_speed,
                 Time.physics_framerate_multiplier,

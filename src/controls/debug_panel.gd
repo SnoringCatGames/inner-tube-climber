@@ -41,31 +41,30 @@ func _scroll_to_bottom() -> void:
             $PanelContainer/ScrollContainer.get_v_scrollbar().max_value
 
 func _log_device_settings() -> void:
-    add_message("\n\n")
     add_message("** Welcome to the debug panel! **")
     add_message( \
             ("Device settings:" + \
-            "\n  OS.get_name()=%s" + \
-            "\n  OS.get_model_name()=%s" + \
-            "\n  Utils.get_model_name()=%s" + \
-            "\n  get_viewport().size=(%4d,%4d)" + \
-            "\n  OS.window_size=%s" + \
-            "\n  OS.get_real_window_size()=%s" + \
-            "\n  OS.get_screen_size()=%s" + \
-            "\n  Utils.get_screen_scale()=%s" + \
-            "\n  OS.get_screen_scale()=%s" + \
-            "\n  Utils.get_screen_ppi()=%s" + \
-            "\n  Utils.get_viewport_ppi()=%s" + \
-            "\n  OS.get_screen_dpi()=%s" + \
-            "\n  IosResolutions.get_screen_ppi()=%s" + \
-            "\n  Utils.get_viewport_size_inches()=%s" + \
-            "\n  Utils.get_viewport_diagonal_inches()=%s" + \
-            "\n  Utils.get_viewport_safe_area()=%s" + \
-            "\n  OS.get_window_safe_area()=%s" + \
-            "\n  Utils.get_safe_area_margin_top()=%s" + \
-            "\n  Utils.get_safe_area_margin_bottom()=%s" + \
-            "\n  Utils.get_safe_area_margin_left()=%s" + \
-            "\n  Utils.get_safe_area_margin_right()=%s" + \
+            "\n    OS.get_name()=%s" + \
+            "\n    OS.get_model_name()=%s" + \
+            "\n    Utils.get_model_name()=%s" + \
+            "\n    get_viewport().size=(%4d,%4d)" + \
+            "\n    OS.window_size=%s" + \
+            "\n    OS.get_real_window_size()=%s" + \
+            "\n    OS.get_screen_size()=%s" + \
+            "\n    Utils.get_screen_scale()=%s" + \
+            "\n    OS.get_screen_scale()=%s" + \
+            "\n    Utils.get_screen_ppi()=%s" + \
+            "\n    Utils.get_viewport_ppi()=%s" + \
+            "\n    OS.get_screen_dpi()=%s" + \
+            "\n    IosResolutions.get_screen_ppi()=%s" + \
+            "\n    Utils.get_viewport_size_inches()=%s" + \
+            "\n    Utils.get_viewport_diagonal_inches()=%s" + \
+            "\n    Utils.get_viewport_safe_area()=%s" + \
+            "\n    OS.get_window_safe_area()=%s" + \
+            "\n    Utils.get_safe_area_margin_top()=%s" + \
+            "\n    Utils.get_safe_area_margin_bottom()=%s" + \
+            "\n    Utils.get_safe_area_margin_left()=%s" + \
+            "\n    Utils.get_safe_area_margin_right()=%s" + \
             "") % [
                 OS.get_name(),
                 OS.get_model_name(),
@@ -106,6 +105,6 @@ func _on_PanelContainer_gui_input(event: InputEvent) -> void:
             (event.button_index == BUTTON_WHEEL_UP or \
             event.button_index == BUTTON_WHEEL_DOWN)\
     
-    if (is_mouse_down or is_touch_down or is_scroll) and \
-            $PanelContainer.get_rect().has_point(event.position):
-        $PanelContainer.accept_event()
+#    if (is_mouse_down or is_touch_down or is_scroll) and \
+#            $PanelContainer.get_rect().has_point(event.position):
+#        $PanelContainer.accept_event()

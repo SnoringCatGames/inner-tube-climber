@@ -163,13 +163,13 @@ func _trigger_collect( \
         details: String, \
         is_session_end := false) -> void:
     if DEBUG:
-        print("Analytics._trigger_collect: " + details)
+        Global.print("Analytics._trigger_collect: " + details)
         if VERBOSE:
-            print("  Payload (readable):\n    " + \
+            Global.print("  Payload (readable):\n    " + \
                     payload.replace("&", "\n    &"))
     
     if OS.is_debug_build():
-        print("Skipping Analytics collection in debug environment")
+        Global.print("Skipping Analytics collection in debug environment")
         if is_session_end:
             emit_signal("session_end")
         return
@@ -228,11 +228,12 @@ func _on_collect_request_completed( \
         url: String, \
         is_session_end: bool) -> void:
     if DEBUG:
-        print("Analytics._on_collect_request_completed: result=%d, code=%d" % \
+        Global.print( \
+                "Analytics._on_collect_request_completed: result=%d, code=%d" % \
                 [result, response_code])
         if VERBOSE:
-            print("  Body:\n    " + body.get_string_from_utf8())
-            print("  Headers:\n    " + Utils.join(headers, ",\n    "))
+            Global.print("  Body:\n    " + body.get_string_from_utf8())
+            Global.print("  Headers:\n    " + Utils.join(headers, ",\n    "))
     
     request.queue_free()
     
@@ -253,7 +254,7 @@ func _on_collect_request_completed( \
             (response_code >= 500 and response_code < 600):
         # Probably a temporary failure! Try again later.
         if DEBUG:
-            print("Analytics._on_collect_request_completed: " + \
+            Global.print("Analytics._on_collect_request_completed: " + \
                     "Queuing entry for re-attempt")
         _retry_queue.push_back(entry)
     else:
@@ -295,10 +296,10 @@ func _trigger_batch(batch: Array) -> void:
         payload += entry_payload
     
     if DEBUG:
-        print("Analytics._trigger_batch")
+        Global.print("Analytics._trigger_batch")
         if VERBOSE:
-            print("  Payload:\n    " + payload)
-            print("  Payload (readable):\n    " + \
+            Global.print("  Payload:\n    " + payload)
+            Global.print("  Payload (readable):\n    " + \
                     payload.replace("&", "\n    &"))
     
     var url := GOOGLE_ANALYTICS_BATCH_URL
@@ -348,11 +349,12 @@ func _on_batch_request_completed( \
         request: HTTPRequest, \
         url: String) -> void:
     if DEBUG:
-        print("Analytics._on_batch_request_completed: result=%d, code=%d" % \
+        Global.print( \
+                "Analytics._on_batch_request_completed: result=%d, code=%d" % \
                 [result, response_code])
         if VERBOSE:
-            print("  Body:\n    " + body.get_string_from_utf8())
-            print("  Headers:\n    " + Utils.join(headers, ",\n    "))
+            Global.print("  Body:\n    " + body.get_string_from_utf8())
+            Global.print("  Headers:\n    " + Utils.join(headers, ",\n    "))
     
     request.queue_free()
     
@@ -371,7 +373,7 @@ func _on_batch_request_completed( \
             (response_code >= 500 and response_code < 600):
         # Probably a temporary failure! Try again later.
         if DEBUG:
-            print("Analytics._on_batch_request_completed: " + \
+            Global.print("Analytics._on_batch_request_completed: " + \
                     "Queuing batch for re-attempt")
         for entry in batch:
             _retry_queue.push_back(entry)

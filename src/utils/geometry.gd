@@ -502,7 +502,7 @@ static func get_tile_map_bounds_in_world_coordinates( \
             used_rect.size.x * cell_size.x, \
             used_rect.size.y * cell_size.y)
 
-static func get_collision_tile_map_coord( \
+func get_collision_tile_map_coord( \
         result: CollisionTileMapCoordResult, \
         position_world_coord: Vector2, \
         tile_map: TileMap, \
@@ -936,7 +936,7 @@ static func get_collision_tile_map_coord( \
         if asserts_on_errors and !error_message.empty():
             Utils.error(print_message)
         else:
-            print(print_message)
+            Global.print(print_message)
 
 static func do_shapes_match( \
         a: Shape2D, \

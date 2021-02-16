@@ -119,15 +119,15 @@ func _ready() -> void:
     effects_animator = EffectsAnimator.new(self, Global.level)
     
     if $CollisionShape2D.shape is CapsuleShape2D:
-        Utils.error()
-#        var shape: CapsuleShape2D = $CollisionShape2D.shape
-#        shape.radius = Constants.PLAYER_CAPSULE_RADIUS_DEFAULT
-#        shape.height = Constants.PLAYER_CAPSULE_HEIGHT_DEFAULT
+        var shape: CapsuleShape2D = $CollisionShape2D.shape
+        shape.radius = Constants.PLAYER_CAPSULE_RADIUS_DEFAULT
+        shape.height = Constants.PLAYER_CAPSULE_HEIGHT_DEFAULT
     elif $CollisionShape2D.shape is RectangleShape2D:
-        var shape: RectangleShape2D = $CollisionShape2D.shape
-        shape.extents = Vector2( \
-                Constants.PLAYER_HALF_WIDTH_DEFAULT, \
-                Constants.PLAYER_HALF_HEIGHT_DEFAULT)
+        Utils.error()
+#        var shape: RectangleShape2D = $CollisionShape2D.shape
+#        shape.extents = Vector2( \
+#                Constants.PLAYER_HALF_WIDTH_DEFAULT, \
+#                Constants.PLAYER_HALF_HEIGHT_DEFAULT)
     else:
         Utils.error()
     on_new_tier()

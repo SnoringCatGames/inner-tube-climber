@@ -1,6 +1,6 @@
 # Inner-Tube Climber
 
-[Live demo](https://snoringcatgames.github.io/inner-tube-climber/dist/web/index.html)
+_[Live demo](https://snoringcatgames.github.io/inner-tube-climber/dist/web/index.html)_
 
 ## Software used
 

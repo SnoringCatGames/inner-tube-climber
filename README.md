@@ -1,5 +1,7 @@
 # Inner-Tube Climber
 
+[Live demo](https://snoringcatgames.github.io/inner-tube-climber/dist/web/index.html)
+
 ## Software used
 
 -   [Godot](https://godotengine.org/) was used to create this game.

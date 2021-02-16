@@ -16,6 +16,7 @@ const INCLUDES_CENTER_CONTAINER := true
 var level_items := []
 var expanded_item: LevelSelectItem
 var _scroll_target: LevelSelectItem
+var _new_unlocked_item: LevelSelectItem
 
 func _init().( \
         TYPE, \
@@ -43,7 +44,9 @@ func _ready() -> void:
         item.connect("toggled", self, "_on_item_toggled", [item])
 
 func _update() -> void:
+    _calculate_new_unlocked_item()
     for item in level_items:
+        item.is_new_unlocked_item = item == _new_unlocked_item
         item.update()
     call_deferred("_deferred_update")
 
@@ -53,9 +56,7 @@ func _deferred_update() -> void:
         if item.is_open:
             previous_open_item = item
     
-    var new_unlocked_levels := SaveState.get_new_unlocked_levels()
-    
-    if new_unlocked_levels.empty():
+    if _new_unlocked_item == null:
         if previous_open_item == null:
             var suggested_level_id: String = \
                     LevelConfig.get_suggested_next_level()
@@ -68,20 +69,24 @@ func _deferred_update() -> void:
         else:
             _give_button_focus(previous_open_item.get_button())
     else:
-        var last_new_unlocked_level: String = new_unlocked_levels.back()
-        var unlocked_item: LevelSelectItem
-        for item in level_items:
-            if item.level_id == last_new_unlocked_level:
-                unlocked_item = item
-        assert(unlocked_item != null)
-        
         var is_closing_accordion_first := previous_open_item != null
         if is_closing_accordion_first:
             previous_open_item.toggle()
         
         _scroll_to_item_to_unlock( \
-                unlocked_item, \
+                _new_unlocked_item, \
                 is_closing_accordion_first)
+
+func _calculate_new_unlocked_item() -> void:
+    var new_unlocked_levels := SaveState.get_new_unlocked_levels()
+    if new_unlocked_levels.empty():
+        _new_unlocked_item = null
+    else:
+        var last_new_unlocked_level: String = new_unlocked_levels.back()
+        for item in level_items:
+            if item.level_id == last_new_unlocked_level:
+                _new_unlocked_item = item
+        assert(_new_unlocked_item != null)
 
 func _scroll_to_item_to_unlock( \
         item: LevelSelectItem, \

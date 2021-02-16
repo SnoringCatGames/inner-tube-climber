@@ -325,6 +325,7 @@ func _fall() -> void:
                     level_id, \
                     all_finished_scores)
         
+        var old_unlocked_levels: Array = LevelConfig.get_old_unlocked_levels()
         new_unlocked_levels = LevelConfig.get_new_unlocked_levels()
         SaveState.set_new_unlocked_levels(new_unlocked_levels)
         for other_level_id in new_unlocked_levels:
@@ -344,9 +345,9 @@ func _fall() -> void:
             SaveState.set_failed_level_streak( \
                     SaveState.get_failed_level_streak() + 1)
         
-        var old_unlocked_levels: Array = LevelConfig.get_old_unlocked_levels()
         if !new_unlocked_levels.empty() and \
-                ((new_unlocked_levels.size() + old_unlocked_levels.size()) % \
+                ((new_unlocked_levels.size() + \
+                old_unlocked_levels.size() - 1) % \
                 Constants.LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN) == 0:
             is_rate_app_screen_next = true
         

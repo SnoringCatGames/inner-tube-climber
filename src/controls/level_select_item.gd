@@ -16,6 +16,8 @@ const LOCK_HIGH_PART_DELAY_SEC := 0.15
 export var level_id := "" setget _set_level_id,_get_level_id
 export var is_open: bool setget _set_is_open,_get_is_open
 
+var is_new_unlocked_item := false
+
 func _ready() -> void:
     _init_children()
     call_deferred("update")
@@ -100,7 +102,9 @@ func update() -> void:
     var score_for_next_rank_str := \
             LevelConfig.get_score_for_next_rank_str(level_id, rank)
     var total_plays := SaveState.get_level_total_plays(level_id)
-    var is_unlocked := SaveState.get_level_is_unlocked(level_id)
+    var is_unlocked := \
+            SaveState.get_level_is_unlocked(level_id) and \
+            !is_new_unlocked_item
     
     $HeaderWrapper/LockedWrapper.visible = !is_unlocked
     $HeaderWrapper/LockedWrapper.modulate.a = LOCKED_OPACITY

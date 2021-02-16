@@ -291,7 +291,7 @@ const _LEVELS := {
         tiers = ["1", "2", "3", "4", "5", "6", "7"],
         version = "0.1.0",
         unlock_conditions = {
-            bronze_levels = ["6"],
+            bronze_levels = ["7"],
         },
     },
 }

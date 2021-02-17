@@ -52,27 +52,55 @@ var fog_screen_primary_color: Color
 var fog_screen_secondary_color: Color
 var windiness: Vector2
 
+var next_peep_hole_size: Vector2
+var next_light_energy: float
+var next_fog_screen_opacity: float
+var next_fog_screen_secondary_color_opacity_multiplier: float
+var next_fog_screen_primary_color: Color
+var next_fog_screen_secondary_color: Color
+var next_windiness: Vector2
+
 func _enter_tree() -> void:
     peep_hole_size_tween = Tween.new()
     add_child(peep_hole_size_tween)
+    peep_hole_size_tween.connect( \
+            "tween_completed", self, "_on_peep_hole_size_tween_completed")
     
     light_energy_tween = Tween.new()
     add_child(light_energy_tween)
+    light_energy_tween.connect( \
+            "tween_completed", self, "_on_light_energy_tween_completed")
     
     fog_screen_opacity_tween = Tween.new()
     add_child(fog_screen_opacity_tween)
+    fog_screen_opacity_tween.connect( \
+            "tween_completed", self, "_on_fog_screen_opacity_tween_completed")
     
     fog_screen_secondary_color_opacity_multiplier_tween = Tween.new()
     add_child(fog_screen_secondary_color_opacity_multiplier_tween)
+    fog_screen_secondary_color_opacity_multiplier_tween.connect( \
+            "tween_completed", \
+            self, \
+            "_on_fog_screen_secondary_color_opacity_multiplier_tween_completed")
     
     fog_screen_primary_color_tween = Tween.new()
     add_child(fog_screen_primary_color_tween)
+    fog_screen_primary_color_tween.connect( \
+            "tween_completed", \
+            self, \
+            "_on_fog_screen_primary_color_tween_completed")
     
     fog_screen_secondary_color_tween = Tween.new()
     add_child(fog_screen_secondary_color_tween)
+    fog_screen_secondary_color_tween.connect( \
+            "tween_completed", \
+            self, \
+            "_on_fog_screen_secondary_color_tween_completed")
     
     windiness_tween = Tween.new()
     add_child(windiness_tween)
+    windiness_tween.connect( \
+            "tween_completed", self, "_on_windiness_tween_completed")
     
     fog_screen = Utils.add_scene( \
             Global.canvas_layers.game_screen_layer, \
@@ -171,19 +199,12 @@ func update_for_current_tier( \
     var is_base_tier := tier_id == "0"
     
     var previous_peep_hole_size: Vector2
-    var next_peep_hole_size: Vector2
     var previous_light_energy: float
-    var next_light_energy: float
     var previous_fog_screen_opacity: float
-    var next_fog_screen_opacity: float
     var previous_fog_screen_secondary_color_opacity_multiplier: float
-    var next_fog_screen_secondary_color_opacity_multiplier: float
     var previous_fog_screen_primary_color: Color
-    var next_fog_screen_primary_color: Color
     var previous_fog_screen_secondary_color: Color
-    var next_fog_screen_secondary_color: Color
     var previous_windiness: Vector2
-    var next_windiness: Vector2
     if is_base_tier:
         previous_peep_hole_size = Vector2(1024.0, 1024.0)
         next_peep_hole_size = PEEP_HOLE_SIZE_PRE_STUCK
@@ -323,6 +344,7 @@ func update_for_current_tier( \
             Tween.TRANS_QUAD, \
             Tween.EASE_IN_OUT)
     windiness_tween.start()
+    
 
 func _interpolate_peep_hole_size(size: Vector2) -> void:
     peep_hole_size = size
@@ -420,3 +442,39 @@ func _update_fog_screen( \
     fog_screen.secondary_color = screen_secondary_color
     fog_screen.windiness = windiness
     emit_signal("updated")
+
+func _on_peep_hole_size_tween_completed( \
+        _object = null, \
+        _key = null) -> void:
+    _interpolate_peep_hole_size(next_peep_hole_size)
+
+func _on_light_energy_tween_completed( \
+        _object = null, \
+        _key = null) -> void:
+    _interpolate_light_energy(next_light_energy)
+
+func _on_fog_screen_opacity_tween_completed( \
+        _object = null, \
+        _key = null) -> void:
+    _interpolate_fog_screen_opacity(next_fog_screen_opacity)
+
+func _on_fog_screen_secondary_color_opacity_multiplier_tween_completed( \
+        _object = null, \
+        _key = null) -> void:
+    _interpolate_fog_screen_secondary_color_opacity_multiplier( \
+            next_fog_screen_secondary_color_opacity_multiplier)
+
+func _on_fog_screen_primary_color_tween_completed( \
+        _object = null, \
+        _key = null) -> void:
+    _interpolate_fog_screen_primary_color(next_fog_screen_primary_color)
+
+func _on_fog_screen_secondary_color_tween_completed( \
+        _object = null, \
+        _key = null) -> void:
+    _interpolate_fog_screen_secondary_color(next_fog_screen_secondary_color)
+
+func _on_windiness_tween_completed( \
+        _object = null, \
+        _key = null) -> void:
+    _interpolate_windiness(next_windiness)

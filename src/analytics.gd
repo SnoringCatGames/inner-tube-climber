@@ -2,7 +2,6 @@ extends Node
 
 signal session_end
 
-const DEBUG := true
 const VERBOSE := false
 
 const UUID := preload("res://addons/crypto_uuid_v4/uuid.gd")
@@ -162,14 +161,13 @@ func _trigger_collect( \
         payload: String, \
         details: String, \
         is_session_end := false) -> void:
-    if DEBUG:
-        Global.print("Analytics._trigger_collect: " + details)
-        if VERBOSE:
-            Global.print("  Payload (readable):\n    " + \
-                    payload.replace("&", "\n    &"))
+    Global.print("Analytics._trigger_collect: " + details)
+    if VERBOSE:
+        Global.print("  Payload (readable):\n    " + \
+                payload.replace("&", "\n    &"))
     
-    if OS.is_debug_build():
-        Global.print("Skipping Analytics collection in debug environment")
+    if Constants.DEBUG:
+        # Skipping Analytics collection in debug environment
         if is_session_end:
             emit_signal("session_end")
         return
@@ -227,13 +225,12 @@ func _on_collect_request_completed( \
         request: HTTPRequest, \
         url: String, \
         is_session_end: bool) -> void:
-    if DEBUG:
+    if VERBOSE:
         Global.print( \
                 "Analytics._on_collect_request_completed: result=%d, code=%d" % \
                 [result, response_code])
-        if VERBOSE:
-            Global.print("  Body:\n    " + body.get_string_from_utf8())
-            Global.print("  Headers:\n    " + Utils.join(headers, ",\n    "))
+        Global.print("  Body:\n    " + body.get_string_from_utf8())
+        Global.print("  Headers:\n    " + Utils.join(headers, ",\n    "))
     
     request.queue_free()
     
@@ -253,7 +250,7 @@ func _on_collect_request_completed( \
             result == HTTPRequest.RESULT_TIMEOUT or \
             (response_code >= 500 and response_code < 600):
         # Probably a temporary failure! Try again later.
-        if DEBUG:
+        if Constants.DEBUG:
             Global.print("Analytics._on_collect_request_completed: " + \
                     "Queuing entry for re-attempt")
         _retry_queue.push_back(entry)
@@ -295,12 +292,11 @@ func _trigger_batch(batch: Array) -> void:
                 "qt=%d&%s\n" % [queue_time_ms, entry.payload]
         payload += entry_payload
     
-    if DEBUG:
+    if VERBOSE:
         Global.print("Analytics._trigger_batch")
-        if VERBOSE:
-            Global.print("  Payload:\n    " + payload)
-            Global.print("  Payload (readable):\n    " + \
-                    payload.replace("&", "\n    &"))
+        Global.print("  Payload:\n    " + payload)
+        Global.print("  Payload (readable):\n    " + \
+                payload.replace("&", "\n    &"))
     
     var url := GOOGLE_ANALYTICS_BATCH_URL
     var body := payload
@@ -348,13 +344,12 @@ func _on_batch_request_completed( \
         batch: Array, \
         request: HTTPRequest, \
         url: String) -> void:
-    if DEBUG:
+    if VERBOSE:
         Global.print( \
                 "Analytics._on_batch_request_completed: result=%d, code=%d" % \
                 [result, response_code])
-        if VERBOSE:
-            Global.print("  Body:\n    " + body.get_string_from_utf8())
-            Global.print("  Headers:\n    " + Utils.join(headers, ",\n    "))
+        Global.print("  Body:\n    " + body.get_string_from_utf8())
+        Global.print("  Headers:\n    " + Utils.join(headers, ",\n    "))
     
     request.queue_free()
     
@@ -372,7 +367,7 @@ func _on_batch_request_completed( \
             result == HTTPRequest.RESULT_TIMEOUT or \
             (response_code >= 500 and response_code < 600):
         # Probably a temporary failure! Try again later.
-        if DEBUG:
+        if Constants.DEBUG:
             Global.print("Analytics._on_batch_request_completed: " + \
                     "Queuing batch for re-attempt")
         for entry in batch:

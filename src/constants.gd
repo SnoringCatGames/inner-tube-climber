@@ -1,5 +1,8 @@
 extends Node
 
+# TODO: Remember to set this to false when creating releases.
+var DEBUG := OS.is_debug_build()
+
 const GOOGLE_ANALYTICS_ID := "UA-186405125-1"
 
 const APP_NAME := "Inner-Tube Climber"
@@ -7,7 +10,7 @@ const APP_ID := "games.snoringcat.inner_tube_climber"
 const APP_VERSION := "0.1.0"
 const SCORE_VERSION := "0.1.0"
 
-const ARE_ALL_LEVELS_UNLOCKED := true
+var ARE_ALL_LEVELS_UNLOCKED := DEBUG
 
 const SNORING_CAT_GAMES_URL := "https://snoringcat.games"
 const GODOT_URL := "https://godotengine.org"
@@ -20,8 +23,8 @@ const IOS_APP_STORE_URL := "itms-apps://apps.apple.com/us/app/inner-tube-climber
 #const IOS_APP_STORE_URL := "https://apps.apple.com/us/app/inner-tube-climber/id1553158659"
 const SUPPORT_URL_BASE := "https://snoringcat.games/support"
 
-const GODOT_SPLASH_SCREEN_DURATION_SEC := 0.8
-const SNORING_CAT_SPLASH_SCREEN_DURATION_SEC := 1.0
+var GODOT_SPLASH_SCREEN_DURATION_SEC := 0.8 if !DEBUG else 0.0
+var SNORING_CAT_SPLASH_SCREEN_DURATION_SEC := 1.0 if !DEBUG else 0.0
 const LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN := 3
 
 const MAIN_FONT_NORMAL: Font = \

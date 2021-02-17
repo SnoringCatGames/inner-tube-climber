@@ -8,6 +8,7 @@ const DEFAULT_SNOW_VELOCITY_WITH_NO_WIND_PIXELS_PER_SECOND := \
 const WINDINESS_TO_PIXELS_PER_SEC_MULTIPLIER := 150.0
 const PIXELS_PER_SECOND_TO_SHADER_SPEED_VALUE_MULTIPLIER := 1.0
 const PARTICLE_LIFETIME_MULTIPLIER := 2.0
+const MAX_WINDINESS := Vector2(8.0, 8.0)
 
 const _DEFAULT_IN_EDITOR_SIZE := Vector2(480.0, 480.0)
 
@@ -36,6 +37,14 @@ func _update_screen_size() -> void:
 func _set_windiness(value: Vector2) -> void:
     if windiness != value:
         windiness = value
+        if windiness.x < 0:
+            windiness.x = max(windiness.x, -MAX_WINDINESS.x)
+        else:
+            windiness.x = min(windiness.x, MAX_WINDINESS.x)
+        if windiness.y < 0:
+            windiness.y = max(windiness.y, -MAX_WINDINESS.y)
+        else:
+            windiness.y = min(windiness.y, MAX_WINDINESS.y)
         _update_shader_args()
 
 func _set_snow_density_multiplier(value: float) -> void:
@@ -114,6 +123,9 @@ func _update_shader_args() -> void:
         if direction.x < 0:
             node_position.x = _viewport_size.x
         emission_extents = Vector3(0.0, particle_region.size.y * 0.5, 0.0)
+    
+    particle_region.position -= node_position
+    particle_region.grow(1.0)
     
     var region_diagonal_length := particle_region.size.length()
     var time_to_cross_screen_sec := \

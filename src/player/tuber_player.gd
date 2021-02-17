@@ -7,7 +7,7 @@ var PLAYER_STUCK_ANIMATION_CENTER_OFFSET := \
 var GRAVITY_FAST_FALL: float = Geometry.GRAVITY
 const SLOW_RISE_GRAVITY_MULTIPLIER := 0.38
 const RISE_DOUBLE_JUMP_GRAVITY_MULTIPLIER := 0.68
-const WINDINESS_MULTIPLIER := 80.0
+const WINDINESS_MULTIPLIER := 100.0
 const JUMP_BOOST := -600.0
 var WALL_BOUNCE_HORIZONTAL_BOOST := \
         0.0 if !Global.get_is_mobile_control_version_one_handed() else 20.0

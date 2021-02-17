@@ -168,11 +168,6 @@ const _DEFAULT_LEVEL_VALUES := {
     },
 }
 
-        # FIXME:
-#        peep_hole_size = {value = Vector2(200.0, 200.0), weight = 1.0},
-#        fog_screen_opacity = {value = 0.3, weight = 1.0},
-#        snow_density_multiplier = 4.0,
-#        windiness = {value = Vector2(2.0, -2.0), weight = 1.0},
 const _TIERS := {
     "0": {
         scene_path = TIERS_DIRECTORY + "tier_base.tscn",
@@ -214,6 +209,10 @@ const _TIERS := {
         version = "0.1.0",
         camera_horizontally_locked = false,
         scroll_speed_max = 32.0,
+        peep_hole_size = {value = Vector2(150.0, 150.0), weight = 1.0},
+        fog_screen_opacity = {value = 0.4, weight = 1.0},
+        snow_density_multiplier = 8.0,
+        windiness = {value = Vector2(3.0, -3.0), weight = 1.0},
     },
 }
 
@@ -222,43 +221,50 @@ const _TIERS := {
 #        name = "Precision",
 const _LEVELS := {
     "1": {
-        name = "Bounce",
-        tiers = ["1", "2", "3"],
+        name = "Test",
+        tiers = ["10"],
         version = "0.1.0",
         unlock_conditions = {
         },
     },
-    "2": {
-        name = "Slip",
-        tiers = ["9", "4"],
-        version = "0.1.0",
-        unlock_conditions = {
-        },
-    },
-    "3": {
-        name = "Precision",
-        tiers = ["5", "6", "7"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["1"],
-        },
-    },
-    "4": {
-        name = "Escape",
-        tiers = ["8"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["2"],
-        },
-    },
-    "5": {
-        name = "Ambition",
-        tiers = ["1", "2", "3", "4", "5", "6", "7", "8"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["3"],
-        },
-    },
+#    "1": {
+#        name = "Bounce",
+#        tiers = ["1", "2", "3"],
+#        version = "0.1.0",
+#        unlock_conditions = {
+#        },
+#    },
+#    "2": {
+#        name = "Slip",
+#        tiers = ["9", "4"],
+#        version = "0.1.0",
+#        unlock_conditions = {
+#        },
+#    },
+#    "3": {
+#        name = "Precision",
+#        tiers = ["5", "6", "7"],
+#        version = "0.1.0",
+#        unlock_conditions = {
+#            bronze_levels = ["1"],
+#        },
+#    },
+#    "4": {
+#        name = "Escape",
+#        tiers = ["8"],
+#        version = "0.1.0",
+#        unlock_conditions = {
+#            bronze_levels = ["2"],
+#        },
+#    },
+#    "5": {
+#        name = "Ambition",
+#        tiers = ["1", "2", "3", "4", "5", "6", "7", "8"],
+#        version = "0.1.0",
+#        unlock_conditions = {
+#            bronze_levels = ["3"],
+#        },
+#    },
 }
 
 const _inflated_tiers := {}

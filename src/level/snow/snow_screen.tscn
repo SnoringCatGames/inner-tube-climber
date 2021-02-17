@@ -6,7 +6,7 @@
 
 [sub_resource type="ParticlesMaterial" id=1]
 emission_shape = 2
-emission_box_extents = Vector3( 240, 0, 0 )
+emission_box_extents = Vector3( 600, 0, 0 )
 flag_disable_z = true
 direction = Vector3( 0, 1, 0 )
 spread = 20.0
@@ -22,7 +22,7 @@ scale_random = 1.0
 
 [sub_resource type="ParticlesMaterial" id=2]
 emission_shape = 2
-emission_box_extents = Vector3( 240, 0, 0 )
+emission_box_extents = Vector3( 600, 0, 0 )
 flag_disable_z = true
 direction = Vector3( 0, 1, 0 )
 spread = 20.0
@@ -44,6 +44,7 @@ script = ExtResource( 3 )
 emitting = false
 amount = 92
 lifetime = 9.05097
+preprocess = 9.05097
 visibility_rect = Rect2( 0, 0, 480, 480 )
 process_material = SubResource( 1 )
 texture = ExtResource( 1 )
@@ -52,6 +53,7 @@ texture = ExtResource( 1 )
 emitting = false
 amount = 92
 lifetime = 9.05097
+preprocess = 9.05097
 visibility_rect = Rect2( 0, 0, 480, 480 )
 process_material = SubResource( 2 )
 texture = ExtResource( 2 )

@@ -294,9 +294,8 @@ __meta__ = {
 [node name="SelectLevelButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 10 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = -1.0
 margin_right = 128.0
-margin_bottom = 87.0
+margin_bottom = 88.0
 rect_min_size = Vector2( 128, 88 )
 size_flags_horizontal = 4
 size_flags_vertical = 4

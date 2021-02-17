@@ -47,22 +47,8 @@ const TIER_GAP_WALLED_RIGHT_TO_WALLED_RIGHT_SCENE_PATH := \
 
 # Dictionary<OpennessType, Dictionary<OpennessType, String>>
 const OPENNESS_TO_TIER_GAP_SCENE_PATH := {
-    OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: {
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: \
-                TIER_GAP_OPEN_TO_OPEN_SCENE_PATH,
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN: \
-                TIER_GAP_OPEN_TO_OPEN_SCENE_PATH,
-        OpennessType.WALLED: \
-                TIER_GAP_OPEN_TO_WALLED_SCENE_PATH,
-        OpennessType.WALLED_LEFT: \
-                TIER_GAP_OPEN_TO_WALLED_LEFT_SCENE_PATH,
-        OpennessType.WALLED_RIGHT: \
-                TIER_GAP_OPEN_TO_WALLED_RIGHT_SCENE_PATH,
-    },
-    OpennessType.OPEN_WITH_HORIZONTAL_PAN: {
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: \
-                TIER_GAP_OPEN_TO_OPEN_SCENE_PATH,
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN: \
+    OpennessType.OPEN: {
+        OpennessType.OPEN: \
                 TIER_GAP_OPEN_TO_OPEN_SCENE_PATH,
         OpennessType.WALLED: \
                 TIER_GAP_OPEN_TO_WALLED_SCENE_PATH,
@@ -72,9 +58,7 @@ const OPENNESS_TO_TIER_GAP_SCENE_PATH := {
                 TIER_GAP_OPEN_TO_WALLED_RIGHT_SCENE_PATH,
     },
     OpennessType.WALLED: {
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: \
-                TIER_GAP_WALLED_TO_OPEN_SCENE_PATH,
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN: \
+        OpennessType.OPEN: \
                 TIER_GAP_WALLED_TO_OPEN_SCENE_PATH,
         OpennessType.WALLED: \
                 TIER_GAP_WALLED_TO_WALLED_SCENE_PATH,
@@ -84,9 +68,7 @@ const OPENNESS_TO_TIER_GAP_SCENE_PATH := {
                 TIER_GAP_WALLED_TO_WALLED_RIGHT_SCENE_PATH,
     },
     OpennessType.WALLED_LEFT: {
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: \
-                TIER_GAP_WALLED_LEFT_TO_OPEN_SCENE_PATH,
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN: \
+        OpennessType.OPEN: \
                 TIER_GAP_WALLED_LEFT_TO_OPEN_SCENE_PATH,
         OpennessType.WALLED: \
                 TIER_GAP_WALLED_LEFT_TO_WALLED_SCENE_PATH,
@@ -96,9 +78,7 @@ const OPENNESS_TO_TIER_GAP_SCENE_PATH := {
                 TIER_GAP_WALLED_LEFT_TO_WALLED_RIGHT_SCENE_PATH,
     },
     OpennessType.WALLED_RIGHT: {
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN: \
-                TIER_GAP_WALLED_RIGHT_TO_OPEN_SCENE_PATH,
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN: \
+        OpennessType.OPEN: \
                 TIER_GAP_WALLED_RIGHT_TO_OPEN_SCENE_PATH,
         OpennessType.WALLED: \
                 TIER_GAP_WALLED_RIGHT_TO_WALLED_SCENE_PATH,
@@ -225,73 +205,58 @@ const _TIERS := {
         scene_path = "res://src/level/tiers/tier_7.tscn",
         version = "0.1.0",
     },
+    "8": {
+        scene_path = "res://src/level/tiers/tier_8.tscn",
+        version = "0.1.0",
+        camera_horizontally_locked = false,
+        scroll_speed_max = 32.0,
+    },
+    "9": {
+        scene_path = "res://src/level/tiers/tier_9.tscn",
+        version = "0.1.0",
+    },
 }
 
+#        name = "Elevator",
+#        name = "Expanse",
+#        name = "Precision",
 const _LEVELS := {
     "1": {
-        name = "Stuck",
-        # FIXME: 
-        tiers = ["1"],
-#        tiers = ["1", "2", "3", "4", "5", "6", "7"],
+        name = "Bounce",
+        tiers = ["1", "2", "3"],
         version = "0.1.0",
         unlock_conditions = {
         },
     },
-    # FIXME: 
     "2": {
-        name = "Higher",
-        tiers = ["2"],
+        name = "Slip",
+        tiers = ["9", "4"],
+        version = "0.1.0",
+        unlock_conditions = {
+        },
+    },
+    "3": {
+        name = "Precision",
+        tiers = ["5", "6", "7"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["1"],
         },
     },
-    "3": {
-        name = "Bounce",
-        tiers = ["3"],
+    "4": {
+        name = "Escape",
+        tiers = ["8"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["2"],
         },
     },
-    "4": {
-        name = "Slip",
-        tiers = ["4"],
+    "5": {
+        name = "Ambition",
+        tiers = ["1", "2", "3", "4", "5", "6", "7", "8"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["3"],
-        },
-    },
-    "5": {
-        name = "Elevator",
-        tiers = ["5"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["4"],
-        },
-    },
-    "6": {
-        name = "Expanse",
-        tiers = ["6"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["5"],
-        },
-    },
-    "7": {
-        name = "Precision",
-        tiers = ["7"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["6"],
-        },
-    },
-    "8": {
-        name = "Aggregation",
-        tiers = ["1", "2", "3", "4", "5", "6", "7"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["7"],
         },
     },
 }

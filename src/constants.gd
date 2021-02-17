@@ -7,12 +7,14 @@ const APP_ID := "games.snoringcat.inner_tube_climber"
 const APP_VERSION := "0.1.0"
 const SCORE_VERSION := "0.1.0"
 
+const ARE_ALL_LEVELS_UNLOCKED := true
+
 const SNORING_CAT_GAMES_URL := "https://snoringcat.games"
 const GODOT_URL := "https://godotengine.org"
 const TERMS_AND_CONDITIONS_URL := "https://snoringcat.games/inner-tube-climber/terms-and-conditions"
 const PRIVACY_POLICY_URL := "https://snoringcat.games/inner-tube-climber/privacy-policy"
 const ANDROID_APP_STORE_URL := "market://details?id=dev.levi.inner_tube_climber"
-#const ANDROID_APP_STORE_URL := "https://play.google.com/store/apps/details?id=dev.levi.inner_tube_climber"
+# FIXME
 const IOS_APP_STORE_URL := "itms-apps://apps.apple.com/us/app/inner-tube-climber/id1553158659"
 #const IOS_APP_STORE_URL := "itms-apps://itunes.apple.com/app/apple-store/id1553158659?mt=8"
 #const IOS_APP_STORE_URL := "https://apps.apple.com/us/app/inner-tube-climber/id1553158659"
@@ -20,8 +22,6 @@ const SUPPORT_URL_BASE := "https://snoringcat.games/support"
 
 const GODOT_SPLASH_SCREEN_DURATION_SEC := 0.8
 const SNORING_CAT_SPLASH_SCREEN_DURATION_SEC := 1.0
-# FIXME:
-#const LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN := 1
 const LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN := 3
 
 const MAIN_FONT_NORMAL: Font = \

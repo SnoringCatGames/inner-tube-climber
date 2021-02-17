@@ -92,7 +92,7 @@ var last_jump_input_time := 0.0
 var last_floor_departure_time := 0.0
 
 var windiness := Vector2.ZERO
-var tier_start: TierStart
+var current_tier: Tier
 
 var effects_animator: EffectsAnimator
 
@@ -140,7 +140,7 @@ func on_new_tier(current_tier: Tier) -> void:
     tilemaps = get_tree().get_nodes_in_group( \
                     Constants.GROUP_NAME_TIER_TILE_MAPS)
     has_touched_floor_in_current_tier = false
-    tier_start = current_tier.tier_start
+    self.current_tier = current_tier
 
 func _apply_movement() -> void:
     if is_stuck:
@@ -159,10 +159,14 @@ func _apply_movement() -> void:
     
     if !has_touched_floor_in_current_tier:
         var min_x := \
-                tier_start.get_x_start() + Constants.PLAYER_HALF_WIDTH_DEFAULT
+                current_tier.tier_start_position.x + \
+                current_tier.tier_start.get_x_start() + \
+                Constants.PLAYER_HALF_WIDTH_DEFAULT
         position.x = max(position.x, min_x)
         var max_x := \
-                tier_start.get_x_end() - Constants.PLAYER_HALF_WIDTH_DEFAULT
+                current_tier.tier_start_position.x + \
+                current_tier.tier_start.get_x_end() - \
+                Constants.PLAYER_HALF_WIDTH_DEFAULT
         position.x = min(position.x, max_x)
 
 # Calculates basic surface-related state for the current frame.

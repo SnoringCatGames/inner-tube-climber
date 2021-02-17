@@ -177,7 +177,8 @@ func get_level_is_unlocked(level_id: String) -> bool:
     return config.get_value( \
             IS_UNLOCKED_SECTION_KEY, \
             level_id, \
-            false) as bool
+            false) as bool or \
+            Constants.ARE_ALL_LEVELS_UNLOCKED
 
 func set_new_unlocked_levels(new_unlocked_levels: Array) -> void:
     config.set_value( \

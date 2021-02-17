@@ -5,8 +5,7 @@ enum {
     WALLED,
     WALLED_LEFT,
     WALLED_RIGHT,
-    OPEN_WITHOUT_HORIZONTAL_PAN,
-    OPEN_WITH_HORIZONTAL_PAN,
+    OPEN,
 }
 
 static func get_type_string(type: int) -> String:
@@ -19,10 +18,8 @@ static func get_type_string(type: int) -> String:
             return "WALLED_LEFT"
         WALLED_RIGHT:
             return "WALLED_RIGHT"
-        OPEN_WITHOUT_HORIZONTAL_PAN:
-            return "OPEN_WITHOUT_HORIZONTAL_PAN"
-        OPEN_WITH_HORIZONTAL_PAN:
-            return "OPEN_WITH_HORIZONTAL_PAN"
+        OPEN:
+            return "OPEN"
         _:
             Utils.error("Invalid OpennessType: %s" % type)
             return "???"

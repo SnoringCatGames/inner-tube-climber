@@ -654,8 +654,7 @@ func _start_new_tier( \
                     false, \
                     false)
             match previous_tier.openness_type:
-                OpennessType.OPEN_WITH_HORIZONTAL_PAN, \
-                OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN:
+                OpennessType.OPEN:
                     previous_tier_scene_path = \
                             LevelConfig.TIER_EMPTY_OPEN_SCENE_PATH
                 OpennessType.WALLED:
@@ -883,8 +882,7 @@ func _update_margin_color() -> void:
         OpennessType.WALLED_RIGHT:
             previous_left_margin_color = Constants.BACKGROUND_DARKEST_COLOR
             previous_right_margin_color = Constants.WALL_COLOR
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN, \
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN:
+        OpennessType.OPEN:
             previous_left_margin_color = Constants.BACKGROUND_DARKEST_COLOR
             previous_right_margin_color = Constants.BACKGROUND_DARKEST_COLOR
         _:
@@ -902,8 +900,7 @@ func _update_margin_color() -> void:
         OpennessType.WALLED_RIGHT:
             next_left_margin_color = Constants.BACKGROUND_DARKEST_COLOR
             next_right_margin_color = Constants.WALL_COLOR
-        OpennessType.OPEN_WITHOUT_HORIZONTAL_PAN, \
-        OpennessType.OPEN_WITH_HORIZONTAL_PAN:
+        OpennessType.OPEN:
             next_left_margin_color = Constants.BACKGROUND_DARKEST_COLOR
             next_right_margin_color = Constants.BACKGROUND_DARKEST_COLOR
         _:

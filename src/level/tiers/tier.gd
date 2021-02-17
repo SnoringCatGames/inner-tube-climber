@@ -13,8 +13,7 @@ enum OpennessType {
     WALLED,
     WALLED_LEFT,
     WALLED_RIGHT,
-    OPEN_WITHOUT_HORIZONTAL_PAN,
-    OPEN_WITH_HORIZONTAL_PAN,
+    OPEN,
 }
 
 export(OpennessType) var openness_type := OpennessType.UNKNOWN

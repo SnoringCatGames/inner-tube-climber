@@ -14,6 +14,8 @@
 extends MobileControlInputV1
 class_name MobileControlInputV3
 
+const MOVEMENT_DISTANCE_FROM_POINTER_DOWN_THRESHOLD_PIXELS := 0.0
+
 func _handle_move_sideways_drag(pointer_position: Vector2) -> void:
     move_sideways_pointer_current_position = pointer_position
     
@@ -24,9 +26,11 @@ func _handle_move_sideways_drag(pointer_position: Vector2) -> void:
             newest_drag_position.position - move_sideways_pointer_down_position
     
     var is_move_left_triggered_from_gesture := \
-            position_relative_to_pointer_down.x < 0.0
+            position_relative_to_pointer_down.x < \
+            -get_movement_distance_from_pointer_down_threshold()
     var is_move_right_triggered_from_gesture := \
-            position_relative_to_pointer_down.x > 0.0
+            position_relative_to_pointer_down.x > \
+            get_movement_distance_from_pointer_down_threshold()
     
     if is_move_left_triggered_from_gesture:
         is_move_left_pressed = true
@@ -34,6 +38,12 @@ func _handle_move_sideways_drag(pointer_position: Vector2) -> void:
     elif is_move_right_triggered_from_gesture:
         is_move_left_pressed = false
         is_move_right_pressed = true
+    else:
+        is_move_left_pressed = false
+        is_move_right_pressed = false
 
 func get_pointer_down_position_to_annotate() -> Vector2:
     return move_sideways_pointer_down_position
+
+func get_movement_distance_from_pointer_down_threshold() -> float:
+    return MOVEMENT_DISTANCE_FROM_POINTER_DOWN_THRESHOLD_PIXELS

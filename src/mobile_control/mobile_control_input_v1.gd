@@ -14,6 +14,8 @@
 extends MobileControlInput
 class_name MobileControlInputV1
 
+const JUMP_SIDE_SCREEN_WIDTH_RATIO := 0.33
+
 const GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.12, 0.12)
 const REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.50, 0.25)
 
@@ -38,7 +40,8 @@ func _unhandled_input(event: InputEvent) -> void:
     
     var is_event_on_jump_side_of_screen: bool = \
             pointer_position != Vector2.INF and \
-            pointer_position.x < get_viewport().size.x * 0.5
+            pointer_position.x < \
+                    get_viewport().size.x * JUMP_SIDE_SCREEN_WIDTH_RATIO
     
     var is_event_closer_to_previous_jump_than_move_sideways: bool
     if jump_pointer_current_position != Vector2.INF and \

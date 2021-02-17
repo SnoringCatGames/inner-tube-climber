@@ -1,49 +1,52 @@
 extends Node
 
+const TIERS_DIRECTORY := "res://src/level/tiers/"
+const TIER_GAPS_DIRECTORY := "res://src/level/tier_gaps/"
+
 const TIER_EMPTY_OPEN_SCENE_PATH := \
-        "res://src/level/tiers/tier_empty_open.tscn"
+        TIERS_DIRECTORY + "tier_empty_open.tscn"
 const TIER_EMPTY_WALLED_SCENE_PATH := \
-        "res://src/level/tiers/tier_empty_walled.tscn"
+        TIERS_DIRECTORY + "tier_empty_walled.tscn"
 const TIER_EMPTY_WALLED_LEFT_SCENE_PATH := \
-        "res://src/level/tiers/tier_empty_walled_left.tscn"
+        TIERS_DIRECTORY + "tier_empty_walled_left.tscn"
 const TIER_EMPTY_WALLED_RIGHT_SCENE_PATH := \
-        "res://src/level/tiers/tier_empty_walled_right.tscn"
+        TIERS_DIRECTORY + "tier_empty_walled_right.tscn"
 
 const TIER_GAP_OPEN_TO_OPEN_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_open_to_open.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_open_to_open.tscn"
 const TIER_GAP_OPEN_TO_WALLED_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_open_to_walled.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_open_to_walled.tscn"
 const TIER_GAP_OPEN_TO_WALLED_LEFT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_open_to_walled_left.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_open_to_walled_left.tscn"
 const TIER_GAP_OPEN_TO_WALLED_RIGHT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_open_to_walled_right.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_open_to_walled_right.tscn"
 
 const TIER_GAP_WALLED_TO_OPEN_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_to_open.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_to_open.tscn"
 const TIER_GAP_WALLED_TO_WALLED_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_to_walled.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_to_walled.tscn"
 const TIER_GAP_WALLED_TO_WALLED_LEFT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_to_walled_left.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_to_walled_left.tscn"
 const TIER_GAP_WALLED_TO_WALLED_RIGHT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_to_walled_right.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_to_walled_right.tscn"
 
 const TIER_GAP_WALLED_LEFT_TO_OPEN_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_left_to_open.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_left_to_open.tscn"
 const TIER_GAP_WALLED_LEFT_TO_WALLED_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_left_to_walled.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_left_to_walled.tscn"
 const TIER_GAP_WALLED_LEFT_TO_WALLED_LEFT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_left_to_walled_left.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_left_to_walled_left.tscn"
 const TIER_GAP_WALLED_LEFT_TO_WALLED_RIGHT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_left_to_walled_right.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_left_to_walled_right.tscn"
 
 const TIER_GAP_WALLED_RIGHT_TO_OPEN_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_right_to_open.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_right_to_open.tscn"
 const TIER_GAP_WALLED_RIGHT_TO_WALLED_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_right_to_walled.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_right_to_walled.tscn"
 const TIER_GAP_WALLED_RIGHT_TO_WALLED_LEFT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_right_to_walled_left.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_right_to_walled_left.tscn"
 const TIER_GAP_WALLED_RIGHT_TO_WALLED_RIGHT_SCENE_PATH := \
-        "res://src/level/tier_gaps/tier_gap_walled_right_to_walled_right.tscn"
+        TIER_GAPS_DIRECTORY + "tier_gap_walled_right_to_walled_right.tscn"
 
 # Dictionary<OpennessType, Dictionary<OpennessType, String>>
 const OPENNESS_TO_TIER_GAP_SCENE_PATH := {
@@ -108,6 +111,7 @@ const _DEFAULT_TIER_VALUES := {
     id = "",
     number = -1,
     version = "",
+    scene_path = "",
     camera_horizontally_locked = true,
     zoom_multiplier = 1.0,
     scroll_speed_multiplier = 1.0,
@@ -164,56 +168,52 @@ const _DEFAULT_LEVEL_VALUES := {
     },
 }
 
+        # FIXME:
+#        peep_hole_size = {value = Vector2(200.0, 200.0), weight = 1.0},
+#        fog_screen_opacity = {value = 0.3, weight = 1.0},
+#        snow_density_multiplier = 4.0,
+#        windiness = {value = Vector2(2.0, -2.0), weight = 1.0},
 const _TIERS := {
     "0": {
-        scene_path = "res://src/level/tiers/tier_base.tscn",
+        scene_path = TIERS_DIRECTORY + "tier_base.tscn",
         scroll_speed_multiplier = 0.0,
         scroll_speed_min = 0.0,
         scroll_speed_max = 0.0,
         version = "0.1.0",
     },
     "1": {
-        scene_path = "res://src/level/tiers/tier_1.tscn",
-        # FIXME:
-#        peep_hole_size = {value = Vector2(200.0, 200.0), weight = 1.0},
-#        fog_screen_opacity = {value = 0.3, weight = 1.0},
-        snow_density_multiplier = 4.0,
-        windiness = {value = Vector2(2.0, -2.0), weight = 1.0},
         version = "0.1.0",
     },
     "2": {
-        scene_path = "res://src/level/tiers/tier_2.tscn",
         version = "0.1.0",
     },
     "3": {
-        scene_path = "res://src/level/tiers/tier_3.tscn",
         version = "0.1.0",
     },
     "4": {
-        scene_path = "res://src/level/tiers/tier_4.tscn",
         version = "0.1.0",
     },
     "5": {
-        scene_path = "res://src/level/tiers/tier_5.tscn",
         version = "0.1.0",
     },
     "6": {
-        scene_path = "res://src/level/tiers/tier_6.tscn",
         version = "0.1.0",
     },
     "7": {
-        scene_path = "res://src/level/tiers/tier_7.tscn",
         version = "0.1.0",
     },
     "8": {
-        scene_path = "res://src/level/tiers/tier_8.tscn",
         version = "0.1.0",
         camera_horizontally_locked = false,
         scroll_speed_max = 32.0,
     },
     "9": {
-        scene_path = "res://src/level/tiers/tier_9.tscn",
         version = "0.1.0",
+    },
+    "10": {
+        version = "0.1.0",
+        camera_horizontally_locked = false,
+        scroll_speed_max = 32.0,
     },
 }
 
@@ -266,17 +266,12 @@ const _inflated_levels := {}
 
 var BASE_TIER: Dictionary = get_tier_config("0")
 
-func _init() -> void:
-    for tier in _TIERS.values():
-        load(tier.scene_path)
-
 static func get_tier_config(tier_id: String) -> Dictionary:
     if _inflated_tiers.has(tier_id):
         return _inflated_tiers[tier_id]
     
     assert(_TIERS.has(tier_id))
     var tier_config: Dictionary = _TIERS[tier_id].duplicate()
-    assert(tier_config.has("scene_path"))
     assert(tier_config.has("version"))
     for key in _DEFAULT_TIER_VALUES.keys():
         if !tier_config.has(key):
@@ -284,6 +279,8 @@ static func get_tier_config(tier_id: String) -> Dictionary:
     tier_config["id"] = tier_id
     assert(tier_id == str(int(tier_id)))
     tier_config["number"] = int(tier_id)
+    if tier_config.scene_path == "":
+        tier_config.scene_path = TIERS_DIRECTORY + "tier_" + tier_id + ".tscn"
     _inflated_tiers[tier_id] = tier_config
     return tier_config
 

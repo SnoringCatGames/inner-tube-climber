@@ -34,4 +34,4 @@ spawn_position_x = 0.0
 position = Vector2( 0, -2080 )
 
 [node name="OneUp" parent="." instance=ExtResource( 6 )]
-position = Vector2( 168, -1848 )
+position = Vector2( 168, -1888 )

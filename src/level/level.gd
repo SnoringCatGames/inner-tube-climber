@@ -209,14 +209,6 @@ func _physics_process(_delta_sec: float) -> void:
                 "Platform height=%s" % player_latest_platform_height)
     display_height = \
             floor(player_max_platform_height / DISPLAY_HEIGHT_INTERVAL) as int
-    
-    cooldown_indicator.check_for_updates( \
-            player_max_platform_height_on_current_life, \
-            player_latest_platform_height, \
-            !player.surface_state.is_touching_floor)
-    max_height_indicator.check_for_updates(player_max_platform_height)
-    max_height_on_current_height_indicator.check_for_updates( \
-            player_max_platform_height_on_current_life)
 
 func _process(delta_sec: float) -> void:
     delta_sec *= Time.physics_framerate_multiplier
@@ -233,6 +225,17 @@ func _process(delta_sec: float) -> void:
             delta_sec, \
             player.position, \
             _get_player_height())
+    
+    cooldown_indicator.check_for_updates( \
+            player_max_platform_height_on_current_life, \
+            player_latest_platform_height, \
+            !player.surface_state.is_touching_floor)
+    max_height_indicator.check_for_updates(player_max_platform_height)
+    max_height_on_current_height_indicator.check_for_updates( \
+            player_max_platform_height_on_current_life)
+    max_height_indicator.position.x = $CameraHandler.camera_position.x
+    max_height_on_current_height_indicator.position.x = \
+            $CameraHandler.camera_position.x
     
     _update_score_displays()
     

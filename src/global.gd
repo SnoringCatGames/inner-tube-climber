@@ -17,7 +17,7 @@ var is_lives_display_shown: bool
 var is_tier_ratio_display_shown: bool
 var is_multiplier_display_shown: bool
 var is_speed_display_shown: bool
-var mobile_control_version: int
+var mobile_control_version: String
 var are_keyboard_controls_shown := false
 
 var canvas_layers: CanvasLayers
@@ -44,7 +44,7 @@ func _load_state() -> void:
             DifficultyMode.MODERATE)
     mobile_control_version = SaveState.get_setting( \
             SaveState.MOBILE_CONTROL_VERSION_KEY, \
-            1)
+            "1R")
     is_giving_haptic_feedback = SaveState.get_setting( \
             SaveState.IS_GIVING_HAPTIC_FEEDBACK_KEY, \
             Utils.get_is_android_device())
@@ -173,7 +173,7 @@ func _get_is_debug_panel_shown() -> bool:
     return is_debug_panel_shown
 
 func get_is_mobile_control_version_one_handed() -> bool:
-    return mobile_control_version == 2
+    return mobile_control_version == "2"
 
 func print(message: String) -> void:
     debug_panel.add_message(message)

@@ -22,9 +22,11 @@ var main_items := [
         label = "Control version",
         type = LabeledControlItemType.DROPDOWN,
         options = [
-            "1",
+            "1R",
+            "1L",
             "2",
-            "3",
+            "3R",
+            "3L",
         ],
     },
     {
@@ -248,7 +250,7 @@ func _on_difficulty_selected( \
 func _on_mobile_control_version_selected( \
         option_index: int, \
         option_label: String) -> void:
-    Global.mobile_control_version = int(option_label)
+    Global.mobile_control_version = option_label
     SaveState.set_setting( \
             SaveState.MOBILE_CONTROL_VERSION_KEY, \
             Global.mobile_control_version)

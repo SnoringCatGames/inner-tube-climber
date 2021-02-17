@@ -1,26 +1,26 @@
 extends Node2D
 class_name MobileControlUI
 
-var version := -1
+var version := ""
 var mobile_control_display: MobileControlDisplay
 var mobile_control_input: MobileControlInput
 var mobile_control_gesture_annotator: MobileControlGestureAnnotator
 
-func _init(version: int) -> void:
+func _init(version: String) -> void:
     self.version = version
 
 func _enter_tree() -> void:
     match version:
-        1:
-            mobile_control_input = MobileControlInputV1.new()
+        "1R","1L":
+            mobile_control_input = MobileControlInputV1.new(version == "1R")
             mobile_control_display = \
                     MobileControlDisplayV1.new(mobile_control_input)
-        2:
+        "2":
             mobile_control_input = MobileControlInputV2.new()
             mobile_control_display = \
                     MobileControlDisplayV2.new(mobile_control_input)
-        3:
-            mobile_control_input = MobileControlInputV3.new()
+        "3R","3L":
+            mobile_control_input = MobileControlInputV3.new(version == "3R")
             mobile_control_display = \
                     MobileControlDisplayV1.new(mobile_control_input)
         _:

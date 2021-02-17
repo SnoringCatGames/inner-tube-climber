@@ -16,6 +16,9 @@ class_name MobileControlInputV3
 
 const MOVEMENT_DISTANCE_FROM_POINTER_DOWN_THRESHOLD_PIXELS := 0.0
 
+func _init(is_jump_on_left_side: bool).(is_jump_on_left_side) -> void:
+    pass
+
 func _handle_move_sideways_drag(pointer_position: Vector2) -> void:
     move_sideways_pointer_current_position = pointer_position
     

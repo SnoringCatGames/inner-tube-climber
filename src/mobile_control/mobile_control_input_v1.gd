@@ -14,7 +14,7 @@
 extends MobileControlInput
 class_name MobileControlInputV1
 
-const JUMP_SIDE_SCREEN_WIDTH_RATIO := 0.33
+const JUMP_SIDE_SCREEN_WIDTH_RATIO := 0.35
 
 const GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.12, 0.12)
 const REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.50, 0.25)
@@ -25,6 +25,8 @@ var reverse_gesture_velocity_threshold_pixels_per_sec: Vector2 = \
         REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC * \
         Utils.get_viewport_ppi()
 
+var is_jump_on_left_side: bool
+
 var is_move_sideways_pressed := false
 
 var jump_pointer_current_position := Vector2.INF
@@ -33,6 +35,9 @@ var move_sideways_pointer_current_position := Vector2.INF
 var jump_pointer_down_position := Vector2.INF
 var move_sideways_pointer_down_position := Vector2.INF
 
+func _init(is_jump_on_left_side: bool).() -> void:
+    self.is_jump_on_left_side = is_jump_on_left_side
+
 func _unhandled_input(event: InputEvent) -> void:
     var type_and_position := _get_event_type_and_position(event)
     var event_type: int = type_and_position[0]
@@ -40,8 +45,11 @@ func _unhandled_input(event: InputEvent) -> void:
     
     var is_event_on_jump_side_of_screen: bool = \
             pointer_position != Vector2.INF and \
-            pointer_position.x < \
-                    get_viewport().size.x * JUMP_SIDE_SCREEN_WIDTH_RATIO
+            (pointer_position.x < \
+                    get_viewport().size.x * JUMP_SIDE_SCREEN_WIDTH_RATIO if \
+            is_jump_on_left_side else \
+            pointer_position.x > \
+                    get_viewport().size.x * (1 - JUMP_SIDE_SCREEN_WIDTH_RATIO))
     
     var is_event_closer_to_previous_jump_than_move_sideways: bool
     if jump_pointer_current_position != Vector2.INF and \

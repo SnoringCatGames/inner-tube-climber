@@ -6,8 +6,7 @@ const CAMERA_PAN_SPEED_PER_TIER_MULTIPLIER := 3.0
 const CAMERA_START_ZOOM_PRE_STUCK := 0.3
 const CAMERA_START_PLAYER_POSITION_OFFSET_PRE_STUCK := Vector2(0.0, -8.0)
 const CAMERA_START_POSITION_POST_STUCK := Vector2(0.0, -128.0)
-const CAMERA_HORIZONTAL_LOCK_DISPLACMENT_TWEEN_DURATION_SEC := \
-        CameraController.ZOOM_ANIMATION_DURATION_SEC
+const CAMERA_HORIZONTAL_LOCK_DISPLACMENT_TWEEN_DURATION_SEC := 0.6
 
 # This is how many tiers the player must pass through without falling before
 # hitting the max camera scroll speed and framerate speed.

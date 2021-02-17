@@ -17,7 +17,7 @@ tile_data = PoolIntArray( -393224, 0, 8, -393223, 0, 11, -458746, 0, 8, -458745,
 [node name="InnerWallPanel" parent="." instance=ExtResource( 2 )]
 margin_left = 224.0
 margin_top = -224.0
-margin_right = 1632.0
+margin_right = 1216.0
 margin_bottom = 1824.0
 rect_pivot_offset = Vector2( 144, 264 )
 
@@ -29,7 +29,7 @@ margin_bottom = 1824.0
 rect_pivot_offset = Vector2( 144, 264 )
 
 [node name="InnerWallPanel3" parent="." instance=ExtResource( 2 )]
-margin_left = -1632.0
+margin_left = -1216.0
 margin_top = -224.0
 margin_right = -224.0
 margin_bottom = 1824.0

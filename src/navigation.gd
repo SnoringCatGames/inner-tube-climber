@@ -80,71 +80,85 @@ func create_screens() -> void:
             GODOT_SPLASH_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.GODOT_SPLASH].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.SNORING_CAT_SPLASH] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             SNORING_CAT_SPLASH_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.SNORING_CAT_SPLASH].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.MAIN_MENU] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             MAIN_MENU_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.MAIN_MENU].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.CREDITS] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             CREDITS_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.CREDITS].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.THIRD_PARTY_LICENSES] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             THIRD_PARTY_LICENSES_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.THIRD_PARTY_LICENSES].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.SETTINGS] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             SETTINGS_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.SETTINGS].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.PAUSE] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             PAUSE_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.PAUSE].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.GAME] = Utils.add_scene( \
             Global.canvas_layers.game_screen_layer, \
             GAME_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.GAME].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.LEVEL_SELECT] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             LEVEL_SELECT_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.LEVEL_SELECT].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.DATA_AGREEMENT] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             DATA_AGREEMENT_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.DATA_AGREEMENT].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.RATE_APP] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             RATE_APP_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.RATE_APP].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.GAME_OVER] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             GAME_OVER_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.GAME_OVER].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.CONFIRM_DATA_DELETION] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             CONFIRM_DATA_DELETION_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.CONFIRM_DATA_DELETION].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.NOTIFICATION] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             NOTIFICATION_SCREEN_PATH, \
             true, \
             false)
+    screens[ScreenType.NOTIFICATION].pause_mode = Node.PAUSE_MODE_STOP
     fade_transition = Utils.add_scene( \
             Global.canvas_layers.top_layer, \
             FADE_TRANSITION_PATH, \
@@ -315,17 +329,19 @@ func _set_screen_is_open( \
                         screen_slide_tween, \
                 ])
     
+    if previous_screen != null:
+        previous_screen._on_deactivated()
+        previous_screen.pause_mode = Node.PAUSE_MODE_STOP
+    
     if next_screen != null:
-        next_screen._on_activated()
+        next_screen.set_params(params)
+        
         # If opening a new screen, auto-scroll to the top. Otherwise, if
         # navigating back to a previous screen, maintain the scroll position,
         # so the user can remember where they were.
         if is_open:
             next_screen._scroll_to_top()
-    
-    next_screen.set_params(params)
-    
-    if next_screen != null:
+        
         Analytics.screen(ScreenType.get_type_string(next_screen.type))
 
 func _on_screen_slide_completed( \
@@ -339,10 +355,11 @@ func _on_screen_slide_completed( \
     if previous_screen != null:
         previous_screen.visible = false
         previous_screen.position = Vector2.ZERO
-        previous_screen._on_deactivated()
     if next_screen != null:
         next_screen.visible = true
         next_screen.position = Vector2.ZERO
+        next_screen.pause_mode = Node.PAUSE_MODE_PROCESS
+        next_screen._on_activated()
 
 func _on_fade_complete() -> void:
     if !fade_transition.is_transitioning:

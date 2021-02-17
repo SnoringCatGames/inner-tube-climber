@@ -154,6 +154,9 @@ static func add_scene( \
         parent.add_child(node)
     return node
 
+const WINDINESS_VELOCITY_THRESHOLD_MULTIPLIER := 1.0
+const DOES_RESTING_IN_AIR_SPEED_MATCH_WIND := true
+
 static func update_velocity_in_air( \
         velocity: Vector2, \
         delta_sec: float, \
@@ -199,11 +202,15 @@ static func update_velocity_in_air( \
                 horizontal_acceleration_sign
     else:
         # Decelerate.
+        var resting_velocity_x := \
+                windiness.x if \
+                DOES_RESTING_IN_AIR_SPEED_MATCH_WIND else \
+                0.0
         var previous_horizontal_movement_sign := \
                 1.0 if \
-                velocity.x > 0 else \
+                velocity.x > resting_velocity_x else \
                 (-1.0 if \
-                velocity.x < 0 else \
+                velocity.x < resting_velocity_x else \
                 0.0)
         velocity.x += \
                 delta_sec * \
@@ -211,17 +218,15 @@ static func update_velocity_in_air( \
                 -previous_horizontal_movement_sign
         var next_horizontal_movement_sign := \
                 1.0 if \
-                velocity.x > 0 else \
+                velocity.x > resting_velocity_x else \
                 (-1.0 if \
-                velocity.x < 0 else \
+                velocity.x < resting_velocity_x else \
                 0.0)
         # Don't allow deceleration to cause movement in the opposite direction.
         if previous_horizontal_movement_sign != next_horizontal_movement_sign:
-            velocity.x = 0.0
+            velocity.x = resting_velocity_x
     
     return velocity
-
-const WINDINESS_VELOCITY_THRESHOLD_MULTIPLIER := 0.1
 
 static func cap_velocity( \
         velocity: Vector2, \
@@ -232,11 +237,9 @@ static func cap_velocity( \
         max_vertical_speed: float, \
         windiness: Vector2) -> Vector2:
     var windiness_horizontal_velocity_threshold_offset := \
-            max_horizontal_speed * \
             windiness.x * \
             WINDINESS_VELOCITY_THRESHOLD_MULTIPLIER
     var windiness_vertical_velocity_threshold_offset := \
-            max_vertical_speed * \
             windiness.y * \
             WINDINESS_VELOCITY_THRESHOLD_MULTIPLIER
     
@@ -246,9 +249,13 @@ static func cap_velocity( \
         min_horizontal_velocity = \
                 -max_horizontal_speed + \
                 windiness_horizontal_velocity_threshold_offset
-        max_horizontal_velocity = max_horizontal_speed
+        max_horizontal_velocity = \
+                max_horizontal_speed + \
+                windiness_horizontal_velocity_threshold_offset
     else:
-        min_horizontal_velocity = -max_horizontal_speed
+        min_horizontal_velocity = \
+                -max_horizontal_speed + \
+                windiness_horizontal_velocity_threshold_offset
         max_horizontal_velocity = \
                 max_horizontal_speed + \
                 windiness_horizontal_velocity_threshold_offset
@@ -259,9 +266,13 @@ static func cap_velocity( \
         min_vertical_velocity = \
                 -max_vertical_speed + \
                 windiness_vertical_velocity_threshold_offset
-        max_vertical_velocity = max_vertical_speed
+        max_vertical_velocity = \
+                max_vertical_speed + \
+                windiness_horizontal_velocity_threshold_offset
     else:
-        min_vertical_velocity = -max_vertical_speed
+        min_vertical_velocity = \
+                -max_vertical_speed + \
+                windiness_horizontal_velocity_threshold_offset
         max_vertical_velocity = \
                 max_vertical_speed + \
                 windiness_vertical_velocity_threshold_offset
@@ -273,10 +284,15 @@ static func cap_velocity( \
             max_horizontal_velocity)
     
     # Kill horizontal speed below a min value.
-    if caps_min_horizontal_speed and \
-            velocity.x > -min_horizontal_speed and \
-            velocity.x < min_horizontal_speed:
-        velocity.x = 0
+    if caps_min_horizontal_speed:
+        if DOES_RESTING_IN_AIR_SPEED_MATCH_WIND and \
+                velocity.x > windiness.x - min_horizontal_speed and \
+                velocity.x < windiness.x + min_horizontal_speed:
+            velocity.x = windiness.x
+        elif !DOES_RESTING_IN_AIR_SPEED_MATCH_WIND and \
+                velocity.x > -min_horizontal_speed and \
+                velocity.x < min_horizontal_speed:
+            velocity.x = 0
     
     # Cap vertical speed at a max value.
     velocity.y = clamp( \

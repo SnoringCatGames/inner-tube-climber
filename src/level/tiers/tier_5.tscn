@@ -16,11 +16,11 @@ tile_data = PoolIntArray( -5570568, 0, 8, -5570567, 0, 11, -5570563, 0, 8, -5570
 [node name="InnerWallPanel" parent="." instance=ExtResource( 5 )]
 margin_left = 224.0
 margin_top = -2752.0
-margin_right = 1632.0
+margin_right = 1216.0
 margin_bottom = 0.0
 
 [node name="InnerWallPanel2" parent="." instance=ExtResource( 5 )]
-margin_left = -1632.0
+margin_left = -1216.0
 margin_top = -2752.0
 margin_right = -224.0
 margin_bottom = 0.0

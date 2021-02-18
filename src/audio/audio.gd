@@ -15,8 +15,9 @@ var pitch_shift_effect: AudioEffectPitchShift
 var previous_music_player: AudioStreamPlayer
 var current_music_player: AudioStreamPlayer
 
-var is_music_enabled := true
-var is_sound_effects_enabled := true
+var is_music_enabled := true setget _set_is_music_enabled,_get_is_music_enabled
+var is_sound_effects_enabled := true setget \
+        _set_is_sound_effects_enabled,_get_is_sound_effects_enabled
 
 func _init() -> void:
     pitch_shift_effect = AudioEffectPitchShift.new()
@@ -133,13 +134,19 @@ func set_playback_speed(playback_speed: float) -> void:
     current_music_player.pitch_scale = playback_speed
     pitch_shift_effect.pitch_scale = 1.0 / playback_speed
 
-func set_music_enabled(enabled: bool) -> void:
+func _set_is_music_enabled(enabled: bool) -> void:
     is_music_enabled = enabled
     _update_volume()
 
-func set_sound_effects_enabled(enabled: bool) -> void:
+func _get_is_music_enabled() -> bool:
+    return is_music_enabled
+
+func _set_is_sound_effects_enabled(enabled: bool) -> void:
     is_sound_effects_enabled = enabled
     _update_volume()
+
+func _get_is_sound_effects_enabled() -> bool:
+    return is_sound_effects_enabled
 
 func _update_volume() -> void:
     for config in Music.MANIFEST.values():

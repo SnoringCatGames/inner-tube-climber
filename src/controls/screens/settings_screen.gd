@@ -332,13 +332,13 @@ func _on_speed_display_pressed(pressed: bool) -> void:
     _update_level_displays()
     
 func _on_music_pressed(pressed: bool):
-    Audio.set_music_enabled(pressed)
+    Audio.is_music_enabled = pressed
     SaveState.set_setting( \
             SaveState.IS_MUSIC_ENABLED_KEY, \
             Audio.is_music_enabled)
     
 func _on_sound_effects_pressed(pressed: bool):
-    Audio.set_sound_effects_enabled(pressed)
+    Audio.is_sound_effects_enabled = pressed
     SaveState.set_setting( \
             SaveState.IS_SOUND_EFFECTS_ENABLED_KEY, \
             Audio.is_sound_effects_enabled)

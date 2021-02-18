@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=56 format=2]
+[gd_resource type="VisualShader" load_steps=60 format=2]
 
 [ext_resource path="res://addons/shaderV/rgba/noise/fractal/simplex3d_fractal.gd" type="Script" id=1]
 [ext_resource path="res://addons/shaderV/rgba/generate_shapes/generateCircle.gd" type="Script" id=2]
@@ -57,7 +57,7 @@ operator = 2
 operator = 3
 
 [sub_resource type="VisualShaderNodeScalarOp" id=18]
-default_input_values = [ 0, 0.0, 1, 2.0 ]
+default_input_values = [ 0, 0.0, 1, 1.0 ]
 operator = 2
 
 [sub_resource type="VisualShaderNodeColorUniform" id=19]
@@ -160,8 +160,24 @@ operator = 2
 
 [sub_resource type="VisualShaderNodeVec3Constant" id=52]
 
+[sub_resource type="VisualShaderNodeScalarOp" id=53]
+default_input_values = [ 0, 0.0, 1, 2.0 ]
+operator = 2
+
+[sub_resource type="VisualShaderNodeScalarOp" id=54]
+default_input_values = [ 0, 0.0, 1, 1.2 ]
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorOp" id=55]
+operator = 2
+
+[sub_resource type="VisualShaderNodeScalarConstant" id=56]
+constant = 0.5
+
 [resource]
 code = "shader_type canvas_item;
+render_mode blend_disabled;
+
 uniform vec4 primary_color : hint_color;
 uniform vec4 secondary_color : hint_color;
 uniform float opacity;
@@ -282,11 +298,15 @@ void fragment() {
 // ScalarUniform:40
 	float n_out40p0 = opacity;
 
+// ScalarOp:74
+	float n_in74p1 = 2.00000;
+	float n_out74p0 = n_out40p0 * n_in74p1;
+
 // ScalarUniform:55
 	float n_out55p0 = secondary_color_opacity_multiplier;
 
 // ScalarOp:54
-	float n_out54p0 = n_out40p0 * n_out55p0;
+	float n_out54p0 = n_out74p0 * n_out55p0;
 
 // Input:17
 	vec3 n_out17p0 = vec3(UV, 0.0);
@@ -329,14 +349,20 @@ void fragment() {
 // VectorUniform:60
 	vec3 n_out60p0 = windiness;
 
+// Scalar:81
+	float n_out81p0 = 0.500000;
+
+// VectorOp:80
+	vec3 n_out80p0 = n_out60p0 * vec3(n_out81p0);
+
 // VectorLen:68
-	float n_out68p0 = length(n_out60p0);
+	float n_out68p0 = length(n_out80p0);
 
 // Vector:73
 	vec3 n_out73p0 = vec3(0.000000, 0.000000, 0.000000);
 
 // VectorFunc:63
-	vec3 n_out63p0 = normalize(n_out60p0);
+	vec3 n_out63p0 = normalize(n_out80p0);
 
 // If:72
 	float n_in72p1 = 0.00000;
@@ -416,14 +442,18 @@ void fragment() {
 // ScalarUniform:25
 	float n_out25p0 = hole_radius;
 
+// ScalarOp:79
+	float n_in79p1 = 1.20000;
+	float n_out79p0 = n_out25p0 * n_in79p1;
+
 // ScalarOp:30
-	float n_out30p0 = n_out25p0 / n_out29p0;
+	float n_out30p0 = n_out79p0 / n_out29p0;
 
 // ScalarFunc:26
 	float n_out26p0 = -(n_out30p0);
 
 // ScalarOp:31
-	float n_in31p1 = 2.00000;
+	float n_in31p1 = 1.00000;
 	float n_out31p0 = n_out30p0 * n_in31p1;
 
 // Color:10
@@ -465,7 +495,7 @@ void fragment() {
 	float n_out24p0 = clamp(n_out23p0, n_in24p1, n_in24p2);
 
 // ScalarOp:41
-	float n_out41p0 = n_out40p0 * n_out24p0;
+	float n_out41p0 = n_out74p0 * n_out24p0;
 
 // ScalarMix:52
 	float n_in52p2 = 0.50000;
@@ -482,8 +512,8 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -1027.59, -736.194 )
 mode = 1
+modes/blend = 5
 flags/light_only = false
 nodes/fragment/0/position = Vector2( 2040, -1860 )
 nodes/fragment/2/node = SubResource( 5 )
@@ -497,7 +527,7 @@ nodes/fragment/5/position = Vector2( -480, -900 )
 nodes/fragment/6/node = SubResource( 40 )
 nodes/fragment/6/position = Vector2( -1060, -1260 )
 nodes/fragment/10/node = SubResource( 1 )
-nodes/fragment/10/position = Vector2( -1040, -420 )
+nodes/fragment/10/position = Vector2( -1040, -400 )
 nodes/fragment/17/node = SubResource( 2 )
 nodes/fragment/17/position = Vector2( -1480, -2800 )
 nodes/fragment/18/node = SubResource( 3 )
@@ -517,7 +547,7 @@ nodes/fragment/24/position = Vector2( 520, -1380 )
 nodes/fragment/25/node = SubResource( 11 )
 nodes/fragment/25/position = Vector2( -3440, -1580 )
 nodes/fragment/26/node = SubResource( 12 )
-nodes/fragment/26/position = Vector2( -1140, -820 )
+nodes/fragment/26/position = Vector2( -1140, -800 )
 nodes/fragment/27/node = SubResource( 13 )
 nodes/fragment/27/position = Vector2( -3440, -1440 )
 nodes/fragment/28/node = SubResource( 14 )
@@ -527,7 +557,7 @@ nodes/fragment/29/position = Vector2( -1880, -520 )
 nodes/fragment/30/node = SubResource( 17 )
 nodes/fragment/30/position = Vector2( -1520, -760 )
 nodes/fragment/31/node = SubResource( 18 )
-nodes/fragment/31/position = Vector2( -1100, -640 )
+nodes/fragment/31/position = Vector2( -1100, -620 )
 nodes/fragment/32/node = SubResource( 19 )
 nodes/fragment/32/position = Vector2( 200, -2980 )
 nodes/fragment/33/node = SubResource( 20 )
@@ -539,7 +569,7 @@ nodes/fragment/36/position = Vector2( -1140, -1000 )
 nodes/fragment/37/node = SubResource( 23 )
 nodes/fragment/37/position = Vector2( -1140, -2740 )
 nodes/fragment/40/node = SubResource( 25 )
-nodes/fragment/40/position = Vector2( 200, -2580 )
+nodes/fragment/40/position = Vector2( -240, -2580 )
 nodes/fragment/41/node = SubResource( 26 )
 nodes/fragment/41/position = Vector2( 900, -1320 )
 nodes/fragment/43/node = SubResource( 27 )
@@ -559,7 +589,7 @@ nodes/fragment/52/position = Vector2( 1400, -1440 )
 nodes/fragment/54/node = SubResource( 35 )
 nodes/fragment/54/position = Vector2( 780, -1920 )
 nodes/fragment/55/node = SubResource( 36 )
-nodes/fragment/55/position = Vector2( 200, -2480 )
+nodes/fragment/55/position = Vector2( 200, -2360 )
 nodes/fragment/56/node = SubResource( 37 )
 nodes/fragment/56/position = Vector2( 200, -2780 )
 nodes/fragment/57/node = SubResource( 38 )
@@ -590,4 +620,12 @@ nodes/fragment/72/node = SubResource( 51 )
 nodes/fragment/72/position = Vector2( -2440, -2220 )
 nodes/fragment/73/node = SubResource( 52 )
 nodes/fragment/73/position = Vector2( -3000, -1780 )
-nodes/fragment/connections = PoolIntArray( 3, 0, 2, 8, 4, 0, 3, 0, 6, 0, 5, 0, 10, 0, 5, 6, 10, 1, 5, 7, 18, 0, 2, 6, 19, 0, 2, 5, 20, 0, 2, 4, 21, 0, 2, 3, 22, 0, 2, 1, 27, 0, 28, 0, 28, 0, 29, 0, 28, 1, 29, 1, 30, 0, 26, 0, 30, 0, 5, 4, 29, 0, 30, 1, 25, 0, 30, 0, 30, 0, 31, 0, 31, 0, 5, 5, 26, 0, 5, 3, 35, 0, 36, 0, 27, 0, 36, 1, 36, 0, 5, 1, 3, 0, 2, 8, 4, 0, 3, 0, 6, 0, 5, 0, 10, 0, 5, 6, 10, 1, 5, 7, 18, 0, 2, 6, 19, 0, 2, 5, 20, 0, 2, 4, 21, 0, 2, 3, 22, 0, 2, 1, 27, 0, 28, 0, 28, 0, 29, 0, 28, 1, 29, 1, 30, 0, 26, 0, 30, 0, 5, 4, 29, 0, 30, 1, 25, 0, 30, 0, 30, 0, 31, 0, 31, 0, 5, 5, 26, 0, 5, 3, 35, 0, 36, 0, 27, 0, 36, 1, 36, 0, 5, 1, 2, 0, 23, 0, 23, 0, 24, 0, 40, 0, 41, 0, 24, 0, 41, 1, 33, 0, 5, 2, 27, 0, 33, 0, 29, 0, 33, 1, 43, 0, 2, 2, 37, 0, 2, 0, 33, 0, 37, 1, 17, 0, 37, 0, 2, 0, 44, 0, 44, 0, 45, 0, 45, 0, 46, 0, 32, 0, 50, 0, 51, 0, 52, 0, 41, 0, 52, 1, 52, 0, 0, 1, 46, 0, 51, 1, 54, 0, 51, 0, 40, 0, 54, 0, 55, 0, 54, 1, 56, 0, 50, 1, 51, 0, 50, 2, 50, 0, 0, 0, 58, 0, 2, 7, 57, 0, 58, 0, 60, 0, 63, 0, 64, 0, 58, 1, 65, 0, 57, 0, 62, 0, 65, 0, 62, 1, 67, 0, 67, 0, 64, 0, 60, 0, 68, 0, 69, 0, 65, 1, 69, 0, 67, 1, 66, 0, 69, 0, 68, 0, 69, 1, 5, 1, 71, 0, 71, 0, 23, 1, 71, 0, 45, 1, 68, 0, 72, 0, 73, 0, 72, 5, 73, 0, 72, 3, 63, 0, 72, 4, 72, 0, 62, 0 )
+nodes/fragment/74/node = SubResource( 53 )
+nodes/fragment/74/position = Vector2( 200, -2580 )
+nodes/fragment/79/node = SubResource( 54 )
+nodes/fragment/79/position = Vector2( -2920, -1580 )
+nodes/fragment/80/node = SubResource( 55 )
+nodes/fragment/80/position = Vector2( -3460, -2100 )
+nodes/fragment/81/node = SubResource( 56 )
+nodes/fragment/81/position = Vector2( -3900, -2000 )
+nodes/fragment/connections = PoolIntArray( 3, 0, 2, 8, 4, 0, 3, 0, 6, 0, 5, 0, 10, 0, 5, 6, 10, 1, 5, 7, 18, 0, 2, 6, 19, 0, 2, 5, 20, 0, 2, 4, 21, 0, 2, 3, 22, 0, 2, 1, 27, 0, 28, 0, 28, 0, 29, 0, 28, 1, 29, 1, 30, 0, 26, 0, 30, 0, 5, 4, 29, 0, 30, 1, 30, 0, 31, 0, 31, 0, 5, 5, 26, 0, 5, 3, 35, 0, 36, 0, 27, 0, 36, 1, 36, 0, 5, 1, 3, 0, 2, 8, 4, 0, 3, 0, 6, 0, 5, 0, 10, 0, 5, 6, 10, 1, 5, 7, 18, 0, 2, 6, 19, 0, 2, 5, 20, 0, 2, 4, 21, 0, 2, 3, 22, 0, 2, 1, 27, 0, 28, 0, 28, 0, 29, 0, 28, 1, 29, 1, 30, 0, 26, 0, 30, 0, 5, 4, 29, 0, 30, 1, 30, 0, 31, 0, 31, 0, 5, 5, 26, 0, 5, 3, 35, 0, 36, 0, 27, 0, 36, 1, 36, 0, 5, 1, 2, 0, 23, 0, 23, 0, 24, 0, 24, 0, 41, 1, 33, 0, 5, 2, 27, 0, 33, 0, 29, 0, 33, 1, 43, 0, 2, 2, 37, 0, 2, 0, 33, 0, 37, 1, 17, 0, 37, 0, 2, 0, 44, 0, 44, 0, 45, 0, 45, 0, 46, 0, 32, 0, 50, 0, 51, 0, 52, 0, 41, 0, 52, 1, 52, 0, 0, 1, 46, 0, 51, 1, 54, 0, 51, 0, 55, 0, 54, 1, 56, 0, 50, 1, 51, 0, 50, 2, 50, 0, 0, 0, 58, 0, 2, 7, 57, 0, 58, 0, 64, 0, 58, 1, 65, 0, 57, 0, 62, 0, 65, 0, 62, 1, 67, 0, 67, 0, 64, 0, 69, 0, 65, 1, 69, 0, 67, 1, 66, 0, 69, 0, 68, 0, 69, 1, 5, 1, 71, 0, 68, 0, 72, 0, 73, 0, 72, 5, 73, 0, 72, 3, 63, 0, 72, 4, 72, 0, 62, 0, 74, 0, 54, 0, 40, 0, 74, 0, 74, 0, 41, 0, 71, 0, 23, 1, 71, 0, 45, 1, 79, 0, 30, 0, 25, 0, 79, 0, 80, 0, 63, 0, 80, 0, 68, 0, 60, 0, 80, 0, 81, 0, 80, 1 )

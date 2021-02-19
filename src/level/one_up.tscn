@@ -39,7 +39,9 @@ animations = [ {
 [sub_resource type="CircleShape2D" id=8]
 radius = 17.0
 
-[node name="OneUp" type="Node2D"]
+[node name="OneUp" type="Node2D" groups=[
+"one_ups",
+]]
 script = ExtResource( 2 )
 
 [node name="Light2D" type="Light2D" parent="."]

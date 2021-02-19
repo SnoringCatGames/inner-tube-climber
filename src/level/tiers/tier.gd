@@ -97,6 +97,13 @@ func setup( \
                 true)
         icicle_fall_animator.position = tier_start.position
         add_child(icicle_fall_animator)
+    
+    # Remove one-ups on HARD mode.
+    if Global.difficulty_mode == DifficultyMode.HARD:
+        var one_ups := get_tree().get_nodes_in_group( \
+                    Constants.GROUP_NAME_ONE_UPS)
+        for one_up in one_ups:
+            one_up.queue_free()
 
 func on_entered_tier(is_new_life: bool) -> void:
     if !is_new_life:

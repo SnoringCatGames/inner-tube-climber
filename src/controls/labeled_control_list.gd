@@ -4,6 +4,13 @@ class_name LabeledControlList
 
 signal control_changed(index)
 
+const ABOUT_ICON_NORMAL := \
+        preload("res://assets/images/icons/about-icon-normal.png")
+const ABOUT_ICON_HOVER := \
+        preload("res://assets/images/icons/about-icon-hover.png")
+const ABOUT_ICON_ACTIVE := \
+        preload("res://assets/images/icons/about-icon-active.png")
+
 const ENABLED_ALPHA := 1.0
 const DISABLED_ALPHA := 0.3
 
@@ -14,15 +21,17 @@ const CHECKBOX_OFFSET := Vector2(-28.0, -31.0)
 #const CHECKBOX_SCALE := Vector2(3.0, 3.0)
 #const CHECKBOX_OFFSET := Vector2(-48.0, -17.5)
 
-# var label: String
-# var type: LabeledControlType
+# label: String
+# type: LabeledControlType
 #
-# var text: String
+# text: String
 #
-# var pressed: bool
+# pressed: bool
 #
-# var selected_index: int
-# var options: Array<String>
+# selected_index: int
+# options: Array<String>
+#
+# description: String
 var items := [] setget _set_items,_get_items
 
 export var row_height := 40.0 setget _set_row_height,_get_row_height
@@ -76,6 +85,30 @@ func _update_children() -> void:
         label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
         label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
         hbox.add_child(label)
+        
+        if item.description != "":
+            var description_button = TextureButton.new()
+            description_button.texture_normal = ABOUT_ICON_NORMAL
+            description_button.texture_hover = ABOUT_ICON_HOVER
+            description_button.texture_pressed = ABOUT_ICON_ACTIVE
+            description_button.connect( \
+                    "pressed", \
+                    self, \
+                    "_on_description_button_pressed", \
+                    [
+                        item.label,
+                        item.description
+                    ])
+            description_button.size_flags_horizontal = \
+                    Control.SIZE_SHRINK_CENTER
+            description_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+            hbox.add_child(description_button)
+            
+            var spacer3 := Control.new()
+            spacer3.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+            spacer3.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+            spacer3.rect_min_size.x = padding_horizontal * 2.0
+            hbox.add_child(spacer3)
         
         var control := _create_control(item, index, item.disabled)
         control.size_flags_horizontal = Control.SIZE_SHRINK_END
@@ -168,6 +201,21 @@ func _on_dropdown_item_selected( \
     item.selected_index = item.control.selected
     emit_signal("control_changed", dropdown_index)
 
+func _on_description_button_pressed( \
+        label: String, \
+        description: String) -> void:
+    Global.give_button_press_feedback()
+    Nav.open( \
+            ScreenType.NOTIFICATION, \
+            false, \
+            {
+                header_text = label,
+                is_back_button_shown = true,
+                body_text = description,
+                close_button_text = "OK",
+                body_alignment = ALIGN_BEGIN,
+            })
+
 func find_index(label: String) -> int:
     for index in range(items.size()):
         if items[index].label == label:
@@ -188,6 +236,9 @@ func _normalize_item(item: Dictionary) -> void:
     
     if !item.has("control"):
         item["control"] = null
+    
+    if !item.has("description"):
+        item["description"] = ""
     
     match item.type:
         LabeledControlItemType.TEXT:

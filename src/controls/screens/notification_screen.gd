@@ -20,13 +20,14 @@ func set_params(params) -> void:
     if params == null:
         return
     
-    var nav_bar := $FullScreenPanel/VBoxContainer/NavBar
-    var body_text := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+    var nav_bar: NavBar = $FullScreenPanel/VBoxContainer/NavBar
+    var body_text: Label = $FullScreenPanel/VBoxContainer/CenteredPanel/ \
             ScrollContainer/CenterContainer/VBoxContainer/BodyText
-    var link := $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
-            CenterContainer/VBoxContainer/NotificationLink
-    var close_button := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
-            ScrollContainer/CenterContainer/VBoxContainer/CloseButton
+    var link: LinkButton = $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            ScrollContainer/CenterContainer/VBoxContainer/NotificationLink
+    var close_button: ShinyButton = $FullScreenPanel/VBoxContainer/ \
+            CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/ \
+            CloseButton
     
     assert(params.has("header_text"))
     nav_bar.text = params["header_text"]
@@ -36,6 +37,9 @@ func set_params(params) -> void:
     body_text.text = params["body_text"]
     assert(params.has("close_button_text"))
     close_button.text = params["close_button_text"]
+    
+    if params.has("body_alignment"):
+        body_text.align = params["body_alignment"]
     
     if params.has("link_text") or \
             params.has("link_href"):

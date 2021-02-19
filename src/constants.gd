@@ -39,6 +39,7 @@ const CELL_SIZE := Vector2(32.0, 32.0)
 const PLAYER_SIZE_MULTIPLIER := 1.0
 
 const GROUP_NAME_TIER_TILE_MAPS := "tier_tilemaps"
+const GROUP_NAME_ONE_UPS := "one_ups"
 
 const ASPECT_RATIO_MAX := 1.0 / 1.0
 const ASPECT_RATIO_MIN := 1.0 / 1.3

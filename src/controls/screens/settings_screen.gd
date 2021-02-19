@@ -17,6 +17,10 @@ var main_items := [
             DifficultyMode.get_type_string(DifficultyMode.MODERATE),
             DifficultyMode.get_type_string(DifficultyMode.HARD),
         ],
+        description = \
+                "The player moves faster at higher difficulties." + \
+                "\n\nAlso, your score is increased with higher difficulties." + \
+                "\n\nOn HARD difficulty, extra lives do not appear.",
     },
     {
         label = "Control version",
@@ -28,6 +32,17 @@ var main_items := [
             "3R",
             "3L",
         ],
+        description = \
+                "1R: Left-side tap to jump. Right-side drag to move " + \
+                        "sideways. Input is based on recent drag movement." + \
+                "\n\n1L: Same as 1R, but with jump input on right side " + \
+                        "and sideways input on left side." + \
+                "\n\n2: Drag up to jump. Drag sideways to move sideways." + \
+                "\n\n3R: Left-side tap to jump. Right-side drag to move " + \
+                        "sideways. Input is based on drag movement " + \
+                        "relative to initial touch position." + \
+                "\n\n3L: Same as 3R, but with jump input on right side " + \
+                        "and sideways input on left side.",
     },
     {
         label = "Music",

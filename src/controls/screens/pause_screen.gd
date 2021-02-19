@@ -102,9 +102,15 @@ func _update_stats() -> void:
 
 func _on_ExitLevelButton_pressed():
     Global.give_button_press_feedback()
-    Audio.play_music(Music.MAIN_MENU_MUSIC_TYPE)
-    Nav.screens[ScreenType.GAME].destroy_level()
-    Nav.open(ScreenType.MAIN_MENU, true)
+    Nav.close_current_screen()
+    Analytics.event( \
+            "level", \
+            "quit", \
+            LevelConfig.get_level_tier_version_string( \
+                    Global.level.level_id, \
+                    Global.level.current_tier_id), \
+            Time.elapsed_play_time_actual_sec - Global.level.tier_start_time)
+    Global.level.quit()
 
 func _on_ResumeButton_pressed():
     Global.give_button_press_feedback()

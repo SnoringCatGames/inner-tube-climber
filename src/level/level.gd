@@ -267,8 +267,6 @@ func _fall() -> void:
     Global.falls_count_since_reaching_level_end += 1
     cooldown_indicator.stop_cooldown()
     
-    Audio.play_sound(Sound.FALL)
-    
     SaveState.set_level_total_falls( \
             level_id, \
             SaveState.get_level_total_falls(level_id) + 1)
@@ -286,86 +284,17 @@ func _fall() -> void:
             player_max_platform_height_on_current_life)
     
     var was_last_life := lives_count == 0
-    $CameraHandler.on_fall_before_new_tier(was_last_life)
     
     if !was_last_life:
+        Audio.play_sound(Sound.FALL)    
+        $CameraHandler.on_fall_before_new_tier(was_last_life)
         _destroy_player()
         Time.set_timeout( \
                 funcref(self, "_start_new_tier_after_fall"), \
                 1.0, \
                 [current_tier.position])
     else:
-        is_game_playing = false
-        $CameraHandler.speed_index = 0
-        score_boards.set_lives(0)
-        $SignAllKeys.visible = false
-        pause_button.visible = false
-        Audio.on_cross_fade_music_finished()
-        _destroy_player()
-        
-        var previous_high_score := SaveState.get_level_high_score(level_id)
-        if score > previous_high_score:
-            reached_new_high_score = true
-            SaveState.set_level_high_score( \
-                    level_id, \
-                    int(score))
-        
-        var previous_high_tier := SaveState.get_level_high_tier(level_id)
-        if tier_count > previous_high_tier:
-            SaveState.set_level_high_tier( \
-                    level_id, \
-                    int(tier_count))
-        
-        var all_scores: Array = SaveState.get_level_all_scores(level_id)
-        all_scores.push_back(score)
-        SaveState.set_level_all_scores(level_id, all_scores)
-        
-        if finished_level:
-            var all_finished_scores: Array = \
-                    SaveState.get_level_all_finished_scores(level_id)
-            all_finished_scores.push_back(score)
-            SaveState.set_level_all_finished_scores( \
-                    level_id, \
-                    all_finished_scores)
-        
-        var old_unlocked_levels: Array = LevelConfig.get_old_unlocked_levels()
-        new_unlocked_levels = LevelConfig.get_new_unlocked_levels()
-        SaveState.set_new_unlocked_levels(new_unlocked_levels)
-        for other_level_id in new_unlocked_levels:
-            SaveState.set_level_is_unlocked(other_level_id, true)
-            Analytics.event( \
-                    "level", \
-                    "unlocked", \
-                    LevelConfig.get_level_version_string(other_level_id), \
-                    LevelConfig.get_level_config(level_id).number)
-        
-        if finished_level:
-            SaveState.set_finished_level_streak( \
-                    SaveState.get_finished_level_streak() + 1)
-            SaveState.set_failed_level_streak(0)
-        else:
-            SaveState.set_finished_level_streak(0)
-            SaveState.set_failed_level_streak( \
-                    SaveState.get_failed_level_streak() + 1)
-        
-        if !new_unlocked_levels.empty() and \
-                ((new_unlocked_levels.size() + \
-                old_unlocked_levels.size() - 1) % \
-                Constants.LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN) == 0:
-            is_rate_app_screen_next = true
-        
-        _set_game_over_state()
-        
-        Sound.MANIFEST[Sound.FALL].player.connect( \
-                "finished", \
-                self, \
-                "_on_last_fall_sound_finished")
-        
-        Analytics.event( \
-                "score", \
-                "v" + Constants.SCORE_VERSION, \
-                LevelConfig.get_level_version_string(level_id), \
-                int(score))
+        quit()
 
 func _start_new_tier_after_fall(current_tier_position: Vector2) -> void:
     _destroy_tiers()
@@ -381,6 +310,82 @@ func _start_new_tier_after_fall(current_tier_position: Vector2) -> void:
             current_tier_position, \
             player.position, \
             _get_player_height())
+
+func quit() -> void:
+    Audio.play_sound(Sound.FALL)
+    $CameraHandler.on_fall_before_new_tier(true)
+    
+    is_game_playing = false
+    $CameraHandler.speed_index = 0
+    score_boards.set_lives(0)
+    $SignAllKeys.visible = false
+    pause_button.visible = false
+    Audio.on_cross_fade_music_finished()
+    _destroy_player()
+    
+    var previous_high_score := SaveState.get_level_high_score(level_id)
+    if score > previous_high_score:
+        reached_new_high_score = true
+        SaveState.set_level_high_score( \
+                level_id, \
+                int(score))
+    
+    var previous_high_tier := SaveState.get_level_high_tier(level_id)
+    if tier_count > previous_high_tier:
+        SaveState.set_level_high_tier( \
+                level_id, \
+                int(tier_count))
+    
+    var all_scores: Array = SaveState.get_level_all_scores(level_id)
+    all_scores.push_back(score)
+    SaveState.set_level_all_scores(level_id, all_scores)
+    
+    if finished_level:
+        var all_finished_scores: Array = \
+                SaveState.get_level_all_finished_scores(level_id)
+        all_finished_scores.push_back(score)
+        SaveState.set_level_all_finished_scores( \
+                level_id, \
+                all_finished_scores)
+    
+    var old_unlocked_levels: Array = LevelConfig.get_old_unlocked_levels()
+    new_unlocked_levels = LevelConfig.get_new_unlocked_levels()
+    SaveState.set_new_unlocked_levels(new_unlocked_levels)
+    for other_level_id in new_unlocked_levels:
+        SaveState.set_level_is_unlocked(other_level_id, true)
+        Analytics.event( \
+                "level", \
+                "unlocked", \
+                LevelConfig.get_level_version_string(other_level_id), \
+                LevelConfig.get_level_config(level_id).number)
+    
+    if finished_level:
+        SaveState.set_finished_level_streak( \
+                SaveState.get_finished_level_streak() + 1)
+        SaveState.set_failed_level_streak(0)
+    else:
+        SaveState.set_finished_level_streak(0)
+        SaveState.set_failed_level_streak( \
+                SaveState.get_failed_level_streak() + 1)
+    
+    if !new_unlocked_levels.empty() and \
+            ((new_unlocked_levels.size() + \
+            old_unlocked_levels.size() - 1) % \
+            Constants.LEVELS_COUNT_BEFORE_SHOWING_RATE_APP_SCREEN) == 0:
+        is_rate_app_screen_next = true
+    
+    _set_game_over_state()
+    
+    Sound.MANIFEST[Sound.FALL].player.connect( \
+            "finished", \
+            self, \
+            "_on_last_fall_sound_finished")
+    
+    Analytics.event( \
+            "score", \
+            "v" + Constants.SCORE_VERSION, \
+            LevelConfig.get_level_version_string(level_id), \
+            int(score))
 
 func _set_game_over_state() -> void:
     var game_over_screen = Nav.screens[ScreenType.GAME_OVER]
@@ -954,6 +959,9 @@ func _interpolate_margin_right_color(color: Color) -> void:
             .bg_color = color
 
 func _on_fog_screen_updated() -> void:
+    if player == null:
+        return
+    
     player.update_light( \
             $FogScreenHandler.peep_hole_size, \
             $FogScreenHandler.light_energy)

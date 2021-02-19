@@ -72,6 +72,8 @@ var BOUNCE_STRETCH_DISPLACEMENT := Vector2( \
         0.0, \
         0.0)
 
+var previous_position := Vector2.INF
+
 var is_stuck := true setget _set_is_stuck,_get_is_stuck
 
 # Array<TileMap>
@@ -146,6 +148,8 @@ func _apply_movement() -> void:
     if is_stuck:
         return
     
+    previous_position = position
+    
     # We don't need to multiply velocity by delta because MoveAndSlide already
     # takes delta time into account.
     # TODO: Use the remaining pre-collision movement that move_and_slide
@@ -156,6 +160,20 @@ func _apply_movement() -> void:
             false, \
             4, \
             Geometry.FLOOR_MAX_ANGLE)
+    
+    if surface_state.is_touching_wall and \
+            Geometry.are_floats_equal_with_epsilon( \
+                    previous_position.x, \
+                    position.x, \
+                    0.01):
+        velocity.x = 0
+    if (surface_state.is_touching_floor or \
+            surface_state.is_touching_ceiling) and \
+            Geometry.are_floats_equal_with_epsilon( \
+                    previous_position.y, \
+                    position.y, \
+                    0.01):
+        velocity.y = 0
     
     if !has_touched_floor_in_current_tier:
         var min_x := \

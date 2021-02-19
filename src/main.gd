@@ -12,11 +12,21 @@ func _ready() -> void:
     if Utils.get_is_browser():
         JavaScript.eval("window.onGameReady()")
     
-    Nav.splash()
+    if Constants.DEBUG and Constants.DEBUG_TIER != "":
+        _skip_to_debug_tier()
+    else:
+        Nav.splash()
 
 func _process(_delta_sec: float) -> void:
     if Input.is_action_just_pressed("screenshot"):
         Utils.take_screenshot()
+
+func _skip_to_debug_tier() -> void:
+    Global.give_button_press_feedback(true)
+    Nav.open(ScreenType.GAME, true)
+    var level_config: Dictionary = LevelConfig._inflated_levels["1"]
+    level_config.tiers = [Constants.DEBUG_TIER]
+    Nav.screens[ScreenType.GAME].start_level("1")
 
 func _set_window_debug_size_and_position() -> void:
     if Constants.DEBUG:

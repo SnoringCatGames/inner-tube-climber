@@ -245,6 +245,28 @@ const _TIERS := {
         snow_density_multiplier = 8.0,
         windiness = {value = Vector2(3.0, -3.0), weight = 1.0},
     },
+    "11": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED_LEFT,
+        snow_density_multiplier = 3.0,
+        windiness = {value = Vector2(-3.0, -1.0), weight = 1.0},
+    },
+    "12": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED_LEFT,
+        snow_density_multiplier = 3.0,
+        windiness = {value = Vector2(0.0, 5.0), weight = 1.0},
+    },
+    "13": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED_LEFT,
+        snow_density_multiplier = 3.0,
+        windiness = {value = Vector2(0.0, -5.1), weight = 1.0},
+    },
+    "14": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+    },
 }
 
 #        name = "Elevator",

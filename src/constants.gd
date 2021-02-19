@@ -2,6 +2,7 @@ extends Node
 
 # TODO: Remember to set this to false when creating releases.
 var DEBUG := OS.is_debug_build()
+var DEBUG_TIER := "13"
 
 const GOOGLE_ANALYTICS_ID := "UA-186405125-1"
 

@@ -914,7 +914,7 @@ func _update_margin_color() -> void:
             next_right_margin_color = Constants.WALL_COLOR
         OpennessType.WALLED_LEFT:
             next_left_margin_color = Constants.WALL_COLOR
-            next_right_margin_color = Constants.BACKGROUND_DARKEST_COLORcurrent_tier
+            next_right_margin_color = Constants.BACKGROUND_DARKEST_COLOR
         OpennessType.WALLED_RIGHT:
             next_left_margin_color = Constants.BACKGROUND_DARKEST_COLOR
             next_right_margin_color = Constants.WALL_COLOR

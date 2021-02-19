@@ -7,14 +7,12 @@
 
 [node name="TierBlank" type="Node2D"]
 script = ExtResource( 1 )
-openness_type = 4
 
 [node name="TierTileMap" parent="." instance=ExtResource( 2 )]
 tile_data = PoolIntArray( -7, 0, 196608, -6, 2, 196610, -5, 2, 196610, -4, 2, 196610, -3, 2, 196610, -2, 2, 196610, -1, 2, 196610, -65536, 2, 196610, -65535, 2, 196610, -65534, 2, 196610, -65533, 2, 196610, -65532, 2, 196610, -65531, 2, 196610, -65530, 0, 196608 )
 
 [node name="TierStart" parent="." instance=ExtResource( 3 )]
 position = Vector2( 0, -32 )
-spawn_position_x = 0.0
 
 [node name="TierEnd" parent="." instance=ExtResource( 4 )]
 position = Vector2( 0, -2080 )

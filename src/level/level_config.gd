@@ -3,6 +3,9 @@ extends Node
 const TIERS_DIRECTORY := "res://src/level/tiers/"
 const TIER_GAPS_DIRECTORY := "res://src/level/tier_gaps/"
 
+const TIER_BASE_WALLED_SCENE_PATH := TIERS_DIRECTORY + "tier_base_walled.tscn"
+const TIER_BASE_OPEN_SCENE_PATH := TIERS_DIRECTORY + "tier_base_open.tscn"
+
 const TIER_EMPTY_OPEN_SCENE_PATH := \
         TIERS_DIRECTORY + "tier_empty_open.tscn"
 const TIER_EMPTY_WALLED_SCENE_PATH := \
@@ -112,6 +115,8 @@ const _DEFAULT_TIER_VALUES := {
     number = -1,
     version = "",
     scene_path = "",
+    openness_type = OpennessType.UNKNOWN,
+    is_base_tier = false,
     camera_horizontally_locked = true,
     zoom_multiplier = 1.0,
     scroll_speed_multiplier = 1.0,
@@ -169,44 +174,67 @@ const _DEFAULT_LEVEL_VALUES := {
 }
 
 const _TIERS := {
+    # Special tiers.
+    "-2": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+    },
+    "-1": {
+        version = "0.1.0",
+        openness_type = OpennessType.OPEN,
+    },
     "0": {
-        scene_path = TIERS_DIRECTORY + "tier_base.tscn",
+        version = "0.1.0",
+        scene_path = TIER_BASE_WALLED_SCENE_PATH,
+        openness_type = OpennessType.WALLED,
+        is_base_tier = true,
         scroll_speed_multiplier = 0.0,
         scroll_speed_min = 0.0,
         scroll_speed_max = 0.0,
-        version = "0.1.0",
     },
+    
+    # Normal tiers.
     "1": {
         version = "0.1.0",
+        openness_type = OpennessType.WALLED,
     },
     "2": {
         version = "0.1.0",
+        openness_type = OpennessType.WALLED,
     },
     "3": {
         version = "0.1.0",
+        openness_type = OpennessType.WALLED,
     },
     "4": {
         version = "0.1.0",
+        openness_type = OpennessType.WALLED,
     },
     "5": {
         version = "0.1.0",
+        openness_type = OpennessType.WALLED,
     },
     "6": {
         version = "0.1.0",
+        openness_type = OpennessType.OPEN,
     },
     "7": {
         version = "0.1.0",
+        openness_type = OpennessType.OPEN,
     },
     "8": {
         version = "0.1.0",
+        openness_type = OpennessType.OPEN,
         camera_horizontally_locked = false,
         scroll_speed_max = 32.0,
     },
     "9": {
         version = "0.1.0",
+        openness_type = OpennessType.WALLED,
     },
     "10": {
         version = "0.1.0",
+        openness_type = OpennessType.OPEN,
         camera_horizontally_locked = false,
         scroll_speed_max = 32.0,
         peep_hole_size = {value = Vector2(300.0, 300.0), weight = 1.0},
@@ -225,7 +253,7 @@ const _TIERS := {
 const _LEVELS := {
     "1": {
         name = "Test",
-        tiers = ["10"],
+        tiers = ["9"],
         version = "0.1.0",
         unlock_conditions = {
         },
@@ -273,6 +301,8 @@ const _LEVELS := {
 const _inflated_tiers := {}
 const _inflated_levels := {}
 
+var EMPTY_WALLED_TIER: Dictionary = get_tier_config("-2")
+var EMPTY_OPEN_TIER: Dictionary = get_tier_config("-1")
 var BASE_TIER: Dictionary = get_tier_config("0")
 
 static func get_tier_config(tier_id: String) -> Dictionary:
@@ -282,6 +312,7 @@ static func get_tier_config(tier_id: String) -> Dictionary:
     assert(_TIERS.has(tier_id))
     var tier_config: Dictionary = _TIERS[tier_id].duplicate()
     assert(tier_config.has("version"))
+    assert(tier_config.has("openness_type"))
     for key in _DEFAULT_TIER_VALUES.keys():
         if !tier_config.has(key):
             tier_config[key] = _DEFAULT_TIER_VALUES[key]

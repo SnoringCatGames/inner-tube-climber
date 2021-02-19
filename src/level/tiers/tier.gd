@@ -7,25 +7,15 @@ const TIER_RATIO_SIGN_RESOURCE_PATH := \
 const TIER_START_ICICLE_FALL_ANIMATOR_RESOURCE_PATH := \
         "res://src/level/tier_start_icicle_fall_animator.tscn"
 
-# NOTE: Keep in-sync with the values in openness_type.gd.
-enum OpennessType {
-    UNKNOWN,
-    WALLED,
-    WALLED_LEFT,
-    WALLED_RIGHT,
-    OPEN,
-}
-
-export(OpennessType) var openness_type := OpennessType.UNKNOWN
-export var is_base_tier := false
-
 var tier_start_position: Vector2 setget ,_get_tier_start_position
 var tier_end_position: Vector2 setget ,_get_tier_end_position
 var spawn_position: Vector2 setget ,_get_spawn_position
-var size: Vector2 setget ,_get_size
+var height: float setget ,_get_height
 var windiness: Vector2 setget _set_windiness
 
 var configuration_warning := ""
+
+var config: Dictionary
 
 var tier_start: TierStart
 var tier_end: TierEnd
@@ -71,14 +61,17 @@ func _ready() -> void:
             TierEnd)
 
 func setup( \
+        config: Dictionary, \
         position_or_previous_tier, \
         tier_index := -1, \
         tier_count := -1) -> void:
-    assert(openness_type != OpennessType.UNKNOWN)
-    assert(is_base_tier or \
-            _get_size().y / \
+    assert(config.is_base_tier == (tier_index < 0))
+    assert(config.is_base_tier or \
+            _get_height() / \
                     Constants.CELL_SIZE.y >= \
                     Constants.LEVEL_MIN_HEIGHT_CELL_COUNT)
+    
+    self.config = config
     
     if position_or_previous_tier is Vector2:
         self.position = position_or_previous_tier
@@ -96,7 +89,7 @@ func setup( \
         tier_ratio_sign.position = tier_start.position
         tier_ratio_sign.text = "%s / %s" % [tier_index + 1, tier_count]
     
-    if !is_base_tier:
+    if !config.is_base_tier:
         icicle_fall_animator = Utils.add_scene( \
                 self, \
                 TIER_START_ICICLE_FALL_ANIMATOR_RESOURCE_PATH, \
@@ -161,8 +154,8 @@ func _get_spawn_position() -> Vector2:
 func _get_configuration_warning() -> String:
     return configuration_warning
 
-func _get_size() -> Vector2:
-    return _get_bounding_box().size
+func _get_height() -> float:
+    return _get_tier_start_position().y - _get_tier_end_position().y
 
 func _set_windiness(value: Vector2) -> void:
     if tier_ratio_sign != null:

@@ -594,35 +594,48 @@ func _start_new_tier( \
     else:
         assert(level_config.tiers.has(current_tier_id))
         current_tier_index = level_config.tiers.find(current_tier_id)
+    var current_tier_config: Dictionary = \
+            LevelConfig.get_tier_config(current_tier_id)
     
     var next_tier_index: int = current_tier_index + 1
     if next_tier_index == level_config.tiers.size():
         # Loop back around, and skip the first/base tier.
         next_tier_index = 0
     var next_tier_id: String = level_config.tiers[next_tier_index]
+    var next_tier_config: Dictionary = \
+            LevelConfig.get_tier_config(next_tier_id)
+    
+    if is_base_tier:
+        current_tier_config.openness_type = \
+                OpennessType.WALLED if \
+                next_tier_config.openness_type == OpennessType.WALLED else \
+                OpennessType.OPEN
+        current_tier_config.scene_path = \
+                LevelConfig.TIER_BASE_WALLED_SCENE_PATH if \
+                current_tier_config.openness_type == OpennessType.WALLED else \
+                LevelConfig.TIER_BASE_OPEN_SCENE_PATH
     
     # Current tier.
-    var current_tier_config: Dictionary = \
-            LevelConfig.get_tier_config(current_tier_id)
+    var current_tier_scene_path: String = current_tier_config.scene_path
     current_tier = Utils.add_scene( \
             self, \
-            current_tier_config.scene_path, \
+            current_tier_scene_path, \
             true, \
             true)
     current_tier.setup( \
+            current_tier_config, \
             tier_position, \
             current_tier_index, \
             level_config.tiers.size())
     
     # Next tier.
-    var next_tier_config: Dictionary = \
-            LevelConfig.get_tier_config(next_tier_id)
     next_tier = Utils.add_scene( \
             self, \
             next_tier_config.scene_path, \
             true, \
             true)
     next_tier.setup( \
+            next_tier_config, \
             current_tier, \
             next_tier_index, \
             level_config.tiers.size())
@@ -630,8 +643,8 @@ func _start_new_tier( \
     # Next tier gap.
     var next_tier_gap_scene_path: String = \
             LevelConfig.get_tier_gap_scene_path( \
-                    current_tier.openness_type, \
-                    next_tier.openness_type)
+                    current_tier_config.openness_type, \
+                    next_tier_config.openness_type)
     next_tier_gap = Utils.add_scene( \
             self, \
             next_tier_gap_scene_path, \
@@ -640,37 +653,31 @@ func _start_new_tier( \
     next_tier_gap.sync_position_to_previous_tier(current_tier)
     
     if !is_base_tier:
-        var previous_tier_scene_path: String
         var previous_tier_index := current_tier_index - 1
+        var previous_tier_id: String
         if previous_tier_index < 0:
             previous_tier_index = level_config.tiers.size() - 1
-            previous_tier_scene_path = \
-                    LevelConfig.TIER_EMPTY_WALLED_SCENE_PATH
+            previous_tier_id = "0"
         else:
-            var previous_tier_id: String = \
-                    level_config.tiers[previous_tier_index]
-            var previous_tier_config: Dictionary = \
-                    LevelConfig.get_tier_config(previous_tier_id)
-            previous_tier = Utils.add_scene( \
-                    self, \
-                    previous_tier_config.scene_path, \
-                    false, \
-                    false)
-            match previous_tier.openness_type:
-                OpennessType.OPEN:
-                    previous_tier_scene_path = \
-                            LevelConfig.TIER_EMPTY_OPEN_SCENE_PATH
-                OpennessType.WALLED:
-                    previous_tier_scene_path = \
-                            LevelConfig.TIER_EMPTY_WALLED_SCENE_PATH
-                OpennessType.WALLED_LEFT:
-                    previous_tier_scene_path = \
-                            LevelConfig.TIER_EMPTY_WALLED_LEFT_SCENE_PATH
-                OpennessType.WALLED_RIGHT:
-                    previous_tier_scene_path = \
-                            LevelConfig.TIER_EMPTY_WALLED_RIGHT_SCENE_PATH
-                _:
-                    Utils.error()
+            previous_tier_id = level_config.tiers[previous_tier_index]
+        var previous_tier_config: Dictionary = \
+                LevelConfig.get_tier_config(previous_tier_id)
+        var previous_tier_scene_path: String
+        match previous_tier_config.openness_type:
+            OpennessType.OPEN:
+                previous_tier_scene_path = \
+                        LevelConfig.TIER_EMPTY_OPEN_SCENE_PATH
+            OpennessType.WALLED:
+                previous_tier_scene_path = \
+                        LevelConfig.TIER_EMPTY_WALLED_SCENE_PATH
+            OpennessType.WALLED_LEFT:
+                previous_tier_scene_path = \
+                        LevelConfig.TIER_EMPTY_WALLED_LEFT_SCENE_PATH
+            OpennessType.WALLED_RIGHT:
+                previous_tier_scene_path = \
+                        LevelConfig.TIER_EMPTY_WALLED_RIGHT_SCENE_PATH
+            _:
+                Utils.error()
         if previous_tier != null:
             previous_tier.queue_free()
         previous_tier = Utils.add_scene( \
@@ -680,13 +687,15 @@ func _start_new_tier( \
                 true)
         var previous_tier_position: Vector2 = \
                 current_tier.position + \
-                Vector2(0.0, previous_tier.size.y)
-        previous_tier.setup(previous_tier_position)
+                Vector2(0.0, previous_tier.height)
+        previous_tier.setup( \
+                previous_tier_config, \
+                previous_tier_position)
         
         var previous_tier_gap_scene_path: String = \
                 LevelConfig.get_tier_gap_scene_path( \
-                        previous_tier.openness_type, \
-                        current_tier.openness_type)
+                        previous_tier_config.openness_type, \
+                        current_tier_config.openness_type)
         previous_tier_gap = Utils.add_scene( \
                 self, \
                 previous_tier_gap_scene_path, \
@@ -788,6 +797,7 @@ func _on_entered_new_tier() -> void:
             true, \
             true)
     next_tier.setup( \
+            next_tier_config, \
             current_tier, \
             next_tier_index, \
             level_config.tiers.size())
@@ -795,8 +805,8 @@ func _on_entered_new_tier() -> void:
     # Next tier gap.
     var next_tier_gap_scene_path: String = \
             LevelConfig.get_tier_gap_scene_path( \
-                    current_tier.openness_type, \
-                    next_tier.openness_type)
+                    current_tier_config.openness_type, \
+                    next_tier_config.openness_type)
     next_tier_gap = Utils.add_scene( \
             self, \
             next_tier_gap_scene_path, \
@@ -875,7 +885,7 @@ func _update_margin_color() -> void:
             previous_tier if \
             previous_tier != null else \
             current_tier
-    match previous.openness_type:
+    match previous.config.openness_type:
         OpennessType.WALLED:
             previous_left_margin_color = Constants.WALL_COLOR
             previous_right_margin_color = Constants.WALL_COLOR
@@ -893,7 +903,7 @@ func _update_margin_color() -> void:
     
     var next_left_margin_color: Color
     var next_right_margin_color: Color
-    match current_tier.openness_type:
+    match current_tier.config.openness_type:
         OpennessType.WALLED:
             next_left_margin_color = Constants.WALL_COLOR
             next_right_margin_color = Constants.WALL_COLOR

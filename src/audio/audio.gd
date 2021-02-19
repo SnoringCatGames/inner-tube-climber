@@ -23,6 +23,11 @@ func _init() -> void:
     pitch_shift_effect = AudioEffectPitchShift.new()
     AudioServer.add_bus_effect(Music.MUSIC_BUS_INDEX, pitch_shift_effect)
     
+    fade_out_tween = Tween.new()
+    add_child(fade_out_tween)
+    fade_in_tween = Tween.new()
+    add_child(fade_in_tween)
+    
     _update_volume()
 
 func play_sound(sound: int) -> void:
@@ -42,12 +47,14 @@ func _play_sound_deferred(sound: int) -> void:
 func _cross_fade_music( \
         music_type: int, \
         transitions_immediately := false) -> void:
-    if fade_out_tween != null:
-        on_cross_fade_music_finished()
+    on_cross_fade_music_finished()
+    
     if previous_music_player != null and \
             previous_music_player.playing:
         # TODO: This shouldn't happen, but it does sometimes.
-        pass
+        Global.print( \
+                "Previous music still playing when trying to play new music.")
+        previous_music_player.stop()
     
     var next_music_player := Music.get_player(music_type)
     previous_music_player = current_music_player
@@ -55,6 +62,13 @@ func _cross_fade_music( \
     
     if previous_music_player == current_music_player and \
             current_music_player.playing:
+        if !fade_in_tween.is_active():
+            var loud_volume := \
+                    Music.get_volume_for_player(current_music_player) + \
+                            GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
+                    is_music_enabled else \
+                    SILENT_VOLUME_DB
+            current_music_player.volume_db = loud_volume
         return
     
     var transition_duration_sec := \
@@ -69,8 +83,6 @@ func _cross_fade_music( \
                         GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
                 is_music_enabled else \
                 SILENT_VOLUME_DB
-        fade_out_tween = Tween.new()
-        add_child(fade_out_tween)
         fade_out_tween.interpolate_property( \
                 previous_music_player, \
                 "volume_db", \
@@ -90,8 +102,6 @@ func _cross_fade_music( \
                     GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
             is_music_enabled else \
             SILENT_VOLUME_DB
-    fade_in_tween = Tween.new()
-    add_child(fade_in_tween)
     fade_in_tween.interpolate_property( \
             current_music_player, \
             "volume_db", \
@@ -110,21 +120,18 @@ func _cross_fade_music( \
 func on_cross_fade_music_finished( \
         _object = null, \
         _key = null) -> void:
-    if fade_out_tween != null:
-        fade_out_tween.queue_free()
-        fade_out_tween = null
-        if previous_music_player != null:
-            previous_music_player.volume_db = SILENT_VOLUME_DB
-    if fade_in_tween != null:
-        fade_in_tween.queue_free()
-        fade_in_tween = null
-        if current_music_player != null:
-            var loud_volume := \
-                    Music.get_volume_for_player(current_music_player) + \
-                            GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
-                    is_music_enabled else \
-                    SILENT_VOLUME_DB
-            current_music_player.volume_db = loud_volume
+    fade_out_tween.stop_all()
+    fade_in_tween.stop_all()
+    
+    if previous_music_player != null:
+        previous_music_player.volume_db = SILENT_VOLUME_DB
+    if current_music_player != null:
+        var loud_volume := \
+                Music.get_volume_for_player(current_music_player) + \
+                        GLOBAL_AUDIO_VOLUME_OFFSET_DB if \
+                is_music_enabled else \
+                SILENT_VOLUME_DB
+        current_music_player.volume_db = loud_volume
     if previous_music_player != null and \
             previous_music_player != current_music_player:
         previous_music_player.stop()

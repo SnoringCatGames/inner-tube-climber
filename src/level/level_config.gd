@@ -238,8 +238,9 @@ const _TIERS := {
         camera_horizontally_locked = false,
         scroll_speed_max = 32.0,
         peep_hole_size = {value = Vector2(300.0, 300.0), weight = 1.0},
-        fog_screen_opacity = {value = 0.9, weight = 1.0},
-        fog_screen_secondary_color_opacity_multiplier = {value = 0.9, weight = 1.0},
+        fog_screen_opacity = {value = 0.95, weight = 1.0},
+        fog_screen_secondary_color_opacity_multiplier = \
+                {value = 0.9, weight = 1.0},
         fog_screen_primary_color = {value = Color("#000000"), weight = 1.0},
         fog_screen_secondary_color = {value = Color("#1c2226"), weight = 1.0},
         snow_density_multiplier = 8.0,

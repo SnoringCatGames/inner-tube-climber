@@ -64,9 +64,6 @@ func update() -> void:
     if level_id == "":
         return
     
-    # FIXME: REMOVE: for debugging
-#    SaveState.set_level_is_unlocked(level_id, true)
-    
     var unlock_hint_message := LevelConfig.get_unlock_hint(level_id)
     var is_next_level_to_unlock := \
             LevelConfig.get_next_level_to_unlock() == level_id

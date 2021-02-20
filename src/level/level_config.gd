@@ -267,6 +267,26 @@ const _TIERS := {
         version = "0.1.0",
         openness_type = OpennessType.WALLED,
     },
+    "15": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+    },
+    "16": {
+        version = "0.1.0",
+        openness_type = OpennessType.OPEN,
+    },
+    "17": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+    },
+    "18": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+    },
+    "19": {
+        version = "0.1.0",
+        openness_type = OpennessType.OPEN,
+    },
 }
 
 #        name = "Elevator",
@@ -274,50 +294,88 @@ const _TIERS := {
 #        name = "Precision",
 const _LEVELS := {
     "1": {
-        name = "Test",
-        tiers = ["9"],
+        name = "Jump",
+        tiers = ["1", "2", "3"],
         version = "0.1.0",
         unlock_conditions = {
         },
     },
-#    "1": {
-#        name = "Bounce",
-#        tiers = ["1", "2", "3"],
-#        version = "0.1.0",
-#        unlock_conditions = {
-#        },
-#    },
-#    "2": {
-#        name = "Slip",
-#        tiers = ["9", "4"],
-#        version = "0.1.0",
-#        unlock_conditions = {
-#        },
-#    },
-#    "3": {
-#        name = "Precision",
-#        tiers = ["5", "6", "7"],
-#        version = "0.1.0",
-#        unlock_conditions = {
-#            bronze_levels = ["1"],
-#        },
-#    },
-#    "4": {
-#        name = "Escape",
-#        tiers = ["8"],
-#        version = "0.1.0",
-#        unlock_conditions = {
-#            bronze_levels = ["2"],
-#        },
-#    },
-#    "5": {
-#        name = "Ambition",
-#        tiers = ["1", "2", "3", "4", "5", "6", "7", "8"],
-#        version = "0.1.0",
-#        unlock_conditions = {
-#            bronze_levels = ["3"],
-#        },
-#    },
+    "2": {
+        name = "Slip",
+        tiers = ["9", "4", "15"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["1"],
+        },
+    },
+    "3": {
+        name = "Bounce",
+        tiers = ["5", "17", "18"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["2"],
+        },
+    },
+    "4": {
+        name = "Minor Challenge",
+        tiers = ["1", "2", "3", "9", "4", "15", "5", "17", "18"],
+        version = "0.1.0",
+        unlock_conditions = {
+            silver_levels = ["1", "2", "3"],
+        },
+    },
+    "5": {
+        name = "Open",
+        tiers = ["19", "6", "7"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["3"],
+        },
+    },
+    "6": {
+        name = "Switchback",
+        tiers = ["16", "14", "8"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["5"],
+        },
+    },
+    "7": {
+        name = "Gale",
+        tiers = ["11", "12", "13"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["6"],
+        },
+    },
+    "8": {
+        name = "Moderate Challenge",
+        tiers = ["19", "6", "7", "16", "14", "8", "11", "12", "13"],
+        version = "0.1.0",
+        unlock_conditions = {
+            silver_levels = ["5", "6", "7"],
+        },
+    },
+    "9": {
+        name = "Shroud",
+        tiers = ["10"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["7"],
+        },
+    },
+    "10": {
+        name = "Ultimate Challenge",
+        tiers = [
+            "1", "2", "3", "9", "4", "15", "5", "17", "18", 
+            "19", "6", "7", "16", "14", "8", "11", "12", "13",
+            "10",
+        ],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["4", "8", "9"],
+        },
+    },
 }
 
 const _inflated_tiers := {}
@@ -326,6 +384,31 @@ const _inflated_levels := {}
 var EMPTY_WALLED_TIER: Dictionary = get_tier_config("-2")
 var EMPTY_OPEN_TIER: Dictionary = get_tier_config("-1")
 var BASE_TIER: Dictionary = get_tier_config("0")
+
+func _init() -> void:
+    SaveState.set_level_is_unlocked("1", true)
+    
+    if Constants.DEBUG or Constants.PLAYTEST:
+        _create_a_test_level_for_each_tier()
+
+func _create_a_test_level_for_each_tier() -> void:
+    var max_level_number := -INF
+    for level_id in _LEVELS:
+        max_level_number = max(int(level_id), max_level_number)
+    
+    for tier_id in _TIERS:
+        if int(tier_id) <= 0:
+            continue
+        max_level_number += 1
+        var level_id := str(max_level_number)
+        _LEVELS[level_id] = {
+            name = "TEST: Tier " + tier_id,
+            tiers = [tier_id],
+            version = "0.1.0",
+            unlock_conditions = {
+            },
+        }
+        SaveState.set_level_is_unlocked(level_id, true)
 
 static func get_tier_config(tier_id: String) -> Dictionary:
     if _inflated_tiers.has(tier_id):

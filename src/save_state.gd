@@ -41,7 +41,6 @@ var config := ConfigFile.new()
 
 func _init() -> void:
     _load_config()
-    set_level_is_unlocked("1", true)
 
 func _load_config() -> void:
     var status := config.load(CONFIG_FILE_PATH)

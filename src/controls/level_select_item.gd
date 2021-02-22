@@ -12,13 +12,19 @@ const LOCKED_OPACITY := 0.6
 const FADE_TWEEN_DURATION_SEC := 0.3
 const LOCK_LOW_PART_DELAY_SEC := 0.4
 const LOCK_HIGH_PART_DELAY_SEC := 0.15
+const HINT_PULSE_DURATION_SEC := 2.0
 
 export var level_id := "" setget _set_level_id,_get_level_id
 export var is_open: bool setget _set_is_open,_get_is_open
 
 var is_new_unlocked_item := false
 
+var hint_tween: Tween
+
 func _ready() -> void:
+    hint_tween = Tween.new()
+    $HeaderWrapper/LockedWrapper/HintWrapper/Hint.add_child(hint_tween)
+    
     _init_children()
     call_deferred("update")
 
@@ -29,6 +35,7 @@ func _init_children() -> void:
     var header_size := Vector2(rect_min_size.x, HEADER_HEIGHT)
     
     $HeaderWrapper/LockedWrapper.rect_min_size = header_size
+    $HeaderWrapper/LockedWrapper/HintWrapper.modulate.a = 0.0
     
     $HeaderWrapper/Header.rect_min_size = header_size
     $HeaderWrapper/Header.connect("pressed", self, "_on_header_pressed")
@@ -67,22 +74,21 @@ func update() -> void:
     var unlock_hint_message := LevelConfig.get_unlock_hint(level_id)
     var is_next_level_to_unlock := \
             LevelConfig.get_next_level_to_unlock() == level_id
-    $UnlockHint.visible = \
+    $HeaderWrapper/LockedWrapper/HintWrapper/Hint.text = unlock_hint_message
+    var is_unlock_pulse_auto_shown := \
             unlock_hint_message != "" and \
             is_next_level_to_unlock
-    $UnlockHint.text = unlock_hint_message
-    if $UnlockHint.visible and \
-            !SaveState.get_new_unlocked_levels().empty():
+    if is_unlock_pulse_auto_shown:
         # Finish the unlock animation for the previous item before showing the
         # unlock hint for this item.
-        $UnlockHint.modulate.a = 0.0
-        $UnlockHint.visible = false
-        var level_select_screen_scroll_duration := 0.3
-        Time.set_timeout(funcref(self, "_fade_in_unlock_hint"), \
-                level_select_screen_scroll_duration + \
+        var delay := \
+                0.0 if \
+                !SaveState.get_new_unlocked_levels().empty() else \
+                (0.3 + \
                 LOCK_LOW_PART_DELAY_SEC + \
                 LockAnimation.UNLOCK_DURATION_SEC + \
                 FADE_TWEEN_DURATION_SEC)
+        Time.set_timeout(funcref(self, "_pulse_unlock_hint"), delay)
     
     var config := LevelConfig.get_level_config(level_id)
     var high_score := SaveState.get_level_high_score(level_id)
@@ -200,27 +206,27 @@ func _on_unlock_fade_finished(fade_tween: Tween) -> void:
     $HeaderWrapper/Header.visible = true
     toggle()
 
-func _fade_in_unlock_hint() -> void:
-    $UnlockHint.visible = true
-    var fade_tween := Tween.new()
-    $UnlockHint.add_child(fade_tween)
-    fade_tween.connect( \
-            "tween_all_completed", \
-            self, \
-            "_fade_in_unlock_finished", \
-            [fade_tween])
-    fade_tween.interpolate_property( \
-            $UnlockHint, \
+func _pulse_unlock_hint() -> void:
+    hint_tween.stop_all()
+    var fade_in_duration_sec := 0.3
+    hint_tween.interpolate_property( \
+            $HeaderWrapper/LockedWrapper/HintWrapper, \
             "modulate:a", \
             0.0, \
             1.0, \
-            FADE_TWEEN_DURATION_SEC, \
+            fade_in_duration_sec, \
             Tween.TRANS_QUAD, \
             Tween.EASE_IN_OUT)
-    fade_tween.start()
-
-func _fade_in_unlock_finished(fade_tween: Tween) -> void:
-    fade_tween.queue_free()
+    hint_tween.interpolate_property( \
+            $HeaderWrapper/LockedWrapper/HintWrapper, \
+            "modulate:a", \
+            1.0, \
+            0.0, \
+            fade_in_duration_sec, \
+            Tween.TRANS_QUAD, \
+            Tween.EASE_IN_OUT, \
+            HINT_PULSE_DURATION_SEC - fade_in_duration_sec)
+    hint_tween.start()
 
 func _on_header_pressed() -> void:
     Global.give_button_press_feedback()
@@ -254,3 +260,16 @@ func _get_is_open() -> bool:
 
 func get_button() -> ShinyButton:
     return $AccordionPanel/VBoxContainer/PlayButton as ShinyButton
+
+
+func _on_LockedWrapper_gui_input(event: InputEvent) -> void:
+    var is_mouse_up: bool = \
+            event is InputEventMouseButton and \
+            !event.pressed and \
+            event.button_index == BUTTON_LEFT
+    var is_touch_up: bool = \
+            (event is InputEventScreenTouch and \
+                    !event.pressed)
+    
+    if is_mouse_up or is_touch_up:
+        _pulse_unlock_hint()

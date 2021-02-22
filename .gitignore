@@ -73,6 +73,9 @@ local.properties
 ehthumbs.db
 Thumbs.db
 
+# Releases that shouldn't be included in the repo
+*.apk
+
 # App-release secrets
 secret/
 secrets/

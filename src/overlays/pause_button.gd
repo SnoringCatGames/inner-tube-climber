@@ -34,7 +34,8 @@ func _pause() -> void:
 func _on_TextureButton_gui_input(event: InputEvent) -> void:
     var is_mouse_down: bool = \
             event is InputEventMouseButton and \
-            event.pressed
+            event.pressed and \
+            event.button_index == BUTTON_LEFT
     var is_touch_down: bool = \
             (event is InputEventScreenTouch and \
                     event.pressed) or \
@@ -42,7 +43,8 @@ func _on_TextureButton_gui_input(event: InputEvent) -> void:
     
     var is_mouse_up: bool = \
             event is InputEventMouseButton and \
-            !event.pressed
+            !event.pressed and \
+            event.button_index == BUTTON_LEFT
     var is_touch_up: bool = \
             (event is InputEventScreenTouch and \
                     !event.pressed)

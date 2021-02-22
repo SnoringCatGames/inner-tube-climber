@@ -318,7 +318,7 @@ const _LEVELS := {
         },
     },
     "4": {
-        name = "Minor Challenge",
+        name = "Minor",
         tiers = ["1", "2", "3", "9", "4", "15", "5", "17", "18"],
         version = "0.1.0",
         unlock_conditions = {
@@ -350,7 +350,7 @@ const _LEVELS := {
         },
     },
     "8": {
-        name = "Moderate Challenge",
+        name = "Moderate",
         tiers = ["19", "6", "7", "16", "14", "8", "11", "12", "13"],
         version = "0.1.0",
         unlock_conditions = {
@@ -366,7 +366,7 @@ const _LEVELS := {
         },
     },
     "10": {
-        name = "Ultimate Challenge",
+        name = "Ultimate",
         tiers = [
             "1", "2", "3", "9", "4", "15", "5", "17", "18", 
             "19", "6", "7", "16", "14", "8", "11", "12", "13",

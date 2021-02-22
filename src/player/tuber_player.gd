@@ -422,6 +422,7 @@ func _process_actions(delta_sec: float) -> void:
             
             velocity.y *= WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER
             velocity.y += WALL_BOUNCE_VERTICAL_BOOST_OFFSET
+            velocity.y = min(velocity.y, JUMP_BOOST)
     
     var is_previous_jump_input_still_consumable := \
             !was_last_jump_input_consumed and \

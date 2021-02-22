@@ -65,7 +65,6 @@ func setup( \
         position_or_previous_tier, \
         tier_index := -1, \
         tier_count := -1) -> void:
-    assert(config.is_base_tier == (tier_index < 0))
     assert(config.is_base_tier or \
             _get_height() / \
                     Constants.CELL_SIZE.y >= \

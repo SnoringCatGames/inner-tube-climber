@@ -695,7 +695,8 @@ func _start_new_tier( \
                 Vector2(0.0, previous_tier.height)
         previous_tier.setup( \
                 previous_tier_config, \
-                previous_tier_position)
+                previous_tier_position, \
+                previous_tier_index)
         
         var previous_tier_gap_scene_path: String = \
                 LevelConfig.get_tier_gap_scene_path( \

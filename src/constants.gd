@@ -4,7 +4,7 @@ extends Node
 #var DEBUG := false
 var DEBUG := OS.is_debug_build()
 var PLAYTEST := true
-var DEBUG_TIER := ""
+var DEBUG_TIER := "14"
 
 const GOOGLE_ANALYTICS_ID := "UA-186405125-1"
 
@@ -13,7 +13,7 @@ const APP_ID := "games.snoringcat.inner_tube_climber"
 const APP_VERSION := "0.1.0"
 const SCORE_VERSION := "0.1.0"
 
-var ARE_ALL_LEVELS_UNLOCKED := false
+var ARE_ALL_LEVELS_UNLOCKED := true
 
 const SNORING_CAT_GAMES_URL := "https://snoringcat.games"
 const GODOT_URL := "https://godotengine.org"

@@ -12,7 +12,7 @@ const START_TIER_ID := "0"
 
 const INPUT_SIGN_POSITION := Vector2(0.0, 10.0)
 
-const PLAYER_START_VELOCITY := Vector2(0.0, -300.0)
+const PLAYER_START_VELOCITY := Vector2(50.0, -300.0)
 
 # How many pixels correspond to a single display-height unit. 
 const DISPLAY_HEIGHT_INTERVAL := 32.0
@@ -224,7 +224,8 @@ func _process(delta_sec: float) -> void:
     $CameraHandler.sync_to_player_position( \
             delta_sec, \
             player.position, \
-            _get_player_height())
+            _get_player_height(), \
+            current_tier.position)
     
     cooldown_indicator.check_for_updates( \
             player_max_platform_height_on_current_life, \

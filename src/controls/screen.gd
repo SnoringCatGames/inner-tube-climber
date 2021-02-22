@@ -79,6 +79,12 @@ func _unhandled_key_input(event: InputEventKey) -> void:
             _focused_button != null and \
             Nav.get_active_screen() == self:
         _focused_button.press()
+    elif (event.scancode == KEY_ESCAPE) and \
+            event.pressed and \
+            nav_bar != null and \
+            nav_bar.shows_back and \
+            Nav.get_active_screen() == self:
+        Nav.close_current_screen()
 
 func _on_activated() -> void:
     _give_button_focus(_get_focused_button())

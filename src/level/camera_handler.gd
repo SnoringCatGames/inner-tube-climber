@@ -19,6 +19,7 @@ var level_id: String
 var tier_id: String
 var player_position: Vector2
 var player_height: float
+var tier_position: Vector2
 
 var camera_max_distance_below_player_with_default_zoom := INF
 var player_max_distance_below_camera_with_default_zoom := INF
@@ -60,9 +61,11 @@ func _process(_delta_sec: float) -> void:
 func sync_to_player_position( \
         delta_modified_sec: float, \
         player_position: Vector2, \
-        player_height: float) -> void:
+        player_height: float, \
+        tier_position: Vector2) -> void:
     self.player_position = player_position
     self.player_height = player_height
+    self.tier_position = tier_position
     
     # Update camera pan, according to auto-scroll speed.
     var camera_displacement_for_frame := camera_speed * delta_modified_sec
@@ -81,7 +84,9 @@ func sync_to_player_position( \
     
     if !is_camera_post_stuck_state_tween_active:
         if camera_horizontally_locked:
-            camera_position.x = camera_horizontal_lock_tween_displacement
+            camera_position.x = \
+                    tier_position.x + \
+                    camera_horizontal_lock_tween_displacement
         else:
             camera_position.x = \
                     player_position.x + \

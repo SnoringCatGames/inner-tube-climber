@@ -18,8 +18,11 @@ func _ready() -> void:
         Nav.splash()
 
 func _process(_delta_sec: float) -> void:
-    if Input.is_action_just_pressed("screenshot"):
-        Utils.take_screenshot()
+    if Constants.DEBUG or Constants.PLAYTEST:
+        if Input.is_action_just_pressed("screenshot"):
+            Utils.take_screenshot()
+        if Input.is_action_just_pressed("one_up"):
+            Global.level.add_life()
 
 func _skip_to_debug_tier() -> void:
     Global.give_button_press_feedback(true)

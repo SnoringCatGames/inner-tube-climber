@@ -166,14 +166,14 @@ func _apply_movement() -> void:
                     previous_position.x, \
                     position.x, \
                     0.01):
-        velocity.x = 0
+        velocity.x = 0.0
     if (surface_state.is_touching_floor or \
             surface_state.is_touching_ceiling) and \
             Geometry.are_floats_equal_with_epsilon( \
                     previous_position.y, \
                     position.y, \
                     0.01):
-        velocity.y = 0
+        velocity.y = MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION
     
     if !has_touched_floor_in_current_tier:
         var min_x := \

@@ -61,11 +61,9 @@ func _process(_delta_sec: float) -> void:
 func sync_to_player_position( \
         delta_modified_sec: float, \
         player_position: Vector2, \
-        player_height: float, \
-        tier_position: Vector2) -> void:
+        player_height: float) -> void:
     self.player_position = player_position
     self.player_height = player_height
-    self.tier_position = tier_position
     
     # Update camera pan, according to auto-scroll speed.
     var camera_displacement_for_frame := camera_speed * delta_modified_sec
@@ -99,9 +97,11 @@ func sync_to_player_position( \
 func update_for_current_tier( \
         level_id: String, \
         tier_id: String, \
-        is_new_life: bool) -> void:
+        is_new_life: bool, \
+        tier_position: Vector2) -> void:
     self.level_id = level_id
     self.tier_id = tier_id
+    self.tier_position = tier_position
     var is_base_tier := tier_id == "0"
     if is_new_life:
         fall_height = -INF
@@ -227,9 +227,9 @@ func _update_camera_horizontally_locked(locked: bool) -> void:
     camera_horizontally_locked = locked
     
     var start_value: float = \
-            Global.camera_controller.offset.x if \
+            player_position.x - tier_position.x if \
             camera_horizontally_locked else \
-            -player_position.x
+            tier_position.x - player_position.x
     camera_horizontal_lock_displacement_tween.stop(self)
     camera_horizontal_lock_displacement_tween.interpolate_property( \
             self, \

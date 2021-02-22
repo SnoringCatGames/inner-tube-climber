@@ -224,8 +224,7 @@ func _process(delta_sec: float) -> void:
     $CameraHandler.sync_to_player_position( \
             delta_sec, \
             player.position, \
-            _get_player_height(), \
-            current_tier.position)
+            _get_player_height())
     
     cooldown_indicator.check_for_updates( \
             player_max_platform_height_on_current_life, \
@@ -722,7 +721,8 @@ func _start_new_tier( \
     $CameraHandler.update_for_current_tier( \
             level_id, \
             current_tier_id, \
-            true)
+            true, \
+            current_tier.position)
     $FogScreenHandler.update_for_current_tier( \
             level_id, \
             current_tier_id)
@@ -831,7 +831,8 @@ func _on_entered_new_tier() -> void:
     $CameraHandler.update_for_current_tier( \
             level_id, \
             current_tier_id, \
-            false)
+            false, \
+            current_tier.position)
     $FogScreenHandler.update_for_current_tier( \
             level_id, \
             current_tier_id)

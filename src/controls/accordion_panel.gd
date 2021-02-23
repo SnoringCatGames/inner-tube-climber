@@ -38,6 +38,7 @@ var _projected_control: Control
 var _caret: TextureRect
 var _is_open_tween: Tween
 
+var _original_projected_control_height: float
 var _start_scroll_vertical: int
 
 func _ready() -> void:
@@ -164,6 +165,7 @@ func _update_children() -> void:
         return
     
     _projected_control = projected_node
+    _original_projected_control_height = _projected_control.rect_size.y
     _projected_control.rect_size.x = rect_size.x
     _projected_control.size_flags_vertical = Control.SIZE_SHRINK_CENTER
     _header.rect_size.x = rect_size.x
@@ -232,6 +234,11 @@ func _trigger_open_change(is_tweening: bool) -> void:
         _on_is_open_tween_completed()
 
 func _interpolate_height(open_ratio: float) -> void:
+    # NOTE: For some reason, this assignment is needed in order to preserve the
+    #       original height of the project content. Otherwise, us changing its
+    #       position here seems to cause it's size to change as well.
+    _projected_control.rect_size.y = _original_projected_control_height
+    
     rect_min_size.y = \
             _projected_control.rect_size.y * open_ratio
     _projected_control.rect_position.y = \

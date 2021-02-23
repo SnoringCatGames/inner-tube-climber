@@ -261,7 +261,6 @@ func _get_is_open() -> bool:
 func get_button() -> ShinyButton:
     return $AccordionPanel/VBoxContainer/PlayButton as ShinyButton
 
-
 func _on_LockedWrapper_gui_input(event: InputEvent) -> void:
     var is_mouse_up: bool = \
             event is InputEventMouseButton and \

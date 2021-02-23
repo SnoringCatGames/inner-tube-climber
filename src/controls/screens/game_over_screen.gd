@@ -247,18 +247,31 @@ func _handle_display_resized() -> void:
                 CenterContainer/VBoxContainer/Control2/StuckAnimationControl \
                 .rect_position.y = 60
 
+func _hide_rank_and_three_loop() -> void:
+    var rank_animator := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            ScrollContainer/CenterContainer/VBoxContainer/Control2/ \
+            RankWrapper/Node2D/RankAnimator
+    var three_loop_icon := $FullScreenPanel/VBoxContainer/CenteredPanel/ \
+            ScrollContainer/CenterContainer/VBoxContainer/Control2/ \
+            RankWrapper/Node2D/ThreeLoopIcon
+    rank_animator.visible = false
+    three_loop_icon.visible = false
+
 func _on_SelectLevelButton_pressed():
     Global.give_button_press_feedback()
     Audio.play_music(Music.MAIN_MENU_MUSIC_TYPE)
+    _hide_rank_and_three_loop()
     Nav.open(ScreenType.LEVEL_SELECT)
 
 func _on_HomeButton_pressed():
     Global.give_button_press_feedback()
     Audio.play_music(Music.MAIN_MENU_MUSIC_TYPE)
+    _hide_rank_and_three_loop()
     Nav.open(ScreenType.MAIN_MENU)
 
 func _on_RetryButton_pressed():
     Global.give_button_press_feedback(true)
+    _hide_rank_and_three_loop()
     Nav.open(ScreenType.GAME, true)
     Nav.screens[ScreenType.GAME].start_level(level_id)
 

@@ -12,6 +12,7 @@ var are_mobile_controls_shown: bool
 var is_multiplier_cooldown_indicator_shown: bool
 var is_height_indicator_shown: bool
 var is_score_display_shown: bool
+var is_next_rank_at_display_shown: bool
 var is_height_display_shown: bool
 var is_lives_display_shown: bool
 var is_tier_ratio_display_shown: bool
@@ -63,6 +64,9 @@ func _load_state() -> void:
             true)
     is_score_display_shown = SaveState.get_setting( \
             SaveState.IS_SCORE_DISPLAY_SHOWN_KEY, \
+            true)
+    is_next_rank_at_display_shown = SaveState.get_setting( \
+            SaveState.IS_NEXT_RANK_AT_DISPLAY_SHOWN_KEY, \
             true)
     is_height_display_shown = SaveState.get_setting( \
             SaveState.IS_HEIGHT_DISPLAY_SHOWN_KEY, \

@@ -29,6 +29,7 @@ const IS_MULTIPLIER_COOLDOWN_INDICATOR_SHOWN_KEY := \
         "is_multiplier_cooldown_indicator_shown"
 const IS_HEIGHT_INDICATOR_SHOWN_KEY := "is_height_indicator_shown"
 const IS_SCORE_DISPLAY_SHOWN_KEY := "is_score_display_shown"
+const IS_NEXT_RANK_AT_DISPLAY_SHOWN_KEY := "is_next_rank_at_display_shown"
 const IS_HEIGHT_DISPLAY_SHOWN_KEY := "is_height_display_shown"
 const IS_LIVES_DISPLAY_SHOWN_KEY := "is_lives_display_shown"
 const IS_TIER_RATIO_DISPLAY_SHOWN_KEY := "is_tier_ratio_display_shown"

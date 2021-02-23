@@ -162,8 +162,8 @@ const _DEFAULT_LEVEL_VALUES := {
     # FIXME: Update these to be more reasonable defaults; but also add actual
     #        values in level configs;
     rank_thresholds = {
-        Rank.GOLD: 6000,
-        Rank.SILVER: 2000,
+        Rank.GOLD: 4000,
+        Rank.SILVER: 1000,
     },
     unlock_conditions = {
         bronze_levels = [],
@@ -288,6 +288,18 @@ var _TIERS := {
         version = "0.1.0",
         openness_type = OpennessType.OPEN,
     },
+    "20": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+    },
+    "21": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+    },
+    "22": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+    },
 }
 
 #        name = "Elevator",
@@ -296,22 +308,22 @@ var _TIERS := {
 var _LEVELS := {
     "1": {
         name = "Jump",
-        tiers = ["1", "2", "3"],
+        tiers = ["1", "21", "20"],
         version = "0.1.0",
         unlock_conditions = {
         },
     },
     "2": {
-        name = "Slip",
-        tiers = ["9", "4", "15"],
+        name = "Climb",
+        tiers = ["3", "2", "22"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["1"],
         },
     },
     "3": {
-        name = "Bounce",
-        tiers = ["5", "17", "18"],
+        name = "Slip",
+        tiers = ["9", "15", "4"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["2"],
@@ -319,13 +331,21 @@ var _LEVELS := {
     },
     "4": {
         name = "* Minor",
-        tiers = ["1", "2", "3", "9", "4", "15", "5", "17", "18"],
+        tiers = ["1", "21", "20", "3", "2", "22", "9", "15", "4"],
         version = "0.1.0",
         unlock_conditions = {
             silver_levels = ["1", "2", "3"],
         },
     },
     "5": {
+        name = "Bounce",
+        tiers = ["5", "17", "18"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["2"],
+        },
+    },
+    "6": {
         name = "Open",
         tiers = ["19", "6", "7"],
         version = "0.1.0",
@@ -333,20 +353,12 @@ var _LEVELS := {
             bronze_levels = ["3"],
         },
     },
-    "6": {
+    "7": {
         name = "Switchback",
         tiers = ["16", "14", "8"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["5"],
-        },
-    },
-    "7": {
-        name = "Gale",
-        tiers = ["11", "12", "13"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["6"],
         },
     },
     "8": {
@@ -358,6 +370,14 @@ var _LEVELS := {
         },
     },
     "9": {
+        name = "Gale",
+        tiers = ["11", "12", "13"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["6"],
+        },
+    },
+    "10": {
         name = "Shroud",
         tiers = ["10"],
         version = "0.1.0",
@@ -365,7 +385,7 @@ var _LEVELS := {
             bronze_levels = ["7"],
         },
     },
-    "10": {
+    "11": {
         name = "* Ultimate",
         tiers = [
             "1", "2", "3", "9", "4", "15", "5", "17", "18", 

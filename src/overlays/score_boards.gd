@@ -17,8 +17,16 @@ func set_height(height: int) -> void:
 func set_score(score: int) -> void:
     $VBoxContainer/ScoreBoard.animate_to_number(score)
 
+func set_next_rank_at( \
+        label_str: String, \
+        value_str: String) -> void:
+    $VBoxContainer/NextRankAtBoard/Label.text = label_str
+    $VBoxContainer/NextRankAtBoard \
+            .set_value_with_color_pulse(value_str)
+
 func set_multiplier(multiplier: int) -> void:
-    $VBoxContainer/MultiplierBoard.set_value_with_color_pulse("x%s" % multiplier)
+    $VBoxContainer/MultiplierBoard \
+            .set_value_with_color_pulse("x%s" % multiplier)
 
 func set_speed(speed: int) -> void:
     $VBoxContainer/SpeedBoard.set_value_with_color_pulse("%s" % speed)
@@ -30,6 +38,8 @@ func update_displays() -> void:
     $VBoxContainer/TierRatioBoard.visible = Global.is_tier_ratio_display_shown
     $VBoxContainer/HeightBoard.visible = Global.is_height_display_shown
     $VBoxContainer/ScoreBoard.visible = Global.is_score_display_shown
+    $VBoxContainer/NextRankAtBoard.visible = \
+            Global.is_next_rank_at_display_shown
     $VBoxContainer/MultiplierBoard.visible = Global.is_multiplier_display_shown
     $VBoxContainer/SpeedBoard.visible = Global.is_speed_display_shown
     $VBoxContainer/LivesBoard.visible = Global.is_lives_display_shown

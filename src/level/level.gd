@@ -255,6 +255,35 @@ func _update_score_displays() -> void:
     score_boards.set_multiplier(cooldown_indicator.multiplier)
     score_boards.set_speed($CameraHandler.speed_index + 1)
     score_boards.set_lives(lives_count)
+    _update_next_rank_at_scoreboard()
+
+func _update_next_rank_at_scoreboard() -> void:
+    var current_rank: int = LevelConfig.get_level_rank( \
+            level_id, \
+            score, \
+            finished_level)
+    var level_config: Dictionary = LevelConfig.get_level_config(level_id)
+    
+    var label_str: String
+    var value_str: String
+    match current_rank:
+        Rank.UNRANKED:
+            label_str = "Bronze at: "
+            value_str = "(finish)"
+        Rank.BRONZE:
+            label_str = "Silver at: "
+            value_str = str(level_config.rank_thresholds[Rank.SILVER])
+        Rank.SILVER:
+            label_str = "Gold at: "
+            value_str = str(level_config.rank_thresholds[Rank.GOLD])
+        Rank.GOLD:
+            label_str = "Highest rank!"
+            value_str = ""
+        _:
+            Utils.error()
+            return
+    
+    score_boards.set_next_rank_at(label_str, value_str)
 
 func _fall() -> void:
     falls_count += 1

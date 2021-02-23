@@ -11,6 +11,8 @@ margin_right = -300.0
 margin_bottom = -438.0
 rect_min_size = Vector2( 180, 42 )
 script = ExtResource( 2 )
+label = null
+value = null
 
 [node name="Background" type="Sprite" parent="."]
 texture = ExtResource( 1 )

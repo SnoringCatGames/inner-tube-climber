@@ -3,6 +3,7 @@ extends Control
 class_name LevelSelectItem
 
 signal toggled
+signal pressed
 
 const HEADER_HEIGHT := 56.0
 const PADDING := Vector2(16.0, 8.0)
@@ -64,6 +65,8 @@ func _init_children() -> void:
             $HeaderWrapper/Header, \
             Control.MOUSE_FILTER_IGNORE)
     
+    $AccordionPanel.extra_scroll_height_for_custom_header = \
+            $HeaderWrapper.rect_size.y
     $AccordionPanel.connect("caret_rotated", self, "_on_caret_rotated")
     $AccordionPanel.connect("toggled", self, "_on_accordion_toggled")
 
@@ -143,6 +146,11 @@ func update() -> void:
         },
     ]
     $AccordionPanel/VBoxContainer/LabeledControlList.items = list_items
+    
+    # TODO: Fix this. This hard-coded height assignment shouldn't be needed,
+    #       but for some reason the height keeps getting enlarged otherwise.
+    $AccordionPanel.height_override = 268.0
+    
     $AccordionPanel.update()
 
 func toggle() -> void:
@@ -204,7 +212,7 @@ func _on_unlock_fade_finished(fade_tween: Tween) -> void:
     fade_tween.queue_free()
     $HeaderWrapper/LockedWrapper.visible = false
     $HeaderWrapper/Header.visible = true
-    toggle()
+    emit_signal("pressed")
 
 func _pulse_unlock_hint() -> void:
     hint_tween.stop_all()
@@ -230,7 +238,7 @@ func _pulse_unlock_hint() -> void:
 
 func _on_header_pressed() -> void:
     Global.give_button_press_feedback()
-    toggle()
+    emit_signal("pressed")
 
 func _on_PlayButton_pressed():
     Global.give_button_press_feedback(true)

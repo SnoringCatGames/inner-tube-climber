@@ -173,7 +173,7 @@ const _DEFAULT_LEVEL_VALUES := {
     },
 }
 
-const _TIERS := {
+var _TIERS := {
     # Special tiers.
     "-2": {
         version = "0.1.0",
@@ -293,7 +293,7 @@ const _TIERS := {
 #        name = "Elevator",
 #        name = "Expanse",
 #        name = "Precision",
-const _LEVELS := {
+var _LEVELS := {
     "1": {
         name = "Jump",
         tiers = ["1", "2", "3"],
@@ -379,8 +379,8 @@ const _LEVELS := {
     },
 }
 
-const _inflated_tiers := {}
-const _inflated_levels := {}
+var _inflated_tiers := {}
+var _inflated_levels := {}
 
 var EMPTY_WALLED_TIER: Dictionary = get_tier_config("-2")
 var EMPTY_OPEN_TIER: Dictionary = get_tier_config("-1")
@@ -411,7 +411,7 @@ func _create_a_test_level_for_each_tier() -> void:
         }
         SaveState.set_level_is_unlocked(level_id, true)
 
-static func get_tier_config(tier_id: String) -> Dictionary:
+func get_tier_config(tier_id: String) -> Dictionary:
     if _inflated_tiers.has(tier_id):
         return _inflated_tiers[tier_id]
     
@@ -430,7 +430,7 @@ static func get_tier_config(tier_id: String) -> Dictionary:
     _inflated_tiers[tier_id] = tier_config
     return tier_config
 
-static func get_level_config(level_id: String) -> Dictionary:
+func get_level_config(level_id: String) -> Dictionary:
     if _inflated_levels.has(level_id):
         return _inflated_levels[level_id]
     
@@ -453,7 +453,7 @@ static func get_level_config(level_id: String) -> Dictionary:
     _inflated_levels[level_id] = level_config
     return level_config
 
-static func get_value( \
+func get_value( \
         level_id: String, \
         tier_id: String, \
         key: String):
@@ -496,47 +496,47 @@ static func get_value( \
         _:
             Utils.error()
 
-static func get_level_ids() -> Array:
+func get_level_ids() -> Array:
     return _LEVELS.keys()
 
-static func get_tier_gap_scene_path( \
+func get_tier_gap_scene_path( \
         from_openness_type: int,  \
         to_openness_type: int) -> String:
     return LevelConfig.OPENNESS_TO_TIER_GAP_SCENE_PATH \
             [from_openness_type][to_openness_type]
 
-static func get_tier_version_string(tier_id: String) -> String:
+func get_tier_version_string(tier_id: String) -> String:
     return tier_id + "v" + get_tier_config(tier_id).version
 
-static func get_level_version_string(level_id: String) -> String:
+func get_level_version_string(level_id: String) -> String:
     return level_id + "v" + get_level_config(level_id).version
 
-static func get_level_tier_version_string( \
+func get_level_tier_version_string( \
         level_id: String, \
         tier_id: String) -> String:
     return get_level_version_string(level_id) + ":" + \
             get_tier_version_string(tier_id)
 
-static func get_is_tile_slippery( \
+func get_is_tile_slippery( \
         tile_set: TileSet, \
         tile_id: int) -> bool:
     return SLIPPERY_TILES.has(tile_set.tile_get_name(tile_id))
 
-static func get_friction_for_tile( \
+func get_friction_for_tile( \
         tile_set: TileSet, \
         tile_id: int) -> float:
     return SLIPPERY_FRICTION_MULTIPLIER if \
             get_is_tile_slippery(tile_set, tile_id) else \
             NON_SLIPPERY_FRICTION_MULTIPLIER
 
-static func get_walk_sound_for_tile( \
+func get_walk_sound_for_tile( \
         tile_set: TileSet, \
         tile_id: int) -> int:
     return Sound.WALK_ICE if \
             get_is_tile_slippery(tile_set, tile_id) else \
             Sound.WALK_SNOW
 
-static func get_level_rank( \
+func get_level_rank( \
         level_id: String, \
         score: int, \
         has_finished: bool) -> int:
@@ -550,14 +550,14 @@ static func get_level_rank( \
     else:
         return Rank.BRONZE
 
-static func get_old_unlocked_levels() -> Array:
+func get_old_unlocked_levels() -> Array:
     var old_unlocked_levels := []
     for level_id in get_level_ids():
         if SaveState.get_level_is_unlocked(level_id):
             old_unlocked_levels.push_back(level_id)
     return old_unlocked_levels
 
-static func get_new_unlocked_levels() -> Array:
+func get_new_unlocked_levels() -> Array:
     var new_unlocked_levels := []
     for level_id in get_level_ids():
         if !SaveState.get_level_is_unlocked(level_id) and \
@@ -565,10 +565,10 @@ static func get_new_unlocked_levels() -> Array:
             new_unlocked_levels.push_back(level_id)
     return new_unlocked_levels
 
-static func _check_if_level_meets_unlock_conditions(level_id: String) -> bool:
+func _check_if_level_meets_unlock_conditions(level_id: String) -> bool:
     return get_unlock_hint(level_id) == ""
 
-static func get_unlock_hint(level_id: String) -> String:
+func get_unlock_hint(level_id: String) -> String:
     var config := get_level_config(level_id)
     var hint := ""
     for key in config.unlock_conditions:
@@ -611,7 +611,7 @@ static func get_unlock_hint(level_id: String) -> String:
         hint += "."
     return hint
 
-static func has_level_earned_rank( \
+func has_level_earned_rank( \
         level_id: String, \
         rank: int) -> bool:
     var config := get_level_config(level_id)
@@ -624,7 +624,7 @@ static func has_level_earned_rank( \
         var high_score := SaveState.get_level_high_score(level_id)
         return high_score >= rank_threshold
 
-static func get_next_level_to_unlock() -> String:
+func get_next_level_to_unlock() -> String:
     var locked_level_numbers := []
     for level_id in get_level_ids():
         if !SaveState.get_level_is_unlocked(level_id):
@@ -637,7 +637,7 @@ static func get_next_level_to_unlock() -> String:
     else:
         return str(locked_level_numbers.front())
 
-static func get_score_for_next_rank_str( \
+func get_score_for_next_rank_str( \
         level_id: String, \
         current_rank: int) -> String:
     var config := get_level_config(level_id)
@@ -654,7 +654,7 @@ static func get_score_for_next_rank_str( \
             Utils.error()
             return ""
 
-static func get_suggested_next_level() -> String:
+func get_suggested_next_level() -> String:
     var next_level_number = INF
     for rank in [Rank.BRONZE, Rank.SILVER, Rank.GOLD]:
         for level_id in get_level_ids():

@@ -41,6 +41,7 @@ func _ready() -> void:
         level_items.push_back(item)
         item.level_id = level_id
         item.is_open = false
+        item.connect("pressed", self, "_on_item_pressed", [item])
         item.connect("toggled", self, "_on_item_toggled", [item])
 
 func _update() -> void:
@@ -65,13 +66,13 @@ func _deferred_update() -> void:
                 if item.level_id == suggested_level_id:
                     item_to_open = item
             assert(item_to_open != null)
-            item_to_open.toggle()
+            _on_item_pressed(item_to_open)
         else:
             _give_button_focus(previous_open_item.get_button())
     else:
         var is_closing_accordion_first := previous_open_item != null
         if is_closing_accordion_first:
-            previous_open_item.toggle()
+            _on_item_pressed(previous_open_item)
         
         _scroll_to_item_to_unlock( \
                 _new_unlocked_item, \
@@ -133,12 +134,17 @@ func _on_unlock_scroll_finished( \
 func _get_focused_button() -> ShinyButton:
     return null
 
-func _on_item_toggled(item: LevelSelectItem) -> void:
-    if item.is_open:
-        if expanded_item != null:
-            expanded_item.toggle()
+func _on_item_pressed(item: LevelSelectItem) -> void:
+    var delay := 0.0
+    if !item.is_open:
+        var previous_expanded_item := expanded_item
         expanded_item = item
+        if previous_expanded_item != null:
+            previous_expanded_item.toggle()
+            delay = 0.05
     elif expanded_item == item:
         expanded_item = null
-    
+    Time.set_timeout(funcref(item, "toggle"), delay)
+
+func _on_item_toggled(item: LevelSelectItem) -> void:
     _give_button_focus(item.get_button())

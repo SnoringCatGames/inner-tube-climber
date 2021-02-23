@@ -27,6 +27,11 @@ export var header_font: Font setget _set_header_font,_get_header_font
 export var is_caret_on_left := true setget \
         _set_is_caret_on_left,_get_is_caret_on_left
 export var padding := Vector2(8.0, 4.0) setget _set_padding,_get_padding
+export var extra_scroll_height_for_custom_header := 0.0 setget \
+        _set_extra_scroll_height_for_custom_header, \
+        _get_extra_scroll_height_for_custom_header
+
+var height_override := INF
 
 var configuration_warning := ""
 
@@ -44,6 +49,15 @@ var _start_scroll_vertical: int
 func _ready() -> void:
     _is_ready = true
     rect_clip_content = true
+    
+    _is_open_tween = Tween.new()
+    _is_open_tween.connect( \
+            "tween_all_completed", \
+            self, \
+            "_on_is_open_tween_completed")
+    add_child(_is_open_tween)
+    move_child(_is_open_tween, 0)
+    
     _update_children()
     call_deferred("_update_children")
 
@@ -59,7 +73,7 @@ func remove_child(child: Node) -> void:
 func _create_header() -> void:
     # TODO: For some reason, when running in-editor, there can be extra
     #       children created?
-    if _header != null:
+    if is_instance_valid(_header):
         _header.queue_free()
     
     _header = Button.new()
@@ -129,24 +143,21 @@ func _create_header() -> void:
     _header.rect_size = Vector2(rect_size.x, header_height)
     _header_hbox.rect_size = _header.rect_size
     
-    _is_open_tween = Tween.new()
-    _is_open_tween.connect( \
-            "tween_all_completed", \
-            self, \
-            "_on_is_open_tween_completed")
-    _header.add_child(_is_open_tween)
-    
     add_child(_header)
 
 func _update_children() -> void:
     if !_is_ready:
         return
     
-    if _header == null:
+    if includes_header and \
+            !is_instance_valid(_header):
         _create_header()
-    _header.visible = includes_header
+    elif !includes_header and \
+            is_instance_valid(_header):
+        _header.queue_free()
+        _header = null
     
-    var expected_child_count := 2
+    var expected_child_count := 3 if includes_header else 2
     var children := get_children()
     if children.size() != expected_child_count:
         configuration_warning = \
@@ -156,21 +167,25 @@ func _update_children() -> void:
         update_configuration_warning()
         return
     
-    move_child(_header, 1)
+    if includes_header:
+        move_child(_header, 2)
+        _header.rect_size.x = rect_size.x
+        _header.rect_position.y = 0.0
+        _header_hbox.rect_size.x = rect_size.x
     
-    var projected_node: Node = children[0]
+    var projected_node: Node = children[1]
     if !(projected_node is Control):
         configuration_warning = "Child node must be of type 'Control'."
         update_configuration_warning()
         return
     
     _projected_control = projected_node
-    _original_projected_control_height = _projected_control.rect_size.y
+    _original_projected_control_height = \
+            _projected_control.rect_size.y if \
+            height_override == INF else \
+            height_override
     _projected_control.rect_size.x = rect_size.x
     _projected_control.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-    _header.rect_size.x = rect_size.x
-    _header.rect_position.y = 0.0
-    _header_hbox.rect_size.x = rect_size.x
     
     configuration_warning = ""
     update_configuration_warning()
@@ -215,22 +230,19 @@ func _trigger_open_change(is_tweening: bool) -> void:
                 Tween.TRANS_QUAD, \
                 Tween.EASE_IN_OUT)
         if is_open:
-            if _calculate_should_scroll():
-                var scroll_container := \
-                        Nav.get_active_screen().scroll_container
-                _start_scroll_vertical = scroll_container.scroll_vertical
-                _is_open_tween.interpolate_method( \
-                        self, \
-                        "_interpolate_scroll", \
-                        0.0, \
-                        1.0, \
-                        SCROLL_TWEEN_DURATION_SEC, \
-                        Tween.TRANS_QUAD, \
-                        Tween.EASE_IN_OUT)
+            var scroll_container := \
+                    Nav.get_active_screen().scroll_container
+            _start_scroll_vertical = scroll_container.scroll_vertical
+            _is_open_tween.interpolate_method( \
+                    self, \
+                    "_interpolate_scroll", \
+                    0.0, \
+                    1.0, \
+                    SCROLL_TWEEN_DURATION_SEC, \
+                    Tween.TRANS_QUAD, \
+                    Tween.EASE_IN_OUT)
         _is_open_tween.start()
     else:
-        var open_ratio := 1.0 if is_open else 0.0
-        _interpolate_height(open_ratio)
         _on_is_open_tween_completed()
 
 func _interpolate_height(open_ratio: float) -> void:
@@ -240,16 +252,17 @@ func _interpolate_height(open_ratio: float) -> void:
     _projected_control.rect_size.y = _original_projected_control_height
     
     rect_min_size.y = \
-            _projected_control.rect_size.y * open_ratio
+            _original_projected_control_height * open_ratio
     _projected_control.rect_position.y = \
-            -_projected_control.rect_size.y * (1.0 - open_ratio)
+            -_original_projected_control_height * (1.0 - open_ratio)
     if includes_header:
         rect_min_size.y += _header.rect_size.y
         _header_hbox.rect_size.y = _header.rect_size.y
         _projected_control.rect_position.y += _header.rect_size.y
 
 func _interpolate_caret_rotation(rotation: float) -> void:
-    _caret.rect_rotation = rotation
+    if is_instance_valid(_caret):
+        _caret.rect_rotation = rotation
     emit_signal("caret_rotated", rotation)
 
 # Auto-scroll if opened past bottom of screen, but don't auto-scroll the header
@@ -270,50 +283,38 @@ func _interpolate_scroll(open_ratio: float) -> void:
             accordion_height - \
             scroll_container.rect_size.y
     var max_scroll_vertical_to_show_accordion_top := \
-            accordion_position_y_in_scroll_container
+            accordion_position_y_in_scroll_container - \
+            extra_scroll_height_for_custom_header
     
-    var end_scroll_vertical := min( \
-            min_scroll_vertical_to_show_accordion_bottom, \
-            max_scroll_vertical_to_show_accordion_top)
+    var is_scrolling_upward := \
+            scroll_container.scroll_vertical > \
+            max_scroll_vertical_to_show_accordion_top
+    
+    var end_scroll_vertical: float
+    end_scroll_vertical = max_scroll_vertical_to_show_accordion_top
+    # TODO: Remove?
+#    if is_scrolling_upward:
+#        end_scroll_vertical = max_scroll_vertical_to_show_accordion_top
+#    else:
+#        end_scroll_vertical = min( \
+#                min_scroll_vertical_to_show_accordion_bottom, \
+#                max_scroll_vertical_to_show_accordion_top)
     
     scroll_container.scroll_vertical = lerp( \
             _start_scroll_vertical, \
             end_scroll_vertical, \
             open_ratio)
-
-# Auto-scroll if opened past bottom of screen, but don't auto-scroll the header
-# off the top of the screen!
-func _calculate_should_scroll() -> bool:
-    var scroll_container := Nav.get_active_screen().scroll_container
-    var accordion_position_y_in_scroll_container := \
-            Utils.get_node_vscroll_position(scroll_container, self)
-    var accordion_height := _projected_control.rect_size.y
-    if includes_header:
-        accordion_height += _header.rect_size.y
     
-    var min_scroll_vertical_to_show_accordion_bottom := \
-            accordion_position_y_in_scroll_container + \
-            accordion_height - \
-            scroll_container.rect_size.y
-    var max_scroll_vertical_to_show_accordion_top := \
-            accordion_position_y_in_scroll_container
-    var current_scroll_vertical := scroll_container.scroll_vertical
-    
-    var should_auto_scroll := \
-            current_scroll_vertical < \
-                    min_scroll_vertical_to_show_accordion_bottom and \
-            current_scroll_vertical < \
-                    max_scroll_vertical_to_show_accordion_top - 2.0
-    return should_auto_scroll
+    _projected_control.rect_size.y = _original_projected_control_height
 
 func _on_is_open_tween_started() -> void:
-    _header.visible = includes_header
     _projected_control.visible = true
 
 func _on_is_open_tween_completed( \
         _object = null, \
         _key = null) -> void:
-    _header.visible = includes_header
+    var open_ratio := 1.0 if is_open else 0.0
+    _interpolate_height(open_ratio)
     _projected_control.visible = is_open
 
 func _get_configuration_warning() -> String:
@@ -349,7 +350,7 @@ func _get_includes_header() -> bool:
 
 func _set_header_text(value: String) -> void:
     header_text = value
-    if _is_ready:
+    if _is_ready and includes_header:
         _header.text = value
 
 func _get_header_text() -> String:
@@ -386,6 +387,14 @@ func _set_padding(value: Vector2) -> void:
 
 func _get_padding() -> Vector2:
     return padding
+
+func _set_extra_scroll_height_for_custom_header(value: float) -> void:
+    extra_scroll_height_for_custom_header = value
+    if _is_ready:
+        _update_children()
+
+func _get_extra_scroll_height_for_custom_header() -> float:
+    return extra_scroll_height_for_custom_header
 
 func update() -> void:
     _update_children()

@@ -43,7 +43,6 @@ var _projected_control: Control
 var _caret: TextureRect
 var _is_open_tween: Tween
 
-var _original_projected_control_height: float
 var _start_scroll_vertical: int
 
 func _ready() -> void:
@@ -180,10 +179,6 @@ func _update_children() -> void:
         return
     
     _projected_control = projected_node
-    _original_projected_control_height = \
-            _projected_control.rect_size.y if \
-            height_override == INF else \
-            height_override
     _projected_control.rect_size.x = rect_size.x
     _projected_control.size_flags_vertical = Control.SIZE_SHRINK_CENTER
     
@@ -249,12 +244,14 @@ func _interpolate_height(open_ratio: float) -> void:
     # NOTE: For some reason, this assignment is needed in order to preserve the
     #       original height of the project content. Otherwise, us changing its
     #       position here seems to cause it's size to change as well.
-    _projected_control.rect_size.y = _original_projected_control_height
+    var projected_height := \
+            height_override if \
+            height_override != INF else \
+            _projected_control.rect_size.y
+    _projected_control.rect_size.y = projected_height
     
-    rect_min_size.y = \
-            _original_projected_control_height * open_ratio
-    _projected_control.rect_position.y = \
-            -_original_projected_control_height * (1.0 - open_ratio)
+    rect_min_size.y = projected_height * open_ratio
+    _projected_control.rect_position.y = -projected_height * (1.0 - open_ratio)
     if includes_header:
         rect_min_size.y += _header.rect_size.y
         _header_hbox.rect_size.y = _header.rect_size.y
@@ -304,8 +301,6 @@ func _interpolate_scroll(open_ratio: float) -> void:
             _start_scroll_vertical, \
             end_scroll_vertical, \
             open_ratio)
-    
-    _projected_control.rect_size.y = _original_projected_control_height
 
 func _on_is_open_tween_started() -> void:
     _projected_control.visible = true

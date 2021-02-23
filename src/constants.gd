@@ -4,7 +4,7 @@ extends Node
 #var DEBUG := false
 var DEBUG := OS.is_debug_build()
 var PLAYTEST := true
-var DEBUG_TIER := ""
+var DEBUG_TIER := "7"
 
 const GOOGLE_ANALYTICS_ID := "UA-186405125-1"
 

@@ -19,11 +19,16 @@ var config: Dictionary
 
 var tier_start: TierStart
 var tier_end: TierEnd
+var spawn_position_override: SpawnPositionOverride
 
 var tier_ratio_sign: TierRatioSign
 var icicle_fall_animator: TierStartIcicleFallAnimator
 
 func _ready() -> void:
+    var spawn_position_overrides := Utils.get_children_by_type( \
+            self, \
+            SpawnPositionOverride)
+    
     if Engine.editor_hint:
         var tile_maps := Utils.get_children_by_type( \
                 self, \
@@ -52,6 +57,10 @@ func _ready() -> void:
         elif tier_ends.size() < 1:
             configuration_warning = "Must define a child TierEnd."
             update_configuration_warning()
+        elif spawn_position_overrides.size() > 1:
+            configuration_warning = \
+                    "Don't define more than one SpawnPositionOverride."
+            update_configuration_warning()
     
     tier_start = Utils.get_child_by_type( \
             self, \
@@ -59,6 +68,10 @@ func _ready() -> void:
     tier_end = Utils.get_child_by_type( \
             self, \
             TierEnd)
+    if !spawn_position_overrides.empty():
+        spawn_position_override = spawn_position_overrides[0]
+    else:
+        spawn_position_override = null
 
 func setup( \
         config: Dictionary, \
@@ -156,7 +169,10 @@ func _get_tier_end_position() -> Vector2:
     return position + tier_end.position
 
 func _get_spawn_position() -> Vector2:
-    return position + tier_start.position + tier_start.spawn_position
+    if spawn_position_override != null:
+        return position + spawn_position_override.position
+    else:
+        return position + tier_start.position + tier_start.spawn_position
 
 func _get_configuration_warning() -> String:
     return configuration_warning

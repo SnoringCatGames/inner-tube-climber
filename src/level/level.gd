@@ -183,8 +183,7 @@ func _physics_process(_delta_sec: float) -> void:
         return
     
     # Keep track of player height.
-    var next_tier_height: float = \
-            -current_tier.tier_end_position.y + Constants.CELL_SIZE.y
+    var next_tier_height: float = -current_tier.tier_end_position.y
     if _get_player_height() > next_tier_height - 0.1:
         call_deferred("_on_entered_new_tier")
     player_max_height = max(player_max_height, _get_player_height())
@@ -502,12 +501,11 @@ func _add_player(is_base_tier := false) -> void:
             PLAYER_RESOURCE_PATH, \
             true, \
             true)
-    player.position = player.get_spawn_position_for_tier( \
-            current_tier, \
-            is_base_tier)
+    player.position = player.get_spawn_position_for_tier(current_tier)
     player.velocity = PLAYER_START_VELOCITY
     player.is_stuck = is_base_tier
     player.on_new_tier(current_tier)
+    player.has_touched_floor_in_current_tier = true
     
     $CameraHandler.set_start_state( \
             player.position, \

@@ -188,10 +188,13 @@ func update_speed() -> void:
             tier_id, \
             "scroll_speed_max")
     
-    camera_speed = lerp( \
-            scroll_speed_min / camera_speed_multiplier, \
-            scroll_speed_max / camera_speed_multiplier, \
-            speed_index_progress)
+    if camera_speed_multiplier > 0.0:
+        camera_speed = lerp( \
+                scroll_speed_min / camera_speed_multiplier, \
+                scroll_speed_max / camera_speed_multiplier, \
+                speed_index_progress)
+    else:
+        camera_speed = 0.0
     camera_speed *= camera_speed_multiplier
     camera_speed = clamp(camera_speed, scroll_speed_min, scroll_speed_max)
     

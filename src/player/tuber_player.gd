@@ -809,9 +809,7 @@ func update_light( \
             PLAYER_LIGHT_TO_PEEP_HOLE_SIZE_RATIO
     $Light2D.energy = light_energy
 
-func get_spawn_position_for_tier( \
-        tier: Tier, \
-        is_base_tier: bool) -> Vector2:
+func get_spawn_position_for_tier(tier: Tier) -> Vector2:
     var spawn_position := tier.spawn_position
     spawn_position.y -= Constants.PLAYER_HALF_HEIGHT_DEFAULT
     spawn_position += PLAYER_STUCK_ANIMATION_CENTER_OFFSET

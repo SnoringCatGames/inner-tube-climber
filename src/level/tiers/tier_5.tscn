@@ -26,7 +26,6 @@ margin_bottom = 0.0
 
 [node name="TierStart" parent="." instance=ExtResource( 3 )]
 position = Vector2( 0, -32 )
-spawn_position_x = 0.0
 
 [node name="TierEnd" parent="." instance=ExtResource( 4 )]
 position = Vector2( 0, -2784 )

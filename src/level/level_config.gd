@@ -243,6 +243,7 @@ var _TIERS := {
                 {value = 0.9, weight = 1.0},
         fog_screen_primary_color = {value = Color("#000000"), weight = 1.0},
         fog_screen_secondary_color = {value = Color("#1c2226"), weight = 1.0},
+        light_energy = {value = 0.99, weight = 0.0},
         snow_density_multiplier = 8.0,
         windiness = {value = Vector2(3.0, -3.0), weight = 1.0},
     },
@@ -300,6 +301,51 @@ var _TIERS := {
         version = "0.1.0",
         openness_type = OpennessType.WALLED,
     },
+    "23": {
+        version = "0.1.0",
+        openness_type = OpennessType.OPEN,
+        camera_horizontally_locked = false,
+        scroll_speed_max = 32.0,
+        peep_hole_size = {value = Vector2(300.0, 300.0), weight = 1.0},
+        fog_screen_opacity = {value = 0.95, weight = 1.0},
+        fog_screen_secondary_color_opacity_multiplier = \
+                {value = 0.9, weight = 1.0},
+        fog_screen_primary_color = {value = Color("#000000"), weight = 1.0},
+        fog_screen_secondary_color = {value = Color("#1c2226"), weight = 1.0},
+        light_energy = {value = 0.99, weight = 0.0},
+        snow_density_multiplier = 8.0,
+#        windiness = {value = Vector2(3.0, -3.0), weight = 1.0},
+    },
+    "24": {
+        version = "0.1.0",
+        openness_type = OpennessType.OPEN,
+        camera_horizontally_locked = false,
+        scroll_speed_max = 32.0,
+        peep_hole_size = {value = Vector2(300.0, 300.0), weight = 1.0},
+        fog_screen_opacity = {value = 0.95, weight = 1.0},
+        fog_screen_secondary_color_opacity_multiplier = \
+                {value = 0.9, weight = 1.0},
+        fog_screen_primary_color = {value = Color("#000000"), weight = 1.0},
+        fog_screen_secondary_color = {value = Color("#1c2226"), weight = 1.0},
+        light_energy = {value = 0.99, weight = 0.0},
+        snow_density_multiplier = 8.0,
+#        windiness = {value = Vector2(3.0, -3.0), weight = 1.0},
+    },
+    "25": {
+        version = "0.1.0",
+        openness_type = OpennessType.OPEN,
+        camera_horizontally_locked = false,
+        scroll_speed_max = 32.0,
+        peep_hole_size = {value = Vector2(300.0, 300.0), weight = 1.0},
+        fog_screen_opacity = {value = 0.95, weight = 1.0},
+        fog_screen_secondary_color_opacity_multiplier = \
+                {value = 0.9, weight = 1.0},
+        fog_screen_primary_color = {value = Color("#000000"), weight = 1.0},
+        fog_screen_secondary_color = {value = Color("#1c2226"), weight = 1.0},
+        light_energy = {value = 0.99, weight = 0.0},
+        snow_density_multiplier = 8.0,
+#        windiness = {value = Vector2(3.0, -3.0), weight = 1.0},
+    },
 }
 
 #        name = "Elevator",
@@ -342,7 +388,7 @@ var _LEVELS := {
         tiers = ["5", "17", "18"],
         version = "0.1.0",
         unlock_conditions = {
-            bronze_levels = ["2"],
+            bronze_levels = ["3"],
         },
     },
     "6": {
@@ -350,7 +396,7 @@ var _LEVELS := {
         tiers = ["19", "6", "7"],
         version = "0.1.0",
         unlock_conditions = {
-            bronze_levels = ["3"],
+            bronze_levels = ["5"],
         },
     },
     "7": {
@@ -358,12 +404,12 @@ var _LEVELS := {
         tiers = ["16", "14", "8"],
         version = "0.1.0",
         unlock_conditions = {
-            bronze_levels = ["5"],
+            bronze_levels = ["6"],
         },
     },
     "8": {
         name = "* Moderate",
-        tiers = ["19", "6", "7", "16", "14", "8", "11", "12", "13"],
+        tiers = ["5", "17", "18", "19", "6", "7", "16", "14", "8"],
         version = "0.1.0",
         unlock_conditions = {
             silver_levels = ["5", "6", "7"],
@@ -374,7 +420,7 @@ var _LEVELS := {
         tiers = ["11", "12", "13"],
         version = "0.1.0",
         unlock_conditions = {
-            bronze_levels = ["6"],
+            bronze_levels = ["7"],
         },
     },
     "10": {
@@ -382,19 +428,35 @@ var _LEVELS := {
         tiers = ["10"],
         version = "0.1.0",
         unlock_conditions = {
-            bronze_levels = ["7"],
+            bronze_levels = ["9"],
         },
     },
     "11": {
+        name = "TODO",
+        tiers = ["1"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["10"],
+        },
+    },
+    "12": {
+        name = "* Major",
+        tiers = ["11", "12", "13", "10"],
+        version = "0.1.0",
+        unlock_conditions = {
+            silver_levels = ["9", "10", "11"],
+        },
+    },
+    "13": {
         name = "* Ultimate",
         tiers = [
-            "1", "2", "3", "9", "4", "15", "5", "17", "18", 
-            "19", "6", "7", "16", "14", "8", "11", "12", "13",
-            "10",
+            "1", "21", "20", "3", "2", "22", "9", "15", "4", 
+            "5", "17", "18", "19", "6", "7", "16", "14", "8",
+            "11", "12", "13", "10",
         ],
         version = "0.1.0",
         unlock_conditions = {
-            bronze_levels = ["4", "8", "9"],
+            bronze_levels = ["4", "8", "12"],
         },
     },
 }

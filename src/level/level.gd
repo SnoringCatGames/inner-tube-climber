@@ -183,7 +183,8 @@ func _physics_process(_delta_sec: float) -> void:
         return
     
     # Keep track of player height.
-    var next_tier_height: float = -next_tier.position.y + Constants.CELL_SIZE.y
+    var next_tier_height: float = \
+            -current_tier.tier_end_position.y + Constants.CELL_SIZE.y
     if _get_player_height() > next_tier_height - 0.1:
         call_deferred("_on_entered_new_tier")
     player_max_height = max(player_max_height, _get_player_height())
@@ -321,22 +322,22 @@ func _fall() -> void:
         Time.set_timeout( \
                 funcref(self, "_start_new_tier_after_fall"), \
                 1.0, \
-                [current_tier.position])
+                [current_tier.tier_start_position])
     else:
         quit()
 
-func _start_new_tier_after_fall(current_tier_position: Vector2) -> void:
+func _start_new_tier_after_fall(current_tier_start_position: Vector2) -> void:
     _destroy_tiers()
     # Reset state to replay the level at the latest tier.
     _start_new_tier( \
             current_tier_id, \
-            current_tier_position)
+            current_tier_start_position)
     # Match player and camera positions to the current tier height.
     player_max_height = max(player_max_height, _get_player_height())
     player_max_height_on_current_life = \
             max(player_max_height_on_current_life, _get_player_height())
     $CameraHandler.on_new_tier_after_fall( \
-            current_tier_position, \
+            current_tier_start_position, \
             player.position, \
             _get_player_height())
 
@@ -615,7 +616,7 @@ func destroy() -> void:
 
 func _start_new_tier( \
         tier_id := START_TIER_ID, \
-        tier_position := Vector2.ZERO) -> void:
+        tier_start_position := Vector2.ZERO) -> void:
     tier_start_time = Time.elapsed_play_time_actual_sec
     falls_count_on_current_tier = 0
     current_tier_id = tier_id
@@ -658,7 +659,7 @@ func _start_new_tier( \
             true)
     current_tier.setup( \
             current_tier_config, \
-            tier_position, \
+            tier_start_position, \
             current_tier_index, \
             level_config.tiers.size())
     
@@ -719,12 +720,12 @@ func _start_new_tier( \
                 previous_tier_scene_path, \
                 true, \
                 true)
-        var previous_tier_position: Vector2 = \
-                current_tier.position + \
+        var previous_tier_start_position: Vector2 = \
+                current_tier.tier_start_position + \
                 Vector2(0.0, previous_tier.height)
         previous_tier.setup( \
                 previous_tier_config, \
-                previous_tier_position, \
+                previous_tier_start_position, \
                 previous_tier_index)
         
         var previous_tier_gap_scene_path: String = \
@@ -751,7 +752,7 @@ func _start_new_tier( \
             level_id, \
             current_tier_id, \
             true, \
-            current_tier.position)
+            current_tier.tier_start_position)
     $FogScreenHandler.update_for_current_tier( \
             level_id, \
             current_tier_id)
@@ -861,7 +862,7 @@ func _on_entered_new_tier() -> void:
             level_id, \
             current_tier_id, \
             false, \
-            current_tier.position)
+            current_tier.tier_start_position)
     $FogScreenHandler.update_for_current_tier( \
             level_id, \
             current_tier_id)

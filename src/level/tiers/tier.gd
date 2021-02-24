@@ -62,7 +62,7 @@ func _ready() -> void:
 
 func setup( \
         config: Dictionary, \
-        position_or_previous_tier, \
+        start_position_or_previous_tier, \
         tier_index := -1, \
         tier_count := -1) -> void:
     assert(config.is_base_tier or \
@@ -72,11 +72,12 @@ func setup( \
     
     self.config = config
     
-    if position_or_previous_tier is Vector2:
-        self.position = position_or_previous_tier
+    if start_position_or_previous_tier is Vector2:
+        self.position = start_position_or_previous_tier - \
+                tier_start.position
     else:
         self.position = \
-                position_or_previous_tier.tier_end_position - \
+                start_position_or_previous_tier.tier_end_position - \
                 tier_start.position
     
     if tier_index >= 0 and tier_count >= 0:

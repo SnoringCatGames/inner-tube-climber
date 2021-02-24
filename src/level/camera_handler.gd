@@ -19,7 +19,7 @@ var level_id: String
 var tier_id: String
 var player_position: Vector2
 var player_height: float
-var tier_position: Vector2
+var tier_start_position: Vector2
 
 var camera_max_distance_below_player_with_default_zoom := INF
 var player_max_distance_below_camera_with_default_zoom := INF
@@ -83,7 +83,7 @@ func sync_to_player_position( \
     if !is_camera_post_stuck_state_tween_active:
         if camera_horizontally_locked:
             camera_position.x = \
-                    tier_position.x + \
+                    tier_start_position.x + \
                     camera_horizontal_lock_tween_displacement
         else:
             camera_position.x = \
@@ -98,10 +98,10 @@ func update_for_current_tier( \
         level_id: String, \
         tier_id: String, \
         is_new_life: bool, \
-        tier_position: Vector2) -> void:
+        tier_start_position: Vector2) -> void:
     self.level_id = level_id
     self.tier_id = tier_id
-    self.tier_position = tier_position
+    self.tier_start_position = tier_start_position
     var is_base_tier := tier_id == "0"
     if is_new_life:
         fall_height = -INF
@@ -119,7 +119,7 @@ func on_fall_before_new_tier(shakes_harder: bool) -> void:
     $CameraShake.shake(shake_strength)
 
 func on_new_tier_after_fall( \
-        current_tier_position: Vector2, \
+        current_tier_start_position: Vector2, \
         player_position: Vector2, \
         player_height: float) -> void:
     self.player_position = player_position
@@ -128,7 +128,7 @@ func on_new_tier_after_fall( \
     camera_speed = 0.0
     camera_position = Vector2( \
             0.0, \
-            CAMERA_START_POSITION_POST_STUCK.y + current_tier_position.y)
+            CAMERA_START_POSITION_POST_STUCK.y + current_tier_start_position.y)
 
 func _get_min_framerate_multiplier() -> float:
     match Global.difficulty_mode:
@@ -227,9 +227,9 @@ func _update_camera_horizontally_locked(locked: bool) -> void:
     camera_horizontally_locked = locked
     
     var start_value: float = \
-            player_position.x - tier_position.x if \
+            player_position.x - tier_start_position.x if \
             camera_horizontally_locked else \
-            tier_position.x - player_position.x
+            tier_start_position.x - player_position.x
     camera_horizontal_lock_displacement_tween.stop(self)
     camera_horizontal_lock_displacement_tween.interpolate_property( \
             self, \

@@ -16,7 +16,10 @@ const FLICKER_DURATION_MAX_SEC := 0.02
 
 const LIGHT_INITIAL_BURST_DURATION_SEC := 0.3
 
+export var is_lit := false setget _set_is_lit,_get_is_lit
 var windiness: Vector2 setget _set_windiness
+
+var _is_ready := false
 
 var _last_flicker_end_time_sec := -INF
 var _next_flicker_start_time_sec := -INF
@@ -25,6 +28,8 @@ var _is_mid_flicker := false
 var light_burst_tween: Tween
 
 func _ready() -> void:
+    _is_ready = true
+    
     var current_time_sec: float = \
             OS.get_ticks_msec() / 1000.0 if \
             Engine.editor_hint else \
@@ -36,7 +41,7 @@ func _ready() -> void:
     light_burst_tween = Tween.new()
     add_child(light_burst_tween)
     
-    if Engine.editor_hint:
+    if is_lit or Engine.editor_hint:
         ignite(true)
     else:
         snuff()
@@ -110,3 +115,15 @@ func _process(delta_sec: float) -> void:
 
 func _set_windiness(value: Vector2) -> void:
     $TorchFlame.windiness = value
+
+func _set_is_lit(value: bool) -> void:
+    if is_lit != value:
+        is_lit = value
+        if _is_ready:
+            if is_lit:
+                ignite(true)
+            else:
+                snuff()
+
+func _get_is_lit() -> bool:
+    return is_lit

@@ -348,6 +348,24 @@ var _TIERS := {
         snow_density_multiplier = 8.0,
 #        windiness = {value = Vector2(3.0, -3.0), weight = 1.0},
     },
+    "26": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+    },
+    "27": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+        camera_horizontally_locked = false,
+    },
+    "28": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+        camera_horizontally_locked = false,
+    },
+    "29": {
+        version = "0.1.0",
+        openness_type = OpennessType.WALLED,
+    },
 }
 
 #        name = "Elevator",
@@ -427,7 +445,7 @@ var _LEVELS := {
     },
     "10": {
         name = "Shroud",
-        tiers = ["10"],
+        tiers = ["23", "24", "10"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["9"],
@@ -435,7 +453,7 @@ var _LEVELS := {
     },
     "11": {
         name = "TODO",
-        tiers = ["1"],
+        tiers = ["26", "27", "28"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["10"],
@@ -443,22 +461,39 @@ var _LEVELS := {
     },
     "12": {
         name = "* Major",
-        tiers = ["11", "12", "13", "10"],
+        tiers = ["11", "12", "13", "23", "24", "10", "26", "27", "28"],
         version = "0.1.0",
         unlock_conditions = {
             silver_levels = ["9", "10", "11"],
         },
     },
     "13": {
+        name = "Choice",
+        tiers = ["25"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["11"],
+        },
+    },
+    "14": {
+        name = "Credits",
+        tiers = ["29"],
+        version = "0.1.0",
+        unlock_conditions = {
+            bronze_levels = ["13"],
+        },
+    },
+    "15": {
         name = "* Ultimate",
         tiers = [
             "1", "21", "20", "3", "2", "22", "9", "15", "4", 
             "5", "17", "18", "19", "6", "7", "16", "14", "8",
-            "11", "12", "13", "10",
+            "11", "12", "13", "23", "24", "10", "26", "27", "28",
+            "25", "29"
         ],
         version = "0.1.0",
         unlock_conditions = {
-            bronze_levels = ["4", "8", "12"],
+            bronze_levels = ["4", "8", "12", "14"],
         },
     },
 }

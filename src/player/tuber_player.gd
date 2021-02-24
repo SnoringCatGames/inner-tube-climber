@@ -31,6 +31,7 @@ const MAX_HORIZONTAL_ON_FLOOR_SPEED := 350.0
 const MIN_VERTICAL_SPEED := 0.0
 const MAX_VERTICAL_SPEED := 4000.0
 const MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION := 15.0
+const MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION := 60.0
 var FRICTION_COEFFICIENT := \
         0.02 if !Global.get_is_mobile_control_version_one_handed() else 0.03
 var WALL_BOUNCE_MOVEMENT_DELAY_SEC := \
@@ -148,23 +149,6 @@ func _apply_movement() -> void:
     if is_stuck:
         return
     
-    if surface_state.is_touching_wall and \
-            Geometry.are_floats_equal_with_epsilon( \
-                    previous_position.x, \
-                    position.x, \
-                    0.01):
-        velocity.x = 0.0
-    if (surface_state.is_touching_floor or \
-            surface_state.is_touching_ceiling) and \
-            !just_triggered_jump:
-        if Geometry.are_floats_equal_with_epsilon( \
-                previous_position.y, \
-                position.y, \
-                0.1):
-            velocity.y = MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION
-    
-    previous_position = position
-    
     # We don't need to multiply velocity by delta because MoveAndSlide already
     # takes delta time into account.
     # TODO: Use the remaining pre-collision movement that move_and_slide
@@ -176,6 +160,7 @@ func _apply_movement() -> void:
             4, \
             Geometry.FLOOR_MAX_ANGLE)
     
+    # Prevent the player from immediately bouncing off the sides of a new tier.
     if !has_touched_floor_in_current_tier:
         var min_x := \
                 current_tier.tier_start_position.x + \
@@ -197,6 +182,8 @@ func _update_surface_state() -> void:
     
     var was_touching_floor := surface_state.is_touching_floor
     var was_touching_ceiling := surface_state.is_touching_ceiling
+    var was_touching_left_wall := surface_state.is_touching_left_wall
+    var was_touching_right_wall := surface_state.is_touching_right_wall
     var was_touching_wall := surface_state.is_touching_wall
     var was_touching_a_surface := surface_state.is_touching_a_surface
     
@@ -208,6 +195,10 @@ func _update_surface_state() -> void:
             surface_state.is_touching_ceiling or \
             surface_state.is_touching_wall
     
+    var which_wall: int = Utils.get_which_wall_collided_for_body(self)
+    surface_state.is_touching_left_wall = which_wall == SurfaceSide.LEFT_WALL
+    surface_state.is_touching_right_wall = which_wall == SurfaceSide.RIGHT_WALL
+    
     surface_state.just_touched_floor = \
             !was_touching_floor and surface_state.is_touching_floor
     surface_state.just_touched_ceiling = \
@@ -218,6 +209,10 @@ func _update_surface_state() -> void:
             was_touching_floor and !surface_state.is_touching_floor
     surface_state.just_left_ceiling = \
             was_touching_ceiling and !surface_state.is_touching_ceiling
+    surface_state.just_left_left_wall = \
+            was_touching_left_wall and !surface_state.is_touching_left_wall
+    surface_state.just_left_right_wall = \
+            was_touching_right_wall and !surface_state.is_touching_right_wall
     surface_state.just_left_wall = \
             was_touching_wall and !surface_state.is_touching_wall
     
@@ -227,10 +222,6 @@ func _update_surface_state() -> void:
     surface_state.just_left_air = \
             !was_touching_a_surface and \
                     surface_state.is_touching_a_surface
-    
-    var which_wall: int = Utils.get_which_wall_collided_for_body(self)
-    surface_state.is_touching_left_wall = which_wall == SurfaceSide.LEFT_WALL
-    surface_state.is_touching_right_wall = which_wall == SurfaceSide.RIGHT_WALL
     
     surface_state.toward_wall_sign = \
             (0 if !surface_state.is_touching_wall else \
@@ -405,6 +396,21 @@ func _process_actions(delta_sec: float) -> void:
     
     just_triggered_jump = false
     
+    # Undo a velocity offset we apply to maintain wall collisions.
+    if surface_state.just_left_wall:
+        if surface_state.just_left_left_wall and \
+                surface_state.horizontal_acceleration_sign != -1:
+            velocity.x += MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION
+            position.x += \
+                    MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION * \
+                    Time.PHYSICS_TIME_STEP_SEC * 1.5
+        elif surface_state.just_left_right_wall and \
+                surface_state.horizontal_acceleration_sign != 1:
+            velocity.x -= MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION
+            position.x -= \
+                    MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION * \
+                    Time.PHYSICS_TIME_STEP_SEC * 1.5
+    
     # Bounce horizontal velocity off of walls.
     just_bounced_off_wall = false
     if surface_state.just_touched_wall:
@@ -448,9 +454,9 @@ func _process_actions(delta_sec: float) -> void:
         is_rising_from_jump = false
         has_touched_floor_in_current_tier = true
         
-        # The move_and_slide system depends on some vertical gravity always pushing
-        # the player into the floor. If we just zero this out, is_on_floor() will
-        # give false negatives.
+        # The move_and_slide system depends on some vertical gravity always
+        # pushing the player into the floor. If we just zero this out,
+        # is_on_floor() will give false negatives.
         velocity.y = MIN_SPEED_TO_MAINTAIN_VERTICAL_COLLISION
         
         # Jump.
@@ -551,6 +557,22 @@ func _process_actions(delta_sec: float) -> void:
             MIN_VERTICAL_SPEED, \
             MAX_VERTICAL_SPEED, \
             modified_windiness)
+    
+    # The move_and_slide system depends on maintained velocity always pushing
+    # the player into a collision, otherwise it will eventually stop the
+    # collision. If we just zero this out, is_on_wall() will give false
+    # negatives.
+    if surface_state.is_touching_wall:
+        if surface_state.is_touching_left_wall and \
+                surface_state.horizontal_acceleration_sign != 1 and \
+                velocity.x <= 0.0:
+            velocity.x = -MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION
+        elif surface_state.is_touching_right_wall and \
+                surface_state.horizontal_acceleration_sign != -1 and \
+                velocity.x >= 0.0:
+            velocity.x = MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION
+    
+    previous_position = position
 
 # Updates the animation state for the current frame.
 func _process_animation() -> void:

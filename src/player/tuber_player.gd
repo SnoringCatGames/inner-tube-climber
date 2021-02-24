@@ -14,7 +14,7 @@ var WALL_BOUNCE_HORIZONTAL_BOOST := \
 const WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER := 0.6
 const WALL_BOUNCE_VERTICAL_BOOST_OFFSET := -420.0
 const FLOOR_BOUNCE_BOOST := -800.0
-const WALL_BOUNCE_MIN_SPEED_THRESHOLD := 80.0
+const WALL_BOUNCE_MIN_SPEED_THRESHOLD := 120.0
 var IN_AIR_HORIZONTAL_ACCELERATION := \
         600.0 if !Global.get_is_mobile_control_version_one_handed() else 500.0
 var IN_AIR_HORIZONTAL_DECELERATION := \
@@ -72,8 +72,6 @@ var BOUNCE_SQUISH_DISPLACEMENT := Vector2( \
 var BOUNCE_STRETCH_DISPLACEMENT := Vector2( \
         0.0, \
         0.0)
-
-var previous_position := Vector2.INF
 
 var is_stuck := true setget _set_is_stuck,_get_is_stuck
 
@@ -571,8 +569,6 @@ func _process_actions(delta_sec: float) -> void:
                 surface_state.horizontal_acceleration_sign != -1 and \
                 velocity.x >= 0.0:
             velocity.x = MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION
-    
-    previous_position = position
 
 # Updates the animation state for the current frame.
 func _process_animation() -> void:

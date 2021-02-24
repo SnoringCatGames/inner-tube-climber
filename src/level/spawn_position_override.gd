@@ -13,6 +13,6 @@ func _ready() -> void:
 func _draw() -> void:
     if Engine.editor_hint:
         draw_circle( \
-                position, \
+                Vector2.ZERO, \
                 24.0, \
                 SURFACE_COLOR)

@@ -154,7 +154,8 @@ func update() -> void:
     $AccordionPanel.update()
 
 func toggle() -> void:
-    $AccordionPanel.toggle()
+    if Nav.get_active_screen_type() == ScreenType.LEVEL_SELECT:
+        $AccordionPanel.toggle()
 
 func unlock() -> void:
     $HeaderWrapper/LockedWrapper.visible = true

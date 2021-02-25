@@ -14,6 +14,7 @@ tile_data = PoolIntArray( -4194302, 0, 8, -4194301, 0, 11, -4194298, 0, 8, -4194
 
 [node name="TierStart" parent="." instance=ExtResource( 3 )]
 position = Vector2( 0, -32 )
+spawn_position_x = 0.0
 
 [node name="TierEnd" parent="." instance=ExtResource( 4 )]
 position = Vector2( 0, -2080 )

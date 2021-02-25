@@ -21,7 +21,8 @@ func _process(_delta_sec: float) -> void:
     if Constants.DEBUG or Constants.PLAYTEST:
         if Input.is_action_just_pressed("screenshot"):
             Utils.take_screenshot()
-        if Input.is_action_just_pressed("one_up"):
+        if Input.is_action_just_pressed("one_up") and \
+                Global.level != null:
             Global.level.add_life()
 
 func _skip_to_debug_tier() -> void:
@@ -51,7 +52,7 @@ func _set_window_debug_size_and_position() -> void:
                 # over-top the editor.
                 OS.current_screen = \
                         (OS.current_screen + 1) % OS.get_screen_count()
-                OS.window_fullscreen = true
-                OS.window_borderless = true
+            OS.window_fullscreen = true
+            OS.window_borderless = true
         else:
             OS.window_size = window_size

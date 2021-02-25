@@ -41,9 +41,9 @@ func _set_window_debug_size_and_position() -> void:
         # App Store: 12.9'' iPad
 #        var window_size = Vector2(2732, 2048)
         # Default
-        var window_size := Vector2(480.0, 480.0)
+#        var window_size := Vector2(480.0, 480.0)
         # Just show as full screen.
-#        var window_size := Vector2.INF
+        var window_size := Vector2.INF
         
         if window_size == Vector2.INF:
             if OS.get_screen_count() > 1:

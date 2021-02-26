@@ -15,6 +15,7 @@ const WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER := 0.6
 const WALL_BOUNCE_VERTICAL_BOOST_OFFSET := -420.0
 const FLOOR_BOUNCE_BOOST := -800.0
 const WALL_BOUNCE_MIN_SPEED_THRESHOLD := 120.0
+const WALL_REBOUNCE_MIN_DISTANCE_THRESHOLD := 4.0
 var IN_AIR_HORIZONTAL_ACCELERATION := \
         600.0 if !Global.get_is_mobile_control_version_one_handed() else 500.0
 var IN_AIR_HORIZONTAL_DECELERATION := \
@@ -91,6 +92,7 @@ var is_in_post_bounce_horizontal_acceleration_grace_period := false
 var was_last_jump_input_consumed := false
 var last_jump_input_time := 0.0
 var last_floor_departure_time := 0.0
+var recent_bounce_player_x := INF
 
 var windiness := Vector2.ZERO
 var current_tier: Tier
@@ -193,9 +195,11 @@ func _update_surface_state() -> void:
             surface_state.is_touching_ceiling or \
             surface_state.is_touching_wall
     
-    var which_wall: int = Utils.get_which_wall_collided_for_body(self)
-    surface_state.is_touching_left_wall = which_wall == SurfaceSide.LEFT_WALL
-    surface_state.is_touching_right_wall = which_wall == SurfaceSide.RIGHT_WALL
+    surface_state.which_wall = Utils.get_which_wall_collided_for_body(self)
+    surface_state.is_touching_left_wall = \
+            surface_state.which_wall == SurfaceSide.LEFT_WALL
+    surface_state.is_touching_right_wall = \
+            surface_state.which_wall == SurfaceSide.RIGHT_WALL
     
     surface_state.just_touched_floor = \
             !was_touching_floor and surface_state.is_touching_floor
@@ -226,7 +230,7 @@ func _update_surface_state() -> void:
     
     surface_state.toward_wall_sign = \
             (0 if !surface_state.is_touching_wall else \
-            (1 if which_wall == SurfaceSide.RIGHT_WALL else \
+            (1 if surface_state.which_wall == SurfaceSide.RIGHT_WALL else \
             -1))
     
     if surface_state.just_touched_wall:
@@ -416,11 +420,35 @@ func _process_actions(delta_sec: float) -> void:
                     MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION * \
                     Time.PHYSICS_TIME_STEP_SEC * 1.5
     
+    # Check whether the player has moved far enough from the wall that they can
+    # now bounce again on that same wall.
+    var x_distance_from_last_bounce := abs(recent_bounce_player_x - position.x)
+    var is_far_enough_from_recent_bounce_x := \
+            x_distance_from_last_bounce > WALL_REBOUNCE_MIN_DISTANCE_THRESHOLD
+    if is_far_enough_from_recent_bounce_x:
+        recent_bounce_player_x = INF
+    
     # Bounce horizontal velocity off of walls.
     is_bouncing_off_wall = false
-    if surface_state.just_touched_wall:
-        if abs(velocity.x) > WALL_BOUNCE_MIN_SPEED_THRESHOLD:
+    if surface_state.just_touched_wall and \
+            is_far_enough_from_recent_bounce_x:
+        # Determine whether the player is moving fast enough to wall-bounce.
+        var is_horizontal_speed_exceeding_wall_bounce_threshold := false
+        if windiness.x > 0.0:
+            if velocity.x > WALL_BOUNCE_MIN_SPEED_THRESHOLD or \
+                    velocity.x < windiness.x - WALL_BOUNCE_MIN_SPEED_THRESHOLD:
+                is_horizontal_speed_exceeding_wall_bounce_threshold = true
+        elif windiness.x < 0.0:
+            if velocity.x < WALL_BOUNCE_MIN_SPEED_THRESHOLD or \
+                    velocity.x > windiness.x + WALL_BOUNCE_MIN_SPEED_THRESHOLD:
+                is_horizontal_speed_exceeding_wall_bounce_threshold = true
+        else: # windiness.x == 0.0
+            is_horizontal_speed_exceeding_wall_bounce_threshold = \
+                    abs(velocity.x) > WALL_BOUNCE_MIN_SPEED_THRESHOLD
+        
+        if is_horizontal_speed_exceeding_wall_bounce_threshold:
             is_bouncing_off_wall = true
+            recent_bounce_player_x = position.x
             
             velocity.x = -velocity.x
             velocity.x += \

@@ -25,6 +25,8 @@ var just_bounced_off_wall := false
 var just_entered_air := false
 var just_left_air := false
 
+var which_wall := SurfaceSide.NONE
+
 var touched_side := SurfaceSide.NONE
 var touched_surface_normal := Vector2.INF
 

@@ -61,6 +61,10 @@ func _update_shader_args() -> void:
     var velocity := \
             windiness * WINDINESS_TO_PIXELS_PER_SEC_MULTIPLIER + \
             DEFAULT_SNOW_VELOCITY_WITH_NO_WIND_PIXELS_PER_SECOND
+    var min_vertical_speed := \
+            DEFAULT_SNOW_VELOCITY_WITH_NO_WIND_PIXELS_PER_SECOND.y * 0.25
+    if velocity.y < min_vertical_speed and velocity.y > -min_vertical_speed:
+        velocity.y = -min_vertical_speed
     var direction_2d := velocity.normalized()
     var direction := Vector3(direction_2d.x, direction_2d.y, 0.0)
     var speed_pixels_per_sec := velocity.length()

@@ -68,7 +68,8 @@ func _ready() -> void:
     tier_end = Utils.get_child_by_type( \
             self, \
             TierEnd)
-    if !spawn_position_overrides.empty():
+    if !spawn_position_overrides.empty() and \
+            Constants.DEBUG:
         spawn_position_override = spawn_position_overrides[0]
     else:
         spawn_position_override = null
@@ -101,6 +102,8 @@ func setup( \
                 true)
         tier_ratio_sign.position = tier_start.position
         tier_ratio_sign.text = "%s / %s" % [tier_index + 1, tier_count]
+        if Constants.DEBUG or Constants.PLAYTEST:
+            tier_ratio_sign.show_tier_id_sign(config.id)
     
     if !config.is_base_tier:
         icicle_fall_animator = Utils.add_scene( \

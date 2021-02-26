@@ -18,3 +18,7 @@ func _get_text() -> String:
 func _set_windiness(value: Vector2) -> void:
     $LeftTorch.windiness = value
     $RightTorch.windiness = value
+
+func show_tier_id_sign(tier_id: String) -> void:
+    $TierIdSign.text = "Tier " + tier_id
+    $TierIdSign.visible = true

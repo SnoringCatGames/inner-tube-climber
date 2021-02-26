@@ -126,9 +126,13 @@ func on_new_tier_after_fall( \
     self.player_height = player_height
     _decrement_speed()
     camera_speed = 0.0
+    var camera_start_offset_y := \
+            max(CAMERA_START_POSITION_POST_STUCK.y * \
+                    camera_zoom * camera_zoom * camera_zoom, \
+                    CAMERA_START_POSITION_POST_STUCK.y)
     camera_position = Vector2( \
             0.0, \
-            CAMERA_START_POSITION_POST_STUCK.y + current_tier_start_position.y)
+            camera_start_offset_y + current_tier_start_position.y)
 
 func _get_min_framerate_multiplier() -> float:
     match Global.difficulty_mode:

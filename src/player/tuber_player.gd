@@ -82,7 +82,7 @@ var just_triggered_jump := false
 var is_rising_from_jump := false
 var jump_count := 0
 var max_jump_count := 1
-var just_bounced_off_wall := false
+var is_bouncing_off_wall := false
 
 var has_touched_floor_in_current_tier := false
 var has_hit_wall_since_pressing_move := false
@@ -213,6 +213,9 @@ func _update_surface_state() -> void:
             was_touching_right_wall and !surface_state.is_touching_right_wall
     surface_state.just_left_wall = \
             was_touching_wall and !surface_state.is_touching_wall
+    surface_state.just_bounced_off_wall = \
+            surface_state.just_left_wall and \
+            is_bouncing_off_wall
     
     surface_state.just_entered_air = \
             was_touching_a_surface and \
@@ -280,6 +283,9 @@ func _update_tile_map_contact() -> void:
         if surface_state.collision_tile_map_coord_result.tile_map_coord == \
                 Vector2.INF:
             for tile_map in tilemaps:
+                if !is_instance_valid(tile_map):
+                    Utils.error()
+                    continue
                 if tile_map == surface_state.touched_tile_map:
                     continue
                 Geometry.get_collision_tile_map_coord( \
@@ -395,7 +401,8 @@ func _process_actions(delta_sec: float) -> void:
     just_triggered_jump = false
     
     # Undo a velocity offset we apply to maintain wall collisions.
-    if surface_state.just_left_wall:
+    if surface_state.just_left_wall and \
+            !surface_state.just_bounced_off_wall:
         if surface_state.just_left_left_wall and \
                 surface_state.horizontal_acceleration_sign != -1:
             velocity.x += MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION
@@ -410,10 +417,10 @@ func _process_actions(delta_sec: float) -> void:
                     Time.PHYSICS_TIME_STEP_SEC * 1.5
     
     # Bounce horizontal velocity off of walls.
-    just_bounced_off_wall = false
+    is_bouncing_off_wall = false
     if surface_state.just_touched_wall:
         if abs(velocity.x) > WALL_BOUNCE_MIN_SPEED_THRESHOLD:
-            just_bounced_off_wall = true
+            is_bouncing_off_wall = true
             
             velocity.x = -velocity.x
             velocity.x += \
@@ -560,7 +567,8 @@ func _process_actions(delta_sec: float) -> void:
     # the player into a collision, otherwise it will eventually stop the
     # collision. If we just zero this out, is_on_wall() will give false
     # negatives.
-    if surface_state.is_touching_wall:
+    if surface_state.is_touching_wall and \
+            !is_bouncing_off_wall:
         if surface_state.is_touching_left_wall and \
                 surface_state.horizontal_acceleration_sign != 1 and \
                 velocity.x <= 0.0:
@@ -682,7 +690,7 @@ func _update_squish_and_stretch() -> void:
         $TuberAnimator.bounce_scale_multiplier = Vector2.ONE
         $TuberAnimator.bounce_offset = Vector2.ZERO
     
-    if just_bounced_off_wall and \
+    if is_bouncing_off_wall and \
             !surface_state.is_touching_floor:
         var squish_duration_sec := \
                 BOUNCE_SQUISH_DURATION_SEC / \
@@ -756,7 +764,7 @@ func _update_effects_animations() -> void:
                     EffectAnimation.LAND_SIDEWAYS, \
                     1 if velocity.x > 0 else -1)
     
-    if just_bounced_off_wall and \
+    if is_bouncing_off_wall and \
             !surface_state.is_touching_floor:
         effects_animator.play( \
                 EffectAnimation.WALL_BOUNCE, \
@@ -787,7 +795,7 @@ func _process_sounds() -> void:
             surface_state.just_touched_ceiling:
         Audio.play_sound(Sound.LAND)
     
-    if just_bounced_off_wall:
+    if is_bouncing_off_wall:
         Audio.play_sound(Sound.BOUNCE)
     
     if Input.is_action_just_pressed("jump"):

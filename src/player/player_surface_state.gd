@@ -21,6 +21,7 @@ var just_touched_wall := false
 var just_left_left_wall := false
 var just_left_right_wall := false
 var just_left_wall := false
+var just_bounced_off_wall := false
 var just_entered_air := false
 var just_left_air := false
 

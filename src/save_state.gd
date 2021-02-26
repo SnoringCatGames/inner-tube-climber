@@ -16,6 +16,7 @@ const MISCELLANEOUS_SECTION_KEY := "miscellaneous"
 
 const CLIENT_ID_KEY := "cliend_id"
 const AGREED_TO_TERMS_KEY := "agreed_to_terms"
+const SELECTED_DIFFICULTY_KEY := "selected_difficulty"
 const NEW_UNLOCKED_LEVELS_KEY := "new_unlocked_levels"
 const FINISHED_LEVEL_STREAK_KEY := "finished_level_streak"
 const FAILED_LEVEL_STREAK_KEY := "failed_level_streak"

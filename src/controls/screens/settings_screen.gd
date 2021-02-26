@@ -270,6 +270,7 @@ func _on_difficulty_selected( \
         option_label: String) -> void:
     Global.difficulty_mode = DifficultyMode.get_string_type(option_label)
     SaveState.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)
+    Global.set_selected_difficulty()
 
 func _on_mobile_control_version_selected( \
         option_index: int, \

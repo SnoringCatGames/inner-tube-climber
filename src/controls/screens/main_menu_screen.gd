@@ -55,4 +55,8 @@ func _handle_display_resized() -> void:
 
 func _on_StartGameButton_pressed() -> void:
     Global.give_button_press_feedback()
-    Nav.open(ScreenType.LEVEL_SELECT)
+    var next_screen_type := \
+        ScreenType.LEVEL_SELECT if \
+        Global.selected_difficulty else \
+        ScreenType.SELECT_DIFFICULTY
+    Nav.open(next_screen_type)

@@ -134,9 +134,6 @@ rect_min_size = Vector2( 160, 80 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 5 )
-is_shiny = null
-includes_color_pulse = null
-is_font_xl = null
 
 [node name="StartGameButton2" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 visible = false

@@ -26,6 +26,8 @@ const GAME_OVER_SCREEN_PATH := \
         "res://src/controls/screens/game_over_screen.tscn"
 const CONFIRM_DATA_DELETION_SCREEN_PATH := \
         "res://src/controls/screens/confirm_data_deletion_screen.tscn"
+const SELECT_DIFFICULTY_SCREEN_PATH := \
+        "res://src/controls/screens/select_difficulty_screen.tscn"
 const NOTIFICATION_SCREEN_PATH := \
         "res://src/controls/screens/notification_screen.tscn"
 const FADE_TRANSITION_PATH := \
@@ -153,6 +155,12 @@ func create_screens() -> void:
             true, \
             false)
     screens[ScreenType.CONFIRM_DATA_DELETION].pause_mode = Node.PAUSE_MODE_STOP
+    screens[ScreenType.SELECT_DIFFICULTY] = Utils.add_scene( \
+            Global.canvas_layers.menu_screen_layer, \
+            SELECT_DIFFICULTY_SCREEN_PATH, \
+            true, \
+            false)
+    screens[ScreenType.SELECT_DIFFICULTY].pause_mode = Node.PAUSE_MODE_STOP
     screens[ScreenType.NOTIFICATION] = Utils.add_scene( \
             Global.canvas_layers.menu_screen_layer, \
             NOTIFICATION_SCREEN_PATH, \

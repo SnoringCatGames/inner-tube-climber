@@ -1,0 +1,131 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/controls/centered_panel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/fonts/main_font_l.tres" type="DynamicFont" id=2]
+[ext_resource path="res://src/controls/full_screen_panel.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/controls/screens/select_difficulty_screen.gd" type="Script" id=4]
+[ext_resource path="res://src/controls/shiny_button.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/controls/nav_bar.tscn" type="PackedScene" id=12]
+
+[node name="SelectDifficultyScreen" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="FullScreenPanel" parent="." instance=ExtResource( 3 )]
+margin_right = 480.0
+margin_bottom = 480.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel"]
+margin_right = 480.0
+margin_bottom = 612.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 8.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NavBar" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 12 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 480.0
+margin_bottom = 128.0
+text = "Select difficulty"
+shows_back = false
+shows_about = false
+shows_settings = false
+shows_logo = false
+shows_game_over = false
+
+[node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 132.0
+margin_right = 480.0
+margin_bottom = 612.0
+stretches_horizontally = false
+stretches_vertically = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel"]
+margin_right = 480.0
+margin_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
+margin_right = 480.0
+margin_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
+margin_left = 100.0
+margin_top = 78.0
+margin_right = 380.0
+margin_bottom = 402.0
+rect_min_size = Vector2( 280, 0 )
+custom_constants/separation = 16
+
+[node name="Spacer3" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
+margin_left = 140.0
+margin_right = 140.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+size_flags_horizontal = 4
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EasyButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 40.0
+margin_top = 66.0
+margin_right = 240.0
+margin_bottom = 126.0
+rect_min_size = Vector2( 200, 60 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_fonts/font = ExtResource( 2 )
+text = "Easy"
+texture = null
+
+[node name="ModerateButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 40.0
+margin_top = 142.0
+margin_right = 240.0
+margin_bottom = 202.0
+rect_min_size = Vector2( 200, 60 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_fonts/font = ExtResource( 2 )
+text = "Moderate"
+texture = null
+
+[node name="HardButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 40.0
+margin_top = 218.0
+margin_right = 240.0
+margin_bottom = 278.0
+rect_min_size = Vector2( 200, 60 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_fonts/font = ExtResource( 2 )
+text = "Hard"
+texture = null
+
+[node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
+margin_left = 140.0
+margin_top = 294.0
+margin_right = 140.0
+margin_bottom = 324.0
+rect_min_size = Vector2( 0, 30 )
+size_flags_horizontal = 4
+size_flags_vertical = 3
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/EasyButton" to="." method="_on_EasyButton_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/ModerateButton" to="." method="_on_ModerateButton_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/HardButton" to="." method="_on_HardButton_pressed"]

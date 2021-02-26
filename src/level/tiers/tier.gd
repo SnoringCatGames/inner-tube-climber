@@ -125,7 +125,7 @@ func on_entered_tier(is_new_life: bool) -> void:
     if !is_new_life:
         assert(tier_ratio_sign != null)
     if tier_ratio_sign != null:
-        Audio.play_sound(Sound.IGNITE)
+        Audio.play_sound(Sound.IGNITE, true)
         tier_ratio_sign.ignite()
 
 func on_landed_in_tier() -> void:

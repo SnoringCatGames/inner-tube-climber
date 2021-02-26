@@ -317,7 +317,7 @@ func _fall() -> void:
     var was_last_life := lives_count == 0
     
     if !was_last_life:
-        Audio.play_sound(Sound.FALL)    
+        Audio.play_sound(Sound.FALL, true)
         $CameraHandler.on_fall_before_new_tier(was_last_life)
         _destroy_player()
         Time.set_timeout( \
@@ -741,7 +741,7 @@ func _start_new_tier( \
     
     if is_base_tier:
         music_index = -1
-        Audio.play_music(Music.STUCK_IN_A_CREVASSE)
+        Audio.play_music(Music.STUCK_IN_A_CREVASSE, true)
     else:
         Audio.play_music(level_config.music_sequence[music_index])
     
@@ -855,7 +855,7 @@ func _on_entered_new_tier() -> void:
     music_index = \
             (music_index + 1) % \
             level_config.music_sequence.size()
-    Audio.play_music(level_config.music_sequence[music_index])
+    Audio.play_music(level_config.music_sequence[music_index], true)
     
     current_tier.on_entered_tier(false)
     $CameraHandler.update_for_current_tier( \
@@ -910,7 +910,7 @@ func _on_entered_new_tier() -> void:
                 Time.elapsed_play_time_actual_sec - level_start_time)
     else:
         pass
-#        Audio.play_sound(Sound.TIER_COMPLETE)
+#        Audio.play_sound(Sound.TIER_COMPLETE, true)
     
     _update_score_for_tier_change()
     

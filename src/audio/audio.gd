@@ -30,16 +30,25 @@ func _init() -> void:
     
     _update_volume()
 
-func play_sound(sound: int) -> void:
-    call_deferred("_play_sound_deferred", sound)
+func play_sound( \
+        sound: int, \
+        deferred := false) -> void:
+    if deferred:
+        call_deferred("_play_sound_deferred", sound)
+    else:
+        _play_sound_deferred(sound)
 
 func play_music( \
         music_type: int, \
-        transitions_immediately := false) -> void:
-    call_deferred( \
-            "_cross_fade_music", \
-            music_type, \
-            transitions_immediately)
+        transitions_immediately := false, \
+        deferred := false) -> void:
+    if deferred:
+        call_deferred( \
+                "_cross_fade_music", \
+                music_type, \
+                transitions_immediately)
+    else:
+        _cross_fade_music(music_type, transitions_immediately)
 
 func _play_sound_deferred(sound: int) -> void:
     Sound.MANIFEST[sound].player.play()

@@ -342,11 +342,8 @@ var _TIERS := {
                 {value = 0.96, weight = 1.0},
         fog_screen_primary_color = {value = Color("#ffffff"), weight = 1.0},
         fog_screen_secondary_color = {value = Color("#d3e2ed"), weight = 1.0},
-#        fog_screen_primary_color = {value = Color("#000000"), weight = 1.0},
-#        fog_screen_secondary_color = {value = Color("#0d1012"), weight = 1.0},
         light_energy = {value = 0.99, weight = 1.0},
         snow_density_multiplier = 8.0,
-#        windiness = {value = Vector2(3.0, -3.0), weight = 1.0},
     },
     "26": {
         version = "0.1.0",
@@ -491,21 +488,13 @@ var _LEVELS := {
     },
     "13": {
         name = "Scatter",
-        tiers = ["25"],
+        tiers = ["25", "29"],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["11"],
         },
     },
     "14": {
-        name = "Credits",
-        tiers = ["29"],
-        version = "0.1.0",
-        unlock_conditions = {
-            bronze_levels = ["13"],
-        },
-    },
-    "15": {
         name = "* Ultimate",
         tiers = [
             "1", "21", "20", "3", "2", "22", "9", "15", "4", 
@@ -515,7 +504,7 @@ var _LEVELS := {
         ],
         version = "0.1.0",
         unlock_conditions = {
-            bronze_levels = ["4", "8", "12", "14"],
+            bronze_levels = ["4", "8", "12", "13"],
         },
     },
 }

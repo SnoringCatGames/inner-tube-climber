@@ -404,6 +404,8 @@ func _process_actions(delta_sec: float) -> void:
     
     just_triggered_jump = false
     
+    var modified_windiness := windiness * WINDINESS_MULTIPLIER
+    
     # Undo a velocity offset we apply to maintain wall collisions.
     if surface_state.just_left_wall and \
             !surface_state.just_bounced_off_wall:
@@ -434,15 +436,17 @@ func _process_actions(delta_sec: float) -> void:
             is_far_enough_from_recent_bounce_x:
         # Determine whether the player is moving fast enough to wall-bounce.
         var is_horizontal_speed_exceeding_wall_bounce_threshold := false
-        if windiness.x > 0.0:
+        if modified_windiness.x > 0.0:
             if velocity.x > WALL_BOUNCE_MIN_SPEED_THRESHOLD or \
-                    velocity.x < windiness.x - WALL_BOUNCE_MIN_SPEED_THRESHOLD:
+                    velocity.x < modified_windiness.x - \
+                            WALL_BOUNCE_MIN_SPEED_THRESHOLD:
                 is_horizontal_speed_exceeding_wall_bounce_threshold = true
-        elif windiness.x < 0.0:
+        elif modified_windiness.x < 0.0:
             if velocity.x < WALL_BOUNCE_MIN_SPEED_THRESHOLD or \
-                    velocity.x > windiness.x + WALL_BOUNCE_MIN_SPEED_THRESHOLD:
+                    velocity.x > modified_windiness.x + \
+                            WALL_BOUNCE_MIN_SPEED_THRESHOLD:
                 is_horizontal_speed_exceeding_wall_bounce_threshold = true
-        else: # windiness.x == 0.0
+        else: # modified_windiness.x == 0.0
             is_horizontal_speed_exceeding_wall_bounce_threshold = \
                     abs(velocity.x) > WALL_BOUNCE_MIN_SPEED_THRESHOLD
         
@@ -475,8 +479,6 @@ func _process_actions(delta_sec: float) -> void:
             last_floor_departure_time > \
             Time.elapsed_play_time_modified_sec - \
                     JUMP_DELAY_FORGIVENESS_THRESHOLD_SEC
-    
-    var modified_windiness := windiness * WINDINESS_MULTIPLIER
     
     if surface_state.is_touching_floor:
         assert(surface_state.friction >= 0.0 and \

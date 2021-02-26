@@ -16,7 +16,11 @@ const WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER := 0.6
 const WALL_BOUNCE_VERTICAL_BOOST_OFFSET := -420.0
 const FLOOR_BOUNCE_BOOST := -800.0
 const WALL_BOUNCE_MIN_SPEED_THRESHOLD := 120.0
-const WALL_BOUNCE_AGAINST_WIND_MIN_SPEED_THRESHOLD := 95.0
+# TODO: This is just disabling bounce against the wind. 100 happens to be the
+#       max against-the-wind in-air speed for all our sideways wind levels. If
+#       we want different sideways wind values, we should replace this with
+#       more correct logic.
+const WALL_BOUNCE_AGAINST_WIND_MIN_SPEED_THRESHOLD := 105.0
 const WALL_REBOUNCE_MIN_DISTANCE_THRESHOLD := 4.0
 var IN_AIR_HORIZONTAL_ACCELERATION := \
         600.0 if !Global.get_is_mobile_control_version_one_handed() else 500.0
@@ -150,9 +154,6 @@ func on_new_tier(current_tier: Tier) -> void:
 func _apply_movement() -> void:
     if is_stuck:
         return
-    
-    # FIXME: 
-    print("velocity.x=" + str(velocity.x))
     
     # We don't need to multiply velocity by delta because MoveAndSlide already
     # takes delta time into account.
@@ -426,6 +427,10 @@ func _process_actions(delta_sec: float) -> void:
             position.x -= \
                     MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION * \
                     Time.PHYSICS_TIME_STEP_SEC * 1.5
+    elif surface_state.is_touching_wall:
+        velocity.x += \
+                MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION * \
+                surface_state.horizontal_acceleration_sign
     
     # Check whether the player has moved far enough from the wall that they can
     # now bounce again on that same wall.

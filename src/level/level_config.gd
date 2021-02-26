@@ -110,6 +110,14 @@ const FRAMERATE_MULTIPLIER_MODERATE_MAX := 1.25
 const FRAMERATE_MULTIPLIER_HARD_MIN := 1.25
 const FRAMERATE_MULTIPLIER_HARD_MAX := 1.6
 
+const _DEFAULT_MUSIC_SEQUENCE := [
+    Music.STUCK_IN_A_CREVASSE,
+    Music.NO_ESCAPE_FROM_THE_LOOP,
+    Music.RISING_THROUGH_RARIFIED_AIR,
+    Music.OUT_FOR_A_LOOP_RIDE,
+    Music.PUMP_UP_THAT_TUBE,
+]
+
 const _DEFAULT_TIER_VALUES := {
     id = "",
     number = -1,
@@ -138,13 +146,7 @@ const _DEFAULT_LEVEL_VALUES := {
     name = "",
     version = "",
     lives_count = 3,
-    music_sequence = [
-        Music.STUCK_IN_A_CREVASSE,
-        Music.NO_ESCAPE_FROM_THE_LOOP,
-        Music.RISING_THROUGH_RARIFIED_AIR,
-        Music.OUT_FOR_A_LOOP_RIDE,
-        Music.PUMP_UP_THAT_TUBE,
-    ],
+    music_sequence = _DEFAULT_MUSIC_SEQUENCE,
     zoom_multiplier = _DEFAULT_TIER_VALUES.zoom_multiplier,
     scroll_speed_multiplier = _DEFAULT_TIER_VALUES.scroll_speed_multiplier,
     scroll_speed_min = _DEFAULT_TIER_VALUES.scroll_speed_min,
@@ -394,6 +396,11 @@ var _LEVELS := {
     "1": {
         name = "Jump",
         tiers = ["1", "21", "20"],
+        music_sequence = [
+            Music.STUCK_IN_A_CREVASSE,
+            Music.NO_ESCAPE_FROM_THE_LOOP,
+            Music.OUT_FOR_A_LOOP_RIDE,
+        ],
         version = "0.1.0",
         unlock_conditions = {
         },
@@ -401,6 +408,11 @@ var _LEVELS := {
     "2": {
         name = "Climb",
         tiers = ["3", "2", "22"],
+        music_sequence = [
+            Music.OUT_FOR_A_LOOP_RIDE,
+            Music.STUCK_IN_A_CREVASSE,
+            Music.PUMP_UP_THAT_TUBE,
+        ],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["1"],
@@ -409,6 +421,11 @@ var _LEVELS := {
     "3": {
         name = "Slip",
         tiers = ["9", "15", "4"],
+        music_sequence = [
+            Music.STUCK_IN_A_CREVASSE,
+            Music.RISING_THROUGH_RARIFIED_AIR,
+            Music.PUMP_UP_THAT_TUBE,
+        ],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["2"],
@@ -416,7 +433,7 @@ var _LEVELS := {
     },
     "4": {
         name = "* Minor",
-        tiers = ["1", "21", "20", "3", "2", "22", "9", "15", "4"],
+        levels = ["1", "2", "3"],
         version = "0.1.0",
         unlock_conditions = {
             silver_levels = ["1", "2", "3"],
@@ -425,6 +442,11 @@ var _LEVELS := {
     "5": {
         name = "Bounce",
         tiers = ["5", "14", "18"],
+        music_sequence = [
+            Music.NO_ESCAPE_FROM_THE_LOOP,
+            Music.OUT_FOR_A_LOOP_RIDE,
+            Music.PUMP_UP_THAT_TUBE,
+        ],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["3"],
@@ -433,6 +455,11 @@ var _LEVELS := {
     "6": {
         name = "Open",
         tiers = ["6", "7", "19"],
+        music_sequence = [
+            Music.STUCK_IN_A_CREVASSE,
+            Music.RISING_THROUGH_RARIFIED_AIR,
+            Music.NO_ESCAPE_FROM_THE_LOOP,
+        ],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["5"],
@@ -441,6 +468,11 @@ var _LEVELS := {
     "7": {
         name = "Switchback",
         tiers = ["8", "16", "17"],
+        music_sequence = [
+            Music.OUT_FOR_A_LOOP_RIDE,
+            Music.PUMP_UP_THAT_TUBE,
+            Music.RISING_THROUGH_RARIFIED_AIR,
+        ],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["6"],
@@ -448,7 +480,7 @@ var _LEVELS := {
     },
     "8": {
         name = "* Moderate",
-        tiers = ["5", "14", "18", "6", "7", "19", "8", "16", "17"],
+        levels = ["5", "6", "7"],
         version = "0.1.0",
         unlock_conditions = {
             silver_levels = ["5", "6", "7"],
@@ -457,6 +489,11 @@ var _LEVELS := {
     "9": {
         name = "Flurry",
         tiers = ["11", "12", "13"],
+        music_sequence = [
+            Music.NO_ESCAPE_FROM_THE_LOOP,
+            Music.OUT_FOR_A_LOOP_RIDE,
+            Music.RISING_THROUGH_RARIFIED_AIR,
+        ],
         version = "0.1.0",
         lives_count = 4,
         unlock_conditions = {
@@ -466,6 +503,11 @@ var _LEVELS := {
     "10": {
         name = "Shroud",
         tiers = ["23", "24", "10"],
+        music_sequence = [
+            Music.STUCK_IN_A_CREVASSE,
+            Music.RISING_THROUGH_RARIFIED_AIR,
+            Music.NO_ESCAPE_FROM_THE_LOOP,
+        ],
         version = "0.1.0",
         lives_count = 4,
         unlock_conditions = {
@@ -475,6 +517,11 @@ var _LEVELS := {
     "11": {
         name = "Scale",
         tiers = ["26", "27", "28"],
+        music_sequence = [
+            Music.NO_ESCAPE_FROM_THE_LOOP,
+            Music.RISING_THROUGH_RARIFIED_AIR,
+            Music.PUMP_UP_THAT_TUBE,
+        ],
         version = "0.1.0",
         lives_count = 5,
         unlock_conditions = {
@@ -483,7 +530,7 @@ var _LEVELS := {
     },
     "12": {
         name = "* Major",
-        tiers = ["11", "12", "13", "23", "24", "10", "26", "27", "28"],
+        levels = ["9", "10", "11"],
         version = "0.1.0",
         unlock_conditions = {
             silver_levels = ["9", "10", "11"],
@@ -492,6 +539,10 @@ var _LEVELS := {
     "13": {
         name = "Scatter",
         tiers = ["25", "29"],
+        music_sequence = [
+            Music.PUMP_UP_THAT_TUBE,
+            Music.OUT_FOR_A_LOOP_RIDE,
+        ],
         version = "0.1.0",
         unlock_conditions = {
             bronze_levels = ["11"],
@@ -499,11 +550,11 @@ var _LEVELS := {
     },
     "14": {
         name = "* Ultimate",
-        tiers = [
-            "1", "21", "20", "3", "2", "22", "9", "15", "4", 
-            "5", "14", "18", "6", "7", "19", "8", "16", "17",
-            "11", "12", "13", "23", "24", "10", "26", "27", "28",
-            "25", "29"
+        levels = [
+            "1", "2", "3",
+            "5", "6", "7",
+            "9", "10", "11",
+            "13",
         ],
         version = "0.1.0",
         unlock_conditions = {
@@ -538,9 +589,12 @@ func _create_a_test_level_for_each_tier() -> void:
             continue
         max_level_number += 1
         var level_id := str(max_level_number)
+        var music: int = _DEFAULT_MUSIC_SEQUENCE[ \
+                int(randf() * _DEFAULT_MUSIC_SEQUENCE.size())]
         _LEVELS[level_id] = {
             name = "TEST: Tier " + tier_id,
             tiers = [tier_id],
+            music_sequence = [music],
             version = "0.1.0",
             unlock_conditions = {
             },
@@ -581,19 +635,33 @@ func get_level_config(level_id: String) -> Dictionary:
     assert(_LEVELS.has(level_id))
     var level_config: Dictionary = _LEVELS[level_id].duplicate()
     assert(level_config.has("name"))
-    assert(level_config.has("tiers"))
+    assert(level_config.has("tiers") or level_config.has("levels"))
     assert(level_config.has("version"))
+    
     for key in _DEFAULT_LEVEL_VALUES.keys():
         if !level_config.has(key):
             var value = _DEFAULT_LEVEL_VALUES[key]
             if value == null:
                 value = _DEFAULT_TIER_VALUES[key]
             level_config[key] = value
+    
+    if level_config.has("levels"):
+        assert(!level_config.has("tiers"))
+        var tiers := []
+        var music_sequence := []
+        for other_level_id in level_config["levels"]:
+            var other_level_config := get_level_config(other_level_id)
+            Utils.concat(tiers, other_level_config["tiers"])
+            Utils.concat(music_sequence, other_level_config["music_sequence"])
+        level_config["tiers"] = tiers
+        level_config["music_sequence"] = music_sequence
+    
     level_config["id"] = level_id
     assert(level_id == str(int(level_id)))
     level_config["number"] = int(level_id)
     assert(level_config.rank_thresholds.has(Rank.GOLD))
     assert(level_config.rank_thresholds.has(Rank.SILVER))
+    
     _inflated_levels[level_id] = level_config
     return level_config
 

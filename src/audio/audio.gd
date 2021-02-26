@@ -3,8 +3,7 @@ extends Node
 const MUSIC_CROSS_FADE_DURATION_SEC := 2.0
 const SILENT_VOLUME_DB := -80.0
 
-const GLOBAL_AUDIO_VOLUME_OFFSET_DB := 0.0
-#const GLOBAL_AUDIO_VOLUME_OFFSET_DB := -20.0
+const GLOBAL_AUDIO_VOLUME_OFFSET_DB := -10.0
 
 var fade_out_tween: Tween
 var fade_in_tween: Tween

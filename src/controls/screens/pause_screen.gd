@@ -61,6 +61,10 @@ func _ready() -> void:
     _control_list = $FullScreenPanel/VBoxContainer/CenteredPanel/ \
             ScrollContainer/CenterContainer/VBoxContainer/LabeledControlList
     _control_list.items = list_items
+    
+    if Constants.DEBUG or Constants.PLAYTEST:
+        $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
+                CenterContainer/VBoxContainer/MoreLivesWrapper.visible = true
 
 func _on_activated() -> void:
     ._on_activated()
@@ -120,3 +124,10 @@ func _on_RestartButton_pressed():
     Global.give_button_press_feedback()
     Nav.screens[ScreenType.GAME].restart_level()
     Nav.close_current_screen(true)
+
+func _on_MoreLivesButton_pressed():
+    if Constants.DEBUG or Constants.PLAYTEST:
+        Global.give_button_press_feedback()
+        Time.set_timeout(funcref(Audio, "play_sound"), 200, [Sound.ACHIEVEMENT])
+        for i in range(10):
+            Global.level.add_life()

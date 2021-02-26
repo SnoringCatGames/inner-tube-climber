@@ -58,39 +58,65 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
-margin_right = 480.0
-margin_bottom = 480.0
+margin_right = 470.0
+margin_bottom = 580.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
-margin_left = 80.0
-margin_top = 124.0
-margin_right = 400.0
-margin_bottom = 356.0
+margin_left = 75.0
+margin_right = 395.0
+margin_bottom = 580.0
 rect_min_size = Vector2( 320, 0 )
+custom_constants/separation = 0
+
+[node name="MoreLivesWrapper" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
+visible = false
+margin_right = 320.0
+margin_bottom = 70.0
+custom_constants/separation = 0
+
+[node name="MoreLivesButton" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/MoreLivesWrapper"]
+margin_left = 30.0
+margin_top = -1.0
+margin_right = 290.0
+margin_bottom = 49.0
+rect_min_size = Vector2( 260, 50 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Psst, want more lives??"
+
+[node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/MoreLivesWrapper"]
+margin_left = 160.0
+margin_top = 50.0
+margin_right = 160.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="LabeledControlList" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer" instance=ExtResource( 9 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 320.0
+margin_bottom = 360.0
 row_height = 40.0
 padding_horizontal = 6.0
 
 [node name="Spacer2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 160.0
-margin_top = 4.0
+margin_top = 360.0
 margin_right = 160.0
-margin_bottom = 24.0
+margin_bottom = 380.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 96.0
-margin_top = 28.0
+margin_top = 380.0
 margin_right = 224.0
-margin_bottom = 188.0
+margin_bottom = 540.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 16
@@ -170,12 +196,13 @@ text = "Exit"
 
 [node name="Spacer3" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 160.0
-margin_top = 192.0
+margin_top = 540.0
 margin_right = 160.0
-margin_bottom = 232.0
+margin_bottom = 580.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/MoreLivesWrapper/MoreLivesButton" to="." method="_on_MoreLivesButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/ResumeButton" to="." method="_on_ResumeButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/ExitLevelButton" to="." method="_on_ExitLevelButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/RestartButton" to="." method="_on_RestartButton_pressed"]

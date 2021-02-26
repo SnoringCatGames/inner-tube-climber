@@ -158,7 +158,7 @@ var MANIFEST := {
     CAT_SNORE: {
         stream = preload("res://assets/sounds/single-cat-snore.wav"),
         text = "CAT_SNORE",
-        volume_db = 21.0,
+        volume_db = 17.0,
     },
 }
 

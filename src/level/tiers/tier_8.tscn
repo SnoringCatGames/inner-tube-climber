@@ -17,7 +17,7 @@ position = Vector2( 0, -32 )
 spawn_position_x = 0.0
 
 [node name="TierEnd" parent="." instance=ExtResource( 4 )]
-position = Vector2( 2528, -2400 )
+position = Vector2( 2432, -2400 )
 
 [node name="OneUp" parent="." instance=ExtResource( 5 )]
 position = Vector2( 1328, -1504 )

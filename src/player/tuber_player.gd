@@ -21,7 +21,7 @@ const WALL_BOUNCE_MIN_SPEED_THRESHOLD := 120.0
 #       we want different sideways wind values, we should replace this with
 #       more correct logic.
 const WALL_BOUNCE_AGAINST_WIND_MIN_SPEED_THRESHOLD := 105.0
-const WALL_REBOUNCE_MIN_DISTANCE_THRESHOLD := 4.0
+const WALL_REBOUNCE_MIN_DISTANCE_THRESHOLD := 8.0
 var IN_AIR_HORIZONTAL_ACCELERATION := \
         600.0 if !Global.get_is_mobile_control_version_one_handed() else 500.0
 var IN_AIR_HORIZONTAL_DECELERATION := \

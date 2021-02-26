@@ -349,7 +349,7 @@ var _TIERS := {
         version = "0.1.0",
         openness_type = OpennessType.WALLED,
         zoom_multiplier = 1.0,
-        snow_density_multiplier = 16.0,
+        snow_density_multiplier = 20.0,
         fog_screen_opacity = {value = 0.99, weight = 1.0},
         fog_screen_secondary_color_opacity_multiplier = \
                 {value = 0.1, weight = 1.0},
@@ -361,7 +361,7 @@ var _TIERS := {
         openness_type = OpennessType.WALLED,
         camera_horizontally_locked = false,
         zoom_multiplier = 0.66667,
-        snow_density_multiplier = 8.0,
+        snow_density_multiplier = 16.0,
         fog_screen_opacity = {value = 0.99, weight = 1.0},
         fog_screen_secondary_color_opacity_multiplier = \
                 {value = 0.5, weight = 1.0},
@@ -375,7 +375,7 @@ var _TIERS := {
         openness_type = OpennessType.WALLED,
         camera_horizontally_locked = false,
         zoom_multiplier = 0.5,
-        snow_density_multiplier = 2.0,
+        snow_density_multiplier = 16.0,
         fog_screen_opacity = {value = 0.99, weight = 1.0},
         fog_screen_secondary_color_opacity_multiplier = \
                 {value = 0.5, weight = 1.0},
@@ -458,6 +458,7 @@ var _LEVELS := {
         name = "Flurry",
         tiers = ["11", "12", "13"],
         version = "0.1.0",
+        lives_count = 4,
         unlock_conditions = {
             bronze_levels = ["7"],
         },
@@ -466,6 +467,7 @@ var _LEVELS := {
         name = "Shroud",
         tiers = ["23", "24", "10"],
         version = "0.1.0",
+        lives_count = 4,
         unlock_conditions = {
             bronze_levels = ["9"],
         },
@@ -474,6 +476,7 @@ var _LEVELS := {
         name = "Scale",
         tiers = ["26", "27", "28"],
         version = "0.1.0",
+        lives_count = 5,
         unlock_conditions = {
             bronze_levels = ["10"],
         },

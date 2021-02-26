@@ -154,6 +154,8 @@ func start( \
     self.level_start_time = Time.elapsed_play_time_actual_sec
     visible = true
     lives_count = LevelConfig.get_level_config(level_id).lives_count
+    if Global.difficulty_mode == DifficultyMode.EASY:
+        lives_count *= 2
     falls_count = 0
     score = 0.0
     _start_new_tier( \

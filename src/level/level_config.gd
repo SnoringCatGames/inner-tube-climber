@@ -532,6 +532,9 @@ func _init() -> void:
     
     if Constants.DEBUG or Constants.PLAYTEST:
         _create_a_test_level_for_each_tier()
+    
+    if Constants.DEBUG:
+        _add_extra_lives_to_each_level()
 
 func _create_a_test_level_for_each_tier() -> void:
     var max_level_number := -INF
@@ -551,6 +554,14 @@ func _create_a_test_level_for_each_tier() -> void:
             },
         }
         SaveState.set_level_is_unlocked(level_id, true)
+
+func _add_extra_lives_to_each_level() -> void:
+    for level_id in _LEVELS:
+        if !_LEVELS[level_id].has("lives_count"):
+            _LEVELS[level_id]["lives_count"] = \
+                    _DEFAULT_LEVEL_VALUES["lives_count"]
+        _LEVELS[level_id]["lives_count"] = \
+                _LEVELS[level_id]["lives_count"] + 10
 
 func get_tier_config(tier_id: String) -> Dictionary:
     if _inflated_tiers.has(tier_id):

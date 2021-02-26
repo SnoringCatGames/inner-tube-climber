@@ -741,9 +741,9 @@ func _start_new_tier( \
     
     if is_base_tier:
         music_index = -1
-        Audio.play_music(Music.STUCK_IN_A_CREVASSE, true)
+        Audio.play_music(Music.STUCK_IN_A_CREVASSE, false, true)
     else:
-        Audio.play_music(level_config.music_sequence[music_index])
+        Audio.play_music(level_config.music_sequence[music_index], false, true)
     
     _add_player(is_base_tier)
     
@@ -855,7 +855,7 @@ func _on_entered_new_tier() -> void:
     music_index = \
             (music_index + 1) % \
             level_config.music_sequence.size()
-    Audio.play_music(level_config.music_sequence[music_index], true)
+    Audio.play_music(level_config.music_sequence[music_index], false, true)
     
     current_tier.on_entered_tier(false)
     $CameraHandler.update_for_current_tier( \

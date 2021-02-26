@@ -4,7 +4,7 @@ extends Node
 #var DEBUG := false
 var DEBUG := OS.is_debug_build()
 var PLAYTEST := true
-var DEBUG_TIER := "" # FIXME: Test these stages in particular for bounce spacing regression: 25, 26, 27, 28, 29, 16, 17, 18, 19, 23, 24, 5, 
+var DEBUG_TIER := ""
 
 const GOOGLE_ANALYTICS_ID := "UA-186405125-1"
 

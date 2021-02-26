@@ -3,7 +3,8 @@ extends Node
 const MUSIC_CROSS_FADE_DURATION_SEC := 2.0
 const SILENT_VOLUME_DB := -80.0
 
-const GLOBAL_AUDIO_VOLUME_OFFSET_DB := -20.0
+const GLOBAL_AUDIO_VOLUME_OFFSET_DB := 0.0
+#const GLOBAL_AUDIO_VOLUME_OFFSET_DB := -20.0
 
 var fade_out_tween: Tween
 var fade_in_tween: Tween
@@ -59,9 +60,9 @@ func _cross_fade_music( \
     on_cross_fade_music_finished()
     
     if previous_music_player != null and \
+            previous_music_player != current_music_player and \
             previous_music_player.playing:
-        # TODO: This shouldn't happen, but it does sometimes.
-        Global.print( \
+        Utils.error( \
                 "Previous music still playing when trying to play new music.")
         previous_music_player.stop()
     
@@ -132,8 +133,10 @@ func on_cross_fade_music_finished( \
     fade_out_tween.stop_all()
     fade_in_tween.stop_all()
     
-    if previous_music_player != null:
+    if previous_music_player != null and \
+            previous_music_player != current_music_player:
         previous_music_player.volume_db = SILENT_VOLUME_DB
+        previous_music_player.stop()
     if current_music_player != null:
         var loud_volume := \
                 Music.get_volume_for_player(current_music_player) + \
@@ -141,9 +144,6 @@ func on_cross_fade_music_finished( \
                 is_music_enabled else \
                 SILENT_VOLUME_DB
         current_music_player.volume_db = loud_volume
-    if previous_music_player != null and \
-            previous_music_player != current_music_player:
-        previous_music_player.stop()
 
 func set_playback_speed(playback_speed: float) -> void:
     current_playback_speed = playback_speed

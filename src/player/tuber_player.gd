@@ -239,6 +239,49 @@ func _update_surface_state() -> void:
             (1 if surface_state.which_wall == SurfaceSide.RIGHT_WALL else \
             -1))
     
+    _update_tile_map_contact()
+    
+    # Godot's move_and_slide collision system can sometimes produce subsurface
+    # collisions, which then produce false positives for wall collisions when
+    # the player is actually on the floor. This prevents those false-positives
+    # from causing problems.
+    if surface_state.is_touching_wall and \
+            _check_for_a_non_floor_collision() == Vector2.INF:
+#        Global.print((
+#            ">>>>_update_surface_state: Floor-wall collision mismatch" +
+#            "\nposition=%s" +
+#            "\ntouch_position=%s" +
+#            "\nhalf_height=%s" +
+#            "\ncollision_count=%s" +
+#            "\nnon-floor-collision=%s" +
+#            "\ncollision-1=%s" +
+#            "\ncollision-2=%s" +
+#            ""
+#        ) % [
+#            position,
+#            surface_state.touch_position,
+#            Constants.PLAYER_HALF_HEIGHT_DEFAULT,
+#            surface_state.collision_count,
+#            _check_for_a_non_floor_collision(),
+#            get_slide_collision(0).position,
+#            get_slide_collision(1).position if \
+#                    surface_state.collision_count > 1 \
+#                    else "",
+#        ])
+        
+        surface_state.is_touching_floor = true
+        surface_state.just_touched_floor = !was_touching_floor
+        surface_state.just_left_floor = false
+        surface_state.just_entered_air = false
+        surface_state.just_left_air = !was_touching_a_surface
+        
+        surface_state.is_touching_wall = false
+        surface_state.is_touching_left_wall = false
+        surface_state.is_touching_right_wall = false
+        surface_state.which_wall = SurfaceSide.NONE
+        surface_state.just_touched_wall = false
+        surface_state.toward_wall_sign = 0
+    
     if surface_state.just_touched_wall:
         has_hit_wall_since_pressing_move = true
     elif Input.is_action_just_pressed("move_left") or \
@@ -259,8 +302,27 @@ func _update_surface_state() -> void:
                     Time.elapsed_play_time_modified_sec - \
                     WALL_BOUNCE_MOVEMENT_DELAY_SEC and \
             !surface_state.is_touching_floor
+
+func _check_for_a_non_floor_collision() -> Vector2:
+    var current_collision: KinematicCollision2D
+    for i in range(surface_state.collision_count):
+        current_collision = get_slide_collision(i)
+        
+        if !_does_position_match_player_bottom(current_collision.position):
+            return current_collision.position
     
-    _update_tile_map_contact()
+    return Vector2.INF
+
+func _does_position_match_player_bottom(pos: Vector2) -> bool:
+    return pos.y > self.position.y + Constants.PLAYER_HALF_HEIGHT_DEFAULT or \
+            Geometry.are_floats_equal_with_epsilon( \
+                pos.y, \
+                self.position.y + Constants.PLAYER_HALF_HEIGHT_DEFAULT, \
+                5.0) and \
+            Geometry.are_floats_equal_with_epsilon( \
+                    pos.x, \
+                    self.position.x, \
+                    11.0)
 
 func _update_tile_map_contact() -> void:
     var collision := Player.get_surface_collision( \

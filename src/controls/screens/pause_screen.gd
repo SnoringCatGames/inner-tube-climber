@@ -104,7 +104,7 @@ func _update_stats() -> void:
     
     _control_list.items = list_items
 
-func _on_ExitLevelButton_pressed():
+func _on_ExitLevelButton_pressed() -> void:
     Global.give_button_press_feedback()
     Nav.close_current_screen()
     Analytics.event( \
@@ -116,18 +116,18 @@ func _on_ExitLevelButton_pressed():
             Time.elapsed_play_time_actual_sec - Global.level.tier_start_time)
     Global.level.quit()
 
-func _on_ResumeButton_pressed():
+func _on_ResumeButton_pressed() -> void:
     Global.give_button_press_feedback()
     Nav.close_current_screen()
 
-func _on_RestartButton_pressed():
+func _on_RestartButton_pressed() -> void:
     Global.give_button_press_feedback()
     Nav.screens[ScreenType.GAME].restart_level()
     Nav.close_current_screen(true)
 
-func _on_MoreLivesButton_pressed():
+func _on_MoreLivesButton_pressed() -> void:
     if Constants.DEBUG or Constants.PLAYTEST:
         Global.give_button_press_feedback()
-        Time.set_timeout(funcref(Audio, "play_sound"), 200, [Sound.ACHIEVEMENT])
+        Time.set_timeout(funcref(Audio, "play_sound"), 0.2, [Sound.ACHIEVEMENT])
         for i in range(10):
             Global.level.add_life()

@@ -73,6 +73,11 @@ func _ready() -> void:
         spawn_position_override = spawn_position_overrides[0]
     else:
         spawn_position_override = null
+    
+    _assert_tilemaps_are_pixel_aligned()
+    _assert_pixel_aligned(position)
+    _assert_pixel_aligned(tier_start.position)
+    _assert_pixel_aligned(tier_end.position)
 
 func setup( \
         config: Dictionary, \
@@ -186,6 +191,17 @@ func _get_height() -> float:
 func _set_windiness(value: Vector2) -> void:
     if tier_ratio_sign != null:
         tier_ratio_sign.windiness = value
+
+func _assert_tilemaps_are_pixel_aligned() -> void:
+    var tile_maps := Utils.get_children_by_type( \
+            self, \
+            TileMap)
+    for tile_map in tile_maps:
+        _assert_pixel_aligned(tile_map.position)
+
+func _assert_pixel_aligned(position: Vector2) -> void:
+    assert(fmod(position.x, 1.0) < 0.001)
+    assert(fmod(position.y, 1.0) < 0.001)
 
 func _get_top_position() -> Vector2:
     var bounding_box := _get_bounding_box()

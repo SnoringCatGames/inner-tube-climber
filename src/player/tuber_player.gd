@@ -249,10 +249,12 @@ func _update_surface_state() -> void:
     var is_wall_collision_but_should_be_floor_collision := \
             surface_state.is_touching_wall and \
             non_floor_collision == Vector2.INF
-    var non_wall_collision := _check_for_a_non_wall_collision()
-    var is_floor_collision_but_should_be_wall_collision := \
-            surface_state.is_touching_floor and \
-            non_wall_collision == Vector2.INF
+    # TODO: Maybe use this if it becomes an issue?
+#    var non_wall_collision := _check_for_a_non_wall_collision()
+#    var is_floor_or_ceiling_collision_but_should_be_wall_collision := \
+#            (surface_state.is_touching_floor or \
+#                    surface_state.is_touching_ceiling) and \
+#            non_wall_collision == Vector2.INF
     if is_wall_collision_but_should_be_floor_collision:
 #        Global.print((
 #            ">>>>_update_surface_state: Floor-wall collision mismatch" +
@@ -289,27 +291,32 @@ func _update_surface_state() -> void:
         surface_state.just_touched_wall = false
         surface_state.toward_wall_sign = 0
         
-    elif is_floor_collision_but_should_be_wall_collision:
-        surface_state.is_touching_floor = false
-        surface_state.just_touched_floor = false
-        surface_state.just_left_floor = was_touching_floor
-        surface_state.just_entered_air = false
-        surface_state.just_left_air = !was_touching_a_surface
-        
-        surface_state.is_touching_wall = true
-        surface_state.which_wall = \
-                SurfaceSide.LEFT_WALL if \
-                non_floor_collision.x < position.x else \
-                SurfaceSide.RIGHT_WALL
-        surface_state.is_touching_left_wall = \
-                surface_state.which_wall == SurfaceSide.LEFT_WALL
-        surface_state.is_touching_right_wall = \
-                surface_state.which_wall == SurfaceSide.RIGHT_WALL
-        surface_state.just_touched_wall = !was_touching_wall
-        surface_state.toward_wall_sign = \
-                1 if \
-                surface_state.which_wall == SurfaceSide.RIGHT_WALL else \
-                -1
+#    elif is_floor_or_ceiling_collision_but_should_be_wall_collision:
+#        if surface_state.is_touching_floor:
+#            surface_state.is_touching_floor = false
+#            surface_state.just_touched_floor = false
+#            surface_state.just_left_floor = was_touching_floor
+#        else: # surface_state.is_touching_ceiling
+#            surface_state.is_touching_ceiling = false
+#            surface_state.just_touched_ceiling = false
+#            surface_state.just_left_ceiling = was_touching_ceiling
+#        surface_state.just_entered_air = false
+#        surface_state.just_left_air = !was_touching_a_surface
+#
+#        surface_state.is_touching_wall = true
+#        surface_state.which_wall = \
+#                SurfaceSide.LEFT_WALL if \
+#                non_floor_collision.x < position.x else \
+#                SurfaceSide.RIGHT_WALL
+#        surface_state.is_touching_left_wall = \
+#                surface_state.which_wall == SurfaceSide.LEFT_WALL
+#        surface_state.is_touching_right_wall = \
+#                surface_state.which_wall == SurfaceSide.RIGHT_WALL
+#        surface_state.just_touched_wall = !was_touching_wall
+#        surface_state.toward_wall_sign = \
+#                1 if \
+#                surface_state.which_wall == SurfaceSide.RIGHT_WALL else \
+#                -1
     
     if surface_state.just_touched_wall:
         has_hit_wall_since_pressing_move = true

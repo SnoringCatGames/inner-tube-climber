@@ -78,9 +78,11 @@ func update() -> void:
     var is_next_level_to_unlock := \
             LevelConfig.get_next_level_to_unlock() == level_id
     $HeaderWrapper/LockedWrapper/HintWrapper/Hint.text = unlock_hint_message
-    var is_unlock_pulse_auto_shown := \
-            unlock_hint_message != "" and \
-            is_next_level_to_unlock
+    # TODO: Remove?
+    var is_unlock_pulse_auto_shown := false
+#    var is_unlock_pulse_auto_shown := \
+#            unlock_hint_message != "" and \
+#            is_next_level_to_unlock
     if is_unlock_pulse_auto_shown:
         # Finish the unlock animation for the previous item before showing the
         # unlock hint for this item.

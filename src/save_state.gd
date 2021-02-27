@@ -13,6 +13,7 @@ const HAS_FINISHED_SECTION_KEY := "has_finished"
 const HAS_THREE_LOOPED_SECTION_KEY := "has_three_looped"
 const SETTINGS_SECTION_KEY := "settings"
 const MISCELLANEOUS_SECTION_KEY := "miscellaneous"
+const VERSIONS_SECTION_KEY := "versions"
 
 const CLIENT_ID_KEY := "cliend_id"
 const AGREED_TO_TERMS_KEY := "agreed_to_terms"
@@ -38,6 +39,7 @@ const IS_MULTIPLIER_DISPLAY_SHOWN_KEY := "is_multiplier_display_shown"
 const IS_SPEED_DISPLAY_SHOWN_KEY := "is_speed_display_shown"
 const IS_MUSIC_ENABLED_KEY := "is_music_enabled"
 const IS_SOUND_EFFECTS_ENABLED_KEY := "is_sound_effects_enabled"
+const SCORE_VERSION_KEY := "score_v"
 
 var config := ConfigFile.new()
 
@@ -282,6 +284,65 @@ func get_setting( \
                     SETTINGS_SECTION_KEY, \
                     setting_key) else \
             default
+
+func set_score_version(version: String) -> void:
+    config.set_value( \
+            VERSIONS_SECTION_KEY, \
+            SCORE_VERSION_KEY, \
+            version)
+    save_config()
+
+func get_score_version() -> String:
+    return config.get_value( \
+            VERSIONS_SECTION_KEY, \
+            SCORE_VERSION_KEY, \
+            "") as String
+
+func set_level_version( \
+        level_id: String, \
+        version: String) -> void:
+    config.set_value( \
+            VERSIONS_SECTION_KEY, \
+            level_id, \
+            version)
+    save_config()
+
+func get_level_version(level_id: String) -> String:
+    return config.get_value( \
+            VERSIONS_SECTION_KEY, \
+            level_id, \
+            "") as String
+
+func erase_all_scores() -> void:
+    var sections := [
+        HIGH_SCORES_SECTION_KEY,
+        ALL_SCORES_SECTION_KEY,
+        ALL_FINISHED_SCORES_SECTION_KEY,
+    ]
+    for section_key in sections:
+        config.erase_section(section_key)
+
+func erase_level_state(level_id: String) -> void:
+    var sections := [
+        HIGH_SCORES_SECTION_KEY,
+        HIGH_TIER_SECTION_KEY,
+        TOTAL_PLAYS_SECTION_KEY,
+        TOTAL_FALLS_SECTION_KEY,
+        ALL_SCORES_SECTION_KEY,
+        ALL_FINISHED_SCORES_SECTION_KEY,
+        HAS_FINISHED_SECTION_KEY,
+        HAS_THREE_LOOPED_SECTION_KEY,
+    ]
+    for section_key in sections:
+        config.erase_section_key( \
+                section_key, \
+                level_id)
+    
+    for key in config.get_section_keys(TOTAL_FALLS_ON_TIER_SECTION_KEY):
+        if key.find(level_id + ":") == 0:
+            config.erase_section_key( \
+                    TOTAL_FALLS_ON_TIER_SECTION_KEY, \
+                    key)
 
 func erase_all_state() -> void:
     for section in config.get_sections():

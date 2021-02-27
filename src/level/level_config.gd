@@ -401,7 +401,7 @@ var _LEVELS := {
             Music.NO_ESCAPE_FROM_THE_LOOP,
             Music.OUT_FOR_A_LOOP_RIDE,
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
         },
     },
@@ -413,7 +413,7 @@ var _LEVELS := {
             Music.STUCK_IN_A_CREVASSE,
             Music.PUMP_UP_THAT_TUBE,
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
             bronze_levels = ["1"],
         },
@@ -426,7 +426,7 @@ var _LEVELS := {
             Music.RISING_THROUGH_RARIFIED_AIR,
             Music.PUMP_UP_THAT_TUBE,
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
             bronze_levels = ["2"],
         },
@@ -434,7 +434,7 @@ var _LEVELS := {
     "4": {
         name = "* Minor",
         levels = ["1", "2", "3"],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
             silver_levels = ["1", "2", "3"],
         },
@@ -447,7 +447,7 @@ var _LEVELS := {
             Music.OUT_FOR_A_LOOP_RIDE,
             Music.PUMP_UP_THAT_TUBE,
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
             bronze_levels = ["3"],
         },
@@ -460,7 +460,7 @@ var _LEVELS := {
             Music.RISING_THROUGH_RARIFIED_AIR,
             Music.NO_ESCAPE_FROM_THE_LOOP,
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
             bronze_levels = ["5"],
         },
@@ -473,7 +473,7 @@ var _LEVELS := {
             Music.PUMP_UP_THAT_TUBE,
             Music.RISING_THROUGH_RARIFIED_AIR,
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
             bronze_levels = ["6"],
         },
@@ -481,7 +481,7 @@ var _LEVELS := {
     "8": {
         name = "* Moderate",
         levels = ["5", "6", "7"],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
             silver_levels = ["5", "6", "7"],
         },
@@ -494,7 +494,7 @@ var _LEVELS := {
             Music.OUT_FOR_A_LOOP_RIDE,
             Music.RISING_THROUGH_RARIFIED_AIR,
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         lives_count = 4,
         unlock_conditions = {
             bronze_levels = ["7"],
@@ -508,7 +508,7 @@ var _LEVELS := {
             Music.RISING_THROUGH_RARIFIED_AIR,
             Music.NO_ESCAPE_FROM_THE_LOOP,
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         lives_count = 4,
         unlock_conditions = {
             bronze_levels = ["9"],
@@ -522,7 +522,7 @@ var _LEVELS := {
             Music.RISING_THROUGH_RARIFIED_AIR,
             Music.PUMP_UP_THAT_TUBE,
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         lives_count = 5,
         unlock_conditions = {
             bronze_levels = ["10"],
@@ -531,7 +531,7 @@ var _LEVELS := {
     "12": {
         name = "* Major",
         levels = ["9", "10", "11"],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
             silver_levels = ["9", "10", "11"],
         },
@@ -543,7 +543,7 @@ var _LEVELS := {
             Music.PUMP_UP_THAT_TUBE,
             Music.OUT_FOR_A_LOOP_RIDE,
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
             bronze_levels = ["11"],
         },
@@ -556,7 +556,7 @@ var _LEVELS := {
             "9", "10", "11",
             "13",
         ],
-        version = "0.1.0",
+        version = "0.2.0",
         unlock_conditions = {
             bronze_levels = ["4", "8", "12", "13"],
         },
@@ -573,16 +573,47 @@ var BASE_TIER: Dictionary = get_tier_config("0")
 func _init() -> void:
     SaveState.set_level_is_unlocked("1", true)
     
+    _inflate_level_configs()
+    _inflate_tier_configs()
+    
     if Constants.DEBUG or Constants.PLAYTEST:
         _create_a_test_level_for_each_tier()
     
     if Constants.DEBUG:
         _add_extra_lives_to_each_level()
+    
+    _clear_old_version_level_state()
+
+func _inflate_level_configs() -> void:
+    for level_id in _LEVELS:
+        get_level_config(level_id)
+
+func _inflate_tier_configs() -> void:
+    for tier_id in _TIERS:
+        get_tier_config(tier_id)
+
+func _clear_old_version_level_state() -> void:
+    if Constants.SCORE_VERSION != SaveState.get_score_version():
+        SaveState.set_score_version(Constants.SCORE_VERSION)
+        SaveState.erase_all_scores()
+    
+    for level_id in _inflated_levels:
+        var config := get_level_config(level_id)
+        if config.version != SaveState.get_level_version(level_id):
+            SaveState.erase_level_state(level_id)
+            SaveState.set_level_version(level_id, config.version)
 
 func _create_a_test_level_for_each_tier() -> void:
     var max_level_number := -INF
-    for level_id in _LEVELS:
+    var max_level_version := "0.1.0"
+    var max_level_version_number := _get_number_from_version(max_level_version)
+    for level_id in _inflated_levels:
+        var config := get_level_config(level_id)
+        var version_number := _get_number_from_version(config.version)
         max_level_number = max(int(level_id), max_level_number)
+        if version_number > max_level_version_number:
+            max_level_version_number = version_number
+            max_level_version = config.version
     
     for tier_id in _TIERS:
         if int(tier_id) <= 0:
@@ -591,23 +622,30 @@ func _create_a_test_level_for_each_tier() -> void:
         var level_id := str(max_level_number)
         var music: int = _DEFAULT_MUSIC_SEQUENCE[ \
                 int(randf() * _DEFAULT_MUSIC_SEQUENCE.size())]
-        _LEVELS[level_id] = {
+        var config := {
             name = "TEST: Tier " + tier_id,
             tiers = [tier_id],
             music_sequence = [music],
-            version = "0.1.0",
+            version = max_level_version,
             unlock_conditions = {
             },
         }
+        _LEVELS[level_id] = config
+        get_level_config(level_id)
         SaveState.set_level_is_unlocked(level_id, true)
 
+func _get_number_from_version(version: String) -> int:
+    var parts := version.split(".")
+    assert(parts.size() == 3)
+    return int(parts[0]) * 1000000 + int(parts[1]) * 1000 + int(parts[2])
+
 func _add_extra_lives_to_each_level() -> void:
-    for level_id in _LEVELS:
-        if !_LEVELS[level_id].has("lives_count"):
-            _LEVELS[level_id]["lives_count"] = \
+    for level_id in _inflated_levels:
+        if !_inflated_levels[level_id].has("lives_count"):
+            _inflated_levels[level_id]["lives_count"] = \
                     _DEFAULT_LEVEL_VALUES["lives_count"]
-        _LEVELS[level_id]["lives_count"] = \
-                _LEVELS[level_id]["lives_count"] + 10
+        _inflated_levels[level_id]["lives_count"] = \
+                _inflated_levels[level_id]["lives_count"] + 10
 
 func get_tier_config(tier_id: String) -> Dictionary:
     if _inflated_tiers.has(tier_id):

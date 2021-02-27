@@ -13,7 +13,7 @@ const APP_ID := "games.snoringcat.inner_tube_climber"
 const APP_VERSION := "0.8.0"
 const SCORE_VERSION := "1.0.1"
 
-var ARE_ALL_LEVELS_UNLOCKED := true
+var ARE_ALL_LEVELS_UNLOCKED := false
 
 const SNORING_CAT_GAMES_URL := "https://snoringcat.games"
 const GODOT_URL := "https://godotengine.org"

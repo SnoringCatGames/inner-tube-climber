@@ -84,13 +84,14 @@ func update() -> void:
     if is_unlock_pulse_auto_shown:
         # Finish the unlock animation for the previous item before showing the
         # unlock hint for this item.
-        var delay := \
-                0.0 if \
-                !SaveState.get_new_unlocked_levels().empty() else \
-                (0.3 + \
-                LOCK_LOW_PART_DELAY_SEC + \
-                LockAnimation.UNLOCK_DURATION_SEC + \
-                FADE_TWEEN_DURATION_SEC)
+        var delay := 0.0
+#        var delay := \
+#                0.0 if \
+#                !SaveState.get_new_unlocked_levels().empty() else \
+#                (0.3 + \
+#                LOCK_LOW_PART_DELAY_SEC + \
+#                LockAnimation.UNLOCK_DURATION_SEC + \
+#                FADE_TWEEN_DURATION_SEC)
         Time.set_timeout(funcref(self, "_pulse_unlock_hint"), delay)
     
     var config := LevelConfig.get_level_config(level_id)

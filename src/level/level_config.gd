@@ -404,6 +404,10 @@ var _LEVELS := {
         version = "0.2.0",
         unlock_conditions = {
         },
+        rank_thresholds = {
+            Rank.GOLD: 4800,
+            Rank.SILVER: 1200,
+        },
     },
     "2": {
         name = "Climb",
@@ -417,6 +421,10 @@ var _LEVELS := {
         unlock_conditions = {
             bronze_levels = ["1"],
         },
+        rank_thresholds = {
+            Rank.GOLD: 3600,
+            Rank.SILVER: 900,
+        },
     },
     "3": {
         name = "Slip",
@@ -427,16 +435,26 @@ var _LEVELS := {
             Music.PUMP_UP_THAT_TUBE,
         ],
         version = "0.2.0",
+        lives_count = 4,
         unlock_conditions = {
             bronze_levels = ["2"],
+        },
+        rank_thresholds = {
+            Rank.GOLD: 2800,
+            Rank.SILVER: 700,
         },
     },
     "4": {
         name = "* Minor",
         levels = ["1", "2", "3"],
         version = "0.2.0",
+        lives_count = 4,
         unlock_conditions = {
             silver_levels = ["1", "2", "3"],
+        },
+        rank_thresholds = {
+            Rank.GOLD: 9600,
+            Rank.SILVER: 2400,
         },
     },
     "5": {
@@ -451,6 +469,10 @@ var _LEVELS := {
         unlock_conditions = {
             bronze_levels = ["3"],
         },
+        rank_thresholds = {
+            Rank.GOLD: 16000,
+            Rank.SILVER: 4000,
+        },
     },
     "6": {
         name = "Open",
@@ -464,6 +486,10 @@ var _LEVELS := {
         unlock_conditions = {
             bronze_levels = ["5"],
         },
+        rank_thresholds = {
+            Rank.GOLD: 4800,
+            Rank.SILVER: 1200,
+        },
     },
     "7": {
         name = "Switchback",
@@ -474,16 +500,26 @@ var _LEVELS := {
             Music.RISING_THROUGH_RARIFIED_AIR,
         ],
         version = "0.2.0",
+        lives_count = 4,
         unlock_conditions = {
             bronze_levels = ["6"],
+        },
+        rank_thresholds = {
+            Rank.GOLD: 8000,
+            Rank.SILVER: 2000,
         },
     },
     "8": {
         name = "* Moderate",
         levels = ["5", "6", "7"],
         version = "0.2.0",
+        lives_count = 5,
         unlock_conditions = {
             silver_levels = ["5", "6", "7"],
+        },
+        rank_thresholds = {
+            Rank.GOLD: 32000,
+            Rank.SILVER: 8000,
         },
     },
     "9": {
@@ -499,9 +535,13 @@ var _LEVELS := {
         unlock_conditions = {
             bronze_levels = ["7"],
         },
+        rank_thresholds = {
+            Rank.GOLD: 2800,
+            Rank.SILVER: 700,
+        },
     },
     "10": {
-        name = "Shroud",
+        name = "Cloud",
         tiers = ["23", "24", "10"],
         music_sequence = [
             Music.STUCK_IN_A_CREVASSE,
@@ -509,9 +549,13 @@ var _LEVELS := {
             Music.NO_ESCAPE_FROM_THE_LOOP,
         ],
         version = "0.2.0",
-        lives_count = 4,
+        lives_count = 6,
         unlock_conditions = {
             bronze_levels = ["9"],
+        },
+        rank_thresholds = {
+            Rank.GOLD: 3200,
+            Rank.SILVER: 800,
         },
     },
     "11": {
@@ -523,17 +567,26 @@ var _LEVELS := {
             Music.PUMP_UP_THAT_TUBE,
         ],
         version = "0.2.0",
-        lives_count = 5,
+        lives_count = 7,
         unlock_conditions = {
             bronze_levels = ["10"],
+        },
+        rank_thresholds = {
+            Rank.GOLD: 6000,
+            Rank.SILVER: 1500,
         },
     },
     "12": {
         name = "* Major",
         levels = ["9", "10", "11"],
         version = "0.2.0",
+        lives_count = 6,
         unlock_conditions = {
             silver_levels = ["9", "10", "11"],
+        },
+        rank_thresholds = {
+            Rank.GOLD: 12000,
+            Rank.SILVER: 3000,
         },
     },
     "13": {
@@ -544,8 +597,13 @@ var _LEVELS := {
             Music.OUT_FOR_A_LOOP_RIDE,
         ],
         version = "0.2.0",
+        lives_count = 2,
         unlock_conditions = {
             bronze_levels = ["11"],
+        },
+        rank_thresholds = {
+            Rank.GOLD: 3200,
+            Rank.SILVER: 800,
         },
     },
     "14": {
@@ -557,8 +615,13 @@ var _LEVELS := {
             "13",
         ],
         version = "0.2.0",
+        lives_count = 7,
         unlock_conditions = {
             bronze_levels = ["4", "8", "12", "13"],
+        },
+        rank_thresholds = {
+            Rank.GOLD: 56000,
+            Rank.SILVER: 14000,
         },
     },
 }
@@ -571,8 +634,6 @@ var EMPTY_OPEN_TIER: Dictionary = get_tier_config("-1")
 var BASE_TIER: Dictionary = get_tier_config("0")
 
 func _init() -> void:
-    SaveState.set_level_is_unlocked("1", true)
-    
     _inflate_level_configs()
     _inflate_tier_configs()
     
@@ -583,6 +644,8 @@ func _init() -> void:
         _add_extra_lives_to_each_level()
     
     _clear_old_version_level_state()
+    
+    SaveState.set_level_is_unlocked("1", true)
 
 func _inflate_level_configs() -> void:
     for level_id in _LEVELS:
@@ -833,28 +896,46 @@ func get_unlock_hint(level_id: String) -> String:
                     if !has_level_earned_rank(other_level_id, Rank.BRONZE):
                         bronze_hint += " " + other_level_id
                 if bronze_hint != "":
-                    hint += "Finish level" + bronze_hint
+                    bronze_hint = bronze_hint.substr(1)
+                    bronze_hint = bronze_hint.replace(" ", ", ")
+                    var is_plural := bronze_hint.find(" ") >= 0
+                    var possible_s := "s" if is_plural else ""
+                    hint += "Finish level" + possible_s + " " + bronze_hint
             "silver_levels":
                 var silver_hint := ""
                 for other_level_id in other_level_ids:
                     if !has_level_earned_rank(other_level_id, Rank.SILVER):
                         silver_hint += " " + other_level_id
                 if silver_hint != "":
-                    hint += "Get silver on level" + silver_hint
+                    silver_hint = silver_hint.substr(1)
+                    silver_hint = silver_hint.replace(" ", ", ")
+                    var is_plural := silver_hint.find(" ") >= 0
+                    var possible_s := "s" if is_plural else ""
+                    hint += "Get silver on level" + possible_s + \
+                            " " + silver_hint
             "gold_levels":
                 var gold_hint := ""
                 for other_level_id in other_level_ids:
                     if !has_level_earned_rank(other_level_id, Rank.GOLD):
                         gold_hint += " " + other_level_id
                 if gold_hint != "":
-                    hint += "Get gold on level" + gold_hint
+                    gold_hint = gold_hint.substr(1)
+                    gold_hint = gold_hint.replace(" ", ", ")
+                    var is_plural := gold_hint.find(" ") >= 0
+                    var possible_s := "s" if is_plural else ""
+                    hint += "Get gold on level" + possible_s + " " + gold_hint
             "three_loop_levels":
                 var three_loop_hint := ""
                 for other_level_id in other_level_ids:
                     if !SaveState.get_level_has_three_looped(other_level_id):
                         three_loop_hint += " " + other_level_id
                 if three_loop_hint != "":
-                    hint += "Three-loop level" + three_loop_hint
+                    three_loop_hint = three_loop_hint.substr(1)
+                    three_loop_hint = three_loop_hint.replace(" ", ", ")
+                    var is_plural := three_loop_hint.find(" ") >= 0
+                    var possible_s := "s" if is_plural else ""
+                    hint += "Three-loop level" + possible_s + \
+                            " " + three_loop_hint
             _:
                 Utils.error()
     if !hint.empty():

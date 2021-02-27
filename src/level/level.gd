@@ -207,8 +207,8 @@ func _physics_process(_delta_sec: float) -> void:
         if tier_of_last_platform != current_tier:
             tier_of_last_platform = current_tier
             current_tier.on_landed_in_tier()
-        Global.print( \
-                "Platform height=%s" % player_latest_platform_height)
+#        Global.print( \
+#                "Platform height=%s" % player_latest_platform_height)
     display_height = \
             floor(player_max_platform_height / DISPLAY_HEIGHT_INTERVAL) as int
 
@@ -231,7 +231,8 @@ func _process(delta_sec: float) -> void:
     cooldown_indicator.check_for_updates( \
             player_max_platform_height_on_current_life, \
             player_latest_platform_height, \
-            !player.surface_state.is_touching_floor)
+            !player.surface_state.is_touching_floor or \
+                    player.surface_state.just_touched_floor)
     max_height_indicator.check_for_updates(player_max_platform_height)
     max_height_on_current_height_indicator.check_for_updates( \
             player_max_platform_height_on_current_life)

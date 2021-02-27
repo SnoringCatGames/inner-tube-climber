@@ -245,8 +245,15 @@ func _update_surface_state() -> void:
     # collisions, which then produce false positives for wall collisions when
     # the player is actually on the floor. This prevents those false-positives
     # from causing problems.
-    if surface_state.is_touching_wall and \
-            _check_for_a_non_floor_collision() == Vector2.INF:
+    var non_floor_collision := _check_for_a_non_floor_collision()
+    var is_wall_collision_but_should_be_floor_collision := \
+            surface_state.is_touching_wall and \
+            non_floor_collision == Vector2.INF
+    var non_wall_collision := _check_for_a_non_wall_collision()
+    var is_floor_collision_but_should_be_wall_collision := \
+            surface_state.is_touching_floor and \
+            non_wall_collision == Vector2.INF
+    if is_wall_collision_but_should_be_floor_collision:
 #        Global.print((
 #            ">>>>_update_surface_state: Floor-wall collision mismatch" +
 #            "\nposition=%s" +
@@ -281,6 +288,28 @@ func _update_surface_state() -> void:
         surface_state.which_wall = SurfaceSide.NONE
         surface_state.just_touched_wall = false
         surface_state.toward_wall_sign = 0
+        
+    elif is_floor_collision_but_should_be_wall_collision:
+        surface_state.is_touching_floor = false
+        surface_state.just_touched_floor = false
+        surface_state.just_left_floor = was_touching_floor
+        surface_state.just_entered_air = false
+        surface_state.just_left_air = !was_touching_a_surface
+        
+        surface_state.is_touching_wall = true
+        surface_state.which_wall = \
+                SurfaceSide.LEFT_WALL if \
+                non_floor_collision.x < position.x else \
+                SurfaceSide.RIGHT_WALL
+        surface_state.is_touching_left_wall = \
+                surface_state.which_wall == SurfaceSide.LEFT_WALL
+        surface_state.is_touching_right_wall = \
+                surface_state.which_wall == SurfaceSide.RIGHT_WALL
+        surface_state.just_touched_wall = !was_touching_wall
+        surface_state.toward_wall_sign = \
+                1 if \
+                surface_state.which_wall == SurfaceSide.RIGHT_WALL else \
+                -1
     
     if surface_state.just_touched_wall:
         has_hit_wall_since_pressing_move = true
@@ -307,10 +336,8 @@ func _check_for_a_non_floor_collision() -> Vector2:
     var current_collision: KinematicCollision2D
     for i in range(surface_state.collision_count):
         current_collision = get_slide_collision(i)
-        
         if !_does_position_match_player_bottom(current_collision.position):
             return current_collision.position
-    
     return Vector2.INF
 
 func _does_position_match_player_bottom(pos: Vector2) -> bool:
@@ -323,6 +350,32 @@ func _does_position_match_player_bottom(pos: Vector2) -> bool:
                     pos.x, \
                     self.position.x, \
                     11.0)
+
+func _check_for_a_non_wall_collision() -> Vector2:
+    var current_collision: KinematicCollision2D
+    for i in range(surface_state.collision_count):
+        current_collision = get_slide_collision(i)
+        if !_does_position_match_player_side(current_collision.position):
+            return current_collision.position
+    return Vector2.INF
+
+func _does_position_match_player_side(pos: Vector2) -> bool:
+    var left_side_x := self.position.x - Constants.PLAYER_HALF_WIDTH_DEFAULT
+    var right_side_x := self.position.x + Constants.PLAYER_HALF_WIDTH_DEFAULT
+    return pos.x > right_side_x or \
+            pos.x < left_side_x or \
+            (pos.y < self.position.y + \
+                    Constants.PLAYER_CAPSULE_HEIGHT_DEFAULT * 0.5 + 2.0 and \
+            pos.y > self.position.y - \
+                    Constants.PLAYER_CAPSULE_HEIGHT_DEFAULT * 0.5 - 2.0 and \
+            (Geometry.are_floats_equal_with_epsilon( \
+                pos.x, \
+                right_side_x, \
+                4.0) or \
+            Geometry.are_floats_equal_with_epsilon( \
+                pos.x, \
+                left_side_x, \
+                4.0)))
 
 func _update_tile_map_contact() -> void:
     var collision := Player.get_surface_collision( \

@@ -22,10 +22,11 @@ var is_new_unlocked_item := false
 
 var hint_tween: Tween
 
-func _ready() -> void:
+func _enter_tree() -> void:
     hint_tween = Tween.new()
     $HeaderWrapper/LockedWrapper/HintWrapper/Hint.add_child(hint_tween)
-    
+
+func _ready() -> void:
     _init_children()
     call_deferred("update")
 

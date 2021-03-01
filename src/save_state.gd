@@ -320,7 +320,8 @@ func erase_all_scores() -> void:
         ALL_FINISHED_SCORES_SECTION_KEY,
     ]
     for section_key in sections:
-        config.erase_section(section_key)
+        if config.has_section(section_key):
+            config.erase_section(section_key)
 
 func erase_level_state(level_id: String) -> void:
     var sections := [
@@ -334,16 +335,21 @@ func erase_level_state(level_id: String) -> void:
         HAS_THREE_LOOPED_SECTION_KEY,
     ]
     for section_key in sections:
-        config.erase_section_key( \
-                section_key, \
-                level_id)
+        if config.has_section_key(section_key, level_id):
+            config.erase_section_key( \
+                    section_key, \
+                    level_id)
     
     for key in config.get_section_keys(TOTAL_FALLS_ON_TIER_SECTION_KEY):
-        if key.find(level_id + ":") == 0:
+        if key.find(level_id + ":") == 0 and \
+                config.has_section_key( \
+                        TOTAL_FALLS_ON_TIER_SECTION_KEY, \
+                        level_id):
             config.erase_section_key( \
                     TOTAL_FALLS_ON_TIER_SECTION_KEY, \
                     key)
 
 func erase_all_state() -> void:
     for section in config.get_sections():
-        config.erase_section(section)
+        if config.has_section(section):
+            config.erase_section(section)

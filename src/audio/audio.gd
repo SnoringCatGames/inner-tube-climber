@@ -23,12 +23,13 @@ func _init() -> void:
     pitch_shift_effect = AudioEffectPitchShift.new()
     AudioServer.add_bus_effect(Music.MUSIC_BUS_INDEX, pitch_shift_effect)
     
+    _update_volume()
+
+func _enter_tree() -> void:
     fade_out_tween = Tween.new()
     add_child(fade_out_tween)
     fade_in_tween = Tween.new()
     add_child(fade_in_tween)
-    
-    _update_volume()
 
 func play_sound( \
         sound: int, \

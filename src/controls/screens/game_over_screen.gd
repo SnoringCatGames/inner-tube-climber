@@ -38,9 +38,11 @@ func _init().( \
         ) -> void:
     pass
 
-func _ready() -> void:
+func _enter_tree() -> void:
     rank_tween = Tween.new()
     add_child(rank_tween)
+
+func _ready() -> void:
     Global.connect( \
             "display_resized", \
             self, \

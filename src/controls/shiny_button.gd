@@ -32,14 +32,16 @@ var button_style_pulse: StyleBoxFlat
 var shine_tween := Tween.new()
 var color_pulse_tween := Tween.new()
 
+func _enter_tree() -> void:
+    add_child(shine_tween)
+    add_child(color_pulse_tween)
+
 func _ready() -> void:
     button_style_normal = $MarginContainer/BottomButton.get_stylebox("normal")
     button_style_hover = $MarginContainer/BottomButton.get_stylebox("hover")
     button_style_pressed = \
             $MarginContainer/BottomButton.get_stylebox("pressed")
     
-    add_child(shine_tween)
-    add_child(color_pulse_tween)
     $MarginContainer/TopButton.connect( \
             "pressed", self, "_on_pressed")
     $MarginContainer/TopButton.connect( \

@@ -12,7 +12,7 @@ var PEEP_HOLE_SIZE_POST_STUCK: Vector2 = \
 var LIGHT_ENERGY_PRE_STUCK: float = 0.0
 var LIGHT_ENERGY_POST_STUCK: float = \
         LevelConfig.BASE_TIER.light_energy.value
-var FOG_SCREEN_OPACITY_PRE_STUCK: float = 0.5
+var FOG_SCREEN_OPACITY_PRE_STUCK: float = 0.7
 var FOG_SCREEN_OPACITY_POST_STUCK: float = \
         LevelConfig.BASE_TIER.fog_screen_opacity.value
 var FOG_SCREEN_SECONDARY_COLOR_OPACITY_MULTIPLIER_PRE_STUCK: float = \

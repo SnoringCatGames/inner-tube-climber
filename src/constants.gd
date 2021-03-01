@@ -22,6 +22,7 @@ const PRIVACY_POLICY_URL := "https://snoringcat.games/inner-tube-climber/privacy
 const ANDROID_APP_STORE_URL := "market://details?id=dev.levi.inner_tube_climber"
 # FIXME
 const IOS_APP_STORE_URL := "itms-apps://apps.apple.com/us/app/inner-tube-climber/id1553158659"
+#const IOS_APP_STORE_URL := "itms-apps://apps.apple.com/us/app/id1553158659"
 #const IOS_APP_STORE_URL := "itms-apps://itunes.apple.com/app/apple-store/id1553158659?mt=8"
 #const IOS_APP_STORE_URL := "https://apps.apple.com/us/app/inner-tube-climber/id1553158659"
 const SUPPORT_URL_BASE := "https://snoringcat.games/support"

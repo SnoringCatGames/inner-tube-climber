@@ -363,7 +363,7 @@ var _TIERS := {
         openness_type = OpennessType.WALLED,
         camera_horizontally_locked = false,
         zoom_multiplier = 0.66667,
-        snow_density_multiplier = 16.0,
+        snow_density_multiplier = 20.0,
         fog_screen_opacity = {value = 0.99, weight = 1.0},
         fog_screen_secondary_color_opacity_multiplier = \
                 {value = 0.5, weight = 1.0},
@@ -487,8 +487,8 @@ var _LEVELS := {
             bronze_levels = ["5"],
         },
         rank_thresholds = {
-            Rank.GOLD: 4800,
-            Rank.SILVER: 1200,
+            Rank.GOLD: 4000,
+            Rank.SILVER: 1000,
         },
     },
     "7": {

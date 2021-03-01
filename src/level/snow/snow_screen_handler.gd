@@ -132,5 +132,7 @@ func _interpolate_snow_density_multiplier(value: float) -> void:
     snow_density_multiplier = value
     active_snow_screen.snow_density_multiplier = snow_density_multiplier
 
-func _on_snow_opacity_fade_finished() -> void:
+func _on_snow_opacity_fade_finished( \
+        _object: Object, \
+        _key: NodePath) -> void:
     inactive_snow_screen.is_active = false

@@ -119,8 +119,8 @@ func animate_to_number(next_number: int) -> void:
     number = next_number
 
 func _on_number_tween_completed( \
-        object: Object, \
-        key: NodePath, \
+        _object: Object, \
+        _key: NodePath, \
         number_tween: Tween) -> void:
     number_tweens.erase(number_tween)
     number_tween.queue_free()

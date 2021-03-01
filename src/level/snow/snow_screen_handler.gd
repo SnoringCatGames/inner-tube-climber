@@ -47,6 +47,7 @@ func destroy() -> void:
 
 func update_windiness(windiness: Vector2) -> void:
     active_snow_screen.windiness = windiness
+    inactive_snow_screen.windiness = windiness
 
 func set_start_state() -> void:
     _interpolate_snow_density_multiplier(SNOW_DENSITY_MULTIPLIER_PRE_STUCK)

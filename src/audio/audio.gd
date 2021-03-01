@@ -30,6 +30,10 @@ func _enter_tree() -> void:
     add_child(fade_out_tween)
     fade_in_tween = Tween.new()
     add_child(fade_in_tween)
+    fade_in_tween.connect( \
+            "tween_completed", \
+            self, \
+            "on_cross_fade_music_finished")
 
 func play_sound( \
         sound: int, \
@@ -121,11 +125,6 @@ func _cross_fade_music( \
             Tween.TRANS_QUAD, \
             Tween.EASE_OUT)
     fade_in_tween.start()
-    
-    fade_in_tween.connect( \
-            "tween_completed", \
-            self, \
-            "on_cross_fade_music_finished")
 
 func on_cross_fade_music_finished( \
         _object = null, \

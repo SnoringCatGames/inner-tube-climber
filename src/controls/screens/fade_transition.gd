@@ -10,9 +10,11 @@ var tween: Tween
 var duration := 0.3
 var is_transitioning := false
 
-func _ready() -> void:
+func _enter_tree() -> void:
     tween = Tween.new()
     add_child(tween)
+
+func _ready() -> void:
     Global.connect( \
             "display_resized", \
             self, \

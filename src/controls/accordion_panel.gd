@@ -45,16 +45,18 @@ var _is_open_tween: Tween
 
 var _start_scroll_vertical: int
 
-func _ready() -> void:
-    _is_ready = true
-    rect_clip_content = true
-    
+func _enter_tree() -> void:
     _is_open_tween = Tween.new()
     _is_open_tween.connect( \
             "tween_all_completed", \
             self, \
             "_on_is_open_tween_completed")
     add_child(_is_open_tween)
+
+func _ready() -> void:
+    _is_ready = true
+    rect_clip_content = true
+    
     move_child(_is_open_tween, 0)
     
     _update_children()

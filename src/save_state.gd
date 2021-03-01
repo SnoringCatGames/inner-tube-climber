@@ -67,7 +67,7 @@ func set_level_high_score( \
     save_config()
 
 func get_level_high_score(level_id: String) -> int:
-    return config.get_value( \
+    return _get_value( \
             HIGH_SCORES_SECTION_KEY, \
             level_id, \
             0) as int
@@ -82,7 +82,7 @@ func set_level_high_tier( \
     save_config()
 
 func get_level_high_tier(level_id: String) -> int:
-    return config.get_value( \
+    return _get_value( \
             HIGH_TIER_SECTION_KEY, \
             level_id, \
             0) as int
@@ -97,7 +97,7 @@ func set_level_total_plays( \
     save_config()
 
 func get_level_total_plays(level_id: String) -> int:
-    return config.get_value( \
+    return _get_value( \
             TOTAL_PLAYS_SECTION_KEY, \
             level_id, \
             0) as int
@@ -112,7 +112,7 @@ func set_level_total_falls( \
     save_config()
 
 func get_level_total_falls(level_id: String) -> int:
-    return config.get_value( \
+    return _get_value( \
             TOTAL_FALLS_SECTION_KEY, \
             level_id, \
             0) as int
@@ -132,7 +132,7 @@ func get_level_total_falls_on_tier( \
         level_id: String, \
         tier_id: String) -> int:
     var key := level_id + ":" + tier_id
-    return config.get_value( \
+    return _get_value( \
             TOTAL_FALLS_ON_TIER_SECTION_KEY, \
             key, \
             0) as int
@@ -147,7 +147,7 @@ func set_level_all_scores( \
     save_config()
 
 func get_level_all_scores(level_id: String) -> Array:
-    return config.get_value( \
+    return _get_value( \
             ALL_SCORES_SECTION_KEY, \
             level_id, \
             []) as Array
@@ -162,7 +162,7 @@ func set_level_all_finished_scores( \
     save_config()
 
 func get_level_all_finished_scores(level_id: String) -> Array:
-    return config.get_value( \
+    return _get_value( \
             ALL_FINISHED_SCORES_SECTION_KEY, \
             level_id, \
             []) as Array
@@ -177,7 +177,7 @@ func set_level_is_unlocked( \
     save_config()
 
 func get_level_is_unlocked(level_id: String) -> bool:
-    return config.get_value( \
+    return _get_value( \
             IS_UNLOCKED_SECTION_KEY, \
             level_id, \
             false) as bool or \
@@ -191,7 +191,7 @@ func set_new_unlocked_levels(new_unlocked_levels: Array) -> void:
     save_config()
 
 func get_new_unlocked_levels() -> Array:
-    return config.get_value( \
+    return _get_value( \
             MISCELLANEOUS_SECTION_KEY, \
             NEW_UNLOCKED_LEVELS_KEY, \
             []) as Array
@@ -206,7 +206,7 @@ func set_level_has_finished( \
     save_config()
 
 func get_level_has_finished(level_id: String) -> bool:
-    return config.get_value( \
+    return _get_value( \
             HAS_FINISHED_SECTION_KEY, \
             level_id, \
             false) as bool
@@ -221,7 +221,7 @@ func set_level_has_three_looped( \
     save_config()
 
 func get_level_has_three_looped(level_id: String) -> bool:
-    return config.get_value( \
+    return _get_value( \
             HAS_THREE_LOOPED_SECTION_KEY, \
             level_id, \
             false) as bool
@@ -234,7 +234,7 @@ func set_finished_level_streak(streak: int) -> void:
     save_config()
 
 func get_finished_level_streak() -> int:
-    return config.get_value( \
+    return _get_value( \
             MISCELLANEOUS_SECTION_KEY, \
             FINISHED_LEVEL_STREAK_KEY, \
             0) as int
@@ -247,7 +247,7 @@ func set_failed_level_streak(streak: int) -> void:
     save_config()
 
 func get_failed_level_streak() -> int:
-    return config.get_value( \
+    return _get_value( \
             MISCELLANEOUS_SECTION_KEY, \
             FAILED_LEVEL_STREAK_KEY, \
             0) as int
@@ -260,7 +260,7 @@ func set_gave_feedback(gave_feedback: bool) -> void:
     save_config()
 
 func get_gave_feedback() -> bool:
-    return config.get_value( \
+    return _get_value( \
             MISCELLANEOUS_SECTION_KEY, \
             GAVE_FEEDBACK_KEY, \
             false) as bool
@@ -277,7 +277,7 @@ func set_setting( \
 func get_setting( \
         setting_key: String, \
         default = null):
-    return config.get_value( \
+    return _get_value( \
                     SETTINGS_SECTION_KEY, \
                     setting_key) if \
             config.has_section_key( \
@@ -293,7 +293,7 @@ func set_score_version(version: String) -> void:
     save_config()
 
 func get_score_version() -> String:
-    return config.get_value( \
+    return _get_value( \
             VERSIONS_SECTION_KEY, \
             SCORE_VERSION_KEY, \
             "") as String
@@ -308,7 +308,7 @@ func set_level_version( \
     save_config()
 
 func get_level_version(level_id: String) -> String:
-    return config.get_value( \
+    return _get_value( \
             VERSIONS_SECTION_KEY, \
             level_id, \
             "") as String
@@ -353,3 +353,8 @@ func erase_all_state() -> void:
     for section in config.get_sections():
         if config.has_section(section):
             config.erase_section(section)
+
+func _get_value(section: String, key: String, default = null):
+    if !config.has_section_key(section, key):
+        config.set_value(section, key, default)
+    return config.get_value(section, key, default)

@@ -117,7 +117,6 @@ func setup( \
                 true, \
                 true)
         icicle_fall_animator.position = tier_start.position
-        add_child(icicle_fall_animator)
     
     # Remove one-ups on HARD mode.
     if Global.difficulty_mode == DifficultyMode.HARD:

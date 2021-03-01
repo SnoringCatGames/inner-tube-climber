@@ -36,14 +36,14 @@ var camera_horizontal_lock_displacement_tween: Tween
 var camera_horizontal_lock_tween_displacement := 0.0
 
 func _enter_tree() -> void:
+    camera_horizontal_lock_displacement_tween = Tween.new()
+    add_child(camera_horizontal_lock_displacement_tween)
+    
     Global.connect( \
             "display_resized", \
             self, \
             "_handle_display_resize")
     _handle_display_resize()
-    
-    camera_horizontal_lock_displacement_tween = Tween.new()
-    add_child(camera_horizontal_lock_displacement_tween)
     
     var camera := Camera2D.new()
     add_child(camera)

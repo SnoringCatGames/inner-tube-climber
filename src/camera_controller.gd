@@ -55,27 +55,27 @@ func get_current_camera() -> Camera2D:
     return _current_camera
 
 func _set_offset(offset: Vector2) -> void:
-    assert(is_instance_valid(_current_camera))
+    if !is_instance_valid(_current_camera):
+        return
     _current_camera.offset = offset
 
 func _get_offset() -> Vector2:
-    if _current_camera == null:
+    if !is_instance_valid(_current_camera):
         return Vector2.ZERO
     return _current_camera.offset
 
 func get_position() -> Vector2:
-    if _current_camera == null:
+    if !is_instance_valid(_current_camera):
         return Vector2.ZERO
     return _current_camera.get_camera_screen_center()
 
 func _set_zoom(zoom: float) -> void:
-    if _current_camera == null:
+    if !is_instance_valid(_current_camera):
         return
-#    assert(is_instance_valid(_current_camera))
     _current_camera.zoom = Vector2(zoom, zoom)
 
 func _get_zoom() -> float:
-    if _current_camera == null:
+    if !is_instance_valid(_current_camera):
         return 1.0
     assert(_current_camera.zoom.x == _current_camera.zoom.y)
     return _current_camera.zoom.x

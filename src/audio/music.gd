@@ -35,7 +35,7 @@ var MANIFEST := {
                 Utils.get_is_ios_device() else \
                 load("res://assets/music/rising-through-rarified-air.ogg"),
         text = "RISING_THROUGH_RARIFIED_AIR",
-        volume_db = 8.0,
+        volume_db = 2.0,
     },
     OUT_FOR_A_LOOP_RIDE: {
         stream = \

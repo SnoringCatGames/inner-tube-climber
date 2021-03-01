@@ -209,7 +209,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/mobile_control/mobile_control_input_v1.gd"
 }, {
-"base": "MobileControlInput",
+"base": "MobileControlInputV1",
 "class": "MobileControlInputV2",
 "language": "GDScript",
 "path": "res://src/mobile_control/mobile_control_input_v2.gd"
@@ -218,6 +218,11 @@ _global_script_classes=[ {
 "class": "MobileControlInputV3",
 "language": "GDScript",
 "path": "res://src/mobile_control/mobile_control_input_v3.gd"
+}, {
+"base": "MobileControlInput",
+"class": "MobileControlInputV4",
+"language": "GDScript",
+"path": "res://src/mobile_control/mobile_control_input_v4.gd"
 }, {
 "base": "Node2D",
 "class": "MobileControlUI",
@@ -952,6 +957,7 @@ _global_script_class_icons={
 "MobileControlInputV1": "",
 "MobileControlInputV2": "",
 "MobileControlInputV3": "",
+"MobileControlInputV4": "",
 "MobileControlUI": "",
 "NavBar": "",
 "NotificationScreen": "",
@@ -1205,8 +1211,8 @@ one_up={
 
 [input_devices]
 
-pointing/ios/touch_delay=0.005
 pointing/emulate_touch_from_mouse=true
+pointing/ios/touch_delay=0.005
 
 [layer_names]
 

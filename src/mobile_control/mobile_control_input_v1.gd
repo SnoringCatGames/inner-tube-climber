@@ -7,8 +7,9 @@
 # -   The right region triggers sideways movement.
 #     -   Sideways movement is controlled by gestures, rather than distinct
 #         sub-regions corresponding to left or right.
-#     -   If enough net horizontal drag movement has occurred recently, within
-#         a small time window, then the sideways movement is triggered.
+#     -   If enough net horizontal drag movement has occurred recently, since
+#         any drag amount in the other direction, then the sideways movement
+#         is triggered.
 #     -   The sideways movement trigger ends on touch-up or when enough net
 #         horizontal drag movement occurs in the opposite direction.
 extends MobileControlInput
@@ -16,13 +17,13 @@ class_name MobileControlInputV1
 
 const JUMP_SIDE_SCREEN_WIDTH_RATIO := 0.35
 
-const GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.12, 0.12)
-const REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC := Vector2(0.64, 0.32)
+const GESTURE_VELOCITY_THRESHOLD_INCHES := Vector2(0.09, 0.09)
+const REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES := Vector2(0.16, 0.08)
 
-var gesture_velocity_threshold_pixels_per_sec: Vector2 = \
-        GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC * Utils.get_viewport_ppi()
-var reverse_gesture_velocity_threshold_pixels_per_sec: Vector2 = \
-        REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES_PER_SEC * \
+var gesture_velocity_threshold_pixels: Vector2 = \
+        GESTURE_VELOCITY_THRESHOLD_INCHES * Utils.get_viewport_ppi()
+var reverse_gesture_velocity_threshold_pixels: Vector2 = \
+        REVERSE_GESTURE_VELOCITY_THRESHOLD_INCHES * \
         Utils.get_viewport_ppi()
 
 var is_jump_on_left_side: bool
@@ -104,6 +105,8 @@ func _unhandled_input(event: InputEvent) -> void:
             recent_gesture_positions.clear()
             is_positions_buffer_dirty = true
             latest_gesture_position = Vector2.INF
+            latest_leftward_position = Vector2.INF
+            latest_rightward_position = Vector2.INF
             move_sideways_pointer_down_position = Vector2.INF
             move_sideways_pointer_current_position = Vector2.INF
         else:
@@ -115,20 +118,20 @@ func _handle_move_sideways_drag(pointer_position: Vector2) -> void:
     move_sideways_pointer_current_position = pointer_position
     
     _update_position_and_time_buffer(pointer_position)
-    var gesture_velocity := _get_velocity()
     
+    var recent_displacement := _get_displacement_since_other_direction()
     var is_move_left_triggered_from_gesture := \
-            gesture_velocity.x < \
-            -reverse_gesture_velocity_threshold_pixels_per_sec.x if \
+            recent_displacement.x < \
+            -reverse_gesture_velocity_threshold_pixels.x if \
             is_move_right_pressed else \
-            gesture_velocity.x < \
-            -gesture_velocity_threshold_pixels_per_sec.x
+            recent_displacement.x < \
+            -gesture_velocity_threshold_pixels.x
     var is_move_right_triggered_from_gesture := \
-            gesture_velocity.x > \
-            reverse_gesture_velocity_threshold_pixels_per_sec.x if \
+            recent_displacement.x > \
+            reverse_gesture_velocity_threshold_pixels.x if \
             is_move_left_pressed else \
-            gesture_velocity.x > \
-            gesture_velocity_threshold_pixels_per_sec.x
+            recent_displacement.x > \
+            gesture_velocity_threshold_pixels.x
     
     if is_move_left_triggered_from_gesture:
         is_move_left_pressed = true

@@ -28,21 +28,29 @@ var main_items := [
         options = [
             "1R",
             "1L",
-            "2",
+            "2R",
+            "2L",
             "3R",
             "3L",
+            "4",
         ],
         description = \
                 "1R: Left-side tap to jump. Right-side drag to move " + \
-                        "sideways. Input is based on recent drag movement." + \
+                        "sideways. Input is based on total drag movement " + \
+                        "since any drag movement in the other direction." + \
                 "\n\n1L: Same as 1R, but with jump input on right side " + \
                         "and sideways input on left side." + \
-                "\n\n2: Drag up to jump. Drag sideways to move sideways." + \
+                "\n\n2R: Same as 1R, but sideways movement is based on " + \
+                        "recend drag speed." + \
+                "\n\n2L: Same as 1L, but sideways movement is based on " + \
+                        "recend drag speed." + \
                 "\n\n3R: Left-side tap to jump. Right-side drag to move " + \
                         "sideways. Input is based on drag movement " + \
                         "relative to initial touch position." + \
                 "\n\n3L: Same as 3R, but with jump input on right side " + \
-                        "and sideways input on left side.",
+                        "and sideways input on left side." + \
+                "\n\n4: One-handed control. Drag up to jump. Drag " + \
+                        "sideways to move sideways.",
     },
     {
         label = "Music",

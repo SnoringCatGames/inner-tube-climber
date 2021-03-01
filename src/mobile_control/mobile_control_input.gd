@@ -14,6 +14,8 @@ var was_last_event_from_keyboard := true
 var recent_gesture_positions := []
 var is_positions_buffer_dirty := false
 var latest_gesture_position := Vector2.INF
+var latest_leftward_position := Vector2.INF
+var latest_rightward_position := Vector2.INF
 
 var is_jump_pressed := false
 var is_move_left_pressed := false
@@ -138,6 +140,7 @@ func _get_event_type_and_position(event: InputEvent) -> Array:
     ]
 
 func _update_position_and_time_buffer(pointer_position: Vector2) -> void:
+    var previous_gesture_position := latest_gesture_position
     latest_gesture_position = pointer_position
     
     # Record the new drag position and time.
@@ -151,6 +154,18 @@ func _update_position_and_time_buffer(pointer_position: Vector2) -> void:
             Time.elapsed_play_time_actual_sec - \
             GESTURE_RECENT_POSITIONS_BUFFER_DELAY_SEC:
         recent_gesture_positions.pop_back()
+    
+    if recent_gesture_positions.size() == 1 or \
+            latest_gesture_position == Vector2.INF:
+        # This is the start of a new gesture.
+        latest_leftward_position = latest_gesture_position
+        latest_rightward_position = latest_gesture_position
+    elif latest_gesture_position.x - previous_gesture_position.x > 0:
+        # Gesture is moving rightward.
+        latest_rightward_position = latest_gesture_position
+    else:
+        # Gesture is moving leftward.
+        latest_leftward_position = latest_gesture_position
     
     is_positions_buffer_dirty = true
 
@@ -168,6 +183,12 @@ func _get_velocity() -> Vector2:
     return delta_position / delta_time if \
             delta_time > 0.0 else \
             Vector2.ZERO
+
+func _get_displacement_since_other_direction() -> Vector2:
+    if latest_gesture_position == latest_leftward_position:
+        return latest_gesture_position - latest_rightward_position
+    else:
+        return latest_gesture_position - latest_leftward_position
 
 func get_pointer_down_position_to_annotate() -> Vector2:
     return Vector2.INF

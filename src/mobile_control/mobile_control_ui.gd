@@ -15,14 +15,18 @@ func _enter_tree() -> void:
             mobile_control_input = MobileControlInputV1.new(version == "1R")
             mobile_control_display = \
                     MobileControlDisplayV1.new(mobile_control_input)
-        "2":
-            mobile_control_input = MobileControlInputV2.new()
+        "2R","2L":
+            mobile_control_input = MobileControlInputV2.new(version == "2R")
             mobile_control_display = \
-                    MobileControlDisplayV2.new(mobile_control_input)
+                    MobileControlDisplayV1.new(mobile_control_input)
         "3R","3L":
             mobile_control_input = MobileControlInputV3.new(version == "3R")
             mobile_control_display = \
                     MobileControlDisplayV1.new(mobile_control_input)
+        "4":
+            mobile_control_input = MobileControlInputV4.new()
+            mobile_control_display = \
+                    MobileControlDisplayV2.new(mobile_control_input)
         _:
             Utils.error()
     

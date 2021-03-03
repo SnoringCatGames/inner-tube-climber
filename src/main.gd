@@ -39,7 +39,9 @@ func _set_window_debug_size_and_position() -> void:
 #        var window_size = Vector2(3840, 2160)
         # App Store: 6.5'' iPhone
 #        var window_size = Vector2(2778, 1284)
-        # App Store: 12.9'' iPad
+        # App Store: 5.5'' iPhone
+#        var window_size = Vector2(2208, 1242)
+        # App Store: 12.9'' iPad (3rd Gen) and (2nd Gen)
 #        var window_size = Vector2(2732, 2048)
         # Default
 #        var window_size := Vector2(480.0, 480.0)

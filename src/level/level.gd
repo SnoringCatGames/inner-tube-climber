@@ -342,6 +342,11 @@ func _start_new_tier_after_fall(current_tier_start_position: Vector2) -> void:
             current_tier_start_position, \
             player.position, \
             _get_player_height())
+    # Reset lives when dying on the first tier, since that's less tedius than
+    # fully restarting the level for the same effect.
+    if tier_count <= 1:
+        Time.set_timeout(funcref(Audio, "play_sound"), 0.5, [Sound.LAND])
+        Time.set_timeout(funcref(self, "add_life"), 0.5)
 
 func quit() -> void:
     Audio.play_sound(Sound.FALL)

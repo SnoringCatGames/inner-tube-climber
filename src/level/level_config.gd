@@ -453,8 +453,8 @@ var _LEVELS := {
             silver_levels = ["1", "2", "3"],
         },
         rank_thresholds = {
-            Rank.GOLD: 9600,
-            Rank.SILVER: 2400,
+            Rank.GOLD: 7200,
+            Rank.SILVER: 1800,
         },
     },
     "5": {
@@ -518,8 +518,8 @@ var _LEVELS := {
             silver_levels = ["5", "6", "7"],
         },
         rank_thresholds = {
-            Rank.GOLD: 32000,
-            Rank.SILVER: 8000,
+            Rank.GOLD: 24000,
+            Rank.SILVER: 6000,
         },
     },
     "9": {
@@ -585,8 +585,8 @@ var _LEVELS := {
             silver_levels = ["9", "10", "11"],
         },
         rank_thresholds = {
-            Rank.GOLD: 12000,
-            Rank.SILVER: 3000,
+            Rank.GOLD: 9200,
+            Rank.SILVER: 2300,
         },
     },
     "13": {
@@ -620,8 +620,8 @@ var _LEVELS := {
             bronze_levels = ["4", "8", "12", "13"],
         },
         rank_thresholds = {
-            Rank.GOLD: 56000,
-            Rank.SILVER: 14000,
+            Rank.GOLD: 40000,
+            Rank.SILVER: 10000,
         },
     },
 }

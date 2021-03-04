@@ -46,3 +46,6 @@ func update_displays() -> void:
     $VBoxContainer/LivesBoard.visible = \
             Global.is_lives_display_shown and \
             Global.difficulty_mode != DifficultyMode.EASY
+    $VBoxContainer/DebugTimeBoard.visible = \
+            Global.is_debug_time_shown and \
+            (Constants.DEBUG or Constants.PLAYTEST)

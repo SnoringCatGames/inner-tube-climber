@@ -19,6 +19,7 @@ var is_lives_display_shown: bool
 var is_tier_ratio_display_shown: bool
 var is_multiplier_display_shown: bool
 var is_speed_display_shown: bool
+var is_debug_time_shown: bool
 var mobile_control_version: String
 var are_keyboard_controls_shown := false
 
@@ -87,6 +88,9 @@ func _load_state() -> void:
             false)
     is_speed_display_shown = SaveState.get_setting( \
             SaveState.IS_SPEED_DISPLAY_SHOWN_KEY, \
+            false)
+    is_debug_time_shown = SaveState.get_setting( \
+            SaveState.IS_DEBUG_TIME_DISPLAY_SHOWN_KEY, \
             false)
     
     Audio.is_music_enabled = SaveState.get_setting( \

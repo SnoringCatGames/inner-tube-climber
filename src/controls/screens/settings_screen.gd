@@ -113,6 +113,10 @@ var details_items := [
         type = LabeledControlItemType.CHECKBOX,
     },
     {
+        label = "Debug time display",
+        type = LabeledControlItemType.CHECKBOX,
+    },
+    {
         label = "Debug panel",
         type = LabeledControlItemType.CHECKBOX,
     },
@@ -197,6 +201,8 @@ func _initialize_selections() -> void:
             Global.is_multiplier_display_shown
     _details_list.find_item("Speed display").pressed = \
             Global.is_speed_display_shown
+    _details_list.find_item("Debug time display").pressed = \
+            Global.is_debug_time_shown
     
     _main_list.find_item("Music").pressed = \
             Audio.is_music_enabled
@@ -222,6 +228,7 @@ func _initialize_enablement() -> void:
     _details_list.find_item("Tier ratio display").disabled = false 
     _details_list.find_item("Multiplier display").disabled = false 
     _details_list.find_item("Speed display").disabled = false 
+    _details_list.find_item("Debug time display").disabled = false 
     _main_list.find_item("Music").disabled = false 
     _main_list.find_item("Sound effects").disabled = false 
 
@@ -266,6 +273,8 @@ func _on_control_changed( \
             _on_multiplier_display_pressed(item.pressed)
         "Speed display":
             _on_speed_display_pressed(item.pressed)
+        "Debug time display":
+            _on_debug_time_display_pressed(item.pressed)
         "Music":
             _on_music_pressed(item.pressed)
         "Sound effects":
@@ -373,6 +382,13 @@ func _on_speed_display_pressed(pressed: bool) -> void:
     SaveState.set_setting( \
             SaveState.IS_SPEED_DISPLAY_SHOWN_KEY, \
             Global.is_speed_display_shown)
+    _update_level_displays()
+
+func _on_debug_time_display_pressed(pressed: bool) -> void:
+    Global.is_debug_time_shown = pressed
+    SaveState.set_setting( \
+            SaveState.IS_DEBUG_TIME_DISPLAY_SHOWN_KEY, \
+            Global.is_debug_time_shown)
     _update_level_displays()
 
 func _on_music_pressed(pressed: bool):

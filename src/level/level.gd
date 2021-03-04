@@ -258,6 +258,9 @@ func _update_score_displays() -> void:
     score_boards.set_multiplier(cooldown_indicator.multiplier)
     score_boards.set_speed($CameraHandler.speed_index + 1)
     score_boards.set_lives(lives_count)
+    if Constants.DEBUG or Constants.PLAYTEST:
+        score_boards.get_node("VBoxContainer/DebugTimeBoard").value = \
+                "%.3f" % Time.elapsed_play_time_actual_sec
     _update_next_rank_at_scoreboard()
 
 func _update_next_rank_at_scoreboard() -> void:

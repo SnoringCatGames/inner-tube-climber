@@ -93,10 +93,10 @@ func _update_stats() -> void:
     _control_list.find_item("Difficulty:").text = \
         DifficultyMode.get_type_string(Global.difficulty_mode)
     _control_list.find_item("Lives:").text = \
-        "%s / %s" % [
+        ("%s / %s" % [
                 level.lives_count,
                 level.lives_count + level.falls_count,
-        ]
+        ]) if Global.difficulty_mode != DifficultyMode.EASY else "-"
     _control_list.find_item("Time:").text = \
         Utils.get_time_string_from_seconds( \
                 Time.elapsed_play_time_actual_sec - \

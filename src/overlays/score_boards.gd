@@ -39,7 +39,10 @@ func update_displays() -> void:
     $VBoxContainer/HeightBoard.visible = Global.is_height_display_shown
     $VBoxContainer/ScoreBoard.visible = Global.is_score_display_shown
     $VBoxContainer/NextRankAtBoard.visible = \
-            Global.is_next_rank_at_display_shown
+            Global.is_next_rank_at_display_shown and \
+            Global.difficulty_mode != DifficultyMode.EASY
     $VBoxContainer/MultiplierBoard.visible = Global.is_multiplier_display_shown
     $VBoxContainer/SpeedBoard.visible = Global.is_speed_display_shown
-    $VBoxContainer/LivesBoard.visible = Global.is_lives_display_shown
+    $VBoxContainer/LivesBoard.visible = \
+            Global.is_lives_display_shown and \
+            Global.difficulty_mode != DifficultyMode.EASY

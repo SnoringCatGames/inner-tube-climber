@@ -291,7 +291,8 @@ func _update_next_rank_at_scoreboard() -> void:
 func _fall() -> void:
     falls_count += 1
     falls_count_on_current_tier += 1
-    lives_count -= 1
+    if Global.difficulty_mode != DifficultyMode.EASY:
+        lives_count -= 1
     tiers_count_since_falling = 0
     player_max_height_on_current_life = 0.0
     player_latest_platform_height = 0.0
@@ -891,12 +892,8 @@ func _on_entered_new_tier() -> void:
             tier_count - 1 == level_config.tiers.size()
     var was_final_tier_completed_third_time: bool = \
             tier_count - 1 == level_config.tiers.size() * 3
-    if was_final_tier_completed_first_time or \
-            was_final_tier_completed_third_time:
-        Time.set_timeout( \
-                funcref(Audio, "play_sound"), \
-                0.8, \
-                [Sound.ACHIEVEMENT])
+    
+    if was_final_tier_completed_first_time:
         Global.falls_count_since_reaching_level_end = 0
         var is_first_time_finishing := \
                 !SaveState.get_level_has_finished(level_id)
@@ -914,13 +911,22 @@ func _on_entered_new_tier() -> void:
                 "finish", \
                 LevelConfig.get_level_version_string(level_id), \
                 Time.elapsed_play_time_actual_sec - level_start_time)
-    else:
-        pass
-#        Audio.play_sound(Sound.TIER_COMPLETE, true)
+    
+    if was_final_tier_completed_first_time or \
+            was_final_tier_completed_third_time:
+        Time.set_timeout( \
+                funcref(Audio, "play_sound"), \
+                0.8, \
+                [Sound.ACHIEVEMENT])
     
     _update_score_for_tier_change()
     
     player.on_new_tier(current_tier)
+    
+    if was_final_tier_completed_first_time and \
+            Global.difficulty_mode == DifficultyMode.EASY:
+        lives_count = 0
+        Time.set_timeout(funcref(self, "_fall"), 1.5)
 
 func _update_margin_color() -> void:
     var previous_left_margin_color: Color

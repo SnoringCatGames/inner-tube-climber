@@ -19,8 +19,12 @@ var main_items := [
         ],
         description = \
                 "The player moves faster at higher difficulties." + \
-                "\n\nAlso, your score is increased with higher difficulties." + \
-                "\n\nOn HARD difficulty, extra lives do not appear.",
+                "\n\nOn EASY, levels end after one loop." + \
+                "\n\nOn MODERATE and HARD, levels loop until you run out of lives." + \
+                "\n\nOn EASY, you have infinite lives." + \
+                "\n\nOn HARD, extra lives do not appear." + \
+                "\n\nYour score is increased with higher difficulties." + \
+                "\n\nIt may not be possible to get Silver or Gold ranks on EASY.",
     },
     {
         label = "Control version",

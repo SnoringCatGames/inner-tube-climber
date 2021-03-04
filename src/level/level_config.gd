@@ -940,6 +940,13 @@ func get_unlock_hint(level_id: String) -> String:
                 Utils.error()
     if !hint.empty():
         hint += "."
+    
+    if Global.difficulty_mode == DifficultyMode.EASY and \
+            (hint.find("gold") or \
+            hint.find("silver") or \
+            hint.find("Three-loop")):
+        hint += "\n(Increase difficulty)"
+    
     return hint
 
 func has_level_earned_rank( \

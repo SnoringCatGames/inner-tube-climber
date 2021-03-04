@@ -4,8 +4,6 @@ class_name MobileControlInput
 # How many seconds worth of drag positions to buffer.
 const GESTURE_RECENT_POSITIONS_BUFFER_DELAY_SEC := 0.1
 
-const RECENT_GESTURE_EVENTS_FOR_DEBUGGING_BUFFER_SIZE := 1000
-
 var is_mobile_device := false
 
 var is_mouse_down := false
@@ -21,6 +19,8 @@ var latest_rightward_position := Vector2.INF
 
 # Array<GestureEventForDebugging>
 var recent_gesture_events_for_debugging := []
+# Array<MovementEventForDebugging>
+var recent_movement_events_for_debugging := []
 
 var is_jump_pressed := false
 var is_move_left_pressed := false
@@ -74,7 +74,7 @@ func _record_new_gesture_event(event: InputEvent) -> void:
             Time.elapsed_play_time_actual_sec)
     recent_gesture_events_for_debugging.push_front(gesture_event)
     while recent_gesture_events_for_debugging.size() > \
-            RECENT_GESTURE_EVENTS_FOR_DEBUGGING_BUFFER_SIZE:
+            Constants.RECENT_GESTURE_EVENTS_FOR_DEBUGGING_BUFFER_SIZE:
         recent_gesture_events_for_debugging.pop_back()
 
 func _physics_process(_delta_sec: float) -> void:
@@ -104,18 +104,41 @@ func _physics_process(_delta_sec: float) -> void:
         action.action = "jump"
         action.pressed = is_jump_pressed
         Input.parse_input_event(action)
+        
+        if Constants.DEBUG or Constants.PLAYTEST:
+            var movement_event := MovementEventForDebugging.new( \
+                    "j", \
+                    Time.elapsed_play_time_actual_sec)
+            recent_movement_events_for_debugging.push_front(movement_event)
     
     if Input.is_action_pressed("move_left") != is_move_left_pressed:
         var action := InputEventAction.new() 
         action.action = "move_left"
         action.pressed = is_move_left_pressed
         Input.parse_input_event(action)
+        
+        if Constants.DEBUG or Constants.PLAYTEST:
+            var movement_event := MovementEventForDebugging.new( \
+                    "l", \
+                    Time.elapsed_play_time_actual_sec)
+            recent_movement_events_for_debugging.push_front(movement_event)
     
     if Input.is_action_pressed("move_right") != is_move_right_pressed:
         var action := InputEventAction.new() 
         action.action = "move_right"
         action.pressed = is_move_right_pressed
         Input.parse_input_event(action)
+        
+        if Constants.DEBUG or Constants.PLAYTEST:
+            var movement_event := MovementEventForDebugging.new( \
+                    "r", \
+                    Time.elapsed_play_time_actual_sec)
+            recent_movement_events_for_debugging.push_front(movement_event)
+    
+    if Constants.DEBUG or Constants.PLAYTEST:
+        while recent_movement_events_for_debugging.size() > \
+                Constants.RECENT_GESTURE_EVENTS_FOR_DEBUGGING_BUFFER_SIZE:
+            recent_movement_events_for_debugging.pop_back()
 
 func _get_event_type_and_position(event: InputEvent) -> Array:
     var pointer_position := Vector2.INF

@@ -7,6 +7,8 @@ var PLAYTEST := true
 var ARE_ALL_LEVELS_UNLOCKED := false
 var DEBUG_TIER := ""
 
+const RECENT_GESTURE_EVENTS_FOR_DEBUGGING_BUFFER_SIZE := 1000
+
 const GOOGLE_ANALYTICS_ID := "UA-186405125-1"
 
 const APP_NAME := "Inner-Tube Climber"
@@ -25,6 +27,7 @@ const IOS_APP_STORE_URL := "itms-apps://apps.apple.com/us/app/inner-tube-climber
 #const IOS_APP_STORE_URL := "itms-apps://itunes.apple.com/app/apple-store/id1553158659?mt=8"
 #const IOS_APP_STORE_URL := "https://apps.apple.com/us/app/inner-tube-climber/id1553158659"
 const SUPPORT_URL_BASE := "https://snoringcat.games/support"
+const LOG_GESTURES_URL := "https://snoringcat.games/log/gestures"
 
 var GODOT_SPLASH_SCREEN_DURATION_SEC := 0.8 if !DEBUG else 0.0
 var SNORING_CAT_SPLASH_SCREEN_DURATION_SEC := 1.0 if !DEBUG else 0.0

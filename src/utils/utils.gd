@@ -2,12 +2,14 @@ extends Node
 
 static func error( \
         message := "An error occurred", \
-        should_assert := true):
+        should_assert := true) -> void:
+    Global.print("**ERROR**: %s" % message)
     push_error("ERROR: %s" % message)
     if should_assert:
          assert(false)
 
-static func warning(message := "An warning occurred"):
+static func warning(message := "An warning occurred") -> void:
+    Global.print("**WARNING**: %s" % message)
     push_warning("WARNING: %s" % message)
 
 # TODO: Replace this with any built-in feature whenever it exists
@@ -591,3 +593,8 @@ static func get_support_url() -> String:
     var params := "?source=" + OS.get_name()
     params += "&app=inner-tube-climber"
     return Constants.SUPPORT_URL_BASE + params
+
+static func get_log_gestures_url() -> String:
+    var params := "?source=" + OS.get_name()
+    params += "&app=inner-tube-climber"
+    return Constants.LOG_GESTURES_URL + params

@@ -58,3 +58,7 @@ func _create_top_layer() -> void:
             true)
     Global.debug_panel.z_index = 1000
     Global.debug_panel.visible = Global.is_debug_panel_shown
+    
+    if Constants.DEBUG or Constants.PLAYTEST:
+        Global.gesture_record = GestureRecord.new()
+        Global.canvas_layers.top_layer.add_child(Global.gesture_record)

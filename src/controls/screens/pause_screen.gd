@@ -131,3 +131,29 @@ func _on_MoreLivesButton_pressed() -> void:
         Time.set_timeout(funcref(Audio, "play_sound"), 0.2, [Sound.ACHIEVEMENT])
         for i in range(10):
             Global.level.add_life()
+
+func _on_SendRecentGestureEventsForDebugging_pressed() -> void:
+    var recent_events_str := ""
+    var events: Array = Global.level.mobile_control_ui.mobile_control_input \
+            .recent_gesture_events_for_debugging
+    for event in events:
+        recent_events_str += event.to_string()
+    OS.set_clipboard(recent_events_str)
+    
+    var body_str: String
+    if Utils.get_is_ios_device():
+        # iOS doesn't allow us to add things to the clipboard.
+        for index in range(events.size() - 50):
+            recent_events_str += events[index].to_string()
+        body_str = recent_events_str
+    else:
+        body_str = "Events have been copied to your clipboard. " + \
+                "Please paste them here!"
+    
+    body_str = body_str.http_escape()
+    var subject_str := \
+            "Events: slightly used, minor repairs needed.".http_escape()
+    var query_string := \
+            "?subject=" + subject_str + "&body=" + body_str
+    var link := "mailto:support@snoringcat.games" + query_string
+    OS.shell_open(link)

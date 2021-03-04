@@ -36,11 +36,7 @@ anchor_bottom = 0.0
 margin_right = 480.0
 margin_bottom = 128.0
 text = "Paused"
-shows_back = true
-shows_about = false
 shows_settings = true
-shows_logo = false
-shows_game_over = false
 
 [node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 1 )]
 anchor_right = 0.0
@@ -87,6 +83,25 @@ size_flags_vertical = 4
 text = "Psst, want more lives??"
 
 [node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/MoreLivesWrapper"]
+margin_left = 160.0
+margin_top = 50.0
+margin_right = 160.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="SendRecentGestureEventsForDebugging" type="Button" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/MoreLivesWrapper"]
+margin_left = 30.0
+margin_top = -1.0
+margin_right = 290.0
+margin_bottom = 49.0
+rect_min_size = Vector2( 260, 50 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Send recent gesture events for debugging"
+
+[node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/MoreLivesWrapper"]
 margin_left = 160.0
 margin_top = 50.0
 margin_right = 160.0
@@ -203,6 +218,7 @@ rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/MoreLivesWrapper/MoreLivesButton" to="." method="_on_MoreLivesButton_pressed"]
+[connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/MoreLivesWrapper/SendRecentGestureEventsForDebugging" to="." method="_on_SendRecentGestureEventsForDebugging_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/ResumeButton" to="." method="_on_ResumeButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/ExitLevelButton" to="." method="_on_ExitLevelButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/RestartButton" to="." method="_on_RestartButton_pressed"]

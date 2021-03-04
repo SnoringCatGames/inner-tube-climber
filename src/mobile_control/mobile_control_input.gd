@@ -4,6 +4,8 @@ class_name MobileControlInput
 # How many seconds worth of drag positions to buffer.
 const GESTURE_RECENT_POSITIONS_BUFFER_DELAY_SEC := 0.1
 
+const RECENT_GESTURE_EVENTS_FOR_DEBUGGING_BUFFER_SIZE := 1000
+
 var is_mobile_device := false
 
 var is_mouse_down := false
@@ -16,6 +18,9 @@ var is_positions_buffer_dirty := false
 var latest_gesture_position := Vector2.INF
 var latest_leftward_position := Vector2.INF
 var latest_rightward_position := Vector2.INF
+
+# Array<GestureEventForDebugging>
+var recent_gesture_events_for_debugging := []
 
 var is_jump_pressed := false
 var is_move_left_pressed := false
@@ -49,6 +54,28 @@ func _unhandled_input(event: InputEvent) -> void:
     elif event is InputEventScreenTouch or \
             event is InputEventMouseButton:
         was_last_event_from_keyboard = false
+    
+    if (Constants.DEBUG or Constants.PLAYTEST) and \
+            (event is InputEventScreenTouch or event is InputEventScreenDrag):
+        _record_new_gesture_event(event)
+
+func _record_new_gesture_event(event: InputEvent) -> void:
+    var gesture_name: String
+    if event is InputEventScreenTouch:
+        gesture_name = "do" if event.pressed else "up"
+    elif event is InputEventScreenDrag:
+        gesture_name = "dr"
+    else:
+        Utils.error()
+        return
+    var gesture_event := GestureEventForDebugging.new( \
+            event.position, \
+            gesture_name, \
+            Time.elapsed_play_time_actual_sec)
+    recent_gesture_events_for_debugging.push_front(gesture_event)
+    while recent_gesture_events_for_debugging.size() > \
+            RECENT_GESTURE_EVENTS_FOR_DEBUGGING_BUFFER_SIZE:
+        recent_gesture_events_for_debugging.pop_back()
 
 func _physics_process(_delta_sec: float) -> void:
     # NOTE: Regarding sequencing:

@@ -5,6 +5,7 @@ class_name MobileControlInput
 const GESTURE_RECENT_POSITIONS_BUFFER_DELAY_SEC := 0.1
 
 var is_mobile_device := false
+var start_time_sec: float
 
 var is_mouse_down := false
 
@@ -28,6 +29,7 @@ var is_move_right_pressed := false
 
 func _init() -> void:
     self.is_mobile_device = Utils.get_is_mobile_device()
+    self.start_time_sec = Time.elapsed_play_time_actual_sec
 
 func destroy() -> void:
     if Input.is_action_pressed("jump"):

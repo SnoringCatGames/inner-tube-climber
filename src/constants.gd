@@ -5,7 +5,7 @@ var DEBUG := OS.is_debug_build()
 #var DEBUG := false
 var PLAYTEST := true
 var ARE_ALL_LEVELS_UNLOCKED := false
-var DEBUG_TIER := ""
+var DEBUG_TIER := "13"
 
 const RECENT_GESTURE_EVENTS_FOR_DEBUGGING_BUFFER_SIZE := 1000
 

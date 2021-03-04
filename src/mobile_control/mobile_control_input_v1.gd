@@ -92,7 +92,17 @@ func _unhandled_input(event: InputEvent) -> void:
         else:
             # There was no corresponding down event for this drag event.
             # This can happen when a finger is pressed while the level starts.
-            pass
+            # Or this could possibly happen if Godot somehow misses the down
+            # event?
+            if Time.elapsed_play_time_actual_sec > start_time_sec + 0.5:
+                if is_event_on_jump_side_of_screen:
+                    is_jump_pressed = true
+                    jump_pointer_down_position = pointer_position
+                    jump_pointer_current_position = pointer_position
+                else:
+                    is_move_sideways_pressed = true
+                    move_sideways_pointer_down_position = pointer_position
+                    _handle_move_sideways_drag(pointer_position)
         
     elif event_type == PointerEventType.UP:
         if is_a_jump_event:

@@ -1,11 +1,11 @@
 extends Node
 
 # TODO: Remember to reset these when creating releases.
-var DEBUG := OS.is_debug_build()
-#var DEBUG := false
+#var DEBUG := OS.is_debug_build()
+var DEBUG := false
 var PLAYTEST := true
 var ARE_ALL_LEVELS_UNLOCKED := false
-var DEBUG_TIER := "13"
+var DEBUG_TIER := ""
 
 const RECENT_GESTURE_EVENTS_FOR_DEBUGGING_BUFFER_SIZE := 1000
 

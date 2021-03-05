@@ -36,11 +36,7 @@ anchor_bottom = 0.0
 margin_right = 480.0
 margin_bottom = 128.0
 text = "Paused"
-shows_back = true
-shows_about = false
 shows_settings = true
-shows_logo = false
-shows_game_over = false
 
 [node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 1 )]
 anchor_right = 0.0
@@ -119,7 +115,6 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 320.0
 margin_bottom = 360.0
-row_height = 40.0
 padding_horizontal = 6.0
 
 [node name="Spacer2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]

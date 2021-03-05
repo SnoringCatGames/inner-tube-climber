@@ -23,6 +23,7 @@ var is_debug_time_shown: bool
 var mobile_control_version: String
 var are_keyboard_controls_shown := false
 
+var is_app_ready := false
 var canvas_layers: CanvasLayers
 var camera_controller: CameraController
 var level: Level

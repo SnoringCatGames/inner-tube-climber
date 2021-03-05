@@ -80,4 +80,20 @@ func _on_AboutButton_pressed():
 
 func _on_SettingsButton_pressed():
     Global.give_button_press_feedback()
-    Nav.open(ScreenType.SETTINGS)
+    if Global.level != null:
+        var description := \
+                "The level must be restarted in order to change settings." + \
+                "\n\nAre you sure you want to restart the level?"
+        Nav.open( \
+                ScreenType.NOTIFICATION, \
+                false, \
+                {
+                    header_text = "Reset level?",
+                    is_back_button_shown = true,
+                    body_text = description,
+                    close_button_text = "Yes",
+                    body_alignment = BoxContainer.ALIGN_BEGIN,
+                    next_screen = ScreenType.SETTINGS,
+                })
+    else:
+        Nav.open(ScreenType.SETTINGS)

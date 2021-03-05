@@ -159,6 +159,10 @@ func _on_activated() -> void:
     _main_list.items = main_items
     _details_list.items = details_items
 
+func _on_deactivated() -> void:
+    if Global.level != null:
+        Nav.screens[ScreenType.GAME].restart_level()
+
 func _initialize_selections() -> void:
     var difficulty_item: Dictionary = \
             _main_list.find_item("Difficulty")
@@ -210,12 +214,14 @@ func _initialize_selections() -> void:
             Audio.is_sound_effects_enabled
 
 func _initialize_enablement() -> void:
-    var is_level_active := Global.level != null
-    _main_list.find_item("Difficulty").disabled = is_level_active
-    _main_list.find_item("Control version").disabled = is_level_active
-    
     _main_list.find_item("Haptic feedback").disabled = \
             !Utils.get_is_mobile_device()
+    
+#    var is_level_active := Global.level != null
+#    _main_list.find_item("Difficulty").disabled = is_level_active
+#    _main_list.find_item("Control version").disabled = is_level_active
+    _main_list.find_item("Difficulty").disabled = false
+    _main_list.find_item("Control version").disabled = false
     
     _details_list.find_item("Debug panel").disabled = false 
     _details_list.find_item("Control display").disabled = false 

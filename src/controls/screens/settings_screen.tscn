@@ -32,11 +32,6 @@ anchor_bottom = 0.0
 margin_right = 480.0
 margin_bottom = 128.0
 text = "Settings"
-shows_back = true
-shows_about = false
-shows_settings = false
-shows_logo = false
-shows_game_over = false
 
 [node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 2 )]
 anchor_right = 0.0
@@ -120,7 +115,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 14.0
 margin_right = 283.0
-margin_bottom = 494.0
+margin_bottom = 590.0
 size_flags_vertical = 4
 row_height = 48.0
 padding_horizontal = 6.0

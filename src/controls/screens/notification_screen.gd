@@ -61,7 +61,11 @@ func _on_CloseButton_pressed():
         params["close_callback"].call_func()
     
     if params.has("next_screen"):
-        Nav.open(params["next_screen"])
+        Nav.close_current_screen()
+        Time.set_timeout( \
+                funcref(Nav, "open"), \
+                Nav.SCREEN_SLIDE_DURATION_SEC / 2.0, \
+                [params["next_screen"]])
     else:
         Nav.close_current_screen()
 

@@ -9,6 +9,8 @@ func _enter_tree() -> void:
 func _ready() -> void:
     _set_window_debug_size_and_position()
     
+    Global.is_app_ready = true
+    
     if Utils.get_is_browser():
         JavaScript.eval("window.onGameReady()")
     

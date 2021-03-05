@@ -269,10 +269,11 @@ func get_gave_feedback() -> bool:
 func set_setting( \
         setting_key: String, \
         setting_value) -> void:
-    Analytics.event( \
-            "setting", \
-            SaveState.DIFFICULTY_KEY, \
-            str(setting_value))
+    if Global.is_app_ready:
+        Analytics.event( \
+                "setting", \
+                setting_key, \
+                str(setting_value))
     config.set_value( \
             SETTINGS_SECTION_KEY, \
             setting_key, \

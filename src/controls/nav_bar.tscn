@@ -14,7 +14,6 @@
 [ext_resource path="res://assets/images/gui/logo.png" type="Texture" id=12]
 [ext_resource path="res://assets/images/gui/game-over.png" type="Texture" id=13]
 
-
 [sub_resource type="StyleBoxEmpty" id=1]
 
 [node name="NavBar" type="PanelContainer"]

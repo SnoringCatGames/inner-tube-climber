@@ -92,13 +92,15 @@ var max_jump_count := 1
 var is_bouncing_off_wall := false
 
 var has_touched_floor_in_current_tier := false
-var has_hit_wall_since_pressing_move := false
+var has_bounced_in_air_since_pressing_move := false
 var last_hit_wall_time := -INF
 var is_in_post_bounce_horizontal_acceleration_grace_period := false
 var was_last_jump_input_consumed := false
 var last_jump_input_time := 0.0
 var last_floor_departure_time := 0.0
 var recent_bounce_player_x := INF
+var previous_position := Vector2.INF
+var is_moving_horizontally := false
 
 var windiness := Vector2.ZERO
 var current_tier: Tier
@@ -154,6 +156,8 @@ func on_new_tier(current_tier: Tier) -> void:
 func _apply_movement() -> void:
     if is_stuck:
         return
+    
+    previous_position = position
     
     # We don't need to multiply velocity by delta because MoveAndSlide already
     # takes delta time into account.
@@ -318,13 +322,54 @@ func _update_surface_state() -> void:
 #                surface_state.which_wall == SurfaceSide.RIGHT_WALL else \
 #                -1
     
-    if surface_state.just_touched_wall:
-        has_hit_wall_since_pressing_move = true
+    is_moving_horizontally = !Geometry.are_floats_equal_with_epsilon( \
+            position.x, \
+            previous_position.x, \
+            0.01)
+    
+    # Check whether the player has moved far enough from the wall that they can
+    # now bounce again on that same wall.
+    var x_distance_from_last_bounce := abs(recent_bounce_player_x - position.x)
+    var is_far_enough_from_recent_bounce_x := \
+            x_distance_from_last_bounce > WALL_REBOUNCE_MIN_DISTANCE_THRESHOLD
+    if is_far_enough_from_recent_bounce_x:
+        recent_bounce_player_x = INF
+    
+    # Bounce horizontal velocity off of walls.
+    is_bouncing_off_wall = false
+    if surface_state.just_touched_wall and \
+            is_far_enough_from_recent_bounce_x:
+        # Determine whether the player is moving fast enough to wall-bounce.
+        var modified_windiness := windiness * WINDINESS_MULTIPLIER
+        var is_horizontal_speed_exceeding_wall_bounce_threshold := false
+        if modified_windiness.x > 0.0:
+            if velocity.x > WALL_BOUNCE_MIN_SPEED_THRESHOLD or \
+                    velocity.x < modified_windiness.x - \
+                            WALL_BOUNCE_MIN_SPEED_THRESHOLD and \
+                    velocity.x < -WALL_BOUNCE_AGAINST_WIND_MIN_SPEED_THRESHOLD:
+                is_horizontal_speed_exceeding_wall_bounce_threshold = true
+        elif modified_windiness.x < 0.0:
+            if velocity.x < -WALL_BOUNCE_MIN_SPEED_THRESHOLD or \
+                    velocity.x > modified_windiness.x + \
+                            WALL_BOUNCE_MIN_SPEED_THRESHOLD and \
+                    velocity.x > WALL_BOUNCE_AGAINST_WIND_MIN_SPEED_THRESHOLD:
+                is_horizontal_speed_exceeding_wall_bounce_threshold = true
+        else: # modified_windiness.x == 0.0
+            is_horizontal_speed_exceeding_wall_bounce_threshold = \
+                    abs(velocity.x) > WALL_BOUNCE_MIN_SPEED_THRESHOLD
+        
+        if is_horizontal_speed_exceeding_wall_bounce_threshold:
+            is_bouncing_off_wall = true
+            recent_bounce_player_x = position.x
+    
+    if is_bouncing_off_wall and \
+            !surface_state.is_touching_floor:
+        has_bounced_in_air_since_pressing_move = true
     elif Input.is_action_just_pressed("move_left") or \
             Input.is_action_just_pressed("move_right") or \
             Input.is_action_just_released("move_left") or \
             Input.is_action_just_released("move_right"):
-        has_hit_wall_since_pressing_move = false
+        has_bounced_in_air_since_pressing_move = false
     
     if surface_state.just_touched_wall:
         last_hit_wall_time = Time.elapsed_play_time_modified_sec
@@ -333,7 +378,7 @@ func _update_surface_state() -> void:
         last_floor_departure_time = Time.elapsed_play_time_modified_sec
     
     is_in_post_bounce_horizontal_acceleration_grace_period = \
-            has_hit_wall_since_pressing_move and \
+            has_bounced_in_air_since_pressing_move and \
             last_hit_wall_time >= \
                     Time.elapsed_play_time_modified_sec - \
                     WALL_BOUNCE_MOVEMENT_DELAY_SEC and \
@@ -554,53 +599,21 @@ func _process_actions(delta_sec: float) -> void:
                 MIN_SPEED_TO_MAINTAIN_HORIZONTAL_COLLISION * \
                 surface_state.horizontal_acceleration_sign
     
-    # Check whether the player has moved far enough from the wall that they can
-    # now bounce again on that same wall.
-    var x_distance_from_last_bounce := abs(recent_bounce_player_x - position.x)
-    var is_far_enough_from_recent_bounce_x := \
-            x_distance_from_last_bounce > WALL_REBOUNCE_MIN_DISTANCE_THRESHOLD
-    if is_far_enough_from_recent_bounce_x:
-        recent_bounce_player_x = INF
-    
     # Bounce horizontal velocity off of walls.
-    is_bouncing_off_wall = false
-    if surface_state.just_touched_wall and \
-            is_far_enough_from_recent_bounce_x:
-        # Determine whether the player is moving fast enough to wall-bounce.
-        var is_horizontal_speed_exceeding_wall_bounce_threshold := false
-        if modified_windiness.x > 0.0:
-            if velocity.x > WALL_BOUNCE_MIN_SPEED_THRESHOLD or \
-                    velocity.x < modified_windiness.x - \
-                            WALL_BOUNCE_MIN_SPEED_THRESHOLD and \
-                    velocity.x < -WALL_BOUNCE_AGAINST_WIND_MIN_SPEED_THRESHOLD:
-                is_horizontal_speed_exceeding_wall_bounce_threshold = true
-        elif modified_windiness.x < 0.0:
-            if velocity.x < -WALL_BOUNCE_MIN_SPEED_THRESHOLD or \
-                    velocity.x > modified_windiness.x + \
-                            WALL_BOUNCE_MIN_SPEED_THRESHOLD and \
-                    velocity.x > WALL_BOUNCE_AGAINST_WIND_MIN_SPEED_THRESHOLD:
-                is_horizontal_speed_exceeding_wall_bounce_threshold = true
-        else: # modified_windiness.x == 0.0
-            is_horizontal_speed_exceeding_wall_bounce_threshold = \
-                    abs(velocity.x) > WALL_BOUNCE_MIN_SPEED_THRESHOLD
+    if is_bouncing_off_wall:
+        velocity.x = -velocity.x
+        velocity.x += \
+                WALL_BOUNCE_HORIZONTAL_BOOST if \
+                velocity.x > 0 else \
+                -WALL_BOUNCE_HORIZONTAL_BOOST
+        if surface_state.is_touching_left_wall:
+            velocity.x = max(velocity.x, 0)
+        else:
+            velocity.x = min(velocity.x, 0)
         
-        if is_horizontal_speed_exceeding_wall_bounce_threshold:
-            is_bouncing_off_wall = true
-            recent_bounce_player_x = position.x
-            
-            velocity.x = -velocity.x
-            velocity.x += \
-                    WALL_BOUNCE_HORIZONTAL_BOOST if \
-                    velocity.x > 0 else \
-                    -WALL_BOUNCE_HORIZONTAL_BOOST
-            if surface_state.is_touching_left_wall:
-                velocity.x = max(velocity.x, 0)
-            else:
-                velocity.x = min(velocity.x, 0)
-            
-            velocity.y *= WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER
-            velocity.y += WALL_BOUNCE_VERTICAL_BOOST_OFFSET
-            velocity.y = min(velocity.y, JUMP_BOOST)
+        velocity.y *= WALL_BOUNCE_VERTICAL_BOOST_MULTIPLIER
+        velocity.y += WALL_BOUNCE_VERTICAL_BOOST_OFFSET
+        velocity.y = min(velocity.y, JUMP_BOOST)
     
     var is_previous_jump_input_still_consumable := \
             !was_last_jump_input_consumed and \
@@ -764,8 +777,11 @@ func _update_player_animation() -> void:
         animator.face_left()
     
     if surface_state.is_touching_floor:
-        if Input.is_action_pressed("move_right") or \
-                Input.is_action_pressed("move_left"):
+        if Input.is_action_pressed("move_right") and \
+                !surface_state.is_touching_right_wall:
+            animator.run()
+        elif Input.is_action_pressed("move_left") and \
+                !surface_state.is_touching_left_wall:
             animator.run()
         else:
             animator.stand()
@@ -942,7 +958,7 @@ func _update_effects_animations() -> void:
         effects_animator.play(EffectAnimation.CEILING_HIT)
     
     if surface_state.is_touching_floor and \
-            velocity.x != 0.0:
+            is_moving_horizontally:
         throttled_play_walk_effect.call_func()
 
 func _play_walk_effect() -> void:
@@ -973,7 +989,8 @@ func _process_sounds() -> void:
             Input.is_action_just_pressed("move_right"):
         Audio.play_sound(Sound.SIDEWAYS_INPUT)
     
-    if surface_state.is_touching_floor and velocity.x != 0.0:
+    if surface_state.is_touching_floor and \
+            is_moving_horizontally:
         throttled_play_walk_sound.call_func()
 
 func _play_walk_sound() -> void:

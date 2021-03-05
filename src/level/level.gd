@@ -296,10 +296,8 @@ func _fall() -> void:
     falls_count += 1
     falls_count_on_current_tier += 1
     lives_count -= 1
-    if Global.difficulty_mode != DifficultyMode.EASY:
-        lives_count = max( \
-                lives_count, \
-                LevelConfig.get_level_config(level_id).lives_count)
+    if Global.difficulty_mode == DifficultyMode.EASY:
+        _ensure_min_lives_for_level()
     tiers_count_since_falling = 0
     player_max_height_on_current_life = 0.0
     player_latest_platform_height = 0.0
@@ -353,8 +351,8 @@ func _start_new_tier_after_fall(current_tier_start_position: Vector2) -> void:
     # Reset lives when dying on the first tier, since that's less tedius than
     # fully restarting the level for the same effect.
     if tier_count <= 1:
-        Time.set_timeout(funcref(Audio, "play_sound"), 0.5, [Sound.LAND])
-        Time.set_timeout(funcref(self, "add_life"), 0.5)
+        Time.set_timeout(funcref(Audio, "play_sound"), 1.0, [Sound.LAND])
+        Time.set_timeout(funcref(self, "_ensure_min_lives_for_level"), 1.0)
 
 func quit() -> void:
     Audio.play_sound(Sound.FALL)
@@ -1070,3 +1068,8 @@ func add_life(includes_score_bonus: bool) -> void:
     lives_count += 1
     if includes_score_bonus:
         score += SCORE_FOR_EXTRA_LIFE
+
+func _ensure_min_lives_for_level() -> void:
+    lives_count = max( \
+            lives_count, \
+            LevelConfig.get_level_config(level_id).lives_count)

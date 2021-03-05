@@ -544,8 +544,8 @@ var _LEVELS := {
         name = "Cloud",
         tiers = ["24", "23", "10"],
         music_sequence = [
-            Music.STUCK_IN_A_CREVASSE,
             Music.RISING_THROUGH_RARIFIED_AIR,
+            Music.STUCK_IN_A_CREVASSE,
             Music.NO_ESCAPE_FROM_THE_LOOP,
         ],
         version = "0.2.0",
@@ -554,8 +554,8 @@ var _LEVELS := {
             bronze_levels = ["9"],
         },
         rank_thresholds = {
-            Rank.GOLD: 3200,
-            Rank.SILVER: 800,
+            Rank.GOLD: 4000,
+            Rank.SILVER: 1000,
         },
     },
     "11": {

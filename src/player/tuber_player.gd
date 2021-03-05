@@ -487,7 +487,6 @@ func _update_tile_map_contact() -> void:
             match surface_state.collision_tile_map_coord_result.surface_side:
                 SurfaceSide.FLOOR:
                     surface_state.is_touching_floor = true
-                    surface_state.is_grabbing_floor = true
                     surface_state.is_touching_ceiling = false
                     surface_state.just_touched_ceiling = false
                     surface_state.touched_side = SurfaceSide.FLOOR
@@ -495,7 +494,6 @@ func _update_tile_map_contact() -> void:
                 SurfaceSide.CEILING:
                     surface_state.is_touching_ceiling = true
                     surface_state.is_touching_floor = false
-                    surface_state.is_grabbing_floor = false
                     surface_state.just_touched_floor = false
                     surface_state.touched_side = SurfaceSide.CEILING
                     surface_state.touched_surface_normal = Geometry.DOWN
@@ -505,7 +503,6 @@ func _update_tile_map_contact() -> void:
                             !surface_state.is_touching_ceiling
                     surface_state.is_touching_floor = \
                             !surface_state.is_touching_floor
-                    surface_state.is_grabbing_floor = false
                     surface_state.just_touched_floor = false
                     surface_state.just_touched_ceiling = false
                 _:

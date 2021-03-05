@@ -83,7 +83,8 @@ func setup( \
         config: Dictionary, \
         start_position_or_previous_tier, \
         tier_index := -1, \
-        tier_count := -1) -> void:
+        tier_count := -1, \
+        is_in_first_loop := true) -> void:
     assert(config.is_base_tier or \
             _get_height() / \
                     Constants.CELL_SIZE.y >= \
@@ -118,12 +119,10 @@ func setup( \
                 true)
         icicle_fall_animator.position = tier_start.position
     
-    # Remove one-ups on HARD mode.
-    if Global.difficulty_mode == DifficultyMode.HARD:
-        var one_ups := get_tree().get_nodes_in_group( \
-                    Constants.GROUP_NAME_ONE_UPS)
-        for one_up in one_ups:
-            one_up.queue_free()
+    # Remove one-ups after the first loop or on HARD mode.
+    if !is_in_first_loop or \
+            Global.difficulty_mode == DifficultyMode.HARD:
+        _remove_one_ups()
 
 func on_entered_tier(is_new_life: bool) -> void:
     if !is_new_life:
@@ -190,6 +189,12 @@ func _get_height() -> float:
 func _set_windiness(value: Vector2) -> void:
     if tier_ratio_sign != null:
         tier_ratio_sign.windiness = value
+
+func _remove_one_ups() -> void:
+    var one_ups := get_tree().get_nodes_in_group( \
+                Constants.GROUP_NAME_ONE_UPS)
+    for one_up in one_ups:
+        one_up.queue_free()
 
 func _assert_tilemaps_are_pixel_aligned() -> void:
     var tile_maps := Utils.get_children_by_type( \

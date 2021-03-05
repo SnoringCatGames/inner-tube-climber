@@ -22,6 +22,7 @@ const _BASE_SCORE_FOR_TIER := 2048.0 * SCORE_PER_HEIGHT_PIXELS * 0.25
 const SCORE_FOR_TIER_FOR_EASY_DIFFICULTY := _BASE_SCORE_FOR_TIER * 0.75
 const SCORE_FOR_TIER_FOR_MODERATE_DIFFICULTY := _BASE_SCORE_FOR_TIER * 1.0
 const SCORE_FOR_TIER_FOR_HARD_DIFFICULTY := _BASE_SCORE_FOR_TIER * 1.25
+const SCORE_FOR_EXTRA_LIFE := 100
 
 var previous_tier: Tier
 var current_tier: Tier
@@ -294,8 +295,11 @@ func _update_next_rank_at_scoreboard() -> void:
 func _fall() -> void:
     falls_count += 1
     falls_count_on_current_tier += 1
+    lives_count -= 1
     if Global.difficulty_mode != DifficultyMode.EASY:
-        lives_count -= 1
+        lives_count = max( \
+                lives_count, \
+                LevelConfig.get_level_config(level_id).lives_count)
     tiers_count_since_falling = 0
     player_max_height_on_current_life = 0.0
     player_latest_platform_height = 0.0
@@ -671,7 +675,8 @@ func _start_new_tier( \
             current_tier_config, \
             tier_start_position, \
             current_tier_index, \
-            level_config.tiers.size())
+            level_config.tiers.size(), \
+            !finished_level)
     
     # Next tier.
     next_tier = Utils.add_scene( \
@@ -683,7 +688,8 @@ func _start_new_tier( \
             next_tier_config, \
             current_tier, \
             next_tier_index, \
-            level_config.tiers.size())
+            level_config.tiers.size(), \
+            tier_count <= level_config.tiers.size())
     
     # Next tier gap.
     var next_tier_gap_scene_path: String = \
@@ -847,7 +853,8 @@ func _on_entered_new_tier() -> void:
             next_tier_config, \
             current_tier, \
             next_tier_index, \
-            level_config.tiers.size())
+            level_config.tiers.size(), \
+            tier_count <= level_config.tiers.size())
     
     # Next tier gap.
     var next_tier_gap_scene_path: String = \
@@ -882,15 +889,6 @@ func _on_entered_new_tier() -> void:
             false)
     _update_margin_color()
     
-    if tier_count == level_config.tiers.size() * 3 + 1:
-        three_looped_level = true
-        SaveState.set_level_has_three_looped(level_id, true)
-        Analytics.event( \
-                "level", \
-                "three-looped", \
-                LevelConfig.get_level_version_string(level_id), \
-                int(score))
-    
     var was_final_tier_completed_first_time: bool = \
             tier_count - 1 == level_config.tiers.size()
     var was_final_tier_completed_third_time: bool = \
@@ -914,6 +912,15 @@ func _on_entered_new_tier() -> void:
                 "finish", \
                 LevelConfig.get_level_version_string(level_id), \
                 Time.elapsed_play_time_actual_sec - level_start_time)
+    
+    if was_final_tier_completed_third_time:
+        three_looped_level = true
+        SaveState.set_level_has_three_looped(level_id, true)
+        Analytics.event( \
+                "level", \
+                "three-looped", \
+                LevelConfig.get_level_version_string(level_id), \
+                int(score))
     
     if was_final_tier_completed_first_time or \
             was_final_tier_completed_third_time:
@@ -1059,5 +1066,7 @@ func get_tier_ratio() -> String:
         LevelConfig.get_level_config(level_id).tiers.size(),
     ]
 
-func add_life() -> void:
+func add_life(includes_score_bonus: bool) -> void:
     lives_count += 1
+    if includes_score_bonus:
+        score += SCORE_FOR_EXTRA_LIFE

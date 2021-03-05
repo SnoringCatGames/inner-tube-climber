@@ -542,7 +542,7 @@ var _LEVELS := {
     },
     "10": {
         name = "Cloud",
-        tiers = ["23", "24", "10"],
+        tiers = ["24", "23", "10"],
         music_sequence = [
             Music.STUCK_IN_A_CREVASSE,
             Music.RISING_THROUGH_RARIFIED_AIR,

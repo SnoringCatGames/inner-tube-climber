@@ -130,7 +130,7 @@ func _on_MoreLivesButton_pressed() -> void:
         Global.give_button_press_feedback()
         Time.set_timeout(funcref(Audio, "play_sound"), 0.2, [Sound.ACHIEVEMENT])
         for i in range(10):
-            Global.level.add_life()
+            Global.level.add_life(false)
 
 func _on_SendRecentGestureEventsForDebugging_pressed() -> void:
     Log.record_recent_gestures()

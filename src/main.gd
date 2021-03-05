@@ -25,7 +25,7 @@ func _process(_delta_sec: float) -> void:
             Utils.take_screenshot()
         if Input.is_action_just_pressed("one_up") and \
                 Global.level != null:
-            Global.level.add_life()
+            Global.level.add_life(false)
 
 func _skip_to_debug_tier() -> void:
     Global.give_button_press_feedback(true)

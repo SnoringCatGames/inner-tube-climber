@@ -265,7 +265,7 @@ var _TIERS := {
         version = "0.1.0",
         openness_type = OpennessType.WALLED_LEFT,
         snow_density_multiplier = 3.0,
-        windiness = {value = Vector2(0.0, -5.1), weight = 1.0},
+        windiness = {value = Vector2(0.0, -5.3), weight = 1.0},
     },
     "14": {
         version = "0.1.0",
@@ -567,7 +567,7 @@ var _LEVELS := {
             Music.PUMP_UP_THAT_TUBE,
         ],
         version = "0.2.0",
-        lives_count = 7,
+        lives_count = 9,
         unlock_conditions = {
             bronze_levels = ["10"],
         },

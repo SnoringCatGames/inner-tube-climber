@@ -289,7 +289,7 @@ func _on_DecreaseDifficultyButton_pressed():
             Global.difficulty_mode = DifficultyMode.EASY
         _:
             Utils.error()
-    SaveState.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)
+    Global.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)
 
 func _on_IncreaseDifficultyButton_pressed():
     Global.give_button_press_feedback()
@@ -303,4 +303,4 @@ func _on_IncreaseDifficultyButton_pressed():
             Global.difficulty_mode = DifficultyMode.HARD
         _:
             Utils.error()
-    SaveState.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)
+    Global.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)

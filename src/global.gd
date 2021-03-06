@@ -197,3 +197,12 @@ func get_is_mobile_control_version_one_handed() -> bool:
 
 func print(message: String) -> void:
     debug_panel.add_message(message)
+
+func set_setting( \
+        setting_key: String, \
+        setting_value) -> void:
+    Analytics.event( \
+            "setting", \
+            setting_key, \
+            str(setting_value))
+    SaveState.set_setting(setting_key, setting_value)

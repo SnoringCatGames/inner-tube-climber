@@ -296,115 +296,115 @@ func _on_difficulty_selected( \
         option_index: int, \
         option_label: String) -> void:
     Global.difficulty_mode = DifficultyMode.get_string_type(option_label)
-    SaveState.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)
+    Global.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)
     Global.set_selected_difficulty()
 
 func _on_mobile_control_version_selected( \
         option_index: int, \
         option_label: String) -> void:
     Global.mobile_control_version = option_label
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.MOBILE_CONTROL_VERSION_KEY, \
             Global.mobile_control_version)
 
 func _on_haptic_feedback_pressed(pressed: bool) -> void:
     Global.is_giving_haptic_feedback = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_GIVING_HAPTIC_FEEDBACK_KEY, \
             Global.is_giving_haptic_feedback)
 
 func _on_debug_panel_pressed(pressed: bool) -> void:
     Global.is_debug_panel_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_DEBUG_PANEL_SHOWN_KEY, \
             Global.is_debug_panel_shown)
     _update_level_displays()
 
 func _on_mobile_control_display_pressed(pressed: bool) -> void:
     Global.are_mobile_controls_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.ARE_MOBILE_CONTROLS_SHOWN_KEY, \
             Global.are_mobile_controls_shown)
     _update_level_displays()
 
 func _on_multiplier_cooldown_indicator_pressed(pressed: bool) -> void:
     Global.is_multiplier_cooldown_indicator_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_MULTIPLIER_COOLDOWN_INDICATOR_SHOWN_KEY, \
             Global.is_multiplier_cooldown_indicator_shown)
     _update_level_displays()
 
 func _on_height_indicator_pressed(pressed: bool) -> void:
     Global.is_height_indicator_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_HEIGHT_INDICATOR_SHOWN_KEY, \
             Global.is_height_indicator_shown)
     _update_level_displays()
 
 func _on_score_display_pressed(pressed: bool) -> void:
     Global.is_score_display_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_SCORE_DISPLAY_SHOWN_KEY, \
             Global.is_score_display_shown)
     _update_level_displays()
 
 func _on_next_rank_at_display_pressed(pressed: bool) -> void:
     Global.is_next_rank_at_display_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_NEXT_RANK_AT_DISPLAY_SHOWN_KEY, \
             Global.is_next_rank_at_display_shown)
     _update_level_displays()
 
 func _on_height_display_pressed(pressed: bool) -> void:
     Global.is_height_display_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_HEIGHT_DISPLAY_SHOWN_KEY, \
             Global.is_height_display_shown)
     _update_level_displays()
 
 func _on_lives_display_pressed(pressed: bool) -> void:
     Global.is_lives_display_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_LIVES_DISPLAY_SHOWN_KEY, \
             Global.is_lives_display_shown)
     _update_level_displays()
 
 func _on_tier_ratio_display_pressed(pressed: bool) -> void:
     Global.is_tier_ratio_display_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_TIER_RATIO_DISPLAY_SHOWN_KEY, \
             Global.is_tier_ratio_display_shown)
     _update_level_displays()
 
 func _on_multiplier_display_pressed(pressed: bool) -> void:
     Global.is_multiplier_display_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_MULTIPLIER_DISPLAY_SHOWN_KEY, \
             Global.is_multiplier_display_shown)
     _update_level_displays()
 
 func _on_speed_display_pressed(pressed: bool) -> void:
     Global.is_speed_display_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_SPEED_DISPLAY_SHOWN_KEY, \
             Global.is_speed_display_shown)
     _update_level_displays()
 
 func _on_debug_time_display_pressed(pressed: bool) -> void:
     Global.is_debug_time_shown = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_DEBUG_TIME_DISPLAY_SHOWN_KEY, \
             Global.is_debug_time_shown)
     _update_level_displays()
 
 func _on_music_pressed(pressed: bool):
     Audio.is_music_enabled = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_MUSIC_ENABLED_KEY, \
             Audio.is_music_enabled)
 
 func _on_sound_effects_pressed(pressed: bool):
     Audio.is_sound_effects_enabled = pressed
-    SaveState.set_setting( \
+    Global.set_setting( \
             SaveState.IS_SOUND_EFFECTS_ENABLED_KEY, \
             Audio.is_sound_effects_enabled)

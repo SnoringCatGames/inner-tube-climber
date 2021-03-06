@@ -30,7 +30,7 @@ func _on_HardButton_pressed():
 func _on_difficulty_selected(difficulty: int) -> void:
     Global.give_button_press_feedback()
     Global.difficulty_mode = difficulty
-    SaveState.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)
+    Global.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)
     Global.set_selected_difficulty()
     Nav.close_current_screen()
     Nav.open(ScreenType.LEVEL_SELECT)

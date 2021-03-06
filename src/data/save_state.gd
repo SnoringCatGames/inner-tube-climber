@@ -269,11 +269,6 @@ func get_gave_feedback() -> bool:
 func set_setting( \
         setting_key: String, \
         setting_value) -> void:
-    if Global.is_app_ready:
-        Analytics.event( \
-                "setting", \
-                setting_key, \
-                str(setting_value))
     config.set_value( \
             SETTINGS_SECTION_KEY, \
             setting_key, \
@@ -346,14 +341,15 @@ func erase_level_state(level_id: String) -> void:
                     section_key, \
                     level_id)
     
-    for key in config.get_section_keys(TOTAL_FALLS_ON_TIER_SECTION_KEY):
-        if key.find(level_id + ":") == 0 and \
-                config.has_section_key( \
+    if config.has_section(TOTAL_FALLS_ON_TIER_SECTION_KEY):
+        for key in config.get_section_keys(TOTAL_FALLS_ON_TIER_SECTION_KEY):
+            if key.find(level_id + ":") == 0 and \
+                    config.has_section_key( \
+                            TOTAL_FALLS_ON_TIER_SECTION_KEY, \
+                            level_id):
+                config.erase_section_key( \
                         TOTAL_FALLS_ON_TIER_SECTION_KEY, \
-                        level_id):
-            config.erase_section_key( \
-                    TOTAL_FALLS_ON_TIER_SECTION_KEY, \
-                    key)
+                        key)
 
 func erase_all_state() -> void:
     for section in config.get_sections():

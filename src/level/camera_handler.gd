@@ -202,13 +202,17 @@ func update_speed() -> void:
     camera_speed *= camera_speed_multiplier
     camera_speed = clamp(camera_speed, scroll_speed_min, scroll_speed_max)
     
-    var frame_rate_multiplier_min := _get_min_framerate_multiplier()
-    var frame_rate_multiplier_max := _get_max_framerate_multiplier()
-    
-    Time.physics_framerate_multiplier = lerp( \
-            frame_rate_multiplier_min, \
-            frame_rate_multiplier_max, \
-            speed_index_progress)
+    if LevelConfig.get_tier_config(tier_id) \
+            .forces_moderate_framerate_multiplier:
+        Time.physics_framerate_multiplier = \
+                LevelConfig.FRAMERATE_MULTIPLIER_MODERATE_MIN
+    else:
+        var frame_rate_multiplier_min := _get_min_framerate_multiplier()
+        var frame_rate_multiplier_max := _get_max_framerate_multiplier()
+        Time.physics_framerate_multiplier = lerp( \
+                frame_rate_multiplier_min, \
+                frame_rate_multiplier_max, \
+                speed_index_progress)
     
     Global.print( \
             ("Updated speed: " + \

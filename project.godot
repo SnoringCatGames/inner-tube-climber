@@ -1230,8 +1230,8 @@ one_up={
 
 [input_devices]
 
-pointing/ios/touch_delay=0.005
 pointing/emulate_touch_from_mouse=true
+pointing/ios/touch_delay=0.005
 
 [layer_names]
 

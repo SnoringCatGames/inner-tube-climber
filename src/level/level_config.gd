@@ -126,6 +126,7 @@ const _DEFAULT_TIER_VALUES := {
     openness_type = OpennessType.UNKNOWN,
     is_base_tier = false,
     camera_horizontally_locked = true,
+    forces_moderate_framerate_multiplier = false,
     zoom_multiplier = 1.0,
     scroll_speed_multiplier = 1.0,
     scroll_speed_min = 20.0,
@@ -209,6 +210,7 @@ var _TIERS := {
     "4": {
         version = "0.1.0",
         openness_type = OpennessType.WALLED,
+        fog_screen_opacity = {value = 0.6, weight = 1.0},
     },
     "5": {
         version = "0.1.0",
@@ -264,10 +266,12 @@ var _TIERS := {
         openness_type = OpennessType.WALLED_LEFT,
         snow_density_multiplier = 3.0,
         windiness = {value = Vector2(0.0, -5.3), weight = 1.0},
+        forces_moderate_framerate_multiplier = true,
     },
     "14": {
         version = "0.1.0",
         openness_type = OpennessType.WALLED,
+        forces_moderate_framerate_multiplier = true,
     },
     "15": {
         version = "0.1.0",
@@ -281,18 +285,22 @@ var _TIERS := {
     "17": {
         version = "0.1.0",
         openness_type = OpennessType.WALLED,
+        snow_density_multiplier = 3.0,
     },
     "18": {
         version = "0.1.0",
         openness_type = OpennessType.WALLED,
+        snow_density_multiplier = 3.0,
     },
     "19": {
         version = "0.1.0",
         openness_type = OpennessType.OPEN,
+        snow_density_multiplier = 3.0,
     },
     "20": {
         version = "0.1.0",
         openness_type = OpennessType.WALLED,
+        fog_screen_opacity = {value = 0.6, weight = 1.0},
     },
     "21": {
         version = "0.1.0",
@@ -301,6 +309,7 @@ var _TIERS := {
     "22": {
         version = "0.1.0",
         openness_type = OpennessType.WALLED,
+        fog_screen_opacity = {value = 0.6, weight = 1.0},
     },
     "23": {
         version = "0.1.0",

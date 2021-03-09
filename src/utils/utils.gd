@@ -1,5 +1,8 @@
 extends Node
 
+func _init() -> void:
+    print("Utils._init")
+
 static func error( \
         message := "An error occurred", \
         should_assert := true) -> void:

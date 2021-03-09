@@ -44,6 +44,9 @@ var active_screen_stack := []
 
 var fade_transition: FadeTransition
 
+func _init() -> void:
+    print("Navigation._init")
+
 func _ready() -> void:
     fade_transition.connect( \
             "fade_complete", \

@@ -293,10 +293,15 @@ func _update_next_rank_at_scoreboard() -> void:
     score_boards.set_next_rank_at(label_str, value_str)
 
 func _fall() -> void:
+    var finished_level_on_easy: bool = \
+            finished_level and \
+            Global.difficulty_mode == DifficultyMode.EASY
+    
     falls_count += 1
     falls_count_on_current_tier += 1
     lives_count -= 1
-    if Global.difficulty_mode == DifficultyMode.EASY:
+    if Global.difficulty_mode == DifficultyMode.EASY and \
+            !finished_level:
         _ensure_min_lives_for_level()
     tiers_count_since_falling = 0
     player_max_height_on_current_life = 0.0
@@ -305,25 +310,28 @@ func _fall() -> void:
     Global.falls_count_since_reaching_level_end += 1
     cooldown_indicator.stop_cooldown()
     
-    SaveState.set_level_total_falls( \
-            level_id, \
-            SaveState.get_level_total_falls(level_id) + 1)
-    SaveState.set_level_total_falls_on_tier( \
-            level_id, \
-            current_tier_id, \
-            SaveState.get_level_total_falls_on_tier( \
-                    level_id, \
-                    current_tier_id) + \
-                    1)
-    Analytics.event( \
-            "level", \
-            "fall", \
-            LevelConfig.get_level_version_string(level_id), \
-            player_max_platform_height_on_current_life)
+    if !finished_level_on_easy:
+        SaveState.set_level_total_falls( \
+                level_id, \
+                SaveState.get_level_total_falls(level_id) + 1)
+        SaveState.set_level_total_falls_on_tier( \
+                level_id, \
+                current_tier_id, \
+                SaveState.get_level_total_falls_on_tier( \
+                        level_id, \
+                        current_tier_id) + \
+                        1)
+        Analytics.event( \
+                "level", \
+                "fall", \
+                LevelConfig.get_level_version_string(level_id), \
+                player_max_platform_height_on_current_life)
     
     var was_last_life := lives_count == 0
     
-    if !was_last_life:
+    if was_last_life or finished_level_on_easy:
+        quit()
+    else:
         Audio.play_sound(Sound.FALL, true)
         $CameraHandler.on_fall_before_new_tier(was_last_life)
         _destroy_player()
@@ -331,8 +339,6 @@ func _fall() -> void:
                 funcref(self, "_start_new_tier_after_fall"), \
                 1.0, \
                 [current_tier.tier_start_position])
-    else:
-        quit()
 
 func _start_new_tier_after_fall(current_tier_start_position: Vector2) -> void:
     _destroy_tiers()

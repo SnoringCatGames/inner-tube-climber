@@ -22,6 +22,9 @@ var _last_ping_time_sec := -INF
 # Array<_AnalyticsEntry>
 var _retry_queue := []
 
+func _init() -> void:
+    print("Analytics._init")
+
 func _process(_delta_sec: float) -> void:
     if _has_session_started and \
             Time.elapsed_app_time_actual_sec - _last_ping_time_sec > \

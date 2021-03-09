@@ -20,6 +20,8 @@ var is_sound_effects_enabled := true setget \
         _set_is_sound_effects_enabled,_get_is_sound_effects_enabled
 
 func _init() -> void:
+    print("Audio._init")
+
     pitch_shift_effect = AudioEffectPitchShift.new()
     AudioServer.add_bus_effect(Music.MUSIC_BUS_INDEX, pitch_shift_effect)
     

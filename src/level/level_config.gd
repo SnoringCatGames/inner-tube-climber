@@ -103,8 +103,8 @@ const SLIPPERY_TILES := [
     "ice_platform_tile",
 ]
 
-const FRAMERATE_MULTIPLIER_EASY_MIN := 0.8
-const FRAMERATE_MULTIPLIER_EASY_MAX := 1.1
+const FRAMERATE_MULTIPLIER_EASY_MIN := 0.7
+const FRAMERATE_MULTIPLIER_EASY_MAX := 1.0
 const FRAMERATE_MULTIPLIER_MODERATE_MIN := 1.25
 const FRAMERATE_MULTIPLIER_MODERATE_MAX := 1.25
 const FRAMERATE_MULTIPLIER_HARD_MIN := 1.25
@@ -634,6 +634,8 @@ var EMPTY_OPEN_TIER: Dictionary = get_tier_config("-1")
 var BASE_TIER: Dictionary = get_tier_config("0")
 
 func _init() -> void:
+    print("LevelConfig._init")
+    
     _inflate_level_configs()
     _inflate_tier_configs()
     
@@ -942,9 +944,9 @@ func get_unlock_hint(level_id: String) -> String:
         hint += "."
     
     if Global.difficulty_mode == DifficultyMode.EASY and \
-            (hint.find("gold") or \
-            hint.find("silver") or \
-            hint.find("Three-loop")):
+            (hint.find("gold") >= 0 or \
+            hint.find("silver") >= 0 or \
+            hint.find("Three-loop") >= 0):
         hint += "\n(Increase difficulty)"
     
     return hint

@@ -7,12 +7,16 @@ const MOVE_SIDEWAYS_INDICATOR_TEXTURE := \
         preload("res://assets/images/signs/swipe_sideways_indicator.png")
 
 var mobile_control_input: MobileControlInput
+var is_jump_on_left_side: bool
 
 var jump_indicator: Sprite
 var move_sideways_indicator: Sprite
 
-func _init(mobile_control_input: MobileControlInput) -> void:
+func _init( \
+        mobile_control_input: MobileControlInput, \
+        is_jump_on_left_side: bool) -> void:
     self.mobile_control_input = mobile_control_input
+    self.is_jump_on_left_side = is_jump_on_left_side
 
 func _enter_tree() -> void:
     jump_indicator = Sprite.new()
@@ -48,8 +52,12 @@ func _on_display_resized() -> void:
             viewport_size.x - right_offset.x, \
             viewport_size.y - right_offset.y)
     
-    jump_indicator.position = left_pad_position
-    move_sideways_indicator.position = right_pad_position
+    if is_jump_on_left_side:
+        jump_indicator.position = left_pad_position
+        move_sideways_indicator.position = right_pad_position
+    else:
+        jump_indicator.position = right_pad_position
+        move_sideways_indicator.position = left_pad_position
 
 func _process(_delta_sec: float) -> void:
     jump_indicator.modulate.a = \

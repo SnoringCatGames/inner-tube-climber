@@ -36,6 +36,8 @@ var elapsed_play_time_modified_sec: float \
         setget ,_get_elapsed_play_time_modified_sec
 
 func _init() -> void:
+    print("Time._init")
+    
     pause_mode = Node.PAUSE_MODE_PROCESS
 
 func _enter_tree() -> void:

@@ -2,6 +2,9 @@ extends Node
 
 const STRIKE_THROUGH_ANGLE := -PI / 3.0
 
+func _init() -> void:
+    print("DrawUtils._init")
+
 static func draw_dashed_line( \
         canvas: CanvasItem, \
         from: Vector2, \

@@ -12,6 +12,9 @@ const FLOAT_EPSILON := 0.00001
 #       higher during graph calculations).
 const COLLISION_BETWEEN_CELLS_DISTANCE_THRESHOLD := 1.5
 
+func _init() -> void:
+    print("Geometry._init")
+
 # Calculates the minimum squared distance between a line segment and a point.
 static func get_distance_squared_from_point_to_segment( \
         point: Vector2, \

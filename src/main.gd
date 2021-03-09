@@ -1,6 +1,9 @@
 extends Node2D
 class_name Main
 
+func _init() -> void:
+    print("Main._init")
+
 func _enter_tree() -> void:
     Global.register_main(self)
     get_tree().root.set_pause_mode(Node.PAUSE_MODE_PROCESS)

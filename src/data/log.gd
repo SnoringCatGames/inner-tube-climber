@@ -2,6 +2,9 @@ extends Node
 
 const HEADERS := ["Content-Type: application/json"]
 
+func _init() -> void:
+    print("Log._init")
+
 func record_recent_gestures() -> void:
     var recent_top_level_events_raw_str := ""
     var recent_control_events_raw_str := ""

@@ -250,6 +250,9 @@ const IPOD_SUFFIX_AND_PPIS = [
     },
 ]
 
+func _init() -> void:
+    print("IosResolutions._init")
+
 static func get_screen_ppi() -> int:
     assert(Utils.get_is_ios_device())
     

@@ -10,19 +10,26 @@ func _init(version: String) -> void:
     self.version = version
 
 func _enter_tree() -> void:
+    var is_jump_on_left_side := version.ends_with("R")
     match version:
         "1R","1L":
-            mobile_control_input = MobileControlInputV1.new(version == "1R")
-            mobile_control_display = \
-                    MobileControlDisplayV1.new(mobile_control_input)
+            mobile_control_input = MobileControlInputV1.new( \
+                    is_jump_on_left_side)
+            mobile_control_display = MobileControlDisplayV1.new( \
+                    mobile_control_input, \
+                    is_jump_on_left_side)
         "2R","2L":
-            mobile_control_input = MobileControlInputV2.new(version == "2R")
-            mobile_control_display = \
-                    MobileControlDisplayV1.new(mobile_control_input)
+            mobile_control_input = MobileControlInputV2.new( \
+                    is_jump_on_left_side)
+            mobile_control_display = MobileControlDisplayV1.new( \
+                    mobile_control_input, \
+                    is_jump_on_left_side)
         "3R","3L":
-            mobile_control_input = MobileControlInputV3.new(version == "3R")
-            mobile_control_display = \
-                    MobileControlDisplayV1.new(mobile_control_input)
+            mobile_control_input = MobileControlInputV3.new( \
+                    is_jump_on_left_side)
+            mobile_control_display = MobileControlDisplayV1.new( \
+                    mobile_control_input, \
+                    is_jump_on_left_side)
         "4":
             mobile_control_input = MobileControlInputV4.new()
             mobile_control_display = \

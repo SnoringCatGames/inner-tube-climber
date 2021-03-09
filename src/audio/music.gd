@@ -58,6 +58,8 @@ var MANIFEST := {
 const MUSIC_BUS_INDEX := 2
 
 func _init() -> void:
+    print("Music._init")
+    
     AudioServer.add_bus(MUSIC_BUS_INDEX)
     var bus_name := AudioServer.get_bus_name(MUSIC_BUS_INDEX)
     

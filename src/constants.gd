@@ -21,11 +21,7 @@ const GODOT_URL := "https://godotengine.org"
 const TERMS_AND_CONDITIONS_URL := "https://snoringcat.games/inner-tube-climber/terms-and-conditions"
 const PRIVACY_POLICY_URL := "https://snoringcat.games/inner-tube-climber/privacy-policy"
 const ANDROID_APP_STORE_URL := "market://details?id=dev.levi.inner_tube_climber"
-# FIXME
 const IOS_APP_STORE_URL := "itms-apps://apps.apple.com/us/app/inner-tube-climber/id1553158659"
-#const IOS_APP_STORE_URL := "itms-apps://apps.apple.com/us/app/id1553158659"
-#const IOS_APP_STORE_URL := "itms-apps://itunes.apple.com/app/apple-store/id1553158659?mt=8"
-#const IOS_APP_STORE_URL := "https://apps.apple.com/us/app/inner-tube-climber/id1553158659"
 const SUPPORT_URL_BASE := "https://snoringcat.games/support"
 const LOG_GESTURES_URL := "https://snoringcat.games/log/gestures"
 
@@ -102,3 +98,6 @@ var MOVE_RIGHT_COLOR := Color.from_hsv(0.783, 1.0, 0.9, 1.0)
 var UNKNOWN_COLOR := Color.from_hsv(0.0, 0.0, 0.8, 1.0)
 
 const TRANSITION_TO_POST_STUCK_DURATION_SEC := 0.5
+
+func _init() -> void:
+    print("Constants._init")

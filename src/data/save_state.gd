@@ -42,12 +42,14 @@ const IS_MUSIC_ENABLED_KEY := "is_music_enabled"
 const IS_SOUND_EFFECTS_ENABLED_KEY := "is_sound_effects_enabled"
 const SCORE_VERSION_KEY := "score_v"
 
-var config := ConfigFile.new()
+var config: ConfigFile
 
 func _init() -> void:
+    print("SaveSate._init")
     _load_config()
 
 func _load_config() -> void:
+    config = ConfigFile.new()
     var status := config.load(CONFIG_FILE_PATH)
     if status != OK and \
             status != ERR_FILE_NOT_FOUND:

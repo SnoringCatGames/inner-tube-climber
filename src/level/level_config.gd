@@ -103,7 +103,7 @@ const SLIPPERY_TILES := [
     "ice_platform_tile",
 ]
 
-const FRAMERATE_MULTIPLIER_EASY_MIN := 0.7
+const FRAMERATE_MULTIPLIER_EASY_MIN := 0.75
 const FRAMERATE_MULTIPLIER_EASY_MAX := 1.0
 const FRAMERATE_MULTIPLIER_MODERATE_MIN := 1.25
 const FRAMERATE_MULTIPLIER_MODERATE_MAX := 1.25
@@ -161,8 +161,6 @@ const _DEFAULT_LEVEL_VALUES := {
             _DEFAULT_TIER_VALUES.fog_screen_secondary_color,
     snow_density_multiplier = _DEFAULT_TIER_VALUES.snow_density_multiplier,
     windiness = _DEFAULT_TIER_VALUES.windiness,
-    # FIXME: Update these to be more reasonable defaults; but also add actual
-    #        values in level configs;
     rank_thresholds = {
         Rank.GOLD: 4000,
         Rank.SILVER: 1000,

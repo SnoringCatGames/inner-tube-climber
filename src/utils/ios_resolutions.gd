@@ -7,6 +7,8 @@ extends Node
 #   - 5.48717706322'' reported (diagonal)
 #   - 5.48717706322/6.06 = 0.9054747629
 
+const DEFAULT_PPI := 300
+
 const IPHONE_SUFFIX_AND_PPIS := [
     {
         suffix = "12 Pro Max",
@@ -253,7 +255,7 @@ const IPOD_SUFFIX_AND_PPIS = [
 func _init() -> void:
     print("IosResolutions._init")
 
-static func get_screen_ppi() -> int:
+func get_screen_ppi() -> int:
     assert(Utils.get_is_ios_device())
     
     var model_name := IosModelNames.get_model_name().to_lower()
@@ -271,7 +273,7 @@ static func get_screen_ppi() -> int:
     else:
         Utils.error()
     
-    var ppi: int = INF
+    var ppi := DEFAULT_PPI
     for suffix_and_ppi in suffix_and_ppis:
         var is_a_match := true
         for suffix_token in suffix_and_ppi.suffix.to_lower().split(" "):

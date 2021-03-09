@@ -41,6 +41,12 @@ func _scroll_to_bottom() -> void:
             $PanelContainer/ScrollContainer.get_v_scrollbar().max_value
 
 func _log_device_settings() -> void:
+    var utils_model_name: String = Utils.get_model_name()
+    var utils_screen_scale: float = Utils.get_screen_scale()
+    var ios_resolution: String = \
+            IosResolutions.get_screen_ppi() if \
+            Utils.get_is_ios_device() else \
+            "N/A"
     add_message("** Welcome to the debug panel! **")
     add_message( \
             ("Device settings:" + \
@@ -68,20 +74,18 @@ func _log_device_settings() -> void:
             "") % [
                 OS.get_name(),
                 OS.get_model_name(),
-                Utils.get_model_name(),
+                utils_model_name,
                 get_viewport().size.x,
                 get_viewport().size.y,
                 OS.window_size,
                 OS.get_real_window_size(),
                 OS.get_screen_size(),
-                Utils.get_screen_scale(),
+                utils_screen_scale,
                 OS.get_screen_scale(),
                 Utils.get_screen_ppi(),
                 Utils.get_viewport_ppi(),
                 OS.get_screen_dpi(),
-                IosResolutions.get_screen_ppi() if \
-                        Utils.get_is_ios_device() else \
-                        "N/A",
+                ios_resolution,
                 Utils.get_viewport_size_inches(),
                 Utils.get_viewport_diagonal_inches(),
                 Utils.get_viewport_safe_area(),

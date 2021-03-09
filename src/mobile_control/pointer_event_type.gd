@@ -18,5 +18,5 @@ static func get_pointer_event_type_string(type: int) -> String:
         DRAG:
             return "DRAG"
         _:
-            Utils.error()
+            Utils.static_error()
             return "???"

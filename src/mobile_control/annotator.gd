@@ -47,7 +47,7 @@ const ACTION_GESTURE_OPACITY_START_MULTIPLIER := 1.0
 const ACTION_GESTURE_OPACITY_END_MULTIPLIER := 0.0
 const ACTION_GESTURE_EASING := "ease_out_strong"
 
-static func action_to_direction_angle(action: String) -> float:
+func action_to_direction_angle(action: String) -> float:
     match action:
         "jump":
             return JUMP_DIRECTION_ANGLE

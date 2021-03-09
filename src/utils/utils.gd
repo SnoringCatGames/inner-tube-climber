@@ -3,17 +3,24 @@ extends Node
 func _init() -> void:
     print("Utils._init")
 
-static func error( \
+func error( \
         message := "An error occurred", \
         should_assert := true) -> void:
+    push_error("ERROR: %s" % message)
     Global.print("**ERROR**: %s" % message)
+    if should_assert:
+         assert(false)
+
+static func static_error( \
+        message := "An error occurred", \
+        should_assert := true) -> void:
     push_error("ERROR: %s" % message)
     if should_assert:
          assert(false)
 
-static func warning(message := "An warning occurred") -> void:
-    Global.print("**WARNING**: %s" % message)
+func warning(message := "An warning occurred") -> void:
     push_warning("WARNING: %s" % message)
+    Global.print("**WARNING**: %s" % message)
 
 # TODO: Replace this with any built-in feature whenever it exists
 #       (https://github.com/godotengine/godot/issues/4715).
@@ -335,7 +342,7 @@ static func ease_name_to_param(name: String) -> float:
         "ease_in_out_weak":
             return -1.8
         _:
-            Utils.error()
+            static_error()
             return INF
 
 static func ease_by_name( \
@@ -381,7 +388,7 @@ func get_screen_scale() -> float:
 
 # This does not take into account the screen scale. Node.get_viewport().size
 # likely returns a smaller number than OS.window_size, because of screen scale.
-static func get_screen_ppi() -> int:
+func get_screen_ppi() -> int:
     if get_is_ios_device():
         return IosResolutions.get_screen_ppi()
     else:
@@ -443,7 +450,7 @@ static func mix( \
     elif values[0] is Vector3:
         weighted_average = Vector3.ZERO
     else:
-        error()
+        static_error()
     
     for i in range(count):
         var value = values[i]
@@ -527,7 +534,7 @@ func take_screenshot() -> void:
     if !directory.dir_exists("user://screenshots"):
         var status := directory.open("user://")
         if status != OK:
-            Utils.error()
+            error()
             return
         directory.make_dir("screenshots")
     
@@ -536,7 +543,7 @@ func take_screenshot() -> void:
     var path := "user://screenshots/screenshot-%s.png" % get_datetime_string()
     var status := image.save_png(path)
     if status != OK:
-        Utils.error()
+        error()
 
 func clear_directory( \
         path: String, \
@@ -545,7 +552,7 @@ func clear_directory( \
     var directory := Directory.new()
     var status := directory.open(path)
     if status != OK:
-        Utils.error()
+        error()
         return
     
     # Delete children.
@@ -561,14 +568,14 @@ func clear_directory( \
         else:
             status = directory.remove(file_name)
             if status != OK:
-                Utils.error("Failed to delete file", false)
+                error("Failed to delete file", false)
         file_name = directory.get_next()
     
     # Delete directory.
     if also_deletes_directory:
         status = directory.remove(path)
         if status != OK:
-            Utils.error("Failed to delete directory", false)
+            error("Failed to delete directory", false)
 
 static func set_mouse_filter_recursively( \
         node: Node, \

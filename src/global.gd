@@ -37,6 +37,8 @@ var throttled_size_changed: FuncRef = Time.throttle( \
         Constants.DISPLAY_RESIZE_THROTTLE_INTERVAL_SEC)
 
 func _init() -> void:
+    print("Global._init")
+    
     _load_state()
 
 func _load_state() -> void:
@@ -196,7 +198,8 @@ func get_is_mobile_control_version_one_handed() -> bool:
     return mobile_control_version == "4"
 
 func print(message: String) -> void:
-    debug_panel.add_message(message)
+    if is_instance_valid(debug_panel):
+        debug_panel.add_message(message)
 
 func set_setting( \
         setting_key: String, \

@@ -435,7 +435,7 @@ var _LEVELS := {
     },
     "3": {
         name = "Slip",
-        tiers = ["9", "15", "4"],
+        tiers = ["15", "4", "9"],
         music_sequence = [
             Music.STUCK_IN_A_CREVASSE,
             Music.RISING_THROUGH_RARIFIED_AIR,

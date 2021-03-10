@@ -16,7 +16,7 @@ func _init().( \
 
 func _get_focused_button() -> ShinyButton:
     return $FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/ \
-            CenterContainer/VBoxContainer/ModerateButton as ShinyButton
+            CenterContainer/VBoxContainer/EasyButton as ShinyButton
 
 func _on_EasyButton_pressed():
     _on_difficulty_selected(DifficultyMode.EASY)

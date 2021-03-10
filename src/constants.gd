@@ -1,8 +1,8 @@
 extends Node
 
 # TODO: Remember to reset these when creating releases.
-#var DEBUG := OS.is_debug_build()
-var DEBUG := false
+var DEBUG := OS.is_debug_build()
+#var DEBUG := false
 var PLAYTEST := false
 var ARE_ALL_LEVELS_UNLOCKED := false
 var DEBUG_TIER := ""
@@ -13,7 +13,7 @@ const GOOGLE_ANALYTICS_ID := "UA-186405125-1"
 
 const APP_NAME := "Inner-Tube Climber"
 const APP_ID := "games.snoringcat.inner_tube_climber"
-const APP_VERSION := "1.1.0"
+const APP_VERSION := "1.1.5"
 const SCORE_VERSION := "1.0.1"
 
 const SNORING_CAT_GAMES_URL := "https://snoringcat.games"

@@ -35,11 +35,6 @@ func _on_RateAppButton_pressed():
             Constants.ANDROID_APP_STORE_URL
     OS.shell_open(app_store_url)
 
-func _on_SupportButton_pressed():
-    Global.give_button_press_feedback()
-    Nav.open(NEXT_SCREEN_TYPE)
-    OS.shell_open(Utils.get_support_url())
-
 func _on_DontAskAgainButton_pressed():
     Global.give_button_press_feedback()
     SaveState.set_gave_feedback(true)
@@ -48,3 +43,8 @@ func _on_DontAskAgainButton_pressed():
 func _on_KeepPlayingButton_pressed():
     Global.give_button_press_feedback()
     Nav.open(NEXT_SCREEN_TYPE)
+
+func _on_SendFeedbackButton_pressed() -> void:
+    Global.give_button_press_feedback()
+    Nav.open(NEXT_SCREEN_TYPE)
+    OS.shell_open(Utils.get_support_url())

@@ -55,14 +55,14 @@ size_flags_vertical = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer"]
 margin_right = 470.0
-margin_bottom = 791.0
+margin_bottom = 822.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer"]
 margin_left = 26.0
 margin_right = 443.0
-margin_bottom = 791.0
+margin_bottom = 822.0
 
 [node name="Control" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_right = 417.0
@@ -210,7 +210,7 @@ size_flags_stretch_ratio = 0.6
 [node name="VBoxContainer" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_top = 425.0
 margin_right = 417.0
-margin_bottom = 523.0
+margin_bottom = 554.0
 custom_constants/separation = 11
 __meta__ = {
 "_edit_use_anchors_": false
@@ -230,27 +230,28 @@ valign = 1
 margin_left = 137.0
 margin_top = 39.0
 margin_right = 280.0
-margin_bottom = 98.0
+margin_bottom = 129.0
 size_flags_horizontal = 4
-text = "Roy Dorombozi
+text = "Mark Devine
+Roy Dorombozi
 Jake Shoudy"
 align = 1
 valign = 1
 
 [node name="Spacer5" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 208.0
-margin_top = 527.0
+margin_top = 558.0
 margin_right = 208.0
-margin_bottom = 567.0
+margin_bottom = 598.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.6
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
-margin_top = 571.0
+margin_top = 602.0
 margin_right = 417.0
-margin_bottom = 677.0
+margin_bottom = 708.0
 custom_constants/separation = 11
 __meta__ = {
 "_edit_use_anchors_": false
@@ -281,9 +282,9 @@ text = "Support"
 
 [node name="Spacer2" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 208.0
-margin_top = 681.0
+margin_top = 712.0
 margin_right = 208.0
-margin_bottom = 711.0
+margin_bottom = 742.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -293,9 +294,9 @@ size_flags_stretch_ratio = 0.6
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 68.0
-margin_top = 715.0
+margin_top = 746.0
 margin_right = 348.0
-margin_bottom = 747.0
+margin_bottom = 778.0
 rect_min_size = Vector2( 280, 32 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -363,9 +364,9 @@ __meta__ = {
 
 [node name="PaddingBottom" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 208.0
-margin_top = 751.0
+margin_top = 782.0
 margin_right = 208.0
-margin_bottom = 791.0
+margin_bottom = 822.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 3

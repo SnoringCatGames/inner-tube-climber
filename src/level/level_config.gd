@@ -150,7 +150,7 @@ const _DEFAULT_LEVEL_VALUES := {
     music_sequence = _DEFAULT_MUSIC_SEQUENCE,
     zoom_multiplier = _DEFAULT_TIER_VALUES.zoom_multiplier,
     scroll_speed_multiplier = _DEFAULT_TIER_VALUES.scroll_speed_multiplier,
-    scroll_speed_min = _DEFAULT_TIER_VALUES.scroll_speed_min,
+    scroll_speed_min = 0.0,
     scroll_speed_max = _DEFAULT_TIER_VALUES.scroll_speed_max,
     light_energy = _DEFAULT_TIER_VALUES.light_energy,
     peep_hole_size = _DEFAULT_TIER_VALUES.peep_hole_size,
@@ -305,6 +305,9 @@ var _TIERS := {
     "21": {
         version = "0.1.0",
         openness_type = OpennessType.WALLED,
+        scroll_speed_multiplier = 0.0,
+        scroll_speed_min = 0.0,
+        scroll_speed_max = 0.0,
     },
     "22": {
         version = "0.1.0",
@@ -402,7 +405,7 @@ var _TIERS := {
 var _LEVELS := {
     "1": {
         name = "Jump",
-        tiers = ["1", "21", "20"],
+        tiers = ["21", "1", "20"],
         music_sequence = [
             Music.STUCK_IN_A_CREVASSE,
             Music.NO_ESCAPE_FROM_THE_LOOP,

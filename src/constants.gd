@@ -1,8 +1,8 @@
 extends Node
 
 # TODO: Remember to reset these when creating releases.
-var DEBUG := OS.is_debug_build()
-#var DEBUG := false
+#var DEBUG := OS.is_debug_build()
+var DEBUG := false
 var PLAYTEST := false
 var ARE_ALL_LEVELS_UNLOCKED := false
 var DEBUG_TIER := ""

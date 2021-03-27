@@ -406,7 +406,7 @@ func quit() -> void:
                 "level", \
                 "unlocked", \
                 LevelConfig.get_level_version_string(other_level_id), \
-                LevelConfig.get_level_config(level_id).number)
+                LevelConfig.get_level_config(other_level_id).number)
     
     if finished_level:
         SaveState.set_finished_level_streak( \

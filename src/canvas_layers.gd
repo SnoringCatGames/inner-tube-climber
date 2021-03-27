@@ -31,8 +31,6 @@ func _create_menu_screen_layer() -> void:
     menu_screen_layer = CanvasLayer.new()
     menu_screen_layer.layer = 400
     Global.add_overlay_to_current_scene(menu_screen_layer)
-    
-    # TODO: Add start and pause menus.
 
 func _create_hud_layer() -> void:
     hud_layer = CanvasLayer.new()

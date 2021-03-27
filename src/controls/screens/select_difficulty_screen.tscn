@@ -31,10 +31,6 @@ margin_right = 480.0
 margin_bottom = 128.0
 text = "Select difficulty"
 shows_back = false
-shows_about = false
-shows_settings = false
-shows_logo = false
-shows_game_over = false
 
 [node name="CenteredPanel" parent="FullScreenPanel/VBoxContainer" instance=ExtResource( 1 )]
 anchor_right = 0.0
@@ -42,7 +38,6 @@ anchor_bottom = 0.0
 margin_top = 132.0
 margin_right = 480.0
 margin_bottom = 612.0
-stretches_horizontally = false
 stretches_vertically = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="FullScreenPanel/VBoxContainer/CenteredPanel"]
@@ -87,8 +82,7 @@ rect_min_size = Vector2( 200, 60 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 2 )
-text = "Easy"
-texture = null
+text = "Hard"
 
 [node name="ModerateButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0
@@ -101,8 +95,7 @@ rect_min_size = Vector2( 200, 60 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 2 )
-text = "Moderate"
-texture = null
+text = "Harder"
 
 [node name="HardButton" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0
@@ -115,8 +108,7 @@ rect_min_size = Vector2( 200, 60 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 2 )
-text = "Hard"
-texture = null
+text = "Hardest"
 
 [node name="Spacer4" type="Control" parent="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer"]
 margin_left = 140.0
@@ -126,6 +118,7 @@ margin_bottom = 324.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
+
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/EasyButton" to="." method="_on_EasyButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/ModerateButton" to="." method="_on_ModerateButton_pressed"]
 [connection signal="pressed" from="FullScreenPanel/VBoxContainer/CenteredPanel/ScrollContainer/CenterContainer/VBoxContainer/HardButton" to="." method="_on_HardButton_pressed"]

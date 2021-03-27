@@ -48,6 +48,10 @@ func _set_window_debug_size_and_position() -> void:
 #        var window_size = Vector2(2208, 1242)
         # App Store: 12.9'' iPad (3rd Gen) and (2nd Gen)
 #        var window_size = Vector2(2732, 2048)
+        # Google Ads: Landscape
+#        var window_size = Vector2(1024, 768)
+        # Google Ads: Portrait
+#        var window_size = Vector2(768, 1024)
         # Default
 #        var window_size := Vector2(480.0, 480.0)
         # Just show as full screen.

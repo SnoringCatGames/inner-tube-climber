@@ -13,6 +13,7 @@ var FONT_PULSE_COLOR := \
 
 export var label: String setget _set_label,_get_label
 export var value := "0" setget _set_value,_get_value
+export var is_wide_value := false setget _set_is_wide_value,_get_is_wide_value
 
 var color_tween: Tween
 
@@ -33,6 +34,7 @@ func _ready() -> void:
     is_ready = true
     _set_label(label)
     _set_value(value)
+    _set_is_wide_value(is_wide_value)
 
 func _process(delta_sec: float) -> void:
     if !is_using_number_tweens:
@@ -64,6 +66,20 @@ func _set_value(v: String) -> void:
 
 func _get_value() -> String:
     return value
+
+func _set_is_wide_value(v: bool) -> void:
+    is_wide_value = v
+    if is_ready:
+        if is_wide_value:
+            $Value.rect_position.x = 44.0
+            $Value.rect_size.x = 128.0
+        else:
+            $Value.rect_position.x = 90.0
+            $Value.rect_size.x = 82.0
+        
+
+func _get_is_wide_value() -> bool:
+    return is_wide_value
 
 func set_value_with_color_pulse(value: String) -> void:
     if value == _get_value():

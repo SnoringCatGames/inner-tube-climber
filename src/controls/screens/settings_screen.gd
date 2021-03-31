@@ -13,18 +13,18 @@ var main_items := [
         label = "Difficulty",
         type = LabeledControlItemType.DROPDOWN,
         options = [
-            DifficultyMode.get_type_string(DifficultyMode.EASY),
-            DifficultyMode.get_type_string(DifficultyMode.MODERATE),
-            DifficultyMode.get_type_string(DifficultyMode.HARD),
+            DifficultyMode.get_modified_type_string(DifficultyMode.EASY),
+            DifficultyMode.get_modified_type_string(DifficultyMode.MODERATE),
+            DifficultyMode.get_modified_type_string(DifficultyMode.HARD),
         ],
         description = \
                 "The player moves faster at higher difficulties." + \
-                "\n\nOn EASY, levels end after one loop." + \
-                "\n\nOn MODERATE and HARD, levels loop until you run out of lives." + \
-                "\n\nOn EASY, you have infinite lives." + \
-                "\n\nOn HARD, extra lives do not appear." + \
+                "\n\nOn Hard, levels end after one loop." + \
+                "\n\nOn Harder and Hardest, levels loop until you run out of lives." + \
+                "\n\nOn Hard, you have infinite lives." + \
+                "\n\nOn Hardest, extra lives do not appear." + \
                 "\n\nYour score is increased with higher difficulties." + \
-                "\n\nIt may not be possible to get Silver or Gold ranks on EASY.",
+                "\n\nIt may not be possible to get Silver or Gold ranks on Hard.",
     },
     {
         label = "Control version",
@@ -94,6 +94,10 @@ var details_items := [
     },
     {
         label = "Lives display",
+        type = LabeledControlItemType.CHECKBOX,
+    },
+    {
+        label = "Time display",
         type = LabeledControlItemType.CHECKBOX,
     },
     {
@@ -168,7 +172,7 @@ func _initialize_selections() -> void:
             _main_list.find_item("Difficulty")
     for i in range(difficulty_item.options.size()):
         if difficulty_item.options[i] == \
-                DifficultyMode.get_type_string(Global.difficulty_mode):
+                DifficultyMode.get_modified_type_string(Global.difficulty_mode):
             difficulty_item.selected_index = i
             break
     
@@ -199,6 +203,8 @@ func _initialize_selections() -> void:
             Global.is_height_display_shown
     _details_list.find_item("Lives display").pressed = \
             Global.is_lives_display_shown
+    _details_list.find_item("Time display").pressed = \
+            Global.is_time_display_shown
     _details_list.find_item("Tier ratio display").pressed = \
             Global.is_tier_ratio_display_shown
     _details_list.find_item("Multiplier display").pressed = \
@@ -231,6 +237,7 @@ func _initialize_enablement() -> void:
     _details_list.find_item("Next-rank-at display").disabled = false 
     _details_list.find_item("Height display").disabled = false 
     _details_list.find_item("Lives display").disabled = false 
+    _details_list.find_item("Time display").disabled = false 
     _details_list.find_item("Tier ratio display").disabled = false 
     _details_list.find_item("Multiplier display").disabled = false 
     _details_list.find_item("Speed display").disabled = false 
@@ -273,6 +280,8 @@ func _on_control_changed( \
             _on_height_display_pressed(item.pressed)
         "Lives display":
             _on_lives_display_pressed(item.pressed)
+        "Time display":
+            _on_time_display_pressed(item.pressed)
         "Tier ratio display":
             _on_tier_ratio_display_pressed(item.pressed)
         "Multiplier display":
@@ -295,7 +304,7 @@ func _update_level_displays() -> void:
 func _on_difficulty_selected( \
         option_index: int, \
         option_label: String) -> void:
-    Global.difficulty_mode = DifficultyMode.get_string_type(option_label)
+    Global.difficulty_mode = DifficultyMode.get_modified_string_type(option_label)
     Global.set_setting(SaveState.DIFFICULTY_KEY, Global.difficulty_mode)
     Global.set_selected_difficulty()
 
@@ -367,6 +376,13 @@ func _on_lives_display_pressed(pressed: bool) -> void:
     Global.set_setting( \
             SaveState.IS_LIVES_DISPLAY_SHOWN_KEY, \
             Global.is_lives_display_shown)
+    _update_level_displays()
+
+func _on_time_display_pressed(pressed: bool) -> void:
+    Global.is_time_display_shown = pressed
+    Global.set_setting( \
+            SaveState.IS_TIME_DISPLAY_SHOWN_KEY, \
+            Global.is_time_display_shown)
     _update_level_displays()
 
 func _on_tier_ratio_display_pressed(pressed: bool) -> void:

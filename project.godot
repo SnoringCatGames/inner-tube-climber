@@ -1250,3 +1250,4 @@ quality/intended_usage/framebuffer_allocation.mobile=1
 quality/2d/use_pixel_snap=true
 environment/default_clear_color=Color( 0.152941, 0.192157, 0.286275, 1 )
 environment/default_environment="res://src/default_env.tres"
+2d/snapping/use_gpu_pixel_snap=true

@@ -91,16 +91,15 @@ func _update_stats() -> void:
     _control_list.find_item("Speed:").text = \
         str(level.get_node("CameraHandler:").speed_index + 1)
     _control_list.find_item("Difficulty:").text = \
-        DifficultyMode.get_type_string(Global.difficulty_mode)
+        DifficultyMode.get_modified_type_string(Global.difficulty_mode)
     _control_list.find_item("Lives:").text = \
         ("%s / %s" % [
                 level.lives_count,
                 level.lives_count + level.falls_count,
         ]) if Global.difficulty_mode != DifficultyMode.EASY else "-"
     _control_list.find_item("Time:").text = \
-        Utils.get_time_string_from_seconds( \
-                Time.elapsed_play_time_actual_sec - \
-                level.level_start_time)
+            Utils.get_time_string_from_seconds( \
+                    level.get_current_run_time(), true, true, true)
     
     _control_list.items = list_items
 

@@ -502,30 +502,47 @@ static func get_datetime_string() -> String:
         datetime.second,
     ]
 
-static func get_time_string_from_seconds(time_sec: float) -> String:
+static func get_time_string_from_seconds( \
+        time_sec: float, \
+        includes_ms := false, \
+        includes_empty_hours := true, \
+        includes_empty_minutes := true) -> String:
     var time_str := ""
     
     # Hours.
     var hours := int(time_sec / 3600.0)
     time_sec = fmod(time_sec, 3600.0)
-    time_str = "%s%02d:" % [
-        time_str,
-        hours,
-    ]
+    if hours != 0 or \
+            includes_empty_hours:
+        time_str = "%s%02d:" % [
+            time_str,
+            hours,
+        ]
     
     # Minutes.
     var minutes := int(time_sec / 60.0)
     time_sec = fmod(time_sec, 60.0)
-    time_str = "%s%02d:" % [
-        time_str,
-        minutes,
-    ]
+    if minutes != 0 or \
+            includes_empty_minutes:
+        time_str = "%s%02d:" % [
+            time_str,
+            minutes,
+        ]
     
     # Seconds.
+    var seconds := int(time_sec)
     time_str = "%s%02d" % [
         time_str,
-        time_sec,
+        seconds,
     ]
+    
+    if includes_ms:
+        # Milliseconds.
+        var milliseconds := int(fmod((time_sec - seconds) * 1000.0, 1000.0))
+        time_str = "%s.%03d" % [
+            time_str,
+            milliseconds,
+        ]
     
     return time_str
 

@@ -16,6 +16,7 @@ __meta__ = {
 }
 label = null
 value = null
+is_wide_value = null
 
 [node name="Background" type="Sprite" parent="."]
 texture = ExtResource( 1 )

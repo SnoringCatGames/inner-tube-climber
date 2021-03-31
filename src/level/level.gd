@@ -48,7 +48,8 @@ var music_index := -1
 var has_input_been_pressed := false
 var is_game_playing := false
 var tiers_count_since_falling := 0
-var level_start_time := -INF
+var level_total_start_time := -INF
+var level_current_run_start_time := -INF
 var tier_start_time := -INF
 
 var player: TuberPlayer
@@ -147,12 +148,16 @@ func _unhandled_input(event: InputEvent) -> void:
         
         if current_tier_id != "0":
             $CameraHandler.update_speed()
+        
+        if tier_count == 1:
+            # Only start the clock when the user starts interacting.
+            level_current_run_start_time = Time.elapsed_play_time_actual_sec
 
 func start( \
         level_id: String, \
         tier_id := START_TIER_ID) -> void:
     self.level_id = level_id
-    self.level_start_time = Time.elapsed_play_time_actual_sec
+    self.level_total_start_time = Time.elapsed_play_time_actual_sec
     visible = true
     lives_count = LevelConfig.get_level_config(level_id).lives_count
     if Global.difficulty_mode == DifficultyMode.EASY:
@@ -217,6 +222,8 @@ func _process(delta_sec: float) -> void:
     delta_sec *= Time.physics_framerate_multiplier
     
     if !is_game_playing or player == null:
+        if is_game_playing:
+            _update_score_displays()
         return
     
     $FogScreenHandler.sync_to_player_position(player.position)
@@ -259,6 +266,7 @@ func _update_score_displays() -> void:
     score_boards.set_multiplier(cooldown_indicator.multiplier)
     score_boards.set_speed($CameraHandler.speed_index + 1)
     score_boards.set_lives(lives_count)
+    score_boards.set_time(get_current_run_time())
     if Constants.DEBUG or Constants.PLAYTEST:
         score_boards.get_node("VBoxContainer/DebugTimeBoard").value = \
                 "%.3f" % Time.elapsed_play_time_actual_sec
@@ -335,6 +343,8 @@ func _fall() -> void:
         Audio.play_sound(Sound.FALL, true)
         $CameraHandler.on_fall_before_new_tier(was_last_life)
         _destroy_player()
+        if tier_count <= 1:
+            level_current_run_start_time = -INF
         Time.set_timeout( \
                 funcref(self, "_start_new_tier_after_fall"), \
                 1.0, \
@@ -367,6 +377,7 @@ func quit() -> void:
     is_game_playing = false
     $CameraHandler.speed_index = 0
     score_boards.set_lives(0)
+#    score_boards.set_time(0.0)
     $SignAllKeys.visible = false
     pause_button.visible = false
     Audio.on_cross_fade_music_finished()
@@ -447,10 +458,9 @@ func _set_game_over_state() -> void:
             (LevelConfig.get_level_config(level_id).tiers.size() - \
                     tier_count) + 1
     game_over_screen.difficulty = \
-            DifficultyMode.get_type_string(Global.difficulty_mode)
+            DifficultyMode.get_modified_type_string(Global.difficulty_mode)
     game_over_screen.time = Utils.get_time_string_from_seconds( \
-            Time.elapsed_play_time_actual_sec - \
-            level_start_time)
+            get_current_run_time(), true, true, true)
     game_over_screen.average_multiplier = "%.1f" % _get_average_multiplier()
     game_over_screen.finished_level = finished_level
     game_over_screen.three_looped_level = three_looped_level
@@ -588,7 +598,8 @@ func destroy() -> void:
     display_height = 0
     tier_count = 0
     tiers_count_since_falling = 0
-    level_start_time = -INF
+#    level_total_start_time = -INF
+#    level_current_run_start_time = -INF
     tier_start_time = -INF
     falls_count = 0
     falls_count_on_current_tier = 0
@@ -792,6 +803,10 @@ func _start_new_tier( \
     is_game_playing = true
 
 func _on_entered_new_tier() -> void:
+    if tier_count == 0:
+        # Only start the clock when we leave the base tier.
+        level_current_run_start_time = Time.elapsed_play_time_actual_sec
+    
     Analytics.event( \
             "level", \
             "tier-end", \
@@ -915,7 +930,7 @@ func _on_entered_new_tier() -> void:
                 "level", \
                 "finish", \
                 LevelConfig.get_level_version_string(level_id), \
-                Time.elapsed_play_time_actual_sec - level_start_time)
+                get_current_run_time())
     
     if was_final_tier_completed_third_time:
         three_looped_level = true
@@ -1079,3 +1094,9 @@ func _ensure_min_lives_for_level() -> void:
     lives_count = max( \
             lives_count, \
             LevelConfig.get_level_config(level_id).lives_count)
+
+func get_current_run_time() -> float:
+    return Time.elapsed_play_time_actual_sec - \
+                    level_current_run_start_time if \
+            level_current_run_start_time != -INF else \
+            0.0

@@ -34,6 +34,10 @@ func set_speed(speed: int) -> void:
 func set_lives(lives: int) -> void:
     $VBoxContainer/LivesBoard.set_value_with_color_pulse(str(lives))
 
+func set_time(time_sec: float) -> void:
+    $VBoxContainer/TimeBoard.value = \
+            Utils.get_time_string_from_seconds(time_sec, true, false, true)
+
 func update_displays() -> void:
     $VBoxContainer/TierRatioBoard.visible = Global.is_tier_ratio_display_shown
     $VBoxContainer/HeightBoard.visible = Global.is_height_display_shown
@@ -46,6 +50,7 @@ func update_displays() -> void:
     $VBoxContainer/LivesBoard.visible = \
             Global.is_lives_display_shown and \
             Global.difficulty_mode != DifficultyMode.EASY
+    $VBoxContainer/TimeBoard.visible = Global.is_time_display_shown
     $VBoxContainer/DebugTimeBoard.visible = \
             Global.is_debug_time_shown and \
             (Constants.DEBUG or Constants.PLAYTEST)

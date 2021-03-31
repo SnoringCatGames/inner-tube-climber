@@ -71,10 +71,20 @@ margin_right = 180.0
 margin_bottom = 324.0
 label = "Lives:"
 
-[node name="DebugTimeBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
+[node name="TimeBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
+anchor_left = -0.0166667
+anchor_right = -0.0166667
 anchor_bottom = 0.0
 margin_top = 329.0
 margin_right = 180.0
 margin_bottom = 371.0
+label = "Time:"
+is_wide_value = true
+
+[node name="DebugTimeBoard" parent="VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 376.0
+margin_right = 180.0
+margin_bottom = 418.0
 label = ""

@@ -16,6 +16,7 @@ var is_score_display_shown: bool
 var is_next_rank_at_display_shown: bool
 var is_height_display_shown: bool
 var is_lives_display_shown: bool
+var is_time_display_shown: bool
 var is_tier_ratio_display_shown: bool
 var is_multiplier_display_shown: bool
 var is_speed_display_shown: bool
@@ -83,6 +84,9 @@ func _load_state() -> void:
     is_lives_display_shown = SaveState.get_setting( \
             SaveState.IS_LIVES_DISPLAY_SHOWN_KEY, \
             true)
+    is_time_display_shown = SaveState.get_setting( \
+            SaveState.IS_TIME_DISPLAY_SHOWN_KEY, \
+            false)
     is_tier_ratio_display_shown = SaveState.get_setting( \
             SaveState.IS_TIER_RATIO_DISPLAY_SHOWN_KEY, \
             false)
